@@ -1,0 +1,4 @@
+ #  use python3 -m pip freeze > requirements.txt to get final version once completed
+ polars 
+ pyarrow
+ yfinance
