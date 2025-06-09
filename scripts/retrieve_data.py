@@ -3,7 +3,7 @@ import pandas as pd
 import polars as pl
 
 # Configuration
-tickers = ["AAPL","GOOG"]
+tickers = "AAPL"
 start_date = "2024-12-01"
 end_date = "2024-12-31"
 
@@ -21,6 +21,9 @@ df_filtered = df_filtered.reset_index()
 
 # Convert to Polars
 pl_df = pl.from_pandas(df_filtered)
+
+# Convert datetime to date
+pl_df = pl_df.with_columns(pl.col("Date").cast(pl.Date))
 
 print(pl_df.head(10))
 
