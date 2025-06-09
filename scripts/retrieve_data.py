@@ -20,10 +20,10 @@ print(tickers)
 # Download price data
 data = yf.download(tickers, start = start_date, end = end_date, auto_adjust= False)
 
-for ticker in tickers:
+# Create an empty list to hold dataframes
+dfs = []
 
-    # Create save path
-    price_save_path = os.path.join(config.DATA_BASE_PATH,config.PARQUET_PRICE_PATH,f"{ticker}.parquet")
+for ticker in tickers:
 
     # Filter relevant columns using pandas
     df_filtered = data.loc[:, [('Adj Close', ticker), ('Close', ticker)]] 
@@ -37,18 +37,31 @@ for ticker in tickers:
     # Reset index to return date to a regular column
     df_filtered = df_filtered.reset_index()
 
-    # Convert to Polars
-    pl_df = pl.from_pandas(df_filtered)
+    # Add ticker column
+    df_filtered['Ticker'] = ticker
 
-    # Convert datetime to date
-    pl_df = pl_df.with_columns(pl.col("Date").cast(pl.Date))
+    # Add df to list
+    dfs.append(df_filtered)
 
-    # Ensure the directory for price_save_path exists
-    os.makedirs(os.path.dirname(price_save_path), exist_ok=True)
+# Concatenate all tickers into a single pandas DataFrame
+all_data_pd = pd.concat(dfs, ignore_index=True)
 
-    # Save data as parquet file
-    pl_df.write_parquet(price_save_path)
+# Convert to Polars
+all_data_pl = pl.from_pandas(all_data_pd)
+
+# Convert datetime to date
+all_data_pl = all_data_pl.with_columns(pl.col("Date").cast(pl.Date))
+
+# Create save folder
+partitioned_path = os.path.join(config.DATA_BASE_PATH,config.PARQUET_PRICE_PATH)
+
+# Save data as parquet file
+all_data_pl.write_parquet(
+    partitioned_path,
+    use_pyarrow=True,
+    partition_by=["Ticker"]
+)
     
-    # Test that it works
-    prices_df = (pl.scan_parquet(price_save_path).collect())   
-    print(prices_df)
+# Test that it works
+prices_df = (pl.scan_parquet(partitioned_path).collect())   
+print(prices_df)
