@@ -12,9 +12,18 @@ import config
 start_date = "2000-01-01"
 end_date = "2025-01-01"
 
-# Retrieve tickers form metadata csv
+# Orignal : Retrieve tickers form metadata csv
 tickers_df = (pl.scan_csv(config.get_asset_metadata_path()).select("ticker").collect())
 tickers = tickers_df["ticker"].to_list()
+print(tickers)
+
+# Retrieve tickers method
+def get_tickers(path, column):
+    tickers_df = (pl.scan_csv(path).select(column).collect())
+    return tickers_df["ticker"].to_list()
+
+# Retrieve tickers form metadata csv
+tickers = get_tickers(config.get_asset_metadata_path(),"ticker")
 print(tickers)
 
 # Download price data
