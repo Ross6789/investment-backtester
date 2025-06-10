@@ -1,76 +1,67 @@
-import sys    
-import os  
 import yfinance as yf
 import polars as pl
 import pandas as pd
 
-# Add the root project folder to sys.path to allow config file to be found
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))) 
-import config
+class PriceDataPipeline:
+    def __init__(self,tickers,start_date,end_date,save_path):
+        self.tickers = tickers
+        self.start_date = start_date
+        self.end_date = end_date
+        self.save_path = save_path
 
-# Configuration
-start_date = "2000-01-01"
-end_date = "2025-01-01"
+    # Method to download data using yfinance
+    def download_data(self):
+        print("Starting download...")
+        self.raw_data = yf.download(self.tickers, self.start_date, self.end_date, auto_adjust= False)
+        print("Download complete.")
 
-# Orignal : Retrieve tickers form metadata csv
-tickers_df = (pl.scan_csv(config.get_asset_metadata_path()).select("ticker").collect())
-tickers = tickers_df["ticker"].to_list()
-print(tickers)
+    # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
+    def transform_data(self):
+        dfs = []
+        
+        for ticker in self.tickers:
 
-# Retrieve tickers method
-def get_tickers(path, column):
-    tickers_df = (pl.scan_csv(path).select(column).collect())
-    return tickers_df["ticker"].to_list()
+            # Filter relevant columns using pandas
+            df_filtered = self.raw_data.loc[:, [('Adj Close', ticker), ('Close', ticker)]] 
 
-# Retrieve tickers form metadata csv
-tickers = get_tickers(config.get_asset_metadata_path(),"ticker")
-print(tickers)
+            # Flatten column names
+            df_filtered.columns = ['Adj Close', 'Close']
 
-# Download price data
-data = yf.download(tickers, start = start_date, end = end_date, auto_adjust= False)
+            # Drop rows with missing price data
+            df_filtered = df_filtered.dropna(subset=['Adj Close', 'Close'])
 
-# Create an empty list to hold dataframes
-dfs = []
+            # Reset index to return date to a regular column
+            df_filtered = df_filtered.reset_index()
 
-for ticker in tickers:
+            # Add ticker column
+            df_filtered['Ticker'] = ticker
 
-    # Filter relevant columns using pandas
-    df_filtered = data.loc[:, [('Adj Close', ticker), ('Close', ticker)]] 
+            # Add df to list
+            dfs.append(df_filtered)
 
-    # Flatten column names
-    df_filtered.columns = ['Adj Close', 'Close']
+        # Concatenate all tickers into a single pandas DataFrame
+        all_data_pd = pd.concat(dfs, ignore_index=True)
 
-    # Drop rows with missing price data
-    df_filtered = df_filtered.dropna(subset=['Adj Close', 'Close'])
+        # Convert to Polars
+        all_data_pl = pl.from_pandas(all_data_pd)
 
-    # Reset index to return date to a regular column
-    df_filtered = df_filtered.reset_index()
+        # Convert datetime to date
+        all_data_pl = all_data_pl.with_columns(pl.col("Date").cast(pl.Date))
 
-    # Add ticker column
-    df_filtered['Ticker'] = ticker
+        self.transformed_data = all_data_pl
 
-    # Add df to list
-    dfs.append(df_filtered)
+        print("Data filtered")
 
-# Concatenate all tickers into a single pandas DataFrame
-all_data_pd = pd.concat(dfs, ignore_index=True)
-
-# Convert to Polars
-all_data_pl = pl.from_pandas(all_data_pd)
-
-# Convert datetime to date
-all_data_pl = all_data_pl.with_columns(pl.col("Date").cast(pl.Date))
-
-# Create save folder
-partitioned_path = os.path.join(config.DATA_BASE_PATH,config.PARQUET_PRICE_PATH)
-
-# Save data as parquet file
-all_data_pl.write_parquet(
-    partitioned_path,
-    use_pyarrow=True,
-    partition_by=["Ticker"]
-)
-    
-# Test that it works
-prices_df = (pl.scan_parquet(partitioned_path).collect())   
-print(prices_df)
+    # Method to save the data as a partitioned parquet file
+    def save_data(self):
+        self.transformed_data.write_parquet(
+        self.save_path,
+        use_pyarrow=True,
+        partition_by=["Ticker"]
+        )
+        print("Data saved.")
+        
+    def run(self):
+        self.download_data()
+        self.transform_data()
+        self.save_data()
