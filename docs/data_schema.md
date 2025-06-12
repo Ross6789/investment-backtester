@@ -13,13 +13,13 @@ Partitioned by: `Ticker`
 
 ---
 
-## Dividend Data
+<!-- ## Dividend Data
 
 | Column       | Type     | Description                     |
 |--------------|----------|---------------------------------|
 | Date         | Date     | Date of dividend payout         |
 | Dividend     | Float    | Dividend amount                 |
-| Ticker       | String   | Asset symbol                    |
+| Ticker       | String   | Asset symbol                    | -->
 
 ---
 
