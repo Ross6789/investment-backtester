@@ -15,6 +15,8 @@ class PriceDataPipeline:
         self.raw_data = yf.download(self.tickers, self.start_date, self.end_date, auto_adjust= False)
         print("Download complete.")
 
+    
+
     # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
     def transform_data(self):
         dfs = []
