@@ -8,18 +8,12 @@ from backend.pipelines.price_pipeline import PriceDataPipeline
 
 # Configuration
 tickers = asset_info.get_metadata("Ticker")
-start_date = "1900-01-01"
+start_date = "2000-01-01"
 end_date = "2025-01-01"
 save_path = config.get_price_data_path()
 
-# Instantiate and run pipeline
-test_pipeline = PriceDataPipeline(tickers,start_date,end_date,save_path)
-test_pipeline.run()
-
-# Quick test to confirm it works
+# # Quick test to confirm it works adn count number of rows for each ticker ie. how much price data
 import polars as pl
-prices_df = (pl.scan_parquet(save_path).collect())   
-print(prices_df)
-
-
-
+prices_df_eager = pl.read_parquet(save_path)
+count_data = prices_df_eager["Ticker"].value_counts()
+print(count_data)

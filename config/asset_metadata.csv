@@ -1,0 +1,3 @@
+ticker,name,type,dividends,currency,isin,api_source,active,start_date,end_date,notes
+AAPL,APPLE,us stock,Y,USD,-,yfinance,Y,01/12/2024,31/12/2024,Test data
+GOOG,GOOGLE,us stock,Y,USD,-,yfinance,Y,02/12/2024,01/01/2025,Test data

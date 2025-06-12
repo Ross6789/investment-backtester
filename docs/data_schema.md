@@ -33,4 +33,4 @@ Partitioned by: `Ticker`
 | Source        | String   | API/data provider                        |
 | Currency      | String   | Native trading currency                  |
 
-Stored in: `/backend/pipelines/asset_info.csv`
+Stored in: `/config/asset_metadata.csv`
