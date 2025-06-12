@@ -3,8 +3,8 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import config.config as config
-import backend.data_pipeline.asset_info as asset_info
-from backend.data_pipeline.pipeline import PriceDataPipeline
+import backend.pipelines.asset_info as asset_info
+from backend.pipelines.price_pipeline import PriceDataPipeline
 
 # Configuration
 tickers = asset_info.get_metadata("Ticker")
