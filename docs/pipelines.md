@@ -22,7 +22,7 @@ Generic class : Fetches historical price data for stocks tickers contained on an
 ---
 
 <!-- ## 2. DividendDataPipeline
-
+s
 **Purpose**:  
 Fetch and store dividend events per asset.
 

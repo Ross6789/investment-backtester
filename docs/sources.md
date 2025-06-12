@@ -14,7 +14,7 @@ Notes:
 
 ## 2. Metadata File
 
-Location: `/backend/pipelines/asset_info.csv`
+Location: `/config/asset_metadata.csv`
 
 Purpose:
 - Stores key information per asset.
