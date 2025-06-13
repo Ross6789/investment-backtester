@@ -2,7 +2,7 @@ import yfinance as yf
 import polars as pl
 import pandas as pd
 
-class PriceDataPipeline:
+class MetalDataPipeline:
     def __init__(self,tickers,start_date,end_date,save_path):
         self.tickers = tickers
         self.start_date = start_date
@@ -49,16 +49,22 @@ class PriceDataPipeline:
         # Convert datetime to date
         all_data_pl = all_data_pl.with_columns(pl.col("Date").cast(pl.Date))
 
-        self.transformed_data = all_data_pl
+        # Pivot dataframe on date
+        transformed_df = all_data_pl.pivot(index="Date",columns="Ticker",values="Close")
+        
+        # Sort by date
+        transformed_df = transformed_df.sort("Date",descending=True)
+
+        self.transformed_data = transformed_df
 
         print("Data filtered")
 
-    # Method to save the data as a partitioned parquet file
+    # Method to save the data as a csv file
     def save_data(self):
-        self.transformed_data.write_parquet(
-        self.save_path,
-        use_pyarrow=True,
-        partition_by=["Ticker"]
+        self.transformed_data.write_csv(
+        self.save_path#,
+        # use_pyarrow=True,
+        # partition_by=["Ticker"]
         )
         print("Data saved.")
         
