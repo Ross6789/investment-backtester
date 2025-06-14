@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import config.config as config
 import backend.pipelines.asset_info as asset_info
-from backend.pipelines.price_pipeline import PriceDataPipeline
+from backend.pipelines.ingestors import PriceDataPipeline
 
 # Configuration
 tickers = asset_info.get_metadata("Ticker")

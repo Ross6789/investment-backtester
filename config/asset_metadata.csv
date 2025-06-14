@@ -1,4 +1,4 @@
-ticker,name,type,dividends,currency,isin,api_source,active,start_date,end_date,notes
+ticker,name,asset_type,dividends,currency,isin,api_source,active,start_date,end_date,notes
 AAPL,APPLE,us stock,Y,USD,-,yfinance,Y,01/12/2024,31/12/2024,Test data
 GOOG,GOOGLE,us stock,Y,USD,-,yfinance,Y,02/12/2024,01/01/2025,Test data
 HLMA.L,HALMA PLC ORD 10P,uk stock,Y,GBX,,yfinance,Y,,,LSE : FTSE All-Share
@@ -534,3 +534,5 @@ CCJI.L,CC JAPAN INCOME & GROWTH TRUST PLC ORD GBP0.01,uk stock,Y,GBX,,yfinance,Y
 BRAI.L,BLACKROCK AMERICAN INCOME TRUST PLC ORD 1P,uk stock,Y,GBX,,yfinance,Y,,,LSE : FTSE All-Share
 BASC.L,BROWN ADVISORY US SMALLER CO'S PLC ORD 25P,uk stock,Y,GBX,,yfinance,Y,,,LSE : FTSE All-Share
 AGVI.L,ABERFORTH GEARED VALUE & INCOME TRU ORD 1P,uk stock,Y,GBX,,yfinance,Y,,,LSE : FTSE All-Share
+AU,PHYSICAL GOLD,commodity,N,USD,,investing.com (manual download),Y,,,No api available : yahoo had limited data
+SI,PHYSICAL SILVER,commodity,N,USD,,investing.com (manual download),Y,,,No api available : yahoo had limited data

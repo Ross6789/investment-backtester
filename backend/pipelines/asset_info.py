@@ -6,7 +6,7 @@ import polars as pl
 import config.config as config
 
 # Retrieve specific column from metadata csv
-def get_metadata(column: str) -> list[str]:
+def get_metadata(asset_type: str, column: str) -> list[str]:
     # Read the CSV eagerly to inspect and clean column names
     df = pl.read_csv(config.get_asset_metadata_path())
 
@@ -22,5 +22,5 @@ def get_metadata(column: str) -> list[str]:
     if cleaned_column not in df.columns:
         raise ValueError(f"Column '{column}' not found in metadata.")
 
-    return df[cleaned_column].to_list()
+    return (df.filter(pl.col("Asset_type")==asset_type).get_column(cleaned_column).to_list())
 
