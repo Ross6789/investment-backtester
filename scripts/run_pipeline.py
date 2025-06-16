@@ -1,7 +1,4 @@
-# import sys
 import os
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 import backend.config as config
 import backend.pipelines.utils as utils
 from backend.pipelines.pipeline import PriceDataPipeline
@@ -11,9 +8,9 @@ from backend.pipelines.ingestors import YFinanceIngestor,CSVIngestor
 
 
 # Configuration
-yfinance_tickers = utils.get_metadata("yfinance","Ticker")
-csv_tickers = utils.get_metadata("csv","Ticker")
-csv_base_path = "XXX"
+yfinance_tickers = utils.get_yfinance_tickers()
+csv_ticker_source_map = utils.get_csv_ticker_source_map()
+csv_base_path = config.EXTERNAL_DATA_BASE_PATH
 start_date = "2024-01-01"
 end_date = "2025-01-01"
 save_path = config.get_price_data_path()
@@ -25,8 +22,8 @@ ingestors = []
 # ingestors.append(YFinanceIngestor(yfinance_tickers,start_date,end_date))
 
 # csv ingestors
-for ticker in csv_tickers:
-    ingestors.append(CSVIngestor(ticker,os.path.join(csv_base_path,f"{ticker}.csv")))
+for csv in csv_ticker_source_map:
+    ingestors.append(CSVIngestor(csv["ticker"],os.path.join(csv_base_path,csv["source_path"])))
 
 # Instantiate and run price pipeline
 pipeline = PriceDataPipeline(ingestors,save_path)
@@ -36,10 +33,6 @@ pipeline.run()
 import polars as pl
 prices_df = (pl.scan_parquet(save_path).collect())   
 print(prices_df)
-
-
-
-
 
 # import sys
 # import os

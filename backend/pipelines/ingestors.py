@@ -60,15 +60,15 @@ class YFinanceIngestor:
         return self.data
 
 class CSVIngestor:
-    def __init__(self, ticker, source_file_path):
+    def __init__(self, ticker, source_path):
         self.ticker = ticker
-        self.csv_path = source_file_path
+        self.source_path = source_path
         self.data = None
 
     # Method to download data from csv
     def read_data(self) -> pl.DataFrame:
-        print(f"Reading file : {self.source_file_path}...")
-        raw_data = pl.read_csv(self.source_file_path)
+        print(f"Reading file : {self.source_path}...")
+        raw_data = pl.read_csv(self.source_path)
         print("Read complete.")
         return raw_data
 
@@ -92,10 +92,10 @@ class CSVIngestor:
             raise ValueError("Invalid number of columns in CSV file")
         
         # Add ticker column
-        transformed_data['Ticker'] = self.ticker
+        transformed_data = transformed_data.with_columns(pl.lit(self.ticker).alias("Ticker"))
 
         # Convert date column to date
-        transformed_data = transformed_data.with_columns(pl.col('Date').cast(pl.Date))
+        transformed_data = transformed_data.with_columns(pl.col('Date').str.strptime(pl.Date,"%d/%m/%Y"))
 
         self.data = transformed_data
         print('Data cleaned')

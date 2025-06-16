@@ -1,9 +1,9 @@
 import polars as pl
 
 class PriceDataPipeline:
-    def __init__(self, price_ingestors, save_path):
+    def __init__(self, price_ingestors, save_file_path):
         self.price_ingestors = price_ingestors    
-        self.save_path = save_path
+        self.save_path = save_file_path
 
     # Method to compile data from different sources (ingestors)
     def combine_data(self):
