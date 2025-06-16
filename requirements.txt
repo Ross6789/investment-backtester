@@ -4,6 +4,7 @@
  yfinance
  pytest
 
+
  #  activating virtual environment => source venv/bin/activate
 
  

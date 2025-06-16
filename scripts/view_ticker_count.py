@@ -2,12 +2,12 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import config.config as config
-import backend.pipelines.asset_info as asset_info
+import backend.config as config
+import backend.pipelines.utils as utils
 from backend.pipelines.ingestors import PriceDataPipeline
 
 # Configuration
-tickers = asset_info.get_metadata("Ticker")
+tickers = utils.get_metadata("Ticker")
 start_date = "2000-01-01"
 end_date = "2025-01-01"
 save_path = config.get_price_data_path()

@@ -1,15 +1,18 @@
-import sys
+# import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import config.config as config
-import backend.pipelines.asset_info as asset_info
+import backend.config as config
+import backend.pipelines.utils as utils
 from backend.pipelines.pipeline import PriceDataPipeline
 from backend.pipelines.ingestors import YFinanceIngestor,CSVIngestor
 
+# Read metadata file
+
+
 # Configuration
-yfinance_tickers = asset_info.get_metadata("yfinance","Ticker")
-csv_tickers = asset_info.get_metadata("csv","Ticker")
+yfinance_tickers = utils.get_metadata("yfinance","Ticker")
+csv_tickers = utils.get_metadata("csv","Ticker")
 csv_base_path = "XXX"
 start_date = "2024-01-01"
 end_date = "2025-01-01"
@@ -18,8 +21,8 @@ save_path = config.get_price_data_path()
 # Instantiate list of ingestors
 ingestors = []
 
-# yfinance ingestor
-ingestors.append(YFinanceIngestor(yfinance_tickers,start_date,end_date))
+# # yfinance ingestor
+# ingestors.append(YFinanceIngestor(yfinance_tickers,start_date,end_date))
 
 # csv ingestors
 for ticker in csv_tickers:
