@@ -9,6 +9,7 @@ from backend.pipelines.ingestors import YFinanceIngestor,CSVIngestor
 
 # Configuration
 yfinance_tickers = utils.get_yfinance_tickers()
+yfinance_batch_size = 100
 csv_ticker_source_map = utils.get_csv_ticker_source_map()
 csv_base_path = config.EXTERNAL_DATA_BASE_PATH
 start_date = "2024-01-01"
@@ -18,8 +19,8 @@ save_path = config.get_price_data_path()
 # Instantiate list of ingestors
 ingestors = []
 
-# # yfinance ingestor
-# ingestors.append(YFinanceIngestor(yfinance_tickers,start_date,end_date))
+# yfinance ingestor
+ingestors.append(YFinanceIngestor(yfinance_tickers,yfinance_batch_size,start_date,end_date))
 
 # csv ingestors
 for csv in csv_ticker_source_map:

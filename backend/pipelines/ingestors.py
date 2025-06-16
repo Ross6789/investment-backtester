@@ -1,18 +1,25 @@
 import yfinance as yf
+import time
 import polars as pl
 import pandas as pd
 
 class YFinanceIngestor:
-    def __init__(self,tickers,start_date,end_date):
+    def __init__(self,tickers,batch_size,start_date,end_date):
         self.tickers = tickers
         self.start_date = start_date
+        self.batch_size = batch_size
         self.end_date = end_date
         self.data = None
 
+    # Method to batch the tickers to prevent API ban or freezing (_ is convention for private methods)
+    def _batch_tickers(self):
+        for i in range(0, len(self.tickers), self.batch_size):
+            yield self.tickers[i:i + self.batch_size]
+
     # Method to download data using yfinance
-    def download_data(self) -> pd.DataFrame:
+    def download_data(self, tickers_batch) -> pd.DataFrame:
         print('Starting download...')
-        raw_data = yf.download(self.tickers, self.start_date, self.end_date, auto_adjust= False)
+        raw_data = yf.download(tickers_batch, self.start_date, self.end_date, auto_adjust= False)
         print('Download complete.')
         return raw_data
     
@@ -55,8 +62,14 @@ class YFinanceIngestor:
         print('Data cleaned')
         
     def run(self) -> pl.DataFrame:
-        raw_data = self.download_data()
-        self.transform_data(raw_data)
+        batch_data = []
+        for batch in self._batch_tickers():
+            print(f"Downloading batch {batch}")
+            batch_data.append(self.download_data(batch))
+            # add 2 second delay to prevent api restrictions
+            time.sleep(2)
+        combined_data = pd.concat(batch_data)
+        self.transform_data(combined_data)
         return self.data
 
 class CSVIngestor:
