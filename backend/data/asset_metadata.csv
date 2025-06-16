@@ -534,5 +534,30 @@ CCJI.L,CC JAPAN INCOME & GROWTH TRUST PLC ORD GBP0.01,uk stock,Y,GBX,,yfinance,-
 BRAI.L,BLACKROCK AMERICAN INCOME TRUST PLC ORD 1P,uk stock,Y,GBX,,yfinance,-,Y,,,LSE : FTSE All-Share
 BASC.L,BROWN ADVISORY US SMALLER CO'S PLC ORD 25P,uk stock,Y,GBX,,yfinance,-,Y,,,LSE : FTSE All-Share
 AGVI.L,ABERFORTH GEARED VALUE & INCOME TRU ORD 1P,uk stock,Y,GBX,,yfinance,-,Y,,,LSE : FTSE All-Share
+BTC-GBP,Bitcoin,cryptocurrency,N,GBP,,yfinance,-,Y,,,25 most popular crypto currency available on yfinance : Market Cap > $2B
+ETH-GBP,Ethereum,cryptocurrency,N,GBP,,yfinance,-,Y,,,26 most popular crypto currency available on yfinance : Market Cap > $2B
+USDT-GBP,Tether,cryptocurrency,N,GBP,,yfinance,-,Y,,,27 most popular crypto currency available on yfinance : Market Cap > $2B
+XRP-GBP,XRP,cryptocurrency,N,GBP,,yfinance,-,Y,,,28 most popular crypto currency available on yfinance : Market Cap > $2B
+BNB-GBP,BNB,cryptocurrency,N,GBP,,yfinance,-,Y,,,29 most popular crypto currency available on yfinance : Market Cap > $2B
+SOL-GBP,Solana,cryptocurrency,N,GBP,,yfinance,-,Y,,,30 most popular crypto currency available on yfinance : Market Cap > $2B
+USDC-GBP,USDC,cryptocurrency,N,GBP,,yfinance,-,Y,,,31 most popular crypto currency available on yfinance : Market Cap > $2B
+DOGE-GBP,Dogecoin,cryptocurrency,N,GBP,,yfinance,-,Y,,,32 most popular crypto currency available on yfinance : Market Cap > $2B
+TRX-GBP,Tron,cryptocurrency,N,GBP,,yfinance,-,Y,,,33 most popular crypto currency available on yfinance : Market Cap > $2B
+ADA-GBP,Cardano,cryptocurrency,N,GBP,,yfinance,-,Y,,,34 most popular crypto currency available on yfinance : Market Cap > $2B
+LINK-GBP,Chainlink,cryptocurrency,N,GBP,,yfinance,-,Y,,,35 most popular crypto currency available on yfinance : Market Cap > $2B
+AVAX-GBP,Avalanche,cryptocurrency,N,GBP,,yfinance,-,Y,,,36 most popular crypto currency available on yfinance : Market Cap > $2B
+XLM-GBP,Stellar,cryptocurrency,N,GBP,,yfinance,-,Y,,,37 most popular crypto currency available on yfinance : Market Cap > $2B
+BCH-GBP,Bitcoin Cash,cryptocurrency,N,GBP,,yfinance,-,Y,,,38 most popular crypto currency available on yfinance : Market Cap > $2B
+SHIB-GBP,Shiba Inu,cryptocurrency,N,GBP,,yfinance,-,Y,,,39 most popular crypto currency available on yfinance : Market Cap > $2B
+HBAR-GBP,Hedera,cryptocurrency,N,GBP,,yfinance,-,Y,,,40 most popular crypto currency available on yfinance : Market Cap > $2B
+LTC-GBP,Litecoin,cryptocurrency,N,GBP,,yfinance,-,Y,,,41 most popular crypto currency available on yfinance : Market Cap > $2B
+DOT-GBP,Polkadot,cryptocurrency,N,GBP,,yfinance,-,Y,,,42 most popular crypto currency available on yfinance : Market Cap > $2B
+XMR-GBP,Monero,cryptocurrency,N,GBP,,yfinance,-,Y,,,43 most popular crypto currency available on yfinance : Market Cap > $2B
+DAI-GBP,Dai,cryptocurrency,N,GBP,,yfinance,-,Y,,,44 most popular crypto currency available on yfinance : Market Cap > $2B
+AAVE-GBP,Aave,cryptocurrency,N,GBP,,yfinance,-,Y,,,45 most popular crypto currency available on yfinance : Market Cap > $2B
+ICP-GBP,Internet Computer,cryptocurrency,N,GBP,,yfinance,-,Y,,,46 most popular crypto currency available on yfinance : Market Cap > $2B
+CRO-GBP,Cronos,cryptocurrency,N,GBP,,yfinance,-,Y,,,47 most popular crypto currency available on yfinance : Market Cap > $2B
+ETC-GBP,Ethereum Classic,cryptocurrency,N,GBP,,yfinance,-,Y,,,48 most popular crypto currency available on yfinance : Market Cap > $2B
+SKY-GBP,Skycoin,cryptocurrency,N,GBP,,yfinance,-,Y,,,49 most popular crypto currency available on yfinance : Market Cap > $2B
 AU,PHYSICAL GOLD,commodity,N,USD,,local_csv,raw/csv/commodities/gold.csv,Y,,,No api available : yahoo had limited data
 SI,PHYSICAL SILVER,commodity,N,USD,,local_csv,raw/csv/commodities/silver.csv,Y,,,No api available : yahoo had limited data
