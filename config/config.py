@@ -1,9 +1,9 @@
 import os
 
 EXTERNAL_DATA_BASE_PATH = "/Volumes/T7/investment_backtester_data"  
-PARQUET_PRICE_PATH = "raw/prices"
+PARQUET_PRICE_PATH = "processed/parquet/prices"
+PARQUET_DIVIDEND_PATH = "processed/parquet/dividends"
 CSV_METAL_PATH = "raw/metals.csv"
-PARQUET_DIVIDEND_PATH = "raw/dividends"
 METADATA_CSV_NAME = "asset_metadata.csv" 
 
 # this method works provided the file is within the same config folder as the current script
@@ -18,3 +18,4 @@ def get_metal_data_path():
 
 def get_dividend_data_path():
     return os.path.join(EXTERNAL_DATA_BASE_PATH, PARQUET_DIVIDEND_PATH)
+

@@ -70,9 +70,24 @@ class CSVIngestor:
     # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
     def transform_data(self): 
 
-        # Clean column names - assume adj close (No dividends)
-        transformed_data = self.raw_data.columns['Date','Adj Close']
+        csv_data = self.raw_data
 
+        # Clean csv files based on column count      
+        if len(csv_data.columns)==3:
+            transformed_data = csv_data.rename({
+                csv_data.columns[0]:'Date',
+                csv_data.columns[1]:'Adj Close',
+                csv_data.columns[2]:'Close',
+            })
+        elif len(csv_data.columns)==2:
+            transformed_data = csv_data.select([
+                pl.col(csv_data.columns[0]).alias('Date'),
+                pl.col(csv_data.columns[1]).alias('Adj Close'),
+                pl.col(csv_data.columns[1]).alias('Close')
+            ])
+        else:
+            raise ValueError("Invalid number of columns in CSV file")
+        
         # Add ticker column
         transformed_data['Ticker'] = self.ticker
 
