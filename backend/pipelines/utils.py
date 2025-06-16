@@ -24,6 +24,32 @@ from backend import config
 
 #     return (df.filter(pl.col("source")==cleaned_source).get_column(cleaned_column).to_list())
 # 
-# def get_yFinance_tickers() -> list[str]:
+#
 
-print(config.METADATA_CSV_PATH)
+def get_yfinance_tickers() -> list[str]:
+    metadata = (
+        pl.scan_csv(config.get_asset_metadata_path())
+        .filter(pl.col("source")=="yfinance")
+        .select("ticker")
+        .collect()
+    )
+    return metadata["ticker"].to_list()
+
+def get_csv_sources() -> dict[str: str]:
+    metadata = (
+        pl.scan_csv(config.get_asset_metadata_path())
+        .filter(pl.col("source")=="local_csv")
+        .select("ticker","source_file_path")
+        .collect()
+    )
+    return [{ticker: source} for ticker, source in metadata.select(["ticker","source_file_path"]).iter_rows()]
+    
+yfinance_tickers = get_yfinance_tickers()    
+print("YFinance tickers : ")
+for ticker in yfinance_tickers:
+    print(ticker)
+
+csv_tickers = get_csv_sources()
+print("CSV ticker dicts : ")
+for ticker in csv_tickers:
+    print(ticker)
