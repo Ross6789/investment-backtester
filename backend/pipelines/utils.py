@@ -44,12 +44,12 @@ def get_csv_ticker_source_map() -> dict[str: str]:
     )
     return [{"ticker": ticker, "source_path": source_path} for ticker, source_path in metadata.select(["ticker","source_file_path"]).iter_rows()]
     
-yfinance_tickers = get_yfinance_tickers()    
-print("YFinance tickers : ")
-for ticker in yfinance_tickers:
-    print(ticker)
+# yfinance_tickers = get_yfinance_tickers()    
+# print("YFinance tickers : ")
+# for ticker in yfinance_tickers:
+#     print(ticker)
 
-csv_tickers = get_csv_ticker_source_map()
-print("CSV ticker dicts : ")
-for ticker in csv_tickers:
-    print(ticker)
+# csv_tickers = get_csv_ticker_source_map()
+# print("CSV ticker dicts : ")
+# for ticker in csv_tickers:
+#     print(ticker)

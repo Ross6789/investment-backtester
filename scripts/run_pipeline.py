@@ -19,12 +19,12 @@ save_path = config.get_price_data_path()
 # Instantiate list of ingestors
 ingestors = []
 
-# yfinance ingestor
-ingestors.append(YFinanceIngestor(yfinance_tickers,yfinance_batch_size,start_date,end_date))
+# # yfinance ingestor
+# ingestors.append(YFinanceIngestor(yfinance_tickers,yfinance_batch_size,start_date,end_date))
 
 # csv ingestors
 for csv in csv_ticker_source_map:
-    ingestors.append(CSVIngestor(csv["ticker"],os.path.join(csv_base_path,csv["source_path"])))
+    ingestors.append(CSVIngestor(csv["ticker"],os.path.join(csv_base_path,csv["source_path"]),start_date,end_date))
 
 # Instantiate and run price pipeline
 pipeline = PriceDataPipeline(ingestors,save_path)

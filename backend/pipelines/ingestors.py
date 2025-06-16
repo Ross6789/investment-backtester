@@ -73,9 +73,11 @@ class YFinanceIngestor:
         return self.data
 
 class CSVIngestor:
-    def __init__(self, ticker, source_path):
+    def __init__(self, ticker, source_path, start_date, end_date):
         self.ticker = ticker
         self.source_path = source_path
+        self.start_date = start_date
+        self.end_date = end_date
         self.data = None
 
     # Method to download data from csv
@@ -109,6 +111,18 @@ class CSVIngestor:
 
         # Convert date column to date
         transformed_data = transformed_data.with_columns(pl.col('Date').str.strptime(pl.Date,"%d/%m/%Y"))
+
+        # Filter based on start date
+        if self.start_date:
+            transformed_data = transformed_data.filter(
+                pl.col('Date') >= pl.lit(self.start_date).cast(pl.Date)
+                )
+
+        # Filter based on end date
+        if self.end_date:
+            transformed_data = transformed_data.filter(
+                pl.col('Date') <= pl.lit(self.end_date).cast(pl.Date)
+                )
 
         self.data = transformed_data
         print('Data cleaned')
