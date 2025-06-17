@@ -1318,3 +1318,66 @@ X,United States Steel,us stock,,USD,,yfinance,-,Y,,,household name bluechip stoc
 PARA,Paramount Global (formerly ViacomCBS),us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500
 KODK,Eastman Kodak,us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500
 XRX,Xerox,us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500
+0P0001O2BP.L,Vanguard ActLife Clmt Awr 40-50% Eq Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001O2BQ.L,Vanguard ActLife Clmt Arw 40-50% Eq Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P000185T5.L,Vanguard ActLife Clmt Awr 60-70% Eq Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P000185T6.L,Vanguard ActLife Clmt Awr 60-70% Eq Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001O2BR.L,Vanguard ActLife Clmt Awr 80-90% Eq Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001O2BS.L,Vanguard ActLife Clmt Awr 80-90% Eq Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZG.L,Vanguard Lifestrategy 20% Equity Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZH.L,Vanguard Lifestrategy 20% Equity Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZI.L,Vanguard Lifestrategy 40% Equity Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZJ.L,Vanguard Lifestrategy 40% Equity Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZK.L,Vanguard Lifestrategy 60% Equity Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZL.L,Vanguard Lifestrategy 60% Equity Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZM.L,Vanguard Lifestrategy 80% Equity Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZN.L,Vanguard Lifestrategy 80% Equity Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZO.L,Vanguard Lifestrategy 100% Equity Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000TKZP.L,Vanguard Lifestrategy 100% Equity Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWM.L,Vanguard Target Retirement 2015 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWO.L,Vanguard Target Retirement 2020 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWP.L,Vanguard Target Retirement 2025 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWQ.L,Vanguard Target Retirement 2030 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWR.L,Vanguard Target Retirement 2035 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWS.L,Vanguard Target Retirement 2040 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWT.L,Vanguard Target Retirement 2045 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWU.L,Vanguard Target Retirement 2050 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00017UWV.L,Vanguard Target Retirement 2055 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001CE2H.L,Vanguard Target Retirement 2060 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001CE2G.L,Vanguard Target Retirement 2065 Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001IL91.L,Vanguard Active UK Equity Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001IL90.L,Vanguard Active UK Equity Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001IU24.L,Vanguard Emerging Markets Bond Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001T4ZA.L,Vanguard Emerging Markets Bond Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KM22.L,Vanguard Emerging Markets Stock Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KM21.L,Vanguard Emerging Markets Stock Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000UGLE.L,Vanguard ESG Developed Europe Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000UGLF.L,Vanguard ESG Developed Europe Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000UGLG.L,Vanguard ESG Developed World All Cap Equity Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000UGLH.L,Vanguard ESG Developed World All Cap Equity Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001K1DR.L,Vanguard ESG Emerging Markets All Cap Equity Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001K1DS.L,Vanguard ESG Emerging Markets All Cap Equity Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001PXCY.L,Vanguard ESG Global Corporate Bond Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001PXCT.L,Vanguard ESG Global Corporate Bond Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001K1DP.L,Vanguard ESG Screened Developed World All Cap Equity Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001K1DQ.L,Vanguard ESG Screened Developed World All Cap Equity Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00011WUG.L,Vanguard Euro Government Bond Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00011WUF.L,Vanguard Euro Investment Grade Bond Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00018XAP.L,Vanguard FTSE 100 Index Unit Trust Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00018XAQ.L,Vanguard FTSE 100 Index Unit Trust Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KSP8.L,Vanguard FTSE Developed Europe ex-U.K. Equity Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KSP9.L,Vanguard FTSE Developed Europe ex-U.K. Equity Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KSP6.L,Vanguard FTSE Developed World ex-U.K. Equity Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KSP7.L,Vanguard FTSE Developed World ex-U.K. Equity Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00018XAR.L,Vanguard FTSE Global All Cap Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P00018XAO.L,Vanguard FTSE Global All Cap Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000SAVS.L,Vanguard FTSE U.K. All Share Index Unit Trust Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P000147Q3.L,Vanguard FTSE U.K. All Share Index Unit Trust Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KSP4.L,Vanguard FTSE U.K. Equity Income Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KSP5.L,Vanguard FTSE U.K. Equity Income Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KM24.L,Vanguard Global Bond Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0000KM23.L,Vanguard Global Bond Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001O2BN.L,Vanguard Global Capital Stewards Equity Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001O2BO.L,Vanguard Global Capital Stewards Equity Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001C5T6.L,Vanguard Global Corporate Bond Index Fund Acc,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund
+0P0001LJIX.L,Vanguard Global Corporate Bond Index Fund Dist,mutual fund,,GBP,,yfinance,-,Y,,,Vanguard mutual fund

@@ -9,6 +9,7 @@ yfinance_tickers_ukstock = utils.get_yfinance_tickers("uk stock")
 yfinance_tickers_cryptocurrency = utils.get_yfinance_tickers("cryptocurrency")
 yfinance_tickers_etf = utils.get_yfinance_tickers("etf")
 yfinance_tickers_usstock = utils.get_yfinance_tickers("us stock")
+yfinance_tickers_mutualfund = utils.get_yfinance_tickers("mutual fund")
 yfinance_batch_size = 100
 csv_ticker_source_map = utils.get_csv_ticker_source_map()
 csv_base_path = config.EXTERNAL_DATA_BASE_PATH
@@ -20,7 +21,7 @@ save_path = config.get_price_data_path()
 ingestors = []
 
 # yfinance ingestor
-ingestors.append(YFinanceIngestor(yfinance_tickers_usstock,yfinance_batch_size,start_date,end_date))
+ingestors.append(YFinanceIngestor(yfinance_tickers_mutualfund,yfinance_batch_size,start_date,end_date))
 
 # # csv ingestors
 # for csv in csv_ticker_source_map:
