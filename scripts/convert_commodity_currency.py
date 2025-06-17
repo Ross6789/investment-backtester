@@ -4,8 +4,8 @@ import polars as pl
 read_path_gold = "/Volumes/T7/investment_backtester_data/raw/metals/investing.com/investing_com_gold.csv"
 read_path_silver = "/Volumes/T7/investment_backtester_data/raw/metals/investing.com/investing_com_silver.csv"
 read_path_exchange = "/Volumes/T7/investment_backtester_data/raw/metals/investing.com/investing_com_exchange.csv"
-save_path_gold = "/Volumes/T7/investment_backtester_data/raw/metals/investing.com/investing_com_gold_filtered.csv"
-save_path_silver = "/Volumes/T7/investment_backtester_data/raw/metals/investing.com/investing_com_silver_filtered.csv"
+save_path_gold = "/Volumes/T7/investment_backtester_data/raw/metals/investing.com/investing_com_gold_converted.csv"
+save_path_silver = "/Volumes/T7/investment_backtester_data/raw/metals/investing.com/investing_com_silver_converted.csv"
 
 # Read csvs
 gold_df = pl.read_csv(read_path_gold)
