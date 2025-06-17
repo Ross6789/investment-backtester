@@ -71,7 +71,7 @@ class YFinanceIngestor:
         combined_data = pd.concat(batch_data)
         self.transform_data(combined_data)
         return self.data
-
+    
 class CSVIngestor:
     def __init__(self, ticker, source_path, start_date, end_date):
         self.ticker = ticker
