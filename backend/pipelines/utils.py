@@ -8,6 +8,8 @@ def get_yfinance_tickers(asset_type: str) -> list[str]:
         .select("ticker")
         .collect()
     )
+    print(f"{asset_type} ticker subset :")
+    print(metadata.head())
     return metadata["ticker"].to_list()
 
 def get_csv_ticker_source_map() -> dict[str: str]:
