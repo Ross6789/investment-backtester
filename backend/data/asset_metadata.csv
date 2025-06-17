@@ -1,6 +1,4 @@
 ﻿ticker,name,asset_type,dividends,currency,isin,source,source_file_path,active,start_date,end_date,notes
-AAPL,APPLE,us stock,Y,USD,-,yfinance,-,Y,01/12/2024,31/12/2024,Test data
-GOOG,GOOGLE,us stock,Y,USD,-,yfinance,-,Y,02/12/2024,01/01/2025,Test data
 HLMA.L,HALMA PLC ORD 10P,uk stock,Y,GBX,,yfinance,-,Y,,,LSE : FTSE All-Share
 ITV.L,ITV PLC ORD 10P,uk stock,Y,GBX,,yfinance,-,Y,,,LSE : FTSE All-Share
 PAY.L,PAYPOINT PLC ORD 1/3P,uk stock,Y,GBX,,yfinance,-,Y,,,LSE : FTSE All-Share
@@ -811,3 +809,512 @@ COMF.L,LEGAL & GENERAL UCITS ETF PLC L&G LONGER DATED ALL COMMODITIES,etf,,USD,,
 CMFP.L,LEGAL & GENERAL UCITS ETF PLC L&G LONGER DATED ALL COMMODITIES,etf,,GBX,,yfinance,-,Y,,,250 ETFs on LSE with highest market cap
 VUCP.L,VANGUARD FUNDS PLC VANGUARD USD CORPORATE BOND UCITS ETF,etf,,GBP,,yfinance,-,Y,,,250 ETFs on LSE with highest market cap
 CRUD.L,WISDOMTREE COMMODITY SECURITIES LTD WISDOMTREE WTI CRUDE OIL,etf,,USD,,yfinance,-,Y,,,250 ETFs on LSE with highest market cap
+A,Agilent Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AAPL,Apple Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ABBV,AbbVie Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ABNB,Airbnb,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ABT,Abbott Laboratories,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ACGL,Arch Capital Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ACN,Accenture,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ADBE,Adobe Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ADI,Analog Devices,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ADM,Archer Daniels Midland,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ADP,Automatic Data Processing,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ADSK,Autodesk,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AEE,Ameren,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AEP,American Electric Power,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AES,AES Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AFL,Aflac,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AIG,American International Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AIZ,Assurant,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AJG,Arthur J. Gallagher & Co.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AKAM,Akamai Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ALB,Albemarle Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ALGN,Align Technology,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ALL,Allstate,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ALLE,Allegion,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AMAT,Applied Materials,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AMCR,Amcor,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AMD,Advanced Micro Devices,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AME,Ametek,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AMGN,Amgen,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AMP,Ameriprise Financial,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AMT,American Tower,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AMZN,Amazon,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ANET,Arista Networks,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ANSS,Ansys,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AON,Aon plc,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AOS,A. O. Smith,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+APA,APA Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+APD,Air Products,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+APH,Amphenol,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+APO,Apollo Global Management,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+APTV,Aptiv,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ARE,Alexandria Real Estate Equities,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ATO,Atmos Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AVB,AvalonBay Communities,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AVGO,Broadcom,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AVY,Avery Dennison,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AWK,American Water Works,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AXON,Axon Enterprise,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AXP,American Express,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+AZO,AutoZone,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BA,Boeing,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BAC,Bank of America,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BALL,Ball Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BAX,Baxter International,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BBY,Best Buy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BDX,Becton Dickinson,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BEN,Franklin Resources,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BF-B,Brown Forman,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BG,Bunge Global,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BIIB,Biogen,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BK,BNY Mellon,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BKNG,Booking Holdings,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BKR,Baker Hughes,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BLDR,Builders FirstSource,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BLK,BlackRock,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BMY,Bristol Myers Squibb,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BR,Broadridge Financial Solutions,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BRK-B,Berkshire Hathaway,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BRO,Brown & Brown,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BSX,Boston Scientific,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BX,Blackstone Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+BXP,"BXP, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+C,Citigroup,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CAG,Conagra Brands,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CAH,Cardinal Health,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CARR,Carrier Global,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CAT,Caterpillar Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CB,Chubb Limited,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CBOE,Cboe Global Markets,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CBRE,CBRE Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CCI,Crown Castle,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CCL,Carnival,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CDNS,Cadence Design Systems,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CDW,CDW Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CEG,Constellation Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CF,CF Industries,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CFG,Citizens Financial Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CHD,Church & Dwight,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CHRW,C.H. Robinson,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CHTR,Charter Communications,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CI,Cigna,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CINF,Cincinnati Financial,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CL,Colgate-Palmolive,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CLX,Clorox,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CMCSA,Comcast,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CME,CME Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CMG,Chipotle Mexican Grill,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CMI,Cummins,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CMS,CMS Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CNC,Centene Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CNP,CenterPoint Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+COF,Capital One,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+COIN,Coinbase,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+COO,Cooper Companies (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+COP,ConocoPhillips,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+COR,Cencora,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+COST,Costco,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CPAY,Corpay,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CPB,Campbell's Company (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CPRT,Copart,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CPT,Camden Property Trust,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CRL,Charles River Laboratories,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CRM,Salesforce,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CRWD,CrowdStrike,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CSCO,Cisco,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CSGP,CoStar Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CSX,CSX Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CTAS,Cintas,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CTRA,Coterra,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CTSH,Cognizant,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CTVA,Corteva,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CVS,CVS Health,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CVX,Chevron Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+CZR,Caesars Entertainment,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+D,Dominion Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DAL,Delta Air Lines,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DASH,DoorDash,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DAY,Dayforce,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DD,DuPont,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DE,Deere & Company,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DECK,Deckers Brands,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DELL,Dell Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DG,Dollar General,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DGX,Quest Diagnostics,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DHI,D. R. Horton,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DHR,Danaher Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DIS,Walt Disney Company (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DLR,Digital Realty,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DLTR,Dollar Tree,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DOC,Healthpeak Properties,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DOV,Dover Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DOW,Dow Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DPZ,Domino's,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DRI,Darden Restaurants,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DTE,DTE Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DUK,Duke Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DVA,DaVita,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DVN,Devon Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+DXCM,Dexcom,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EA,Electronic Arts,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EBAY,eBay Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ECL,Ecolab,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ED,Consolidated Edison,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EFX,Equifax,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EG,Everest Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EIX,Edison International,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EL,Estee Lauder Companies ,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ELV,Elevance Health,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EMN,Eastman Chemical Company,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EMR,Emerson Electric,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ENPH,Enphase Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EOG,EOG Resources,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EPAM,EPAM Systems,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EQIX,Equinix,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EQR,Equity Residential,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EQT,EQT Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ERIE,Erie Indemnity,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ES,Eversource Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ESS,Essex Property Trust,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ETN,Eaton Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ETR,Entergy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EVRG,Evergy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EW,Edwards Lifesciences,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EXC,Exelon,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EXE,Expand Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EXPD,Expeditors International,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EXPE,Expedia Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+EXR,Extra Space Storage,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+F,Ford Motor Company,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FANG,Diamondback Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FAST,Fastenal,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FCX,Freeport-McMoRan,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FDS,FactSet,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FDX,FedEx,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FE,FirstEnergy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FFIV,"F5, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FI,Fiserv,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FICO,Fair Isaac,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FIS,Fidelity National Information Services,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FITB,Fifth Third Bancorp,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FOX,Fox Corporation (Class B),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FOXA,Fox Corporation (Class A),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FRT,Federal Realty Investment Trust,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FSLR,First Solar,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FTNT,Fortinet,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+FTV,Fortive,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GD,General Dynamics,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GDDY,GoDaddy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GE,GE Aerospace,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GEHC,GE HealthCare,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GEN,Gen Digital,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GEV,GE Vernova,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GILD,Gilead Sciences,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GIS,General Mills,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GL,Globe Life,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GLW,Corning Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GM,General Motors,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GNRC,Generac,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GOOG,Alphabet Inc. (Class C),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GOOGL,Alphabet Inc. (Class A),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GPC,Genuine Parts Company,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GPN,Global Payments,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GRMN,Garmin,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GS,Goldman Sachs,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+GWW,W. W. Grainger,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HAL,Halliburton,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HAS,Hasbro,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HBAN,Huntington Bancshares,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HCA,HCA Healthcare,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HD,Home Depot (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HES,Hess Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HIG,Hartford (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HII,Huntington Ingalls Industries,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HLT,Hilton Worldwide,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HOLX,Hologic,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HON,Honeywell,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HPE,Hewlett Packard Enterprise,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HPQ,HP Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HRL,Hormel Foods,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HSIC,Henry Schein,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HST,Host Hotels & Resorts,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HSY,Hershey Company (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HUBB,Hubbell Incorporated,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HUM,Humana,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HWM,Howmet Aerospace,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IBM,IBM,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ICE,Intercontinental Exchange,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IDXX,Idexx Laboratories,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IEX,IDEX Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IFF,International Flavors & Fragrances,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+INCY,Incyte,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+INTC,Intel,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+INTU,Intuit,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+INVH,Invitation Homes,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IP,International Paper,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IPG,Interpublic Group of Companies (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IQV,IQVIA,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IR,Ingersoll Rand,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IRM,Iron Mountain,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ISRG,Intuitive Surgical,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IT,Gartner,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ITW,Illinois Tool Works,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+IVZ,Invesco,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+J,Jacobs Solutions,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+JBHT,J.B. Hunt,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+JBL,Jabil,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+JCI,Johnson Controls,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+JKHY,Jack Henry & Associates,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+JNJ,Johnson & Johnson,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+JNPR,Juniper Networks,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+JPM,JPMorgan Chase,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+K,Kellanova,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KDP,Keurig Dr Pepper,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KEY,KeyCorp,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KEYS,Keysight Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KHC,Kraft Heinz,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KIM,Kimco Realty,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KKR,KKR & Co.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KLAC,KLA Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KMB,Kimberly-Clark,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KMI,Kinder Morgan,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KMX,CarMax,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KO,Coca-Cola Company (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KR,Kroger,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+KVUE,Kenvue,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+L,Loews Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LDOS,Leidos,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LEN,Lennar,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LH,Labcorp,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LHX,L3Harris,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LII,Lennox International,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LIN,Linde plc,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LKQ,LKQ Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LLY,Lilly (Eli),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LMT,Lockheed Martin,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LNT,Alliant Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LOW,Lowe's,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LRCX,Lam Research,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LULU,Lululemon Athletica,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LUV,Southwest Airlines,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LVS,Las Vegas Sands,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LW,Lamb Weston,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LYB,LyondellBasell,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+LYV,Live Nation Entertainment,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MA,Mastercard,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MAA,Mid-America Apartment Communities,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MAR,Marriott International,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MAS,Masco,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MCD,McDonald's,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MCHP,Microchip Technology,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MCK,McKesson Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MCO,Moody's Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MDLZ,Mondelez International,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MDT,Medtronic,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MET,MetLife,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+META,Meta Platforms,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MGM,MGM Resorts,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MHK,Mohawk Industries,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MKC,McCormick & Company,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MKTX,MarketAxess,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MLM,Martin Marietta Materials,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MMC,Marsh McLennan,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MMM,3M,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MNST,Monster Beverage,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MO,Altria,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MOH,Molina Healthcare,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MOS,Mosaic Company (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MPC,Marathon Petroleum,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MPWR,Monolithic Power Systems,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MRK,Merck & Co.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MRNA,Moderna,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MS,Morgan Stanley,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MSCI,MSCI Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MSFT,Microsoft,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MSI,Motorola Solutions,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MTB,M&T Bank,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MTCH,Match Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MTD,Mettler Toledo,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+MU,Micron Technology,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NCLH,Norwegian Cruise Line Holdings,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NDAQ,"Nasdaq, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NDSN,Nordson Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NEE,NextEra Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NEM,Newmont,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NFLX,Netflix,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NI,NiSource,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NKE,"Nike, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NOC,Northrop Grumman,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NOW,ServiceNow,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NRG,NRG Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NSC,Norfolk Southern,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NTAP,NetApp,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NTRS,Northern Trust,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NUE,Nucor,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NVDA,Nvidia,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NVR,"NVR, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NWS,News Corp (Class B),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NWSA,News Corp (Class A),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+NXPI,NXP Semiconductors,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+O,Realty Income,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ODFL,Old Dominion,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+OKE,Oneok,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+OMC,Omnicom Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ON,ON Semiconductor,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ORCL,Oracle Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ORLY,O'Reilly Automotive,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+OTIS,Otis Worldwide,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+OXY,Occidental Petroleum,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PANW,Palo Alto Networks,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PARA,Paramount Global,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PAYC,Paycom,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PAYX,Paychex,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PCAR,Paccar,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PCG,PG&E Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PEG,Public Service Enterprise Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PEP,PepsiCo,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PFE,Pfizer,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PFG,Principal Financial Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PG,Procter & Gamble,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PGR,Progressive Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PH,Parker Hannifin,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PHM,PulteGroup,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PKG,Packaging Corporation of America,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PLD,Prologis,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PLTR,Palantir Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PM,Philip Morris International,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PNC,PNC Financial Services,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PNR,Pentair,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PNW,Pinnacle West Capital,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PODD,Insulet Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+POOL,Pool Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PPG,PPG Industries,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PPL,PPL Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PRU,Prudential Financial,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PSA,Public Storage,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PSX,Phillips 66,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PTC,PTC Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PWR,Quanta Services,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+PYPL,PayPal,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+QCOM,Qualcomm,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+RCL,Royal Caribbean Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+REG,Regency Centers,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+REGN,Regeneron Pharmaceuticals,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+RF,Regions Financial Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+RJF,Raymond James Financial,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+RL,Ralph Lauren Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+RMD,ResMed,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ROK,Rockwell Automation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ROL,"Rollins, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ROP,Roper Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ROST,Ross Stores,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+RSG,Republic Services,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+RTX,RTX Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+RVTY,Revvity,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SBAC,SBA Communications,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SBUX,Starbucks,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SCHW,Charles Schwab Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SHW,Sherwin-Williams,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SJM,J.M. Smucker Company (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SLB,Schlumberger,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SMCI,Supermicro,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SNA,Snap-on,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SNPS,Synopsys,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SO,Southern Company,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SOLV,Solventum,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SPG,Simon Property Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SPGI,S&P Global,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SRE,Sempra,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+STE,Steris,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+STLD,Steel Dynamics,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+STT,State Street Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+STX,Seagate Technology,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+STZ,Constellation Brands,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SW,Smurfit Westrock,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SWK,Stanley Black & Decker,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SWKS,Skyworks Solutions,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SYF,Synchrony Financial,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SYK,Stryker Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+SYY,Sysco,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+T,AT&T,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TAP,Molson Coors Beverage Company,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TDG,TransDigm Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TDY,Teledyne Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TECH,Bio-Techne,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TEL,TE Connectivity,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TER,Teradyne,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TFC,Truist Financial,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TGT,Target Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TJX,TJX Companies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TKO,TKO Group Holdings,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TMO,Thermo Fisher Scientific,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TMUS,T-Mobile US,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TPL,Texas Pacific Land Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TPR,"Tapestry, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TRGP,Targa Resources,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TRMB,Trimble Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TROW,T. Rowe Price,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TRV,Travelers Companies (The),us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TSCO,Tractor Supply,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TSLA,"Tesla, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TSN,Tyson Foods,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TT,Trane Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TTWO,Take-Two Interactive,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TXN,Texas Instruments,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TXT,Textron,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+TYL,Tyler Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+UAL,United Airlines Holdings,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+UBER,Uber,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+UDR,"UDR, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+UHS,Universal Health Services,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ULTA,Ulta Beauty,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+UNH,UnitedHealth Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+UNP,Union Pacific Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+UPS,United Parcel Service,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+URI,United Rentals,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+USB,U.S. Bancorp,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+V,Visa Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VICI,Vici Properties,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VLO,Valero Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VLTO,Veralto,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VMC,Vulcan Materials Company,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VRSK,Verisk Analytics,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VRSN,Verisign,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VRTX,Vertex Pharmaceuticals,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VST,Vistra Corp.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VTR,Ventas,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VTRS,Viatris,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+VZ,Verizon,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WAB,Wabtec,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WAT,Waters Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WBA,Walgreens Boots Alliance,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WBD,Warner Bros. Discovery,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WDAY,"Workday, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WDC,Western Digital,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WEC,WEC Energy Group,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WELL,Welltower,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WFC,Wells Fargo,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WM,Waste Management,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WMB,Williams Companies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WMT,Walmart,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WRB,W. R. Berkley Corporation,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WSM,"Williams-Sonoma, Inc.",us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WST,West Pharmaceutical Services,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WTW,Willis Towers Watson,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WY,Weyerhaeuser,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+WYNN,Wynn Resorts,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+XEL,Xcel Energy,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+XOM,ExxonMobil,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+XYL,Xylem Inc.,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+YUM,Yum! Brands,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ZBH,Zimmer Biomet,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ZBRA,Zebra Technologies,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+ZTS,Zoetis,us stock,,USD,,yfinance,-,Y,,,S&P500 constituents
+HMC,Honda Motor Co.,us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500
+QSR,Burger King (Restaurant Brands Intl),us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500
+X,United States Steel,us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500
+PARA,Paramount Global (formerly ViacomCBS),us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500
+KODK,Eastman Kodak,us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500
+XRX,Xerox,us stock,,USD,,yfinance,-,Y,,,household name bluechip stock outside of S&P500

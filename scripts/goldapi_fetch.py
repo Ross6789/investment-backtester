@@ -4,8 +4,8 @@ import json
 def make_gapi_request():
     api_key = "goldapi-4foj4a2smc0shlje-io"
     symbol = "XAU"
-    curr = "USD"
-    date = "/19700101"
+    curr = "GBP"
+    date = ""
 
     url = f"https://www.goldapi.io/api/{symbol}/{curr}{date}"
     
