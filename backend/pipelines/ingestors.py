@@ -39,7 +39,9 @@ class YFinanceIngestor:
             # Drop rows with missing price data
             filtered_df_clean = filtered_df.dropna(subset=['Adj Close', 'Close'])
 
+
             # Reset index to return date to a regular column
+            filtered_df_clean.index.name = 'Date'
             filtered_df_reset = filtered_df_clean.reset_index()
 
             # Add ticker column
