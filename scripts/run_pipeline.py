@@ -1,25 +1,39 @@
-import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-import config.config as config
-import backend.pipelines.asset_info as asset_info
-from backend.pipelines.price_pipeline import PriceDataPipeline
+import backend.config as config
+import backend.pipelines.utils as utils
+from backend.pipelines.pipeline import PriceDataPipeline
+from backend.pipelines.ingestors import YFinanceIngestor,CSVIngestor
 
 # Configuration
-tickers = asset_info.get_metadata("Ticker")
-start_date = "1900-01-01"
+yfinance_tickers_ukstock = utils.get_yfinance_tickers("uk stock")
+yfinance_tickers_cryptocurrency = utils.get_yfinance_tickers("cryptocurrency")
+yfinance_tickers_etf = utils.get_yfinance_tickers("etf")
+yfinance_tickers_usstock = utils.get_yfinance_tickers("us stock")
+yfinance_tickers_mutualfund = utils.get_yfinance_tickers("mutual fund")
+yfinance_batch_size = 100
+csv_ticker_source_map = utils.get_csv_ticker_source_map()
+csv_base_path = config.EXTERNAL_DATA_BASE_PATH
+start_date = "2024-01-01"
 end_date = "2025-01-01"
 save_path = config.get_price_data_path()
 
-# Instantiate and run pipeline
-test_pipeline = PriceDataPipeline(tickers,start_date,end_date,save_path)
-test_pipeline.run()
+# Instantiate list of ingestors
+ingestors = []
+
+# yfinance ingestor
+ingestors.append(YFinanceIngestor(yfinance_tickers_mutualfund,yfinance_batch_size,start_date,end_date))
+
+# # csv ingestors
+# for csv in csv_ticker_source_map:
+#     ingestors.append(CSVIngestor(csv["ticker"],os.path.join(csv_base_path,csv["source_path"]),start_date,end_date))
+
+# Instantiate and run price pipeline
+pipeline = PriceDataPipeline(ingestors,save_path)
+pipeline.run()
 
 # Quick test to confirm it works
 import polars as pl
 prices_df = (pl.scan_parquet(save_path).collect())   
 print(prices_df)
-
 
 

@@ -67,6 +67,37 @@ Depending on what you are making, it can be a good idea to include screenshots o
 ## Installation
 Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
+######
+
+1. Clone the repo from GitLab
+
+2. Navigate to your project folder within a terminal window and create a virtual environment by running the command:
+    python3 -m venv venv
+
+3. Activate the virtual environment using the following command:
+
+macOS/Linux: 
+    source venv/bin/activate
+
+Windows (PowerShell):
+    .\venv\Scripts\Activate.ps1
+
+4. Install dependancies using the requirements.txt file
+    pip install -r requirements.txt
+
+5. Run the setup script:
+
+    source setup.sh
+
+! Note: steps 1-4 willl only need to be completed once, step 5 is required every time a new terminal session is created. If using VSCode, you can run scripts directly usign the in-built play button as long as the interpreter is set to the python version within the virtual environent within the project folder. The .env file must be present with the line PYTHONPATH=. to allow the project root path to be added to th emodule search path for any imports
+
+<!-- 2. Create a .env file which contains a variable called PROJECT_ROOT whcih stores teh absolute path to you local project folder where the repo has been cloned 
+E.G. PROJECT_ROOT =/users/johnsmith/projects/IBT -->
+
+3
+
+######
+
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 

@@ -8,7 +8,7 @@ import tempfile
 import os
 import pandas as pd
 import polars as pl
-from backend.pipelines.price_pipeline import PriceDataPipeline
+from backend.pipelines.ingestors import PriceDataPipeline
 
 TEST_TICKERS = ["AAPL","GOOG"]
 TEST_START_DATE = "2024-01-01"
