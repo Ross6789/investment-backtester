@@ -1,59 +1,125 @@
-# class CSVIngestor:
-#     def __init__(self, ticker, source_path, start_date, end_date):
-#         self.ticker = ticker
-#         self.source_path = source_path
-#         self.start_date = start_date
-#         self.end_date = end_date
-#         self.data = None
+from unittest.mock import patch
+import pytest
+import polars as pl
+from backend.pipelines.ingestors import CSVIngestor
+from datetime import date
+from polars.testing import assert_frame_equal as pl_assert_frame_equal
 
-#     # Method to download data from csv
-#     def read_data(self) -> pl.DataFrame:
-#         print(f"Reading file : {self.source_path}...")
-#         raw_data = pl.read_csv(self.source_path)
-#         print("Read complete.")
-#         return raw_data
+@pytest.fixture
+def get_fixture_value(request):
+    return request.getfixturevalue(request.param)
 
-#     # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
-#     def transform_data(self, raw_data: pl.DataFrame): 
+# @pytest.fixture
+# def transformed_df(request):
+#     return request.getfixturevalue(request.param)
 
-#         # Clean csv files based on column count      
-#         if len(raw_data.columns)==3:
-#             transformed_data = raw_data.rename({
-#                 raw_data.columns[0]:'Date',
-#                 raw_data.columns[1]:'Adj Close',
-#                 raw_data.columns[2]:'Close',
-#             })
-#         elif len(raw_data.columns)==2:
-#             transformed_data = raw_data.select([
-#                 pl.col(raw_data.columns[0]).alias('Date'),
-#                 pl.col(raw_data.columns[1]).alias('Adj Close'),
-#                 pl.col(raw_data.columns[1]).alias('Close')
-#             ])
-#         else:
-#             raise ValueError("Invalid number of columns in CSV file")
-        
-#         # Add ticker column
-#         transformed_data = transformed_data.with_columns(pl.lit(self.ticker).alias("Ticker"))
+# @pytest.fixture
+# def ingestor(request):
+#     return request.getfixturevalue(request.param)
 
-#         # Convert date column to date
-#         transformed_data = transformed_data.with_columns(pl.col('Date').str.strptime(pl.Date,"%d/%m/%Y"))
+@pytest.fixture
+def sample_2col_df_raw():
+    return pl.DataFrame({
+        'Date':['01/01/2025','02/01/2025','03/01/2025','04/01/2025'],
+        'Close':[1000,1002,1004,1006]
+    })
 
-#         # Filter based on start date
-#         if self.start_date:
-#             transformed_data = transformed_data.filter(
-#                 pl.col('Date') >= pl.lit(self.start_date).cast(pl.Date)
-#                 )
+@pytest.fixture
+def expected_transformed_2col_df_full():
+    return pl.DataFrame({
+        'Date':[date(2025,1,1),date(2025,1,2),date(2025,1,3),date(2025,1,4)],
+        'Adj Close':[1000,1002,1004,1006],
+        'Close':[1000,1002,1004,1006],
+        'Ticker':['AAPL','AAPL','AAPL','AAPL']
+    })
 
-#         # Filter based on end date
-#         if self.end_date:
-#             transformed_data = transformed_data.filter(
-#                 pl.col('Date') <= pl.lit(self.end_date).cast(pl.Date)
-#                 )
+@pytest.fixture
+def expected_transformed_2col_df_filtered():
+    return pl.DataFrame({
+        'Date':[date(2025,1,2),date(2025,1,3)],
+        'Adj Close':[1002,1004],
+        'Close':[1002,1004],
+        'Ticker':['AAPL','AAPL']
+    })
 
-#         self.data = transformed_data
-#         print('Data cleaned')
-        
-#     def run(self) -> pl.DataFrame:
-#         raw_data = self.read_data()
-#         self.transform_data(raw_data)
-#         return self.data
+@pytest.fixture
+def sample_3col_df_raw():
+    return pl.DataFrame({
+        'Date':['01/01/2025','02/01/2025','03/01/2025','04/01/2025'],
+        'Adj Close':[1003,1005,1007,1009],
+        'Close':[1000,1002,1004,1006]
+    })
+
+@pytest.fixture
+def expected_transformed_3col_df_full():
+    return pl.DataFrame({
+        'Date':[date(2025,1,1),date(2025,1,2),date(2025,1,3),date(2025,1,4)],
+        'Adj Close':[1003,1005,1007,1009],
+        'Close':[1000,1002,1004,1006],
+        'Ticker':['AAPL','AAPL','AAPL','AAPL']
+    })
+
+@pytest.fixture
+def expected_transformed_3col_df_filtered():
+    return pl.DataFrame({
+        'Date':[date(2025,1,2),date(2025,1,3)],
+        'Adj Close':[1005,1007],
+        'Close':[1002,1004],
+        'Ticker':['AAPL','AAPL']
+    })
+
+@pytest.fixture
+def sample_ingestor_with_dates():
+    return CSVIngestor('AAPL','dummy_source_path.csv','2025-01-02','2025-01-03')
+
+@pytest.fixture
+def sample_ingestor_without_dates():
+    return CSVIngestor('AAPL','dummy_source_path.csv',None,None)
+
+# @pytest.mark.parametrize('tickers,batch_size,expected_batches',[
+#     # Large set of tickers
+#     (['AAPL', 'GOOG', 'TSLA', 'MSFT', 'AMZN'],2,[['AAPL','GOOG'],['TSLA','MSFT'],['AMZN']]), 
+#     # tickers less than batch size
+#     (['AAPL'],2,[['AAPL']]),
+#     # Empty ticker list
+#     ([],2,[]) 
+# ])
+# def test_batch_tickers(tickers,batch_size,expected_batches):
+#     ingestor = YFinanceIngestor(tickers,batch_size,'2025-01-01','2025-01-03')
+#     assert list(ingestor._batch_tickers()) == expected_batches
+
+
+@patch('backend.pipelines.ingestors.pl.read_csv')
+def test_read_data(mock_read_csv,sample_2col_df_raw, sample_ingestor_without_dates):
+    mock_read_csv.return_value = sample_2col_df_raw
+
+    ingestor = sample_ingestor_without_dates
+
+    result = ingestor.read_data()
+
+    mock_read_csv.assert_called_once_with('dummy_source_path.csv')
+
+    pl_assert_frame_equal(result, sample_2col_df_raw)
+
+csv_df = get_fixture_value
+transformed_df = get_fixture_value
+ingestor = get_fixture_value
+
+@pytest.mark.parametrize('csv_df,transformed_df,ingestor',[
+    ('sample_2col_df_raw','expected_transformed_2col_df_full','sample_ingestor_without_dates'),
+    ('sample_2col_df_raw','expected_transformed_2col_df_filtered','sample_ingestor_with_dates'),
+    ('sample_3col_df_raw','expected_transformed_3col_df_full','sample_ingestor_without_dates'),
+    ('sample_3col_df_raw','expected_transformed_3col_df_filtered','sample_ingestor_with_dates')
+], indirect=True)
+def test_transform_data(csv_df,transformed_df,ingestor):
+    ingestor.transform_data(csv_df)
+    pl_assert_frame_equal(ingestor.data,transformed_df) 
+
+# def test_run(monkeypatch, sample_pandas_df,sample_polars_df,sample_ingestor):
+
+#     monkeypatch.setattr(sample_ingestor,"_batch_tickers", lambda: iter([['AAPL','GOOG']]))
+#     monkeypatch.setattr(sample_ingestor,"download_data",lambda batch: sample_pandas_df)
+#     monkeypatch.setattr(sample_ingestor,"transform_data", lambda df: setattr(sample_ingestor,"data",sample_polars_df))
+
+#     result = sample_ingestor.run()
+#     pl_assert_frame_equal(result, sample_polars_df)
