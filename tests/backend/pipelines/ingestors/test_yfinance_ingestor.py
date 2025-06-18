@@ -29,6 +29,18 @@ def sample_polars_df():
 def sample_ingestor():
     return YFinanceIngestor(['AAPL','GOOG'],2,'2025-01-01','2025-01-03')
 
+@pytest.mark.parametrize('tickers,batch_size,expected_batches',[
+    # Large set of tickers
+    (['AAPL', 'GOOG', 'TSLA', 'MSFT', 'AMZN'],2,[['AAPL','GOOG'],['TSLA','MSFT'],['AMZN']]), 
+    # tickers less than batch size
+    (['AAPL'],2,[['AAPL']]),
+    # Empty ticker list
+    ([],2,[]) 
+])
+def test_batch_tickers(tickers,batch_size,expected_batches):
+    ingestor = YFinanceIngestor(tickers,batch_size,'2025-01-01','2025-01-03')
+    assert list(ingestor._batch_tickers()) == expected_batches
+
 
 @patch('backend.pipelines.ingestors.yf.download')
 def test_download_data(mock_download,sample_pandas_df,sample_ingestor):
@@ -55,6 +67,11 @@ def test_transform_data(sample_pandas_df,sample_polars_df,sample_ingestor):
 
     pl_assert_frame_equal(result,expected_df)
 
+def test_run(monkeypatch, sample_pandas_df,sample_polars_df,sample_ingestor):
 
-# def test_run():
+    monkeypatch.setattr(sample_ingestor,"_batch_tickers", lambda: iter([['AAPL','GOOG']]))
+    monkeypatch.setattr(sample_ingestor,"download_data",lambda batch: sample_pandas_df)
+    monkeypatch.setattr(sample_ingestor,"transform_data", lambda df: setattr(sample_ingestor,"data",sample_polars_df))
 
+    result = sample_ingestor.run()
+    pl_assert_frame_equal(result, sample_polars_df)
