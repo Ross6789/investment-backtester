@@ -1,7 +1,7 @@
 from unittest.mock import patch
 import pytest
 import polars as pl
-from backend.pipelines.ingestors import CSVIngestor
+from backend.pipelines.ingestors import CSVPriceIngestor
 from datetime import date
 from polars.testing import assert_frame_equal as pl_assert_frame_equal
 
@@ -12,76 +12,76 @@ def get_fixture_value(request):
 @pytest.fixture
 def sample_2col_df_raw():
     return pl.DataFrame({
-        'Date':['01/01/2025','02/01/2025','03/01/2025','04/01/2025'],
-        'Close':[1000,1002,1004,1006]
+        'date':['01/01/2025','02/01/2025','03/01/2025','04/01/2025'],
+        'close':[1000,1002,1004,1006]
     })
 
 @pytest.fixture
 def expected_transformed_2col_df_full():
     return pl.DataFrame({
-        'Date':[date(2025,1,1),date(2025,1,2),date(2025,1,3),date(2025,1,4)],
-        'Adj Close':[1000,1002,1004,1006],
-        'Close':[1000,1002,1004,1006],
-        'Ticker':['AAPL','AAPL','AAPL','AAPL']
+        'date':[date(2025,1,1),date(2025,1,2),date(2025,1,3),date(2025,1,4)],
+        'adj_close':[1000,1002,1004,1006],
+        'close':[1000,1002,1004,1006],
+        'ticker':['AAPL','AAPL','AAPL','AAPL']
     })
 
 @pytest.fixture
 def expected_transformed_2col_df_filtered():
     return pl.DataFrame({
-        'Date':[date(2025,1,2),date(2025,1,3)],
-        'Adj Close':[1002,1004],
-        'Close':[1002,1004],
-        'Ticker':['AAPL','AAPL']
+        'date':[date(2025,1,2),date(2025,1,3)],
+        'adj_close':[1002,1004],
+        'close':[1002,1004],
+        'ticker':['AAPL','AAPL']
     })
 
 @pytest.fixture
 def sample_3col_df_raw():
     return pl.DataFrame({
-        'Date':['01/01/2025','02/01/2025','03/01/2025','04/01/2025'],
-        'Adj Close':[1003,1005,1007,1009],
-        'Close':[1000,1002,1004,1006]
+        'date':['01/01/2025','02/01/2025','03/01/2025','04/01/2025'],
+        'adj_close':[1003,1005,1007,1009],
+        'close':[1000,1002,1004,1006]
     })
 
 @pytest.fixture
 def expected_transformed_3col_df_full():
     return pl.DataFrame({
-        'Date':[date(2025,1,1),date(2025,1,2),date(2025,1,3),date(2025,1,4)],
-        'Adj Close':[1003,1005,1007,1009],
-        'Close':[1000,1002,1004,1006],
-        'Ticker':['AAPL','AAPL','AAPL','AAPL']
+        'date':[date(2025,1,1),date(2025,1,2),date(2025,1,3),date(2025,1,4)],
+        'adj_close':[1003,1005,1007,1009],
+        'close':[1000,1002,1004,1006],
+        'ticker':['AAPL','AAPL','AAPL','AAPL']
     })
 
 @pytest.fixture
 def expected_transformed_3col_df_filtered():
     return pl.DataFrame({
-        'Date':[date(2025,1,2),date(2025,1,3)],
-        'Adj Close':[1005,1007],
-        'Close':[1002,1004],
-        'Ticker':['AAPL','AAPL']
+        'date':[date(2025,1,2),date(2025,1,3)],
+        'adj_close':[1005,1007],
+        'close':[1002,1004],
+        'ticker':['AAPL','AAPL']
     })
 
 @pytest.fixture
 def sample_invalid_1col_df_raw():
     return pl.DataFrame({
-        'Close':[1000,1002,1004,1006]
+        'close':[1000,1002,1004,1006]
     })
 
 @pytest.fixture
 def sample_invalid_4col_df_raw():
     return pl.DataFrame({
-        'Date':['01/01/2025','02/01/2025','03/01/2025','04/01/2025'],
-        'Adj Close':[1003,1005,1007,1009],
-        'Close':[1000,1002,1004,1006],
-        'Volume':[1000000,1000500,1000900,1001100]
+        'date':['01/01/2025','02/01/2025','03/01/2025','04/01/2025'],
+        'adj_close':[1003,1005,1007,1009],
+        'close':[1000,1002,1004,1006],
+        'volume':[1000000,1000500,1000900,1001100]
     })
 
 @pytest.fixture
 def sample_ingestor_with_dates():
-    return CSVIngestor('AAPL','dummy_source_path.csv','2025-01-02','2025-01-03')
+    return CSVPriceIngestor('AAPL','dummy_source_path.csv','2025-01-02','2025-01-03')
 
 @pytest.fixture
 def sample_ingestor_without_dates():
-    return CSVIngestor('AAPL','dummy_source_path.csv',None,None)
+    return CSVPriceIngestor('AAPL','dummy_source_path.csv',None,None)
 
 
 @patch('backend.pipelines.ingestors.pl.read_csv')
