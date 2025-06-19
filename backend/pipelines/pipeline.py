@@ -34,7 +34,7 @@ class DataPipeline:
         self.combined_data.write_parquet(
         self.save_path,
         use_pyarrow=True,
-        partition_by=["Ticker"]
+        partition_by=["ticker"]
         )
         print(f"Data saved to {self.save_path}.")
         

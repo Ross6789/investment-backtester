@@ -13,20 +13,20 @@ metadata_df_eager = pl.read_csv(metadata_path)
 
 action_counts = (
     actions_df_eager
-    .group_by('Ticker')
+    .group_by('ticker')
     .agg([
-        pl.col('Dividends').filter(pl.col('Dividends').is_not_null()).count().alias('Dividend Count'),
-        pl.col('Stock Splits').filter(pl.col('Stock Splits').is_not_null()).count().alias('Stock Split Count')
+        pl.col('dividends').filter(pl.col('dividends').is_not_null()).count().alias('dividend_count'),
+        pl.col('stock_splits').filter(pl.col('stock_splits').is_not_null()).count().alias('stock_split_count')
     ])
     )
 
 action_bool = (
     action_counts.with_columns([
-        pl.when(pl.col('Dividend Count') > 0)
+        pl.when(pl.col('dividend_count') > 0)
         .then(pl.lit('Y'))
         .otherwise(pl.lit('N'))
         .alias("has_dividends"),
-        pl.when(pl.col('Stock Split Count') > 0)
+        pl.when(pl.col('stock_split_count') > 0)
         .then(pl.lit('Y'))
         .otherwise(pl.lit('N'))
         .alias("has_stock_splits"),

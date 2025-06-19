@@ -12,13 +12,13 @@ ingestor = YFinancePriceIngestor(tickers,batch_size,start_date,end_date)
 metal_df = ingestor.run()
 
 # Drop adj close column (same as close since no corporate actions)
-metal_df.drop("Adj Close")
+metal_df.drop("adj_close")
 
 # Pivot dataframe on date
-transformed_df = metal_df.pivot(index="Date",on="Ticker",values="Close")
+transformed_df = metal_df.pivot(index="date",on="ticker",values="close")
         
 # Sort by date
-sorted_df = transformed_df.sort("Date",descending=True)
+sorted_df = transformed_df.sort("date",descending=True)
 
 # Rename columns
 renamed_df = sorted_df.rename({"GC=F":"Gold(USD)","SI=F":"Silver(USD)"})

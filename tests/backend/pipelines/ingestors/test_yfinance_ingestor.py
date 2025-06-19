@@ -19,10 +19,10 @@ def sample_pandas_df():
 @pytest.fixture
 def sample_polars_df():
     return pl.DataFrame({
-        'Date':[date(2025,1,1),date(2025,1,2),date(2025,1,1),date(2025,1,2)],
-        'Adj Close':[1003,1005,503,505],
-        'Close':[1000,1002,500,502],
-        'Ticker':['AAPL','AAPL','GOOG','GOOG']
+        'date':[date(2025,1,1),date(2025,1,2),date(2025,1,1),date(2025,1,2)],
+        'adj_close':[1003,1005,503,505],
+        'close':[1000,1002,500,502],
+        'ticker':['AAPL','AAPL','GOOG','GOOG']
     })
 
 @pytest.fixture
