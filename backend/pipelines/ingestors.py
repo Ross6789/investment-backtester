@@ -171,7 +171,7 @@ class CSVIngestor:
                 pl.col('Date') <= pl.lit(self.end_date).cast(pl.Date)
                 )
 
-        self.data = transformed_data
+        self.data = transformed_data.sort('Date')
         print('Data cleaned')
         
     def run(self) -> pl.DataFrame:

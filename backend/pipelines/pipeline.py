@@ -7,12 +7,18 @@ class PriceDataPipeline:
 
     # Method to compile data from different sources (ingestors)
     def combine_data(self):
-        
         dfs = []
         
         for ingestor in self.price_ingestors:
-            df = ingestor.run()
-            dfs.append(df)
+            try:
+                df = ingestor.run()
+                if not df.is_empty():
+                    dfs.append(df)
+                else: 
+                    print(f"Warning: no data returned from ingestor")
+            except Exception as e:
+                print(f"Error running ingestor : {e}")
+                continue
         
         self.combined_data = pl.concat(dfs)
     
@@ -23,8 +29,11 @@ class PriceDataPipeline:
         use_pyarrow=True,
         partition_by=["Ticker"]
         )
-        print("Data saved.")
+        print(f"Data saved to {self.save_path}.")
         
     def run(self):
-        self.combine_data()
-        self.save_data()
+        try:
+            self.combine_data()
+            self.save_data()
+        except Exception as e:
+            raise Exception(f"Pricedata pipeline failed : {e}")
