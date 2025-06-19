@@ -2,14 +2,11 @@ import backend.config as config
 import polars as pl
 
 # Configuration
-actions_path = config.get_corporate_action_data_path()
-metadata_path = config.get_asset_metadata_path()
+parquet_corporate_actions_path = config.get_parquet_corporate_action_path()
+csv_count_corporate_actions_path = config.get_csv_count_corporate_action_path()
 
 # Read parquet actions file
-actions_df_eager = pl.read_parquet(actions_path)
-
-# Read csv metadata file
-metadata_df_eager = pl.read_csv(metadata_path)
+actions_df_eager = pl.read_parquet(parquet_corporate_actions_path)
 
 action_counts = (
     actions_df_eager
@@ -35,4 +32,7 @@ action_bool = (
 
 # print(action_counts)
 print(action_bool)
-print(metadata_df_eager)
+
+# save to csv to allow human readable check
+action_bool.write_csv(csv_count_corporate_actions_path)
+print(f"Data saved to file at {csv_count_corporate_actions_path}")

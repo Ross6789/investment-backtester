@@ -11,8 +11,10 @@ start_date = "1970-01-01"
 end_date = "2025-06-01"
 csv_base_path = config.EXTERNAL_DATA_BASE_PATH
 csv_ticker_source_map = utils.get_csv_ticker_source_map()
-price_save_path = config.get_price_data_path()
-corporate_actions_save_path = config.get_corporate_action_data_path()
+parquet_price_save_path = config.get_parquet_price_path()
+parquet_corporate_actions_save_path = config.get_parquet_corporate_action_path()
+csv_price_save_path = config.get_csv_price_path()
+csv_corporate_actions_save_path = config.get_csv_corporate_action_path()
 
 # Ticker lists
 yfinance_tickers_ukstock = utils.get_yfinance_tickers("uk stock")
@@ -48,13 +50,14 @@ corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tick
 # price_pipeline.run()
 
 # Instantiate and run price pipeline
-corporate_action_pipeline = DataPipeline(corporate_action_ingestors,corporate_actions_save_path)
+corporate_action_pipeline = DataPipeline(corporate_action_ingestors,parquet_corporate_actions_save_path)
 corporate_action_pipeline.run()
 
-# # Quick test to confirm it works
-# prices_df = (pl.scan_parquet(price_save_path).collect())   
-# print(prices_df)
+# Print to screen and csv to allow human readable check
+prices_df = (pl.scan_parquet(parquet_price_save_path).collect())   
+prices_df.write_csv(csv_price_save_path)   
+print(prices_df)
 
-actions_df = (pl.scan_parquet(corporate_actions_save_path).collect())
-actions_df.write_csv('/Volumes/T7/investment_backtester_data/processed/parquet/corporate_actions.csv')   
+actions_df = (pl.scan_parquet(parquet_corporate_actions_save_path).collect())
+actions_df.write_csv(csv_corporate_actions_save_path)   
 print(actions_df)
