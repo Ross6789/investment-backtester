@@ -6,7 +6,7 @@ PARQUET_PRICE_PATH = "processed/parquet/prices"
 PARQUET_CORPORATE_ACTIONS_PATH = "processed/parquet/corporate_actions"
 CSV_PRICE_PATH = "processed/csv/prices.csv"
 CSV_CORPORATE_ACTIONS_PATH = "processed/csv/corporate_actions.csv"
-CSV_COUNT_CORPORATE_ACTIONS_PATH = "processed/csv/count_corporate_actions.csv"
+CSV_HAS_CORPORATE_ACTIONS_PATH = "processed/csv/count_corporate_actions.csv"
 CSV_METAL_PATH = "raw/metals.csv"
 
 
@@ -26,8 +26,8 @@ def get_csv_price_path():
 def get_csv_corporate_action_path():
     return os.path.join(EXTERNAL_DATA_BASE_PATH, CSV_CORPORATE_ACTIONS_PATH)
 
-def get_csv_count_corporate_action_path():
-    return os.path.join(EXTERNAL_DATA_BASE_PATH, CSV_COUNT_CORPORATE_ACTIONS_PATH)
+def get_csv_has_corporate_action_path():
+    return os.path.join(EXTERNAL_DATA_BASE_PATH, CSV_HAS_CORPORATE_ACTIONS_PATH)
 
 def get_metal_data_path():
     return os.path.join(EXTERNAL_DATA_BASE_PATH, CSV_METAL_PATH)

@@ -2,12 +2,17 @@ import backend.config as config
 import polars as pl
 
 # Configuration
+asset_metadata_path = config.get_asset_metadata_path()
 parquet_corporate_actions_path = config.get_parquet_corporate_action_path()
-csv_count_corporate_actions_path = config.get_csv_count_corporate_action_path()
+csv_has_corporate_actions_path = config.get_csv_has_corporate_action_path()
 
 # Read parquet actions file
 actions_df_eager = pl.read_parquet(parquet_corporate_actions_path)
 
+# Read metadata file
+metadata_df_eager = pl.read_csv(asset_metadata_path)
+
+# Count actions per ticker
 action_counts = (
     actions_df_eager
     .group_by('ticker')
@@ -17,6 +22,7 @@ action_counts = (
     ])
     )
 
+# Add 'Y/N' columns based on action count
 action_bool = (
     action_counts.with_columns([
         pl.when(pl.col('dividend_count') > 0)
@@ -27,12 +33,17 @@ action_bool = (
         .then(pl.lit('Y'))
         .otherwise(pl.lit('N'))
         .alias("has_stock_splits"),
-    ])
+    ]).sort('ticker')
 )
 
-# print(action_counts)
-print(action_bool)
+# Merge metadata with action count
+merge_df = metadata_df_eager.join(action_bool,how="left",on='ticker')
+final_merged_df = merge_df.select('ticker','has_dividends','has_stock_splits').fill_null('N').sort('ticker')
 
-# save to csv to allow human readable check
-action_bool.write_csv(csv_count_corporate_actions_path)
-print(f"Data saved to file at {csv_count_corporate_actions_path}")
+# print dfs for visible check
+print(action_bool)
+print (final_merged_df)
+
+# save to final csv to allow updating metadata
+final_merged_df.write_csv(csv_has_corporate_actions_path)
+print(f"Data saved to file at {csv_has_corporate_actions_path}")
