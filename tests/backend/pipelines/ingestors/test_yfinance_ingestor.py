@@ -2,7 +2,7 @@ from unittest.mock import patch
 import pytest
 import pandas as pd
 import polars as pl
-from backend.pipelines.ingestors import YFinanceIngestor
+from backend.pipelines.ingestors import YFinancePriceIngestor
 from datetime import date
 from pandas.testing import assert_frame_equal as pd_assert_frame_equal
 from polars.testing import assert_frame_equal as pl_assert_frame_equal
@@ -27,7 +27,7 @@ def sample_polars_df():
 
 @pytest.fixture
 def sample_ingestor():
-    return YFinanceIngestor(['AAPL','GOOG'],2,'2025-01-01','2025-01-03')
+    return YFinancePriceIngestor(['AAPL','GOOG'],2,'2025-01-01','2025-01-03')
 
 @pytest.mark.parametrize('tickers,batch_size,expected_batches',[
     # Large set of tickers
@@ -38,7 +38,7 @@ def sample_ingestor():
     ([],2,[]) 
 ])
 def test_batch_tickers(tickers,batch_size,expected_batches):
-    ingestor = YFinanceIngestor(tickers,batch_size,'2025-01-01','2025-01-03')
+    ingestor = YFinancePriceIngestor(tickers,batch_size,'2025-01-01','2025-01-03')
     assert list(ingestor._batch_tickers()) == expected_batches
 
 

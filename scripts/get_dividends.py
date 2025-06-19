@@ -1,9 +1,9 @@
 import yfinance as yf
-import time
-import polars as pl
 import pandas as pd
+import polars as pl
+import time
 
-class YFinancePriceIngestor:
+class YFinanceDividendIngestor:
     def __init__(self,tickers,batch_size,start_date,end_date):
         if not isinstance(batch_size, int):
             raise TypeError("Batch size must be an integer")
@@ -26,7 +26,7 @@ class YFinancePriceIngestor:
     def download_data(self, tickers_batch) -> pd.DataFrame:
         print('Starting download...')
         try:
-            raw_data = yf.download(tickers_batch, self.start_date, self.end_date, auto_adjust= False)
+            raw_data = yf.download(tickers_batch, self.start_date, self.end_date, auto_adjust= False, actions=True)
         except Exception as e:
             raise RuntimeError(f"Failed to download data for batch {tickers_batch}: {e}")
         
@@ -44,15 +44,16 @@ class YFinancePriceIngestor:
 
             try:
                 # Filter relevant columns using pandas
-                filtered_df = raw_data.loc[:, [('Adj Close', ticker), ('Close', ticker)]] 
+                filtered_df = raw_data.loc[:, [('Dividends', ticker), ('Stock Splits', ticker)]] 
             except KeyError:
                 raise KeyError(f"Required columns for ticker {ticker} not found in raw_data")
             
             # Rename column names
-            filtered_df.columns = ['Adj Close', 'Close']
+            filtered_df.columns = ['Dividends', 'Stock Splits']
 
             # Drop rows with missing price data
-            filtered_df_clean = filtered_df.dropna(subset=['Adj Close', 'Close'])
+            filtered_df_clean = filtered_df.replace(0.0, None)
+            filtered_df_clean = filtered_df_clean.dropna(subset=['Dividends', 'Stock Splits'],how='all')
 
             if filtered_df_clean.empty:
                 print(f"Downloaded data for ticker {ticker} is empty")
@@ -106,77 +107,15 @@ class YFinancePriceIngestor:
             raise RuntimeError(f"Error during batch concatenation: {e}")
         self.transform_data(combined_data)
         return self.data
-    
-class CSVPriceIngestor:
-    def __init__(self, ticker, source_path, start_date, end_date):
-        if start_date > end_date:
-            raise ValueError("Start date must be after the end date")
-        self.ticker = ticker
-        self.source_path = source_path
-        self.start_date = start_date
-        self.end_date = end_date
-        self.data = None
 
-    # Method to download data from csv
-    def read_data(self) -> pl.DataFrame:
-        print(f"Reading file : {self.source_path}...")
-        try:
-            raw_data = pl.read_csv(self.source_path)
-        except FileNotFoundError:
-            raise FileNotFoundError(f"CSV file not found at path: {self.source_path}") 
-        except Exception as e:
-            raise RuntimeError(f"Error occured when trying to read csv: {e}")
-        print("Read complete.")
-        if raw_data.is_empty():
-            raise ValueError(f"CSV file at {self.source_path} is empty.")
-        return raw_data
+tickers = ['AAPL','GOOG','MSFT','TSLA','AMZN']
+batch_size = 100
+start_date = '1970-01-01'
+end_date = '2025-01-01'    
 
-    # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
-    def transform_data(self, raw_data: pl.DataFrame): 
+ingestor = YFinanceDividendIngestor(tickers,batch_size,start_date,end_date)
+actions_df = ingestor.run()
 
-        # Clean csv files based on column count      
-        if len(raw_data.columns)==3:
-            transformed_data = raw_data.rename({
-                raw_data.columns[0]:'Date',
-                raw_data.columns[1]:'Adj Close',
-                raw_data.columns[2]:'Close',
-            })
-        elif len(raw_data.columns)==2:
-            transformed_data = raw_data.select([
-                pl.col(raw_data.columns[0]).alias('Date'),
-                pl.col(raw_data.columns[1]).alias('Adj Close'),
-                pl.col(raw_data.columns[1]).alias('Close')
-            ])
-        else:
-            raise ValueError("Invalid number of columns in CSV file")
-        
-        # Add ticker column
-        transformed_data = transformed_data.with_columns(pl.lit(self.ticker).alias("Ticker"))
-
-        try:
-            # Convert date column to date
-            transformed_data = transformed_data.with_columns(pl.col('Date').str.strptime(pl.Date,"%d/%m/%Y"))
-        except Exception as e:
-            raise Exception(f"Error while trying to parse the csv date column, ensure it is in the format 'dd/mm/yyyy': {e}")
-
-        # Filter based on start date
-        if self.start_date:
-            transformed_data = transformed_data.filter(
-                pl.col('Date') >= pl.lit(self.start_date).cast(pl .Date)
-                )
-
-        # Filter based on end date
-        if self.end_date:
-            transformed_data = transformed_data.filter(
-                pl.col('Date') <= pl.lit(self.end_date).cast(pl.Date)
-                )
-
-        self.data = transformed_data.sort('Date')
-        print('Data cleaned')
-        
-    def run(self) -> pl.DataFrame:
-        raw_data = self.read_data()
-        self.transform_data(raw_data)
-        return self.data
-
-        
+file_path = '/Volumes/T7/investment_backtester_data/processed/actions.csv'
+actions_df.write_csv(file_path)
+print(f"File save to {file_path}")

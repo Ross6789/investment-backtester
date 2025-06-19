@@ -2,7 +2,7 @@ import os
 import backend.config as config
 import backend.pipelines.utils as utils
 from backend.pipelines.pipeline import PriceDataPipeline
-from backend.pipelines.ingestors import YFinanceIngestor,CSVIngestor
+from backend.pipelines.ingestors import YFinancePriceIngestor,CSVPriceIngestor
 
 # Configuration
 yfinance_tickers_ukstock = utils.get_yfinance_tickers("uk stock")
@@ -21,15 +21,15 @@ save_path = config.get_price_data_path()
 ingestors = []
 
 # yfinance ingestors
-ingestors.append(YFinanceIngestor(yfinance_tickers_ukstock,yfinance_batch_size,start_date,end_date))
-ingestors.append(YFinanceIngestor(yfinance_tickers_cryptocurrency,yfinance_batch_size,start_date,end_date))
-ingestors.append(YFinanceIngestor(yfinance_tickers_etf,yfinance_batch_size,start_date,end_date))
-ingestors.append(YFinanceIngestor(yfinance_tickers_usstock,yfinance_batch_size,start_date,end_date))
-ingestors.append(YFinanceIngestor(yfinance_tickers_mutualfund,yfinance_batch_size,start_date,end_date))
+ingestors.append(YFinancePriceIngestor(yfinance_tickers_ukstock,yfinance_batch_size,start_date,end_date))
+ingestors.append(YFinancePriceIngestor(yfinance_tickers_cryptocurrency,yfinance_batch_size,start_date,end_date))
+ingestors.append(YFinancePriceIngestor(yfinance_tickers_etf,yfinance_batch_size,start_date,end_date))
+ingestors.append(YFinancePriceIngestor(yfinance_tickers_usstock,yfinance_batch_size,start_date,end_date))
+ingestors.append(YFinancePriceIngestor(yfinance_tickers_mutualfund,yfinance_batch_size,start_date,end_date))
 
 # csv ingestors
 for csv in csv_ticker_source_map:
-    ingestors.append(CSVIngestor(csv["ticker"],os.path.join(csv_base_path,csv["source_path"]),start_date,end_date))
+    ingestors.append(CSVPriceIngestor(csv["ticker"],os.path.join(csv_base_path,csv["source_path"]),start_date,end_date))
 
 # Instantiate and run price pipeline
 pipeline = PriceDataPipeline(ingestors,save_path)

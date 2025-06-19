@@ -1,4 +1,4 @@
-from backend.pipelines.ingestors import YFinanceIngestor
+from backend.pipelines.ingestors import YFinancePriceIngestor
 
 # Configuration
 tickers = ["GC=F","SI=F"]
@@ -8,7 +8,7 @@ end_date = "2025-06-12"
 save_path = "/Volumes/T7/investment_backtester_data/raw/metals/yfinance/yfinance_metals.csv"
 
 # Ingest yfinance data
-ingestor = YFinanceIngestor(tickers,batch_size,start_date,end_date)
+ingestor = YFinancePriceIngestor(tickers,batch_size,start_date,end_date)
 metal_df = ingestor.run()
 
 # Drop adj close column (same as close since no corporate actions)
