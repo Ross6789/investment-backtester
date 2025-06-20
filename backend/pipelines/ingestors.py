@@ -11,7 +11,7 @@ class BaseYFinanceIngestor(ABC):
         if not isinstance(batch_size, int):
             raise TypeError("Batch size must be an integer")
         if batch_size < 1:
-            raise ValueError("Batch size must be a positive integer")
+            raise ValueError("Batch size must be greater than zero")
         if start_date > end_date:
             raise ValueError("Start date must be after the end date")
         self.tickers = tickers
