@@ -30,6 +30,13 @@ def sample_pl_transformed_df():
 def sample_ingestor():
     return YFinancePriceIngestor(['AAPL','GOOG'],2,'2025-01-01','2025-01-03')
 
+def test_constructor_valid(sample_ingestor):
+    ingestor = sample_ingestor
+    assert ingestor.tickers == ['AAPL', 'GOOG']
+    assert ingestor.batch_size == 2
+    assert ingestor.start_date == '2025-01-01'
+    assert ingestor.end_date == '2025-01-03'
+
 @pytest.mark.parametrize('tickers,batch_size,start_date,end_date,expected_error_type, expected_error_message',[
     # Invalid batch size type
     (['AAPL', 'GOOG'],'two','2025-01-01','2025-01-02',TypeError,'Batch size must be an integer'),
