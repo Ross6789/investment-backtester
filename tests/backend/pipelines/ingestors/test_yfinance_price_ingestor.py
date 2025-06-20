@@ -8,12 +8,14 @@ from pandas.testing import assert_frame_equal as pd_assert_frame_equal
 from polars.testing import assert_frame_equal as pl_assert_frame_equal
 
 @pytest.fixture
-def sample_pandas_df():
+def sample_yf_download_df():
     return pd.DataFrame({
         ('Close','AAPL'):[1000,1002],
         ('Adj Close','AAPL'):[1003,1005],
+        ('Another Column','AAPL'):[0,0],
         ('Close','GOOG'):[500,502],
-        ('Adj Close','GOOG'):[503,505]
+        ('Adj Close','GOOG'):[503,505],
+        ('Another Column','GOOG'):[0,0]
     }, index=pd.to_datetime(['2025-01-01','2025-01-02']))
 
 @pytest.fixture
@@ -43,8 +45,8 @@ def test_batch_tickers(tickers,batch_size,expected_batches):
 
 
 @patch('backend.pipelines.ingestors.yf.download')
-def test_download_data(mock_download,sample_pandas_df,sample_ingestor):
-    expected_df = sample_pandas_df
+def test_download_data(mock_download,sample_yf_download_df,sample_ingestor):
+    expected_df = sample_yf_download_df
     mock_download.return_value = expected_df
 
     ingestor = sample_ingestor
@@ -55,8 +57,8 @@ def test_download_data(mock_download,sample_pandas_df,sample_ingestor):
 
     pd_assert_frame_equal(result,expected_df)
 
-def test_transform_data(sample_pandas_df,sample_polars_df,sample_ingestor):
-    raw_data = sample_pandas_df
+def test_transform_data(sample_yf_download_df,sample_polars_df,sample_ingestor):
+    raw_data = sample_yf_download_df
     expected_df = sample_polars_df
 
     ingestor = sample_ingestor
@@ -67,10 +69,10 @@ def test_transform_data(sample_pandas_df,sample_polars_df,sample_ingestor):
 
     pl_assert_frame_equal(result,expected_df)
 
-def test_run(monkeypatch, sample_pandas_df,sample_polars_df,sample_ingestor):
+def test_run(monkeypatch, sample_yf_download_df,sample_polars_df,sample_ingestor):
 
     monkeypatch.setattr(sample_ingestor,"_batch_tickers", lambda: iter([['AAPL','GOOG']]))
-    monkeypatch.setattr(sample_ingestor,"download_data",lambda batch: sample_pandas_df)
+    monkeypatch.setattr(sample_ingestor,"download_data",lambda batch: sample_yf_download_df)
     monkeypatch.setattr(sample_ingestor,"transform_data", lambda df: setattr(sample_ingestor,"data",sample_polars_df))
 
     result = sample_ingestor.run()
