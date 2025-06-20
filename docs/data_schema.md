@@ -13,24 +13,38 @@ Partitioned by: `Ticker`
 
 ---
 
-<!-- ## Dividend Data
+## Corporate Action Data
 
 | Column       | Type     | Description                     |
 |--------------|----------|---------------------------------|
 | Date         | Date     | Date of dividend payout         |
-| Dividend     | Float    | Dividend amount                 |
-| Ticker       | String   | Asset symbol                    | -->
+| Dividends    | Float    | Dividend amount                 |
+| Stock Splits | Float    | Stock split ratio               |
+| Ticker       | String   | Asset symbol                    |
+
+Partitioned by: `Ticker`
 
 ---
 
 ## Metadata
 
-| Column        | Type     | Description                              |
-|---------------|----------|------------------------------------------|
-| Ticker        | String   | Unique symbol                            |
-| Asset Name    | String   | Full name                                |
-| Asset Type    | String   | e.g. 'ETF', 'Stock', 'Crypto'            |
-| Source        | String   | API/data provider                        |
-| Currency      | String   | Native trading currency                  |
+# Metadata File Schema
 
-Stored in: `/config/asset_metadata.csv`
+This file defines metadata for each asset.
+
+| Column           | Type     | Description                                                           |
+|------------------|----------|-----------------------------------------------------------------------|
+| ticker           | String   | Unique symbol or identifier (e.g. `AAPL`)                             |
+| name             | String   | Full asset name                                                       |
+| asset_type       | String   | Type of asset (e.g. `mutual fund`, `ETF`, `stock`, `crypto`)          |
+| has_dividends    | Boolean  | `Y` if the asset distributes dividends, otherwise `N`                 |
+| has_stock_splits | Boolean  | `Y` if asset has undergone stock splits, otherwise `N`                |
+| currency         | String   | Native currency in which the asset is traded (e.g. `GBP`, `USD`)      |
+| source           | String   | Data source used to fetch this asset’s price (e.g. `yfinance`, `csv`) |
+| source_file_path | String   | Optional: path to source file (used if source is local like `csv`)    |
+| active           | Boolean  | `Y` if asset is currently included in backtester, otherwise `N`       |
+| start_date       | Date     | Optional: first known or relevant data date (may be blank)            |
+| end_date         | Date     | Optional: last known or relevant data date (may be blank)             |
+| notes            | String   | Free-form notes                                                       |
+
+Stored in: `/backend/data/asset_metadata.csv`
