@@ -86,12 +86,12 @@ def test_save_data(tmp_path, sample_pl_df_combined):
     assert(save_dir / 'ticker=AAPL').exists()
     assert(save_dir / 'ticker=GOOG').exists()
 
-@patch('backend.pipelines.pipeline.pl.Dataframe.write_parquet')
-def test_run(mock_write_parquet, pipeline_valid ,monkeypatch, sample_pl_df_combined):
+def test_run(monkeypatch, pipeline_valid):
 
-    monkeypatch.setattr(pipeline_valid,'combine_data', lambda: sample_pl_df_combined)
-    monkeypatch.setattr(pipeline_valid,'save_data',lambda: mock_write_parquet)
+    monkeypatch.setattr(pipeline_valid, "combine_data", MagicMock())
+    monkeypatch.setattr(pipeline_valid, "save_data", MagicMock())
 
     pipeline_valid.run()
-    
-    mock_write_parquet.assert_called_once_with('dummy_save_path',use_pyarrow=True,partition_by=['ticker'])
+
+    pipeline_valid.combine_data.assert_called_once()
+    pipeline_valid.save_data.assert_called_once()
