@@ -3,7 +3,7 @@ import polars as pl
 
 # Configuration
 asset_metadata_path = config.get_asset_metadata_path()
-parquet_corporate_actions_path = config.get_parquet_corporate_action_path()
+parquet_corporate_actions_path = config.get_parquet_corporate_action_base_path()
 csv_has_corporate_actions_path = config.get_csv_has_corporate_action_path()
 
 # Read parquet actions file
@@ -37,8 +37,8 @@ action_bool = (
 )
 
 # Merge metadata with action count
-merge_df = metadata_df_eager.join(action_bool,how="left",on='ticker')
-final_merged_df = merge_df.select('ticker','has_dividends','has_stock_splits').fill_null('N').sort('ticker')
+merge_df = metadata_df_eager.join(action_bool,how="left",on='ticker',suffix='_updated')
+final_merged_df = merge_df.select('ticker','has_dividends_updated','has_stock_splits_updated').fill_null('N').sort('ticker')
 
 # print dfs for visible check
 print(action_bool)

@@ -1,9 +1,10 @@
 import polars as pl
+from pathlib import Path
 
 class DataPipeline:
-    def __init__(self, ingestors, save_file_path):
+    def __init__(self, ingestors, save_dir_base_path):
         self.ingestors = ingestors    
-        self.save_path = save_file_path
+        self.save_dir_base_path = save_dir_base_path
 
     # Method to compile data from different sources (ingestors)
     def combine_data(self):
@@ -31,12 +32,12 @@ class DataPipeline:
     
     # Method to save the data as a partitioned parquet file
     def save_data(self):
-        self.combined_data.write_parquet(
-        self.save_path,
-        use_pyarrow=True,
-        partition_by=["ticker"]
-        )
-        print(f"Data saved to {self.save_path}.")
+        save_dir_base_path = Path(self.save_dir_base_path)
+        for (ticker,) , ticker_df in self.combined_data.group_by("ticker"):
+            folder = save_dir_base_path / f"ticker={ticker}"
+            folder.mkdir(parents=True, exist_ok=True)
+            ticker_df.write_parquet(folder / "data.parquet")
+        print(f"Data saved to {save_dir_base_path}.")
         
     def run(self):
         try:
