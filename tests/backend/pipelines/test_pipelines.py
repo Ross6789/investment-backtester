@@ -1,104 +1,97 @@
-# import sys
-# import os
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..","..")))
+import pytest
+from datetime import date
+import polars as pl
+from unittest.mock import MagicMock, patch
+from backend.pipelines.pipeline import DataPipeline 
+from polars.testing import assert_frame_equal
 
-# import pytest
-# from unittest.mock import patch
-# import tempfile
-# import os
-# import pandas as pd
-# import polars as pl
-# from backend.pipelines.ingestors import PriceDataPipeline
+@pytest.fixture
+def sample_pl_df_1():
+    return pl.DataFrame({
+        'date':[date(2025,1,1),date(2025,1,2),date(2025,1,1),date(2025,1,2)],
+        'adj_close':[1003,1005,503,505],
+        'close':[1000,1002,500,502],
+        'ticker':['AAPL','AAPL','GOOG','GOOG']
+    })
 
-# TEST_TICKERS = ["AAPL","GOOG"]
-# TEST_START_DATE = "2024-01-01"
-# TEST_END_DATE = "2025-01-01"
+@pytest.fixture
+def sample_pl_df_2():
+    return pl.DataFrame({
+        'date':[date(2025,1,1),date(2025,1,2),date(2025,1,1),date(2025,1,2)],
+        'adj_close':[2006,2010,1006,1010],
+        'close':[2000,2004,1000,1004],
+        'ticker':['MSFT','MSFT','TSLA','TSLA']
+    })
 
-# # Sample fake yfinance data shaped like yf.download output
-# def create_fake_yf_data():
-#     # MultiIndex columns like: ('Adj Close', 'AAPL'), ('Close', 'AAPL'), etc.
-#     dates = pd.date_range(TEST_START_DATE, TEST_END_DATE)
-#     tuples = []
-#     data = {}
-#     for ticker in TEST_TICKERS:
-#         for col in ["Adj Close", "Close"]:
-#             tuples.append((col, ticker))
-#             # just some dummy data
-#             data[(col, ticker)] = [100 + i for i in range(len(dates))]
+@pytest.fixture
+def sample_pl_df_combined():
+    return pl.DataFrame({
+        'date':[date(2025,1,1),date(2025,1,2),date(2025,1,1),date(2025,1,2),date(2025,1,1),date(2025,1,2),date(2025,1,1),date(2025,1,2)],
+        'adj_close':[1003,1005,503,505,2006,2010,1006,1010],
+        'close':[1000,1002,500,502,2000,2004,1000,1004],
+        'ticker':['AAPL','AAPL','GOOG','GOOG','MSFT','MSFT','TSLA','TSLA']
+    })
 
-#     # Create multiindex columns
-#     cols = pd.MultiIndex.from_tuples(tuples)
-#     df = pd.DataFrame(data, index=dates)
-#     df.columns = cols
-#     df.index.name = "Date"
-#     return df
+@pytest.fixture
+def mock_valid_ingestors(sample_pl_df_1,sample_pl_df_2):
+    ingestor1 = MagicMock()
+    ingestor1.run.return_value = sample_pl_df_1
+    ingestor2 = MagicMock()
+    ingestor2.run.return_value = sample_pl_df_2
+    return [ingestor1, ingestor2]
 
-# @pytest.fixture
-# def temp_dir():
-#     with tempfile.TemporaryDirectory() as tmpdir:
-#         yield tmpdir
+@pytest.fixture
+def mock_ingestor_fail():
+    ingestor = MagicMock()
+    ingestor.run.side_effect = RuntimeError('Simulated failure')
+    return ingestor
 
-# @patch("backend.pipelines.price_pipeline.yf.download")
-# def test_download_data(mock_yf_download):
-#     fake_data = create_fake_yf_data()
-#     mock_yf_download.return_value = fake_data
+@pytest.fixture
+def pipeline_valid(mock_valid_ingestors):
+    return DataPipeline(mock_valid_ingestors, 'dummy_save_path')
 
-#     pipeline = PriceDataPipeline(TEST_TICKERS, TEST_START_DATE, TEST_END_DATE, "some_path")
-#     pipeline.download_data()
+@pytest.fixture
+def pipeline_invalid(mock_ingestor_fail):
+    return DataPipeline(mock_ingestor_fail, 'dummy_save_path')
 
-#     mock_yf_download.assert_called_once_with(TEST_TICKERS, TEST_START_DATE, TEST_END_DATE, auto_adjust=False)
-#     pd.testing.assert_frame_equal(pipeline.raw_data, fake_data)
-
-
-# def test_transform_data():
-#     pipeline = PriceDataPipeline(TEST_TICKERS, TEST_START_DATE, TEST_END_DATE, "some_path")
-
-#     # Assign fake raw_data (same structure as yf.download output)
-#     pipeline.raw_data = create_fake_yf_data()
-
-#     pipeline.transform_data()
-
-#     # Check type
-#     assert isinstance(pipeline.transformed_data, pl.DataFrame)
-
-#     # Check columns exist
-#     cols = pipeline.transformed_data.columns
-#     for col in ["Date", "Adj Close", "Close", "Ticker"]:
-#         assert col in cols
-
-#     # Check no missing values in Adj Close or Close
-#     assert not pipeline.transformed_data.select(pl.col("Adj Close").is_null().any()).item()
-#     assert not pipeline.transformed_data.select(pl.col("Close").is_null().any()).item()
-
-# # def test_save_data(temp_dir):
-# #     pipeline = PriceDataPipeline([], "", "", temp_dir)
-
-# #     # Create simple polars DataFrame like your transform_data output
-# #     df = pl.DataFrame({
-# #         "Date": [pl.date(2023, 1, 1), pl.date(2023, 1, 2)],
-# #         "Adj Close": [100.0, 101.0],
-# #         "Close": [101.0, 102.0],
-# #         "Ticker": ["AAPL", "GOOG"]
-# #     })
-# #     pipeline.transformed_data = df
-
-# #     print("starting test")
-# #     pipeline.save_data()
-
-# #     # Check at least one parquet file was created
-# #     files = os.listdir(temp_dir)
-# #     print(files)
-# #     assert any(f.endswith(".parquet") for f in files)
-
-# # @patch("backend.pipelines.price_pipeline.yf.download")
-# # def test_run(mock_yf_download, temp_dir):
-# #     fake_data = create_fake_yf_data()
-# #     mock_yf_download.return_value = fake_data
-
-# #     pipeline = PriceDataPipeline(TEST_TICKERS, TEST_START_DATE, TEST_END_DATE, temp_dir)
-# #     pipeline.run()
-
-# #     # Confirm all stages complete and file saved
-# #     files = os.listdir(temp_dir)
-# #     assert any(f.endswith(".parquet") for f in files)
+def test_combine_data_valid(pipeline_valid, sample_pl_df_combined):
     
+    expected_df = sample_pl_df_combined
+    pipeline_valid.combine_data()
+
+    assert_frame_equal(pipeline_valid.combined_data, expected_df)
+
+def test_combine_data_invalid(pipeline_invalid):
+    with pytest.raises(ValueError, match='No data ingested, therefore file save has been aborted'):
+        pipeline_invalid.combine_data()
+
+
+def test_save_data(tmp_path, sample_pl_df_combined):
+    save_dir = tmp_path / 'test_output'
+    df = sample_pl_df_combined
+
+    pipeline = DataPipeline(['dummy_ingestors'], save_dir)
+    pipeline.combined_data = df 
+
+    pipeline.save_data()
+
+    tickers = sample_pl_df_combined.select('ticker').unique().to_series().to_list()
+
+    for ticker in tickers:
+        partitioned_dir = save_dir / f'ticker={ticker}'
+        assert partitioned_dir.exists()
+        assert any(partitioned_dir.glob('*parquet'))
+
+    # Check partitioned directory exists, the parquet files will be stored within these folders
+    assert(save_dir / 'ticker=AAPL').exists()
+    assert(save_dir / 'ticker=GOOG').exists()
+
+@patch('backend.pipelines.pipeline.pl.Dataframe.write_parquet')
+def test_run(mock_write_parquet, pipeline_valid ,monkeypatch, sample_pl_df_combined):
+
+    monkeypatch.setattr(pipeline_valid,'combine_data', lambda: sample_pl_df_combined)
+    monkeypatch.setattr(pipeline_valid,'save_data',lambda: mock_write_parquet)
+
+    pipeline_valid.run()
+    
+    mock_write_parquet.assert_called_once_with('dummy_save_path',use_pyarrow=True,partition_by=['ticker'])
