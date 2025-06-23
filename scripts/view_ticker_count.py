@@ -1,5 +1,5 @@
 import backend.config as config
-import backend.pipelines.utils as utils
+import backend.utils as utils
 import polars as pl
 
 # Configuration

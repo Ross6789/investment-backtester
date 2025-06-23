@@ -2,10 +2,18 @@ import backend.config as config
 import polars as pl
 from datetime import date, timedelta
 from typing import List
+from backend.utils import parse_date
 
 def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_days: int = 10) -> pl.DataFrame:
     
-    # Adjust date range for forward filling (incase start date falls on a non trading day)
+    # parse dates
+    try:
+        start_date = parse_date(start_date)
+        end_date = parse_date(end_date)
+    except ValueError as err:
+        print(f'Error: {err}')
+
+    # adjust date range for forward filling (incase start date falls on a non trading day)
     start_date_extended = start_date - timedelta(days=buffer_days)
     end_date_extended = end_date + timedelta(days=buffer_days)
 
@@ -45,8 +53,8 @@ def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_d
 # config
 parquet_price_path = config.get_parquet_price_base_path()
 adjusted_days = 10
-start_date = date(2024,1,1)
-end_date = date(2025,1,1)
+start_date = "2024-01-01"
+end_date = "2025-01-01"
 tickers = ['AAPL','GOOG']
 
 prices = get_price_data(tickers,start_date,end_date)
