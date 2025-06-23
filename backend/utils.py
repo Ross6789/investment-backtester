@@ -1,5 +1,6 @@
 import polars as pl
 from backend import config
+from datetime import datetime, date
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
     metadata = (
@@ -20,13 +21,21 @@ def get_csv_ticker_source_map() -> dict[str: str]:
         .collect()
     )
     return [{"ticker": ticker, "source_path": source_path} for ticker, source_path in metadata.select(["ticker","source_file_path"]).iter_rows()]
-    
-# yfinance_tickers = get_yfinance_tickers()    
-# print("YFinance tickers : ")
-# for ticker in yfinance_tickers:
-#     print(ticker)
 
-# csv_tickers = get_csv_ticker_source_map()
-# print("CSV ticker dicts : ")
-# for ticker in csv_tickers:
-#     print(ticker)
+def parse_date(date_str: str) -> date:
+    """
+    Converts a date string in 'YYYY-MM-DD' format to a datetime.date object.
+
+    Args:
+        date_str (str): Date string, e.g. '2024-01-01'
+
+    Returns:
+        datetime.date: Parsed date object
+
+    Raises:
+        ValueError: If the input string is not in the expected format.
+    """
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError as e:
+        raise ValueError(f"Invalid date format: '{date_str}'. Expected 'YYYY-MM-DD'.") from e
