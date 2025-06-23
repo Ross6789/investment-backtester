@@ -1,4 +1,8 @@
 from typing import Dict, List
+import math
+
+# Config
+fractional_shares = False
 
 class Portfolio:
     def __init__(self, cash_gbp : float):
@@ -30,7 +34,10 @@ class Portfolio:
         for ticker, weight in target_weights.items():
             balance_available = cash_balance * weight
             price = prices.get(ticker)
-            units_bought = balance_available / price
+            if fractional_shares:
+                units_bought = balance_available / price
+            else:
+                units_bought = math.floor(balance_available / price)
             self.holdings[ticker] = units_bought
             remaining_balance -= units_bought * price
 
