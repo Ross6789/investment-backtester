@@ -38,33 +38,36 @@ corporate_action_ingestors = []
 # for csv in csv_ticker_source_map:
 #     price_ingestors.append(CSVPriceIngestor(csv["ticker"],os.path.join(csv_base_path,csv["source_path"]),start_date,end_date))
 
-# # yfinance corporate action ingestors
-# corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_ukstock,yfinance_batch_size,start_date,end_date))
-# corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_cryptocurrency,yfinance_batch_size,start_date,end_date))
-# corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_etf,yfinance_batch_size,start_date,end_date))
-# corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_usstock,yfinance_batch_size,start_date,end_date))
-# corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_mutualfund,yfinance_batch_size,start_date,end_date))
-
 # # Instantiate and run price pipeline
-# price_pipeline = DataPipeline(price_ingestors,price_save_path)
+# price_pipeline = DataPipeline(price_ingestors,parquet_price_save_path)
 # price_pipeline.run()
 
-# # Instantiate and run price pipeline
-# corporate_action_pipeline = DataPipeline(corporate_action_ingestors,parquet_corporate_actions_save_path)
-# corporate_action_pipeline.run()
-
 # # Print to screen and csv to allow human readable check
-# prices_df = (pl.scan_parquet(parquet_price_save_path).collect())   
+# prices_df = (pl.read_parquet(parquet_price_save_path))   
 # prices_df.write_csv(csv_price_save_path)   
 # print(prices_df)
 
-# actions_df = (pl.scan_parquet(parquet_corporate_actions_save_path).collect())
-# actions_df.write_csv(csv_corporate_actions_save_path)   
-# print(actions_df)
-
-# # Dummy pipelines
+# # Dummy price pipelines
 # price_pipeline = DataPipeline([YFinancePriceIngestor(['AAPL','GOOG'],yfinance_batch_size,start_date,end_date)],parquet_price_save_path)
 # price_pipeline.run()
 
-action_pipeline = DataPipeline([YFinanceCorporateActionsIngestor(['AAPL','GOOG'],yfinance_batch_size,start_date,end_date)],parquet_corporate_actions_save_path)
-action_pipeline.run()
+# yfinance corporate action ingestors
+corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_ukstock,yfinance_batch_size,start_date,end_date))
+corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_cryptocurrency,yfinance_batch_size,start_date,end_date))
+corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_etf,yfinance_batch_size,start_date,end_date))
+corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_usstock,yfinance_batch_size,start_date,end_date))
+corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tickers_mutualfund,yfinance_batch_size,start_date,end_date))
+
+
+# Instantiate and run corporate action pipeline
+corporate_action_pipeline = DataPipeline(corporate_action_ingestors,parquet_corporate_actions_save_path)
+corporate_action_pipeline.run()
+
+
+actions_df = (pl.read_parquet(parquet_corporate_actions_save_path))
+actions_df.write_csv(csv_corporate_actions_save_path)   
+print(actions_df)
+
+# # Dummy action pipeline
+# action_pipeline = DataPipeline([YFinanceCorporateActionsIngestor(['AAPL','GOOG'],yfinance_batch_size,start_date,end_date)],parquet_corporate_actions_save_path)
+# action_pipeline.run()
