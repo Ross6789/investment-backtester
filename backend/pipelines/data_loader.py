@@ -1,10 +1,9 @@
-import backend.config as config
 import polars as pl
-from datetime import date, timedelta
+from datetime import timedelta
 from typing import List
 from backend.utils import parse_date
 
-def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_days: int = 10) -> pl.DataFrame:
+def get_price_data(price_data_path: str,tickers : List[str], start_date: str, end_date: str, buffer_days: int = 10) -> pl.DataFrame:
     
     # parse dates
     try:
@@ -24,7 +23,7 @@ def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_d
 
     # lazy query prices, filtering by ticker and date
     prices = (
-        pl.scan_parquet((parquet_price_path))
+        pl.scan_parquet((price_data_path))
         .filter(
             (pl.col('date')>= start_date_extended)&
             (pl.col('date')<= end_date_extended)&
@@ -49,13 +48,3 @@ def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_d
         .sort('date')
     )
     return filled_df
-
-# config
-parquet_price_path = config.get_parquet_price_base_path()
-adjusted_days = 10
-start_date = "2024-01-01"
-end_date = "2025-01-01"
-tickers = ['AAPL','GOOG']
-
-prices = get_price_data(tickers,start_date,end_date)
-print(prices)

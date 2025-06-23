@@ -53,23 +53,3 @@ class Portfolio:
         }
         return snapshot
 
-portfolioA = Portfolio(10000)
-PortfolioB = Portfolio(50000)
-
-PortfolioTargets = {
-    'AAPL':0.5,
-    'GOOG':0.5
-}
-
-Prices = {
-    'AAPL':100,
-    'GOOG':60
-}
-
-Date = '2025-01-01'
-
-portfolioA.rebalance(PortfolioTargets,Prices)
-print(f"Portfolio A : {portfolioA.snapshot(Date, Prices)}")
-
-PortfolioB.rebalance(PortfolioTargets,Prices)
-print(f"Portfolio B : {PortfolioB.snapshot(Date, Prices)}")
