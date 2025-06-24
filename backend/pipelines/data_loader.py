@@ -1,9 +1,9 @@
 import polars as pl
 from datetime import timedelta
-from typing import List
+from typing import List, Tuple
 from backend.utils import parse_date
 
-def get_price_data(price_data_path: str,tickers : List[str], start_date: str, end_date: str, buffer_days: int = 10) -> pl.DataFrame:
+def get_price_data(price_data_path: str,tickers : List[str], start_date: str, end_date: str, buffer_days: int = 10) -> Tuple[pl.DataFrame, List[str]]:
     
     # parse dates
     try:
@@ -37,6 +37,9 @@ def get_price_data(price_data_path: str,tickers : List[str], start_date: str, en
         .pivot(on='ticker',index='date', values=['adj_close','close'])
     )
 
+    # extract trading dates
+    trading_dates = pivoted_df.select('date').to_series().to_list()
+
     # Join all dates df to price df
     joined_df = all_dates_df.join(pivoted_df,on='date',how='left')
 
@@ -47,4 +50,4 @@ def get_price_data(price_data_path: str,tickers : List[str], start_date: str, en
         .filter((pl.col('date')>= start_date)&(pl.col('date')<= end_date))
         .sort('date')
     )
-    return filled_df
+    return filled_df, trading_dates

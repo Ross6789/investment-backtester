@@ -34,15 +34,27 @@ class Strategy:
         self.reinvest_dividends = reinvest_dividends
         self.rebalance_frequency = rebalance_frequency
 
-    def should_rebalance(self, previous_rebalance_date: str, current_date: str) -> bool:
+    def should_rebalance(self, previous_rebalance_date: str | None, current_date: str) -> bool:
+        
+        """
+        Decide if we should rebalance on current_date, given the last rebalance date.
+        Args:
+            previous_rebalance_date: YYYY-MM-DD string or None if never rebalance yet.
+            current_date: YYYY-MM-DD string or date object for today.
+        Returns:
+            bool: True if rebalance should occur today.
+        """
+                
+        # Rebalance if missing last rebalance date ie. always rebalance first day
+        if previous_rebalance_date is None:
+            return True
         
         # Parse into date objects
         previous_rebalance_date = parse_date(previous_rebalance_date)
         current_date = parse_date(current_date)
 
-        days_since_rebalance = (current_date - previous_rebalance_date).days
-
-        match self.rebalance_frequency:
+        # Determine rebalance status based on strategy
+        match self.rebalance_frequency.lower():
             case "never":
                 return False
             case "daily":
@@ -50,14 +62,22 @@ class Strategy:
             case "weekly":
                 if current_date == previous_rebalance_date + relativedelta(days=7):
                     return True
+                else: 
+                    return False
             case "monthly":
                 if current_date == previous_rebalance_date + relativedelta(months=1):
                     return True
+                else:
+                    return False
             case "quarterly":
                 if current_date == previous_rebalance_date + relativedelta(months=3):
                     return True
+                else: 
+                    False
             case "yearly":
                 if current_date == previous_rebalance_date + relativedelta(years=1):
                     return True
+                else:
+                    return False
             case _: 
                 raise ValueError(f"Invalid rebalance frequency : {self.rebalance_frequency}")
