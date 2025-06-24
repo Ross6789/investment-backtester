@@ -1,49 +1,38 @@
-import backend.config as config
 import polars as pl
 from datetime import date
 from typing import Dict, Tuple, List
-from backend.pipelines.data_loader import get_price_data
 from backend.backtest.portfolio import Portfolio
-from backend.backtest.strategy import Strategy
 
+class BacktestEngine:
+    def __init__(self, portfolio: Portfolio,start_date: date, end_date: date, target_weights: Dict[str, float], price_data : Tuple[pl.DataFrame, List[date]]):
+            self.portfolio = portfolio
+            self.start_date = start_date
+            self.end_date = end_date
+            self.target_weights = target_weights
+            self.price_data = price_data
 
-# config
-parquet_price_path = config.get_parquet_price_base_path()
-start_date = date.fromisoformat("2024-01-01")
-end_date = date.fromisoformat("2025-01-01")
-tickers = ['AAPL','GOOG']
-initial_balance = 10000
-strategy = Strategy(allow_fractional_shares=True, reinvest_dividends=True,rebalance_frequency='monthly')
+    def run(self) -> List[Dict[str, object]]:
+        # unpack price data tuple
+        all_prices, trading_dates = self.price_data
+        
+        # Create empty list for portfolio snapshots
+        snapshots = []
 
-price_data= get_price_data(parquet_price_path,tickers,start_date,end_date)
+        # Find rebalance dates
+        rebalance_dates = self.portfolio.strategy.get_rebalance_dates(self.start_date,self.end_date,trading_dates)
 
-portfolio = Portfolio(initial_balance, strategy)
+        # Iterate through date range, rebalance where necessary and save snapshot
+        for row in all_prices.iter_rows(named=True):
+            date = row['date']
+            date_prices = {k: v for k, v in row.items() if k != 'date'}
+        
+            if date in rebalance_dates:
+                self.portfolio.rebalance(self.target_weights,date_prices)
+            
+            snapshots.append(self.portfolio.snapshot(date,date_prices))
+        
+        # Save snapshots to object
+        self.history = snapshots
 
-
-PortfolioTargets = {
-    'AAPL':0.5,
-    'GOOG':0.5
-}
-
-def backtest(portfolio: Portfolio, price_data : Tuple[pl.DataFrame, List[date]], target_weights: Dict[str, float]):
+        return snapshots
     
-    # unpack price data tuple
-    all_prices, trading_dates = price_data
-    
-    # Create empty list for portfolio snapshots
-    snapshots = []
-
-    # Find rebalance dates
-    rebalance_dates = portfolio.strategy.get_rebalance_dates(start_date,end_date,trading_dates)
-
-    # Iterate through date range and rebalance where necessary
-    for row in all_prices.iter_rows(named=True):
-        date = row['date']
-        date_prices = {k: v for k, v in row.items() if k != 'date'}
-    
-        if date in rebalance_dates:
-            portfolio.rebalance(target_weights,date_prices)
-            print(portfolio.snapshot(date,date_prices))
-
-
-backtest(portfolio,price_data,PortfolioTargets)

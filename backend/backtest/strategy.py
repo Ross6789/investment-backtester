@@ -4,6 +4,15 @@ from dateutil.relativedelta import relativedelta
 from typing import List
 
 class Strategy:
+    """
+    Represents a portfolio investment strategy used during backtesting.
+
+    Encapsulates key configuration options:
+    - Whether fractional shares can be purchased.
+    - How dividends are treated.
+    - How often to rebalance the portfolio.
+    """
+    
     def __init__(
         self,
         allow_fractional_shares: bool = True,
