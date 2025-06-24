@@ -1,6 +1,7 @@
 from backend.utils import parse_date
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from typing import List
 
 class Strategy:
     def __init__(
@@ -34,50 +35,51 @@ class Strategy:
         self.reinvest_dividends = reinvest_dividends
         self.rebalance_frequency = rebalance_frequency
 
-    def should_rebalance(self, previous_rebalance_date: str | None, current_date: str) -> bool:
+    def get_rebalance_dates(self, start_date: date, end_date: date, trading_dates: List[date]) -> List[date]:
         
         """
-        Decide if we should rebalance on current_date, given the last rebalance date.
-        Args:
-            previous_rebalance_date: YYYY-MM-DD string or None if never rebalance yet.
-            current_date: YYYY-MM-DD string or date object for today.
-        Returns:
-            bool: True if rebalance should occur today.
-        """
-                
-        # Rebalance if missing last rebalance date ie. always rebalance first day
-        if previous_rebalance_date is None:
-            return True
-        
-        # Parse into date objects
-        previous_rebalance_date = parse_date(previous_rebalance_date)
-        current_date = parse_date(current_date)
+        Generate a list of rebalance dates between a start and end date based on the strategy's rebalance frequency.
 
-        # Determine rebalance status based on strategy
-        match self.rebalance_frequency.lower():
-            case "never":
-                return False
-            case "daily":
-                return True
-            case "weekly":
-                if current_date == previous_rebalance_date + relativedelta(days=7):
-                    return True
-                else: 
-                    return False
-            case "monthly":
-                if current_date == previous_rebalance_date + relativedelta(months=1):
-                    return True
-                else:
-                    return False
-            case "quarterly":
-                if current_date == previous_rebalance_date + relativedelta(months=3):
-                    return True
-                else: 
-                    False
-            case "yearly":
-                if current_date == previous_rebalance_date + relativedelta(years=1):
-                    return True
-                else:
-                    return False
-            case _: 
-                raise ValueError(f"Invalid rebalance frequency : {self.rebalance_frequency}")
+        Ensures all rebalance dates fall on actual trading days by finding the first trading day 
+        on or after each target rebalance date.
+
+        Args:
+            start_date (date): The start date of the backtest period.
+            end_date (date): The end date of the backtest period.
+            trading_dates (List[date]): A list of all valid trading dates.
+
+        Returns:
+            List[date]: A list of dates on which rebalancing should occur, aligned to trading days.
+
+        Raises:
+            ValueError: If an invalid rebalance frequency is provided.
+        """
+        
+        rebalance_dates = []
+        target_date = start_date
+        
+        while target_date <= end_date:
+            rebalance_date = next((td for td in trading_dates if td >= target_date),None)
+            if rebalance_date == None:
+                break
+            rebalance_dates.append(rebalance_date)
+            
+            # Determine next target rebalance date based on strategy
+            match self.rebalance_frequency.lower():
+                case "never":
+                    break
+                case "daily":
+                    target_date += relativedelta(days=1)
+                case "weekly":
+                    target_date += relativedelta(days=7)
+                case "monthly":
+                    target_date += relativedelta(months=1)
+                case "quarterly":
+                    target_date += relativedelta(months=3)
+                case "yearly":
+                    target_date += relativedelta(years=1)
+                case _: 
+                    raise ValueError(f"Invalid rebalance frequency : {self.rebalance_frequency}")
+
+        return rebalance_dates
+    

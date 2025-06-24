@@ -1,6 +1,7 @@
 import backend.config as config
 import polars as pl
-from typing import Dict
+from datetime import date
+from typing import Dict, Tuple, List
 from backend.pipelines.data_loader import get_price_data
 from backend.backtest.portfolio import Portfolio
 from backend.backtest.strategy import Strategy
@@ -8,15 +9,14 @@ from backend.backtest.strategy import Strategy
 
 # config
 parquet_price_path = config.get_parquet_price_base_path()
-start_date = "2024-01-01"
-end_date = "2025-01-01"
+start_date = date.fromisoformat("2024-01-01")
+end_date = date.fromisoformat("2025-01-01")
 tickers = ['AAPL','GOOG']
 initial_balance = 10000
-strategyA = Strategy(allow_fractional_shares=True, reinvest_dividends=True,rebalance_frequency='yearly')
+strategyA = Strategy(allow_fractional_shares=True, reinvest_dividends=True,rebalance_frequency='monthly')
 strategyB = Strategy(allow_fractional_shares=False, reinvest_dividends=True,rebalance_frequency='never')
 
-prices = get_price_data(parquet_price_path,tickers,start_date,end_date)
-print(prices)
+price_data= get_price_data(parquet_price_path,tickers,start_date,end_date)
 
 portfolioA = Portfolio(initial_balance, strategyA)
 PortfolioB = Portfolio(initial_balance, strategyB)
@@ -26,16 +26,24 @@ PortfolioTargets = {
     'GOOG':0.5
 }
 
-def backtest(portfolio: Portfolio, prices : pl.DataFrame, target_weights: Dict[str, float]):
+def backtest(portfolio: Portfolio, price_data : Tuple[pl.DataFrame, List[date]], target_weights: Dict[str, float]):
     
+    # unpack price data tuple
+    prices, trading_dates = price_data
+    
+    # Create empty list for portfolio snapshots
     snapshots = []
-    previous_rebalance_date = None
 
+    # Find rebalance dates
+    rebalance_dates = portfolio.strategy.get_rebalance_dates(start_date,end_date,trading_dates)
+
+    # Iterate through date range and rebalance where necessary
     for row in prices.iter_rows(named=True):
         date = row['date']
         prices = {k: v for k, v in row.items() if k != 'date'}
     
-        if portfolio.strategy.should_rebalance(previous_rebalance_date,date):
+        if date in rebalance_dates:
             print(f"{date} : rebalance")
 
-backtest(portfolioA,prices,PortfolioTargets)
+
+backtest(portfolioA,price_data,PortfolioTargets)
