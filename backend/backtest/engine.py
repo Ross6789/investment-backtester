@@ -29,7 +29,7 @@ PortfolioTargets = {
 def backtest(portfolio: Portfolio, price_data : Tuple[pl.DataFrame, List[date]], target_weights: Dict[str, float]):
     
     # unpack price data tuple
-    prices, trading_dates = price_data
+    all_prices, trading_dates = price_data
     
     # Create empty list for portfolio snapshots
     snapshots = []
@@ -38,12 +38,13 @@ def backtest(portfolio: Portfolio, price_data : Tuple[pl.DataFrame, List[date]],
     rebalance_dates = portfolio.strategy.get_rebalance_dates(start_date,end_date,trading_dates)
 
     # Iterate through date range and rebalance where necessary
-    for row in prices.iter_rows(named=True):
+    for row in all_prices.iter_rows(named=True):
         date = row['date']
-        prices = {k: v for k, v in row.items() if k != 'date'}
+        date_prices = {k: v for k, v in row.items() if k != 'date'}
     
         if date in rebalance_dates:
-            print(f"{date} : rebalance")
+            portfolio.rebalance(target_weights,date_prices)
+            print(portfolio.snapshot(date,date_prices))
 
 
 backtest(portfolioA,price_data,PortfolioTargets)

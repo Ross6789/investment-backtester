@@ -1,5 +1,5 @@
-from typing import Dict, List
-from math import floor
+from typing import Dict
+from datetime import date
 from backend.backtest.strategy import Strategy
 
 class Portfolio:
@@ -11,7 +11,7 @@ class Portfolio:
     def get_value(self, prices: Dict[str, float]):
         total_value = self.cash_balance
         for ticker, units in self.holdings.items():
-            price = prices.get(ticker)
+            price = prices.get(self.get_price_col_name(ticker))
             value = units * price
             total_value += value
         return total_value
@@ -22,33 +22,42 @@ class Portfolio:
 
         # Sell all assets to get total balance
         for ticker, units in self.holdings.items():
-            price = prices.get(ticker)
+            price = prices.get(self.get_price_col_name(ticker))
             value = units * price
             cash_balance += value
+        
+        # Reset holdings
+        self.holdings = {}
 
-        # Record remaining balance
+        # Initialise remaining balance
         remaining_balance = cash_balance
 
         # Buy assets using defined target weights
         for ticker, weight in target_weights.items():
             balance_available = cash_balance * weight
-            price = prices.get(ticker)
+            price = prices.get(self.get_price_col_name(ticker))
             if self.strategy.allow_fractional_shares:
                 units_bought = balance_available / price
             else:
-                units_bought = floor(balance_available / price)
+                units_bought = balance_available // price
             self.holdings[ticker] = units_bought
             remaining_balance -= units_bought * price
 
-        # Update remaining balance
+        # Update cash balance
         self.cash_balance = remaining_balance
         
-    def snapshot(self, date: str, prices: Dict[str, float]):
+    def snapshot(self, date: date, prices: Dict[str, float]):
         snapshot = {
-            'date': date,
+            'date': date.isoformat(),
             'holdings': self.holdings.copy(),
             'cash balance': self.cash_balance,
             'total_value': self.get_value(prices)
         }
         return snapshot
 
+    def get_price_col_name(self, ticker: str) -> str:
+        if self.strategy.reinvest_dividends:
+            price_type = 'close'
+        else:
+            price_type = 'adj_close'
+        return f'{price_type}_{ticker}'
