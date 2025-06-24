@@ -15,6 +15,7 @@ start_date = date.fromisoformat("2024-01-01")
 end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
 initial_balance = 10000
+recurring_cashflow = {'amount':100, 'frequency':'monthly'}
 fractional_shares = True
 reinvest_dividends = True
 rebalance_frequency = 'monthly'

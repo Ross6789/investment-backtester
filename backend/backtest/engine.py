@@ -2,6 +2,7 @@ import polars as pl
 from datetime import date
 from typing import Dict, Tuple, List
 from backend.backtest.portfolio import Portfolio
+from backend.utils import get_scheduling_dates
 
 class BacktestEngine:
     def __init__(self, portfolio: Portfolio,start_date: date, end_date: date, target_weights: Dict[str, float], price_data : Tuple[pl.DataFrame, List[date]]):
@@ -19,7 +20,8 @@ class BacktestEngine:
         snapshots = []
 
         # Find rebalance dates
-        rebalance_dates = self.portfolio.strategy.get_rebalance_dates(self.start_date,self.end_date,trading_dates)
+        rebalance_freq = self.portfolio.strategy.rebalance_frequency
+        rebalance_dates = get_scheduling_dates(self.start_date,self.end_date,rebalance_freq,trading_dates)
 
         # Iterate through date range, rebalance where necessary and save snapshot
         for row in all_prices.iter_rows(named=True):
