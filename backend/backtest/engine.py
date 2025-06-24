@@ -1,4 +1,6 @@
 import backend.config as config
+import polars as pl
+from typing import Dict
 from backend.pipelines.data_loader import get_price_data
 from backend.backtest.portfolio import Portfolio
 from backend.backtest.strategy import Strategy
@@ -24,12 +26,14 @@ PortfolioTargets = {
     'GOOG':0.5
 }
 
-Prices = {
-    'AAPL':100,
-    'GOOG':60
-}
+def backtest(Portfolio: Portfolio, prices : pl.DataFrame, target_weights: Dict[str, float]):
+    snapshots = []
 
-Date = '2025-01-01'
+    for row in prices.iter_rows(named=True):
+        date = row['date']
+        prices = {k: v for k, v in row.items() if k != 'date'}
+
+        
 
 portfolioA.rebalance(PortfolioTargets,Prices)
 print(f"Portfolio A : {portfolioA.snapshot(Date, Prices)}")
