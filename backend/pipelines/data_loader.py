@@ -1,18 +1,36 @@
-import backend.config as config
 import polars as pl
-from datetime import date, timedelta
-from typing import List
-from backend.utils import parse_date
+from datetime import timedelta
+from typing import List, Tuple
+from datetime import date
 
-def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_days: int = 10) -> pl.DataFrame:
-    
-    # parse dates
-    try:
-        start_date = parse_date(start_date)
-        end_date = parse_date(end_date)
-    except ValueError as err:
-        print(f'Error: {err}')
+def get_price_data(price_data_path: str,tickers : List[str], start_date: date, end_date: date, buffer_days: int = 10) -> Tuple[pl.DataFrame, List[date]]:
+    """
+    Loads and processes historical price data for given tickers within a specified date range, 
+    including a buffer period for forward-filling missing prices on non-trading days.
 
+    Steps performed:
+    - Extends the requested date range by `buffer_days` before and after to ensure continuous price data for forward-filling.
+    - Reads price data from a Parquet file, filtered by tickers and extended date range.
+    - Pivots the data to a wide format with tickers as columns for 'adj_close' and 'close' prices.
+    - Extracts and returns the sorted list of actual trading dates from the data.
+    - Joins the complete date range with the price data and forward-fills missing prices.
+    - Filters the final dataframe to the original requested date range and sorts by date.
+
+    Args:
+        price_data_path (str): Path to the Parquet file containing historical price data.
+        tickers (List[str]): List of ticker symbols to load data for.
+        start_date (date): Start date of the desired price data range.
+        end_date (date): End date of the desired price data range.
+        buffer_days (int, optional): Number of days to extend the date range on each side for forward-filling.
+                                     Defaults to 10.
+
+    Returns:
+        Tuple[pl.DataFrame, List[date]]: 
+            - A Polars DataFrame containing forward-filled price data for the requested tickers and date range. 
+              Columns include 'date', and for each ticker, 'adj_close' and 'close' prices.
+            - A sorted list of trading dates (date objects) present in the original price data within the extended range.
+    """
+        
     # adjust date range for forward filling (incase start date falls on a non trading day)
     start_date_extended = start_date - timedelta(days=buffer_days)
     end_date_extended = end_date + timedelta(days=buffer_days)
@@ -24,7 +42,7 @@ def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_d
 
     # lazy query prices, filtering by ticker and date
     prices = (
-        pl.scan_parquet((parquet_price_path))
+        pl.scan_parquet((price_data_path))
         .filter(
             (pl.col('date')>= start_date_extended)&
             (pl.col('date')<= end_date_extended)&
@@ -38,6 +56,9 @@ def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_d
         .pivot(on='ticker',index='date', values=['adj_close','close'])
     )
 
+    # extract trading dates
+    trading_dates = sorted(pivoted_df.select('date').to_series().to_list())
+
     # Join all dates df to price df
     joined_df = all_dates_df.join(pivoted_df,on='date',how='left')
 
@@ -48,14 +69,4 @@ def get_price_data(tickers : List[str], start_date: str, end_date: str, buffer_d
         .filter((pl.col('date')>= start_date)&(pl.col('date')<= end_date))
         .sort('date')
     )
-    return filled_df
-
-# config
-parquet_price_path = config.get_parquet_price_base_path()
-adjusted_days = 10
-start_date = "2024-01-01"
-end_date = "2025-01-01"
-tickers = ['AAPL','GOOG']
-
-prices = get_price_data(tickers,start_date,end_date)
-print(prices)
+    return filled_df, trading_dates
