@@ -134,7 +134,7 @@ class Portfolio:
         snapshot = {
             'date': date.isoformat(),
             'holdings': self.holdings.copy(),
-            'cash balance': self.cash_balance,
+            'cash_balance': self.cash_balance,
             'total_value': self.get_value(prices)
         }
         return snapshot

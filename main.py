@@ -21,7 +21,19 @@ initial_balance = 10000
 fractional_shares = False
 reinvest_dividends = True
 rebalance_frequency = 'never'
-recurring_investment = RecurringInvestment(2500,'monthly')
+recurring_investment = None #RecurringInvestment(2500,'monthly')
+
+configuration_dict = {
+    "Start date": start_date.isoformat(),
+    "End date": end_date.isoformat(),
+    "Target weights": target_weights,
+    "Initial amount": initial_balance,
+    "Recurring investment amount": None if recurring_investment == None else recurring_investment.amount,
+    "Recurring investment frequency": None if recurring_investment == None else recurring_investment.frequency,
+    "Fractional shares allowed": fractional_shares,
+    "Reinvest dividends": reinvest_dividends,
+    "Rebalance frequency": rebalance_frequency
+}
 
 # Instantiate engine objects
 strategy = Strategy(fractional_shares, reinvest_dividends, rebalance_frequency)
@@ -36,5 +48,5 @@ backtest = BacktestEngine(portfolio,start_date,end_date,target_weights,price_dat
 result = BacktestResult(backtest.run())
 
 # export results
-result.to_csv(csv_save_path)
+result.to_csv(csv_save_path,configuration_dict)
 
