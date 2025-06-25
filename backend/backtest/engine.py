@@ -35,10 +35,16 @@ class BacktestEngine:
         for row in all_prices.iter_rows(named=True):
             date = row['date']
             date_prices = {k: v for k, v in row.items() if k != 'date'}
+
+            # Make initial investment
+            if date == self.start_date:
+                self.portfolio.invest_by_target(self.target_weights,date_prices)
         
+            # Rebalance
             if date in rebalance_dates:
                 self.portfolio.rebalance(self.target_weights,date_prices)
 
+            # Recurring investment
             if self.recurring_investment:
                  if date in investment_dates:
                     self.portfolio.add_cash(self.recurring_investment.amount)
