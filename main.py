@@ -20,7 +20,7 @@ recurring_cashflow = {'amount':100, 'frequency':'monthly'}
 fractional_shares = True
 reinvest_dividends = True
 rebalance_frequency = 'monthly'
-recurring_investment = RecurringInvestment(100,'monthly')
+recurring_investment = RecurringInvestment(1000,'quarterly')
 
 # Instantiate engine objects
 strategy = Strategy(fractional_shares, reinvest_dividends, rebalance_frequency)
