@@ -46,6 +46,7 @@ class Portfolio:
             value = units * price
             total_value += value
         return round(total_value,2)
+    
 
     def rebalance(self, target_weights: Dict[str, float], prices: Dict[str, float]):
         """
@@ -121,3 +122,19 @@ class Portfolio:
         else:
             price_type = 'adj_close'
         return f'{price_type}_{ticker}'
+
+    def add_cash(self, amount: float):
+        """
+        Add a specified amount to the holdings cash balance.
+
+        Args:
+            amount (float): The amount of cash to add. Must be greater than 0.
+
+        Raises:
+            ValueError: If the amount is not positive.
+        """
+        if amount <= 0:
+            raise ValueError("Invalid amount : must be greater than zero")
+        self.cash_balance += amount
+    
+    

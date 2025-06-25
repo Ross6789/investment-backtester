@@ -4,6 +4,7 @@ from datetime import date
 from backend.pipelines.data_loader import get_price_data
 from backend.backtest.portfolio import Portfolio
 from backend.backtest.strategy import Strategy
+from backend.models import RecurringInvestment
 from backend.backtest.engine import BacktestEngine
 
 
@@ -19,6 +20,7 @@ recurring_cashflow = {'amount':100, 'frequency':'monthly'}
 fractional_shares = True
 reinvest_dividends = True
 rebalance_frequency = 'monthly'
+recurring_investment = RecurringInvestment(100,'monthly')
 
 # Instantiate engine objects
 strategy = Strategy(fractional_shares, reinvest_dividends, rebalance_frequency)
@@ -29,7 +31,7 @@ tickers = list(target_weights.keys())
 price_data= get_price_data(parquet_price_path,tickers,start_date,end_date)
 
 # run backtest
-backtest = BacktestEngine(portfolio,start_date,end_date,target_weights,price_data)
+backtest = BacktestEngine(portfolio,start_date,end_date,target_weights,price_data,recurring_investment)
 history = backtest.run()
 
 # print history
