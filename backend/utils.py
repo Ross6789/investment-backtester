@@ -64,17 +64,34 @@ def get_scheduling_dates(start_date: date, end_date: date, frequency: str,tradin
     Raises:
         ValueError: If an invalid scheduling frequency is provided.
     """
-        
     schedule_dates = []
-    target_date = start_date
+        
+    # Offset start date by frequency chosen
+    match frequency.lower():
+        case "never":
+            return []
+        case "daily":
+            target_date = start_date + relativedelta(days=1)
+        case "weekly":
+            target_date = start_date + relativedelta(days=7)
+        case "monthly":
+            target_date = start_date + relativedelta(months=1)
+        case "quarterly":
+            target_date = start_date + relativedelta(months=3)
+        case "yearly":
+            target_date = start_date + relativedelta(years=1)
+        case _: 
+            raise ValueError(f"Invalid scheduling frequency : {frequency}")
         
     while target_date <= end_date:
+        # Get the first trading date on or after the current target_date
         schedule_date = next((td for td in trading_dates if td >= target_date),None)
-        if schedule_date == None:
+        
+        if schedule_date is None or schedule_date > end_date:
             break
         schedule_dates.append(schedule_date)
             
-        # Determine next target rebalance date based on strategy
+        # Determine next target date based on frequency
         match frequency.lower():
             case "never":
                 break

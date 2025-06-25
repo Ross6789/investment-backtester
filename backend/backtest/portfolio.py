@@ -71,7 +71,7 @@ class Portfolio:
                 units_bought = floor((balance_available / price)*10000)/10000 # use a factor and floor to round down to 4 decimal places
             else:
                 units_bought = balance_available // price
-            self.holdings[ticker] += units_bought
+            self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
             remaining_balance -= units_bought * price
             
             # Round units to 4 DP - might have accrued more digits in addition
@@ -134,7 +134,7 @@ class Portfolio:
         snapshot = {
             'date': date.isoformat(),
             'holdings': self.holdings.copy(),
-            'cash balance': self.cash_balance,
+            'cash_balance': self.cash_balance,
             'total_value': self.get_value(prices)
         }
         return snapshot
