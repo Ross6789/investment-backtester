@@ -42,6 +42,7 @@ class BacktestEngine:
             if self.recurring_investment:
                  if date in investment_dates:
                     self.portfolio.add_cash(self.recurring_investment.amount)
+                    self.portfolio.invest_by_target(self.target_weights,date_prices)
             
             snapshots.append(self.portfolio.snapshot(date,date_prices))
         

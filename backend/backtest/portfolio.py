@@ -46,7 +46,39 @@ class Portfolio:
             value = units * price
             total_value += value
         return round(total_value,2)
-    
+
+    def invest_by_target(self, target_weights: Dict[str, float], prices: Dict[str, float]):
+        """
+        Invests the portfolio's available cash according to target weights and current prices.
+
+        This method does not rebalance existing holdings, but uses only the available cash balance
+        to buy assets according to the given target weights. Supports fractional shares (rounded 
+        down to 4 decimal places) if allowed by the strategy.
+
+        Args:
+            target_weights (Dict[str, float]): Target portfolio weights by ticker (e.g. {'AAPL': 0.5}).
+            prices (Dict[str, float]): Current prices keyed by price column name (e.g. {'close_AAPL': 187.3}).
+        """
+        # Get starting balance and initialise remaining balance
+        starting_balance = self.cash_balance
+        remaining_balance = starting_balance
+
+        # Buy assets using defined target weights
+        for ticker, weight in target_weights.items():
+            balance_available = starting_balance * weight
+            price = prices.get(self.get_price_col_name(ticker))
+            if self.strategy.allow_fractional_shares:
+                units_bought = floor((balance_available / price)*10000)/10000 # use a factor and floor to round down to 4 decimal places
+            else:
+                units_bought = balance_available // price
+            self.holdings[ticker] += units_bought
+            remaining_balance -= units_bought * price
+            
+            # Round units to 4 DP - might have accrued more digits in addition
+            self.holdings[ticker] = floor(self.holdings[ticker]*10000)/10000
+
+        # Update cash balance
+        self.cash_balance = round(remaining_balance,2) 
 
     def rebalance(self, target_weights: Dict[str, float], prices: Dict[str, float]):
         """
