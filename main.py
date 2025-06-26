@@ -1,7 +1,7 @@
 import backend.config as config
 import polars as pl
 from datetime import date
-from backend.pipelines.data_loader import get_price_data
+from backend.pipelines.data_loader import get_price_data,get_corporate_action_data
 from backend.backtest.portfolio import Portfolio
 from backend.backtest.strategy import Strategy
 from backend.models import PortfolioWeights,RecurringInvestment
@@ -11,6 +11,7 @@ from backend.backtest.result import BacktestResult
 
 # config
 parquet_price_path = config.get_parquet_price_base_path()
+parquet_corporate_action_path = config.get_parquet_corporate_action_base_path()
 csv_save_path = config.get_csv_backtest_result_path()
 
 # User choices
@@ -43,8 +44,11 @@ portfolio = Portfolio(initial_balance, strategy)
 tickers = list(target_weights.keys())
 price_data= get_price_data(parquet_price_path,tickers,start_date,end_date)
 
+# Retrieve corporate action data
+corporate_action_data = get_corporate_action_data(parquet_corporate_action_path,tickers,start_date,end_date)
+
 # run backtest
-backtest = BacktestEngine(portfolio,start_date,end_date,target_weights,price_data,recurring_investment)
+backtest = BacktestEngine(portfolio,start_date,end_date,target_weights,price_data,corporate_action_data,recurring_investment)
 result = BacktestResult(backtest.run())
 
 # export results
