@@ -18,10 +18,10 @@ start_date = date.fromisoformat("2024-01-01")
 end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
 initial_balance = 10000
-fractional_shares = False
+fractional_shares = True
 reinvest_dividends = True
-rebalance_frequency = 'never'
-recurring_investment = None #RecurringInvestment(2500,'monthly')
+rebalance_frequency = 'monthly'
+recurring_investment = RecurringInvestment(2500,'monthly')
 
 configuration_dict = {
     "Start date": start_date.isoformat(),

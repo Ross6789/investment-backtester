@@ -136,13 +136,13 @@ class Portfolio:
         """
         # Condense the price dicts to contain only the applicable price (ie. adj close or close) keyed to each ticker
         ticker_prices = {
-            ticker : prices.get(self.get_price_col_name(ticker),0)
+            ticker : round(prices.get(self.get_price_col_name(ticker),0),4)
             for ticker in self.holdings
         }
 
         # Calculate the value of each different holding
         holding_values = {
-            ticker : self.holdings.get(ticker, 0) * ticker_prices.get((ticker), 0)
+            ticker : round(self.holdings.get(ticker, 0) * ticker_prices.get((ticker), 0),2)
             for ticker in self.holdings
         }
 
