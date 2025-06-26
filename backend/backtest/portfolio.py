@@ -120,22 +120,45 @@ class Portfolio:
         # Update cash balance
         self.cash_balance = round(remaining_balance,2) 
         
-    def snapshot(self, date: date, prices: Dict[str, float]):
+    def snapshot(self, date: date, prices: Dict[str, float], cash_inflow: float, rebalanced: bool, invested: bool):
         """
         Create a snapshot of the portfolio state at a given date.
 
         Args:
             date (date): The date of the snapshot.
-            prices (Dict[str, float]): Current prices keyed by price column name.
+            prices (Dict[str, float]): Current prices keyed by ticker.
+            cash_inflow (float): New cash added on this date.
+            rebalanced (bool): Whether a rebalance occurred on this date.
+            invested (bool): Whether a recurring investment was made.
 
         Returns:
-            Dict[str, object]: A dictionary containing date (ISO format), holdings, cash balance, and total portfolio value.
+            Dict[str, object]: Snapshot of the portfolio state.
         """
+        # Condense the price dicts to contain only the applicable price (ie. adj close or close) keyed to each ticker
+        ticker_prices = {
+            ticker : round(prices.get(self.get_price_col_name(ticker),0),4)
+            for ticker in self.holdings
+        }
+
+        # Calculate the value of each different holding
+        holding_values = {
+            ticker : round(self.holdings.get(ticker, 0) * ticker_prices.get((ticker), 0),2)
+            for ticker in self.holdings
+        }
+
         snapshot = {
             'date': date.isoformat(),
-            'holdings': self.holdings.copy(),
             'cash_balance': self.cash_balance,
-            'total_value': self.get_value(prices)
+            'cash_inflow': cash_inflow,
+            'total_value': self.get_value(prices),
+            'holdings': self.holdings.copy(),
+            'prices': ticker_prices.copy(),
+            'holding_values':holding_values.copy(),
+            'rebalanced': rebalanced,
+            'invested': invested
+            # 'dividends_received': 
+            # 'stock_splits': 
+
         }
         return snapshot
 
