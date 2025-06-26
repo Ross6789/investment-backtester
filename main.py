@@ -49,4 +49,3 @@ result = BacktestResult(backtest.run())
 
 # export results
 result.to_csv(csv_save_path,configuration_dict)
-

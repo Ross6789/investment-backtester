@@ -34,8 +34,13 @@ class BacktestResult:
             tickers.update(row.get('holdings', {}).keys())
         tickers = sorted(tickers)
 
+        # Ticker columns
+        ticker_cols = []
+        for ticker in tickers:
+            ticker_cols.extend([f'{ticker} units',f'{ticker} price',f'{ticker} total value'])
+
         # CSV headers
-        headers = ['Date','Cash balance','Total value'] + tickers
+        headers = ['Date','Cash balance','Cash Inflow','Total value','Rebalanced','Invested'] + ticker_cols
 
         with open(save_path, mode='w') as f:
             writer = csv.writer(f)
@@ -51,14 +56,21 @@ class BacktestResult:
 
             for row in self.history:
                 flat_row = {
-                    "Date": row["date"],
-                    "Cash balance": row["cash_balance"],
-                    "Total value": row["total_value"],
+                    'Date': row['date'],
+                    'Cash balance': row['cash_balance'],
+                    'Cash Inflow': row['cash_inflow'],
+                    'Total value': row['total_value'],
+                    'Rebalanced': row['rebalanced'],
+                    'Invested': row['invested']
                 }
 
-                holdings = row.get("holdings", {})
+                units = row.get('holdings', {})
+                prices = row.get('prices',{})
+                values = row.get('holding_values',{})
                 for ticker in tickers:
-                    flat_row[ticker] = holdings.get(ticker, 0.0)
+                    flat_row[f'{ticker} units'] = units.get(ticker, 0.0)
+                    flat_row[f'{ticker} price'] = prices.get(ticker, 0.0)
+                    flat_row[f'{ticker} total value'] = values.get(ticker, 0.0)
 
                 dict_writer.writerow(flat_row)
     

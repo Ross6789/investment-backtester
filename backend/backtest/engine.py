@@ -36,21 +36,33 @@ class BacktestEngine:
             date = row['date']
             date_prices = {k: v for k, v in row.items() if k != 'date'}
 
+            # Initialise snapshot flags
+            cash_inflow = 0.0
+            rebalanced = False
+            invested = False
+            # dividends_received
+            # stock_splits
+
             # Make initial investment
             if date == self.start_date:
+                cash_inflow = self.portfolio.cash_balance
                 self.portfolio.invest_by_target(self.target_weights,date_prices)
+                invested = True
         
             # Rebalance
             if date in rebalance_dates:
                 self.portfolio.rebalance(self.target_weights,date_prices)
+                rebalanced = True
 
             # Recurring investment
             if self.recurring_investment:
                  if date in investment_dates:
                     self.portfolio.add_cash(self.recurring_investment.amount)
+                    cash_inflow += self.recurring_investment.amount
                     self.portfolio.invest_by_target(self.target_weights,date_prices)
-            
-            snapshots.append(self.portfolio.snapshot(date,date_prices))
+                    invested = True
+
+            snapshots.append(self.portfolio.snapshot(date,date_prices,cash_inflow,rebalanced,invested))
         
         # Save snapshots to object
         self.history = snapshots
