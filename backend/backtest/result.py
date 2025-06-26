@@ -37,10 +37,10 @@ class BacktestResult:
         # Ticker columns
         ticker_cols = []
         for ticker in tickers:
-            ticker_cols.extend([f'{ticker} units',f'{ticker} price',f'{ticker} total value'])
+            ticker_cols.extend([f'{ticker} units',f'{ticker} price',f'{ticker} total value',f'{ticker} dividend per unit',f'{ticker} total dividend'])
 
         # CSV headers
-        headers = ['Date','Cash balance','Cash Inflow','Total value','Rebalanced','Invested'] + ticker_cols
+        headers = ['Date','Cash balance','Cash Inflow','Dividend Income','Total value','Rebalanced','Invested','Dividends received'] + ticker_cols
 
         with open(save_path, mode='w') as f:
             writer = csv.writer(f)
@@ -59,18 +59,28 @@ class BacktestResult:
                     'Date': row['date'],
                     'Cash balance': row['cash_balance'],
                     'Cash Inflow': row['cash_inflow'],
+                    'Dividend Income': row['dividend_income'],
                     'Total value': row['total_value'],
                     'Rebalanced': row['rebalanced'],
-                    'Invested': row['invested']
+                    'Invested': row['invested'],
+                    'Dividends received': row['dividends_received']
                 }
 
                 units = row.get('holdings', {})
                 prices = row.get('prices',{})
                 values = row.get('holding_values',{})
+                dividends = row.get('dividends',[])
+                
                 for ticker in tickers:
+                    
+                    dividend_per_unit = next((d['dividend_per_unit'] for d in dividends if d['ticker'] == ticker), 0.0)
+                    total_dividend = next((d['total_dividend'] for d in dividends if d['ticker'] == ticker), 0.0)
+                    
                     flat_row[f'{ticker} units'] = units.get(ticker, 0.0)
                     flat_row[f'{ticker} price'] = prices.get(ticker, 0.0)
                     flat_row[f'{ticker} total value'] = values.get(ticker, 0.0)
+                    flat_row[f'{ticker} dividend per unit'] = dividend_per_unit
+                    flat_row[f'{ticker} total dividend'] = total_dividend
 
                 dict_writer.writerow(flat_row)
     

@@ -70,3 +70,40 @@ def get_price_data(price_data_path: str,tickers : List[str], start_date: date, e
         .sort('date')
     )
     return filled_df, trading_dates
+
+def get_corporate_action_data(corporate_action_data_path: str,tickers : List[str], start_date: date, end_date: date) -> Tuple[pl.DataFrame, pl.DataFrame]:
+    """
+    Load and pivot corporate action data (dividends and stock splits) for specified tickers and date range.
+
+    Args:
+        corporate_action_data_path (str): Path to the Parquet file containing corporate actions.
+        tickers (List[str]): List of ticker symbols to include.
+        start_date (date): Start of the date range (inclusive).
+        end_date (date): End of the date range (inclusive).
+
+    Returns:
+        Tuple[pl.DataFrame, pl.DataFrame]: 
+            - The first DataFrame contains dividends, pivoted with dates as rows and tickers as columns.
+            - The second DataFrame contains stock splits, similarly pivoted.
+
+    """
+    # lazy query prices, filtering by ticker and date
+    actions = (
+        pl.scan_parquet(corporate_action_data_path)
+        .filter(
+            (pl.col('date')>= start_date)&
+            (pl.col('date')<= end_date)&
+            (pl.col('ticker').is_in(tickers))
+        )
+        .collect()
+    )
+
+    # fitler by action
+    dividends = actions.filter(pl.col('dividends').is_not_null())
+    stocksplits = actions.filter(pl.col('stock_splits').is_not_null())
+
+    # pivot action dataframes to wide format and sort by date
+    dividends_pivoted = dividends.pivot(on='ticker',index='date', values=['dividends']).sort('date')
+    stock_splits_pivoted = stocksplits.pivot(on='ticker',index='date', values=['stock_splits']).sort('date')
+
+    return dividends_pivoted, stock_splits_pivoted
