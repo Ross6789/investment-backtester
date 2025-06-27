@@ -14,12 +14,12 @@ csv_save_path = config.get_csv_backtest_result_path()
 
 # User choices
 mode = 'manual'
-start_date = date.fromisoformat("2024-01-01")
-end_date = date.fromisoformat("2025-01-01")
+start_date = date.fromisoformat("2020-01-01")
+end_date = date.fromisoformat("2023-01-01")
 target_weights = PortfolioWeights({'AAPL':0.5,'GOOG':0.5}).weights
 initial_balance = 10000
 fractional_shares = False
-reinvest_dividends = False
+reinvest_dividends = True
 rebalance_frequency = 'monthly'
 recurring_investment = RecurringInvestment(2500,'monthly')
 
