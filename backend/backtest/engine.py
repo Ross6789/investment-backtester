@@ -67,11 +67,10 @@ class BacktestEngine:
 
         # Find corporate action dates
         dividend_dates = []
-        stock_split_dates = []
         if self.mode == 'manual':
             dividends, stock_splits = self.corporate_action_data
             dividend_dates = dividends['date'].to_list()
-            stock_split_dates = stock_splits['date'].to_list()
+
 
         # Iterate through date range, rebalance and invest where necessary and save snapshot
         for row in all_prices.iter_rows(named=True):
@@ -84,7 +83,6 @@ class BacktestEngine:
             rebalanced = False
             invested = False
             dividends_received = False
-            # stock_splits
 
             # Make initial investment
             if current_date == self.start_date:
