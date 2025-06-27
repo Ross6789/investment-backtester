@@ -1,7 +1,8 @@
 from typing import Dict,Tuple
 from datetime import date
 from math import floor
-from backend.backtest.strategy import Strategy
+from backend.models import Strategy
+
 
 class Portfolio:
     """
@@ -17,16 +18,18 @@ class Portfolio:
     
     """
         
-    def __init__(self, initial_balance : float, strategy : Strategy):
+    def __init__(self, initial_balance : float, strategy : Strategy, backtest_engine):
         """
         Initialize the portfolio with starting cash and strategy.
 
         Args:
             initial_cash (float): Initial amount of cash in the portfolio.
             strategy (Strategy): The investment strategy instance.
+            backtest_engine (BacktestEngine): The backtest engine instance
         """
         self.cash_balance = initial_balance
         self.strategy = strategy
+        self.backtest_engine = backtest_engine
         self.holdings = {}
         self.dividends = []
         
@@ -177,7 +180,7 @@ class Portfolio:
         Returns:
             str: The price column name in the format '{price_type}_{ticker}'.
         """
-        if self.strategy.reinvest_dividends:
+        if self.backtest_engine.mode == "manual":
             price_type = 'close'
         else:
             price_type = 'adj_close'

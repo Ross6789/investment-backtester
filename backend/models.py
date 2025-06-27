@@ -52,3 +52,16 @@ class RecurringInvestment:
         if self.amount <= 0:
             raise ValueError("Investment amount must be greater than zero.")
 
+@dataclass
+class Strategy:
+    """
+    Represents a portfolio investment strategy used during backtesting.
+
+    Encapsulates key configuration options:
+    - Whether fractional shares can be purchased.
+    - How dividends are treated.
+    - How often to rebalance the portfolio.
+    """
+    allow_fractional_shares: bool = True
+    reinvest_dividends: bool = True
+    rebalance_frequency: str = "never"

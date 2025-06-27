@@ -1,22 +1,24 @@
 import polars as pl
 from datetime import date
 from typing import Dict, Tuple, List, Optional
-from backend.backtest.portfolio import Portfolio
+from backend.backtest.portfolio import Portfolio, Strategy
 from backend.utils import get_scheduling_dates
 from backend.models import RecurringInvestment
 
 
 class BacktestEngine:
-    def __init__(self, portfolio: Portfolio,start_date: date, end_date: date, target_weights: Dict[str, float],price_data : Tuple[pl.DataFrame, List[date]],corporate_action_data: Tuple[pl.DataFrame, pl.DataFrame],recurring_investment: Optional[RecurringInvestment] = None):
-            self.portfolio = portfolio
+    def __init__(self, start_date: date, end_date: date, target_weights: Dict[str, float],price_data : Tuple[pl.DataFrame, List[date]],corporate_action_data: Tuple[pl.DataFrame, pl.DataFrame],mode: str = 'manual',initial_balance: float = 1000,recurring_investment: Optional[RecurringInvestment] = None, fractional_shares: bool = False, reinvest_dividends: bool = True, rebalance_frequency: str = 'never'):
             self.start_date = start_date
             self.end_date = end_date
             self.target_weights = target_weights
             self.price_data = price_data
             self.corporate_action_data = corporate_action_data
+            self.mode = mode
             self.recurring_investment = recurring_investment
+            self.portfolio = Portfolio(initial_balance, Strategy(fractional_shares,reinvest_dividends,rebalance_frequency),self)
 
     def run(self) -> List[Dict[str, object]]:
+
         # unpack price data tuple
         all_prices, trading_dates = self.price_data
         
@@ -62,14 +64,16 @@ class BacktestEngine:
                 rebalanced = True
 
             # Dividends
-            if date in dividend_dates:
+            if (self.mode == 'manual') & (date in dividend_dates):
                 # Add dividend which were distributed on current date to portfolio
                 dividend_dict = dividends.filter(pl.col('date')==date).drop('date').to_dicts()[0]
                 self.portfolio.add_dividends(dividend_dict, self.portfolio.holdings)
                 dividends_received = True
                 # Process dividend
+                total_dividend = self.portfolio.get_total_dividends()
                 if self.portfolio.strategy.reinvest_dividends:
-                    cash_inflow += self.portfolio.get_total_dividends()
+                    self.portfolio.add_cash(total_dividend)
+                    cash_inflow += total_dividend
                     self.portfolio.invest_by_target(self.target_weights,date_prices)
                     invested = True
                 else:
