@@ -2,6 +2,8 @@ import polars as pl
 
 def process_price_data(price_data_path: str) -> pl.DataFrame:
  
+    print('Processing prices ...')
+    
     # scan price data
     prices = pl.read_parquet(price_data_path)    
 
@@ -25,5 +27,14 @@ def process_price_data(price_data_path: str) -> pl.DataFrame:
         ])
         .sort('date')
     )
+    print('Price processing complete.')
 
     return filled_prices
+
+def process_corporate_action_data(corporate_action_data_path: str) -> pl.DataFrame:   
+
+    print('Processing corporate actions ...')
+    actions = pl.read_parquet(corporate_action_data_path) 
+    print('Corporate action processing complete.')
+
+    return actions
