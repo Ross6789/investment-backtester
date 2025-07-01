@@ -76,20 +76,23 @@ class YFinanceCorporateActionsIngestor(BaseYFinanceIngestor):
         return raw_data
     
 class CSVPriceIngestor:
-    def __init__(self):
-        pass
-
-    # Method to download data from csv
-    def run(self, source_path, start_date, end_date) -> pd.DataFrame:
+    def __init__(self,ticker,source_path, start_date, end_date):
         if start_date and end_date:
             if start_date > end_date:
                 raise ValueError("Start date must be after the end date")
-        print(f"Reading file : {source_path}...")
-        all_data = pd.read_csv(source_path, parse_dates=['date'])
+        self.ticker = ticker
+        self.source_path = source_path
+        self.start_date = start_date
+        self.end_date = end_date
+
+    # Method to download data from csv
+    def run(self) -> pd.DataFrame:
+        print(f"Reading file : {self.source_path}...")
+        all_data = pd.read_csv(self.source_path, parse_dates=['date'])
         # Ingest only rows within the date range
-        raw_data = all_data[(all_data['date'] >= start_date) & (all_data['date'] <= end_date)]
+        raw_data = all_data[(all_data['date'] >= self.start_date) & (all_data['date'] <= self.end_date)]
         print("Read complete.")
         if raw_data.empty:
-            raise ValueError(f"No data in {source_path} within the date range.")
+            raise ValueError(f"No data in {self.source_path} within the date range.")
         return raw_data
 
