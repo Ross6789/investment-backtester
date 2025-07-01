@@ -100,25 +100,33 @@ class PriceProcessor:
             print('Warning : cleaned prices dataframe is empty')
             return cleaned_prices
         
-        # Get min and max dates
-        start_date = cleaned_prices.select('date').min().to_series()[0]
-        end_date = cleaned_prices.select('date').max().to_series()[0]
+        # Find relevant date ranges for each ticker
+        ticker_date_ranges = (
+            cleaned_prices.group_by('ticker').agg([
+                pl.col('date').min().alias('min_date'),
+                pl.col('date').max().alias('max_date')
+            ])
+        )
 
-        # Create dataframe using daterange
-        dates = pl.DataFrame({'date':pl.date_range(start_date,end_date,interval='1d', eager=True)})
+        # Create dataframe of all dates (including non trading) for each ticker using its daterange
+        date_dfs = []
+        for ticker,min_date, max_date in ticker_date_ranges.iter_rows():
+            date_df = pl.DataFrame({'date':pl.date_range(min_date,max_date,interval='1d', eager=True), 'ticker':ticker})
+            date_dfs.append(date_df)
+        full_date_df = pl.concat(date_dfs)
 
-        # Add trading dates column
+        # Add trading dates column to cleaned prices df (trading day = true, since cleaned data is only present on trading dates)
         cleaned_prices = cleaned_prices.with_columns(pl.lit(True).alias('is_trading_day'))
 
-        # Join dates df to prices df and forward fill
+        # Join full dates df to prices df and forward fill
         filled_prices = (
-            dates.join(cleaned_prices, on='date', how='left')
+            full_date_df.join(cleaned_prices, on=['date','ticker'], how='left')
+            .sort(['ticker','date'])
             .with_columns([
                 pl.col('adj_close').fill_null(strategy='forward'),
                 pl.col('close').fill_null(strategy='forward'),
                 pl.col('is_trading_day').fill_null(False)
             ])
-            .sort('date')
         )
 
         return filled_prices 
@@ -184,5 +192,3 @@ class CorporateActionProcessor:
 
         print('Corporate action data cleaned')
         return df_cols_cast.sort('date')
-
-

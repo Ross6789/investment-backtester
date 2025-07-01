@@ -1,6 +1,5 @@
 import polars as pl
 from pathlib import Path
-from typing import List, Dict
 from backend.pipelines.ingestors import YFinancePriceIngestor,YFinanceCorporateActionsIngestor, CSVPriceIngestor
 from backend.pipelines.processor import PriceProcessor,CorporateActionProcessor
 from backend.pipelines.compiler import Compiler
@@ -16,7 +15,7 @@ class PricePipeline:
         for ingestor in self.ingestors:
             try:
                 raw_data = ingestor.run()
-                if not raw_data.is_empty():
+                if not raw_data.empty:
                     if isinstance(ingestor, YFinancePriceIngestor):
                         cleaned_data = PriceProcessor.clean_yfinance_data(raw_data,ingestor.tickers)
                     elif isinstance(ingestor, CSVPriceIngestor):
@@ -49,7 +48,7 @@ class CorporateActionPipeline:
         for ingestor in self.ingestors:
             try:
                 raw_data = ingestor.run()
-                if not raw_data.is_empty():
+                if not raw_data.empty:
                     if isinstance(ingestor, YFinanceCorporateActionsIngestor):
                         cleaned_data = CorporateActionProcessor.clean_yfinance_data(raw_data,ingestor.tickers)
                     else:
