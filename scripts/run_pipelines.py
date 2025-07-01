@@ -2,7 +2,7 @@ import os
 import polars as pl
 import backend.config as config
 import backend.utils as utils
-from backend.pipelines.pipeline import MasterPipeline
+from backend.pipelines.pipeline import DataPipeline
 from backend.pipelines.ingestors import YFinancePriceIngestor,CSVPriceIngestor, YFinanceCorporateActionsIngestor
 
 # Configuration
@@ -60,7 +60,7 @@ corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_tick
 
 
 # Instantiate and run corporate action pipeline
-corporate_action_pipeline = MasterPipeline(corporate_action_ingestors,parquet_corporate_actions_save_path)
+corporate_action_pipeline = DataPipeline(corporate_action_ingestors,parquet_corporate_actions_save_path)
 corporate_action_pipeline.run()
 
 

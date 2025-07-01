@@ -2,7 +2,7 @@ import pytest
 from datetime import date
 import polars as pl
 from unittest.mock import MagicMock, patch
-from backend.pipelines.pipeline import MasterPipeline 
+from backend.pipelines.pipeline import DataPipeline 
 from polars.testing import assert_frame_equal
 
 @pytest.fixture
@@ -48,11 +48,11 @@ def mock_ingestor_fail():
 
 @pytest.fixture
 def pipeline_valid(mock_valid_ingestors):
-    return MasterPipeline(mock_valid_ingestors, 'dummy_save_path')
+    return DataPipeline(mock_valid_ingestors, 'dummy_save_path')
 
 @pytest.fixture
 def pipeline_invalid(mock_ingestor_fail):
-    return MasterPipeline(mock_ingestor_fail, 'dummy_save_path')
+    return DataPipeline(mock_ingestor_fail, 'dummy_save_path')
 
 def test_combine_data_valid(pipeline_valid, sample_pl_df_combined):
     
@@ -70,7 +70,7 @@ def test_save_data(tmp_path, sample_pl_df_combined):
     save_dir = tmp_path / 'test_output'
     df = sample_pl_df_combined
 
-    pipeline = MasterPipeline(['dummy_ingestors'], save_dir)
+    pipeline = DataPipeline(['dummy_ingestors'], save_dir)
     pipeline.combined_data = df 
 
     pipeline.save_data()
