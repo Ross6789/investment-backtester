@@ -1,17 +1,19 @@
-from backend.pipelines.processor import process_price_data,process_corporate_action_data
-import backend.config as config
 import polars as pl
 
+class Compiler:
+    @staticmethod
+    def compile(processed_prices: pl.DataFrame, processed_actions: pl.DataFrame) -> pl.DataFrame:
+        """
+        Join price and corporate actions dataframes on 'date' and 'ticker' columns.
 
-# Process price data - ie. forward fill prices
-processed_prices = process_price_data(config.get_parquet_price_base_path())
+        Args:
+            processed_prices (pl.DataFrame): Processed prices DataFrame.
+            processed_actions (pl.DataFrame): Processed corporate actions DataFrame.
 
-# Process corporate action data
-corporate_actions = process_corporate_action_data(config.get_parquet_corporate_action_base_path()) 
+        Returns:
+            pl.DataFrame: Joined DataFrame with prices and corporate actions.
+        """
+        return processed_prices.join(processed_actions, on=['date','ticker'],how='left')
 
-# Merge
-compiled = processed_prices.join(corporate_actions, on=['date','ticker'],how='left')
-
-# Save to hard drive
 
 
