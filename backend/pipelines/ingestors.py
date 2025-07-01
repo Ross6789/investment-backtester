@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import List, Iterator
-import datetime
 import yfinance as yf
-import time
-import polars as pl
 import pandas as pd
+from pathlib import Path
+from datetime import date
+from time import sleep
 
 class BaseYFinanceIngestor(ABC):
-    def __init__(self, tickers: List[str], batch_size: int, start_date: datetime.date, end_date: datetime.date):
+    def __init__(self, tickers: List[str], batch_size: int, start_date: date, end_date: date):
         if not isinstance(batch_size, int):
             raise TypeError("Batch size must be an integer")
         if batch_size < 1:
@@ -35,7 +35,7 @@ class BaseYFinanceIngestor(ABC):
                 print (f"Error downloading batch {batch} : {e}")
                 continue
             # add 2 second delay to prevent api restrictions
-            time.sleep(2)
+            sleep(2)
         try:
             combined_data = pd.concat(batch_data)
         except Exception as e:
@@ -76,7 +76,7 @@ class YFinanceCorporateActionsIngestor(BaseYFinanceIngestor):
         return raw_data
     
 class CSVPriceIngestor:
-    def __init__(self,ticker,source_path, start_date, end_date):
+    def __init__(self,ticker: str,source_path: Path, start_date: date, end_date: date):
         if start_date and end_date:
             if start_date > end_date:
                 raise ValueError("Start date must be after the end date")
@@ -88,9 +88,12 @@ class CSVPriceIngestor:
     # Method to download data from csv
     def run(self) -> pd.DataFrame:
         print(f"Reading file : {self.source_path}...")
-        all_data = pd.read_csv(self.source_path, parse_dates=['date'])
+        all_data = pd.read_csv(self.source_path, parse_dates=['date'], dayfirst=True)
+        # Convert start and end date to pandas for comparison
+        start_date_pd = pd.Timestamp(self.start_date)
+        end_date_pd = pd.Timestamp(self.end_date)
         # Ingest only rows within the date range
-        raw_data = all_data[(all_data['date'] >= self.start_date) & (all_data['date'] <= self.end_date)]
+        raw_data = all_data[(all_data['date'] >= start_date_pd) & (all_data['date'] <= end_date_pd)]
         print("Read complete.")
         if raw_data.empty:
             raise ValueError(f"No data in {self.source_path} within the date range.")

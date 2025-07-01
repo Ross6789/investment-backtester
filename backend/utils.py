@@ -2,6 +2,7 @@ import polars as pl
 from backend import config
 from datetime import datetime, date
 from typing import List
+from pathlib import Path
 from dateutil.relativedelta import relativedelta
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
@@ -11,16 +12,17 @@ def get_yfinance_tickers(asset_type: str) -> list[str]:
         .select("ticker")
         .collect()
     )
+
     return metadata["ticker"].to_list()
 
-def get_csv_ticker_source_map() -> dict[str: str]:
+def get_csv_ticker_source_map() -> dict[str, Path]:
     metadata = (
         pl.scan_csv(config.get_asset_metadata_path())
         .filter(pl.col("source")=="local_csv")
         .select("ticker","source_file_path")
         .collect()
     )
-    return [{"ticker": ticker, "source_path": source_path} for ticker, source_path in metadata.select(["ticker","source_file_path"]).iter_rows()]
+    return {ticker: Path(source_path) for ticker, source_path in metadata.select(["ticker","source_file_path"]).iter_rows()}
 
 def parse_date(date_str: str) -> date:
     """

@@ -60,23 +60,29 @@ class PriceProcessor:
         return combined_data_pl.sort('date')
 
     @staticmethod
-    # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
+    # Method to convert to polars dataframe and remove unnecessary columns
     def clean_csv_data(raw_data: pd.DataFrame, ticker: str) -> pl.DataFrame: 
         
         print('Starting to clean CSV price data ...')
 
+        try:
+            # Convert to Polars
+            raw_data_pl = pl.from_pandas(raw_data)
+        except Exception as e:
+            raise Exception(f"Failed to convert to polars df: {e}")
+        
         # Clean csv files based on column count      
-        if len(raw_data.columns)==3:
-            transformed_data = raw_data.rename({
-                raw_data.columns[0]:'date',
-                raw_data.columns[1]:'adj_close',
-                raw_data.columns[2]:'close',
+        if len(raw_data_pl.columns)==3:
+            transformed_data = raw_data_pl.rename({
+                raw_data_pl.columns[0]:'date',
+                raw_data_pl.columns[1]:'adj_close',
+                raw_data_pl.columns[2]:'close',
             })
-        elif len(raw_data.columns)==2:
-            transformed_data = raw_data.select([
-                pl.col(raw_data.columns[0]).alias('date'),
-                pl.col(raw_data.columns[1]).alias('adj_close'),
-                pl.col(raw_data.columns[1]).alias('close')
+        elif len(raw_data_pl.columns)==2:
+            transformed_data = raw_data_pl.select([
+                pl.col(raw_data_pl.columns[0]).alias('date'),
+                pl.col(raw_data_pl.columns[1]).alias('adj_close'),
+                pl.col(raw_data_pl.columns[1]).alias('close')
             ])
         else:
             raise ValueError("Invalid number of columns in CSV file")
@@ -86,12 +92,12 @@ class PriceProcessor:
 
         try:
             # Convert date column to date
-            transformed_data = transformed_data.with_columns(pl.col('date').str.strptime(pl.Date,"%d/%m/%Y"))
+            transformed_data = transformed_data.with_columns(pl.col('date').cast(pl.Date))
         except Exception as e:
-            raise Exception(f"Error while trying to parse the csv date column, ensure it is in the format 'dd/mm/yyyy': {e}")
+            raise Exception(f"Error while trying to cast the date column : {e}")
 
         print('CSV price data cleaned')
-        return transformed_data.sort('date')
+        return transformed_data.sort(['ticker','date'])
 
     @staticmethod
     def forward_fill(cleaned_prices: pl.DataFrame) -> pl.DataFrame:
@@ -191,4 +197,4 @@ class CorporateActionProcessor:
             ])
 
         print('Corporate action data cleaned')
-        return df_cols_cast.sort('date')
+        return df_cols_cast.sort(['ticker','date'])
