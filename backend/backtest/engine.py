@@ -196,9 +196,8 @@ class BacktestEngine:
             return None
         return trading_date[0, 0]
     
-    def _queue_order(self, current_date: date):
+    def _queue_order(self, current_date: date, normalized_weights: Dict[str, float]):
         
-        normalized_weights = self._normalize_portfolio_targets(current_date)
         orders = []
         available_cash = self.portfolio.cash
 
@@ -250,87 +249,6 @@ class BacktestEngine:
             like rebalancing and investing.
         """
         
-        # # Create empty list for portfolio snapshots
-        # snapshots = []
-
-        # # Find rebalance dates
-        # rebalance_freq = self.portfolio.strategy.rebalance_frequency
-        # rebalance_dates = get_scheduling_dates(self.start_date,self.end_date,rebalance_freq,trading_dates)
-
-        # # Find recurring_investment dates if applicable
-        # investment_dates = []
-        # if self.recurring_investment:
-        #     investment_freq = self.recurring_investment.frequency
-        #     investment_dates = get_scheduling_dates(self.start_date,self.end_date,investment_freq,trading_dates)
-
-        # # Find dividend dates
-        # dividend_dates = []
-        # if self.mode == 'manual':
-        #    dividend_dates = (
-        #        self.backtest_data
-        #        .filter(pl.col('date').is_not_null())
-        #        .select('date')
-        #        .to_series()
-        #        .to_list()
-        #        )
-
-        # # Iterate through date range, rebalance and invest where necessary and save snapshot
-        # for row in self.backtest_data.iter_rows(named=True):
-        #     current_date = row['date']
-        #     date_prices = {k: v for k, v in row.items() if k != 'date'}
-
-        #     # Initialise snapshot flags
-        #     cash_inflow = 0.0
-        #     dividend_income = 0.0
-        #     rebalanced = False
-        #     invested = False
-        #     dividends_received = False
-
-        #     # Make initial investment
-        #     if current_date == self.start_date:
-        #         cash_inflow = self.portfolio.cash_balance
-        #         self.portfolio.invest_by_target(self.target_weights,date_prices)
-        #         invested = True
-        
-        #     # Rebalance
-        #     if current_date in rebalance_dates:
-        #         self.portfolio.rebalance(self.target_weights,date_prices)
-        #         rebalanced = True
-
-        #     # Dividends
-        #     if (self.mode == 'manual') and (current_date in dividend_dates):
-        #         # Add dividend which were distributed on current date to portfolio
-        #         dividend_dict = dividends.filter(pl.col('date')==current_date).drop('date').to_dicts()[0]
-        #         self.portfolio.add_dividends(dividend_dict, self.portfolio.holdings)
-        #         dividends_received = True
-        #         # Process dividend
-        #         total_dividend = self.portfolio.get_total_dividends()
-        #         if self.portfolio.strategy.reinvest_dividends:
-        #             self.portfolio.add_cash(total_dividend)
-        #             cash_inflow += total_dividend
-        #             self.portfolio.invest_by_target(self.target_weights,date_prices)
-        #             invested = True
-        #         else:
-        #             dividend_income += total_dividend
-                    
-        #     else:
-        #         self.portfolio.dividends = {}
-
-        #     # Recurring investment
-        #     if self.recurring_investment:
-        #          if current_date in investment_dates:
-        #             self.portfolio.add_cash(self.recurring_investment.amount)
-        #             cash_inflow += self.recurring_investment.amount
-        #             self.portfolio.invest_by_target(self.target_weights,date_prices)
-        #             invested = True
-
-        #     snapshots.append(self.portfolio.snapshot(current_date,date_prices,cash_inflow,dividend_income,rebalanced,invested,dividends_received))
-
-        # # Save snapshots to object
-        # self.history = snapshots
-
-        # return snapshots
-    
         # Create empty list for portfolio snapshots
         snapshots = []
 
@@ -343,50 +261,71 @@ class BacktestEngine:
             rebalanced = False
             invested = False
             dividends_received = False
+            order_required = False
 
             # Create daily dict for each ticker
             daily_dict = self._build_daily_dict(current_date)
 
+            # Fetch daily prices
+            daily_prices = self._get_prices_on_date(current_date)
+
+            # Normalized target weights ie. the target portfolio based on active tickers, shoudl only be computed once and could eb reused iin both order and rebalance
+            normalized_weights = None
+
             # MANAGE CASHFLOW 
             # Initial investment
             if current_date == self.start_date:
-                # queue order
-                self._queue_order(current_date, self.initial_balance)
                 self.portfolio.add_cash(self.initial_balance)
+                place_order = True
 
             # Recurring investment
             if current_date in self.recurring_cashflow_dates:
-                # queue order
+                self.portfolio.add_cash(self.recurring_investment.amount)
+                place_order = True
 
             # Dividends
-            if (self.mode == 'manual') and (current_date in self.dividend_dates):
-                # Add dividend which were distributed on current date to portfolio
-                dividend_dict = dividends.filter(pl.col('date')==current_date).drop('date').to_dicts()[0]
-                self.portfolio.add_dividends(dividend_dict, self.portfolio.holdings)
-                dividends_received = True
-                # Process dividend
-                total_dividend = self.portfolio.get_total_dividends()
-                if self.portfolio.strategy.reinvest_dividends:
-                    self.portfolio.add_cash(total_dividend)
-                    cash_inflow += total_dividend
-                    self.portfolio.invest_by_target(self.target_weights,date_prices)
-                    invested = True
-                else:
-                    dividend_income += total_dividend
+            # if (self.mode == 'manual') and (current_date in self.dividend_dates):
+            #     # Add dividend which were distributed on current date to portfolio
+            #     dividend_dict = dividends.filter(pl.col('date')==current_date).drop('date').to_dicts()[0]
+            #     self.portfolio.add_dividends(dividend_dict, self.portfolio.holdings)
+            #     dividends_received = True
+            #     # Process dividend
+            #     total_dividend = self.portfolio.get_total_dividends()
+            #     if self.portfolio.strategy.reinvest_dividends:
+            #         self.portfolio.add_cash(total_dividend)
+            #         cash_inflow += total_dividend
+            #         self.portfolio.invest_by_target(self.target_weights,date_prices)
+            #         invested = True
+            #     else:
+            #         dividend_income += total_dividend
                     
-            else:
-                self.portfolio.dividends = {}
-            
+            # else:
+            #     self.portfolio.dividends = {}
+
+
+            # PLACE ORDERS
+            if place_order:
+
+                # Compute normalized weights if not done already for date
+                if normalized_weights is None:
+                    normalized_weights = self._normalize_portfolio_targets(current_date)
+
+                self._queue_order(current_date, normalized_weights)
 
             # PROCESS ORDERS
-            
-            
+            if not self.order_book.filter(pl.col('date_executed') == current_date).is_empty():
+                self._process_orders(current_date)
+
             # REBALANCE
             if self._should_rebalance(current_date):
-                #Rebalance method
-                pass
 
-            snapshots.append(self.portfolio.snapshot(current_date,date_prices,cash_inflow,dividend_income,rebalanced,invested,dividends_received))
+                # Compute normalized weights if not done already for date
+                if normalized_weights is None:
+                    normalized_weights = self._normalize_portfolio_targets(current_date)
+
+                self.portfolio.rebalance(normalized_weights,daily_prices)
+
+            snapshots.append(self.portfolio.snapshot(current_date,daily_prices,cash_inflow,dividend_income,rebalanced,invested,dividends_received))
 
         # Save snapshots to object
         self.history = snapshots
