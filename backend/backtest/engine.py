@@ -29,15 +29,62 @@ class BacktestEngine:
         portfolio (Portfolio): The Portfolio object tracking holdings and strategy.
     """
 
-    def __init__(self, start_date: date, end_date: date, target_weights: Dict[str, float],price_data : Tuple[pl.DataFrame, List[date]],corporate_action_data: Tuple[pl.DataFrame, pl.DataFrame],mode: str = 'manual',initial_balance: float = 1000,recurring_investment: Optional[RecurringInvestment] = None, fractional_shares: bool = False, reinvest_dividends: bool = True, rebalance_frequency: str = 'never'):
+    def __init__(self, start_date: date, end_date: date, target_weights: Dict[str, float],backtest_data : pl.DataFrame,mode: str = 'manual',initial_balance: float = 1000,recurring_investment: Optional[RecurringInvestment] = None, fractional_shares: bool = False, reinvest_dividends: bool = True, rebalance_frequency: str = 'never'):
             self.start_date = start_date
             self.end_date = end_date
             self.target_weights = target_weights
-            self.price_data = price_data
-            self.corporate_action_data = corporate_action_data
+            self.backtest_data = backtest_data
             self.mode = mode
             self.recurring_investment = recurring_investment
             self.portfolio = Portfolio(initial_balance, Strategy(fractional_shares,reinvest_dividends,rebalance_frequency),self)
+            self.master_calendar = self._generate_master_calendar()
+
+    def _generate_master_calendar(self) -> pl.DataFrame:
+        master_calendar = (
+            self.backtest_data
+            .group_by('date')
+            .agg([
+                pl.col('ticker').filter(pl.col('is_trading_day')==True).unique().sort().alias('trading_tickers')
+            ])
+            .sort('date')
+        )
+        return master_calendar
+    
+    def _generate_ticker_active_dates(self) -> pl.DataFrame:
+        ticker_active_dates = (
+            self.backtest_data
+            .filter(pl.col('is_trading_day')==True)
+            .group_by('ticker')
+            .agg([
+                pl.col('date').min().alias('first_active_date'),
+                pl.col('date').max().alias('last_active_date')
+            ])
+            .sort('ticker')
+        )
+        return ticker_active_dates
+
+
+    def _generate_rebalance_dates(self) -> List[pl.Date]:
+        pass
+
+    def _generate_invest_dates(self) -> List[pl.Date]:
+        pass
+        
+    
+    def _build_daily_dict(self, date: pl.Date) -> dict:
+        daily_data = self.backtest_data.filter(pl.col('date')== date)
+        
+        return {
+            row['ticker']: {
+                'adj_close': row['adj_close'],
+                'close': row['close'],
+                'is_trading_day': row['is_trading_day'],
+                'dividend': row['dividend'],
+                'stock_split': row['stock_split']
+            }
+            for row in daily_data.iter_rows(named=True)
+        }
+    
 
     def run(self) -> List[Dict[str, object]]:
         """
@@ -48,35 +95,97 @@ class BacktestEngine:
             including portfolio state, cash inflow, dividend income, and flags for events
             like rebalancing and investing.
         """
-
-        # unpack price data tuple
-        all_prices, trading_dates = self.price_data
         
+        # # Create empty list for portfolio snapshots
+        # snapshots = []
+
+        # # Find rebalance dates
+        # rebalance_freq = self.portfolio.strategy.rebalance_frequency
+        # rebalance_dates = get_scheduling_dates(self.start_date,self.end_date,rebalance_freq,trading_dates)
+
+        # # Find recurring_investment dates if applicable
+        # investment_dates = []
+        # if self.recurring_investment:
+        #     investment_freq = self.recurring_investment.frequency
+        #     investment_dates = get_scheduling_dates(self.start_date,self.end_date,investment_freq,trading_dates)
+
+        # # Find dividend dates
+        # dividend_dates = []
+        # if self.mode == 'manual':
+        #    dividend_dates = (
+        #        self.backtest_data
+        #        .filter(pl.col('date').is_not_null())
+        #        .select('date')
+        #        .to_series()
+        #        .to_list()
+        #        )
+
+        # # Iterate through date range, rebalance and invest where necessary and save snapshot
+        # for row in self.backtest_data.iter_rows(named=True):
+        #     current_date = row['date']
+        #     date_prices = {k: v for k, v in row.items() if k != 'date'}
+
+        #     # Initialise snapshot flags
+        #     cash_inflow = 0.0
+        #     dividend_income = 0.0
+        #     rebalanced = False
+        #     invested = False
+        #     dividends_received = False
+
+        #     # Make initial investment
+        #     if current_date == self.start_date:
+        #         cash_inflow = self.portfolio.cash_balance
+        #         self.portfolio.invest_by_target(self.target_weights,date_prices)
+        #         invested = True
+        
+        #     # Rebalance
+        #     if current_date in rebalance_dates:
+        #         self.portfolio.rebalance(self.target_weights,date_prices)
+        #         rebalanced = True
+
+        #     # Dividends
+        #     if (self.mode == 'manual') and (current_date in dividend_dates):
+        #         # Add dividend which were distributed on current date to portfolio
+        #         dividend_dict = dividends.filter(pl.col('date')==current_date).drop('date').to_dicts()[0]
+        #         self.portfolio.add_dividends(dividend_dict, self.portfolio.holdings)
+        #         dividends_received = True
+        #         # Process dividend
+        #         total_dividend = self.portfolio.get_total_dividends()
+        #         if self.portfolio.strategy.reinvest_dividends:
+        #             self.portfolio.add_cash(total_dividend)
+        #             cash_inflow += total_dividend
+        #             self.portfolio.invest_by_target(self.target_weights,date_prices)
+        #             invested = True
+        #         else:
+        #             dividend_income += total_dividend
+                    
+        #     else:
+        #         self.portfolio.dividends = {}
+
+        #     # Recurring investment
+        #     if self.recurring_investment:
+        #          if current_date in investment_dates:
+        #             self.portfolio.add_cash(self.recurring_investment.amount)
+        #             cash_inflow += self.recurring_investment.amount
+        #             self.portfolio.invest_by_target(self.target_weights,date_prices)
+        #             invested = True
+
+        #     snapshots.append(self.portfolio.snapshot(current_date,date_prices,cash_inflow,dividend_income,rebalanced,invested,dividends_received))
+
+        # # Save snapshots to object
+        # self.history = snapshots
+
+        # return snapshots
+    
         # Create empty list for portfolio snapshots
         snapshots = []
 
-        # Find rebalance dates
-        rebalance_freq = self.portfolio.strategy.rebalance_frequency
-        rebalance_dates = get_scheduling_dates(self.start_date,self.end_date,rebalance_freq,trading_dates)
+        # Find unique dates in backtest 
+        dates = self.backtest_data.select('date').unique().to_series().sort()
 
-        # Find recurring_investment dates if applicable
-        investment_dates = []
-        if self.recurring_investment:
-            investment_freq = self.recurring_investment.frequency
-            investment_dates = get_scheduling_dates(self.start_date,self.end_date,investment_freq,trading_dates)
-
-        # Find corporate action dates
-        dividend_dates = []
-        if self.mode == 'manual':
-            dividends, stock_splits = self.corporate_action_data
-            dividend_dates = dividends['date'].to_list()
-
-
-        # Iterate through date range, rebalance and invest where necessary and save snapshot
-        for row in all_prices.iter_rows(named=True):
-            current_date = row['date']
-            date_prices = {k: v for k, v in row.items() if k != 'date'}
-
+        # Iterate through date range, rebalance and collect daily data
+        for current_date in dates:
+            
             # Initialise snapshot flags
             cash_inflow = 0.0
             dividend_income = 0.0
@@ -84,8 +193,11 @@ class BacktestEngine:
             invested = False
             dividends_received = False
 
+            # Create daily dict for each ticker
+            daily_dict = self._build_daily_dict(current_date)
+
             # Make initial investment
-            if current_date == self.start_date:
+            if current_date == _next_trading_date(start_date):
                 cash_inflow = self.portfolio.cash_balance
                 self.portfolio.invest_by_target(self.target_weights,date_prices)
                 invested = True
@@ -128,4 +240,3 @@ class BacktestEngine:
         self.history = snapshots
 
         return snapshots
-    
