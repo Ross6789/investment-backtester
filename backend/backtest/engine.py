@@ -202,7 +202,7 @@ class BacktestEngine:
         for ticker, weight in normalized_weights.items():
             orders.append({
                     "ticker": ticker,
-                    "allocated_fund": round(weight * funds, 2),
+                    "allocated_funds": round(weight * funds, 2),
                     "date_placed": current_date,
                     "date_executed": self._next_trading_date(ticker,current_date)
                 })
@@ -213,6 +213,27 @@ class BacktestEngine:
             self.order_book = new_orders_df
         else:
             self.order_book = pl.concat([self.order_book, new_orders_df])
+
+    def _get_prices_on_date(self, current_date: date) -> Dict[str,float]:
+        prices_df = (
+            self.backtest_data
+            .filter(pl.col('date')==current_date)
+            .select(['ticker','price'])
+            .sort('ticker')         
+        )
+
+        return dict(zip(prices_df['ticker'], prices_df['price']))
+
+    def _process_orders(self, current_date: date):
+
+        executable_orders = (
+            self.order_book
+            .filter(pl.col('date_executed')==current_date)
+        )
+
+        for ticker, allocated_funds in executable_orders.iter_rows():
+            portfolio.invest(ticker, allocated_funds, prices)
+            
 
     def run(self) -> List[Dict[str, object]]:
         """
