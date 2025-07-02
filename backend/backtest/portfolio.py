@@ -1,7 +1,7 @@
 from typing import Dict,Tuple
 from datetime import date
-from math import floor
 from backend.models import Strategy
+from backend.utils import round_down
 
 
 class Portfolio:
@@ -18,18 +18,17 @@ class Portfolio:
     
     """
         
-    def __init__(self, initial_balance : float, strategy : Strategy, backtest_engine):
+    def __init__(self, strategy : Strategy, backtest_engine):
         """
         Initialize the portfolio with starting cash and strategy.
 
         Args:
-            initial_cash (float): Initial amount of cash in the portfolio.
             strategy (Strategy): The investment strategy instance.
             backtest_engine (BacktestEngine): The backtest engine instance
         """
-        self.cash_balance = initial_balance
         self.strategy = strategy
         self.backtest_engine = backtest_engine
+        self.cash = 0
         self.holdings = {}
         self.dividends = []
         
@@ -44,12 +43,15 @@ class Portfolio:
         Returns:
             float: The total portfolio value rounded to 2 decimal places.
         """
-        total_value = self.cash_balance
+        total_value = self.cash
         for ticker, units in self.holdings.items():
             price = prices.get(self.get_price_col_name(ticker))
             value = units * price
             total_value += value
         return round(total_value,2)
+    
+    def get_available_cash(self) -> float:
+        return self.cash
 
     def invest_by_target(self, target_weights: Dict[str, float], prices: Dict[str, float]):
         """
@@ -64,7 +66,7 @@ class Portfolio:
             prices (Dict[str, float]): Current prices keyed by price column name (e.g. {'close_AAPL': 187.3}).
         """
         # Get starting balance and initialise remaining balance
-        starting_balance = self.cash_balance
+        starting_balance = self.cash
         remaining_balance = starting_balance
 
         # Buy assets using defined target weights
@@ -82,7 +84,7 @@ class Portfolio:
             self.holdings[ticker] = floor(self.holdings[ticker]*10000)/10000
 
         # Update cash balance
-        self.cash_balance = round(remaining_balance,2) 
+        self.cash = round(remaining_balance,2) 
 
     def rebalance(self, target_weights: Dict[str, float], prices: Dict[str, float]):
         """
@@ -96,7 +98,7 @@ class Portfolio:
             prices (Dict[str, float]): Current prices keyed by price column name (e.g. 'close_AAPL').
         """
         # Get starting balance
-        cash_balance = self.cash_balance
+        cash_balance = self.cash
 
         # Sell all assets to get total balance
         for ticker, units in self.holdings.items():
@@ -114,7 +116,7 @@ class Portfolio:
         for ticker, weight in target_weights.items():
             balance_available = cash_balance * weight
             price = prices.get(self.get_price_col_name(ticker))
-            if self.strategy.allow_fractional_shares:
+            if self.backtest_engine.strategy.allow_fractional_shares:
                 units_bought = floor((balance_available / price)*10000)/10000 # use a factor and floor to round down to 4 decimal places
             else:
                 units_bought = balance_available // price
@@ -122,7 +124,7 @@ class Portfolio:
             remaining_balance -= units_bought * price
 
         # Update cash balance
-        self.cash_balance = round(remaining_balance,2) 
+        self.cash = round(remaining_balance,2) 
         
     def snapshot(self, date: date, prices: Dict[str, float], cash_inflow: float, dividend_income: float, rebalanced: bool, invested: bool, dividends_received: bool):
         """
@@ -154,7 +156,7 @@ class Portfolio:
 
         snapshot = {
             'date': date.isoformat(),
-            'cash_balance': self.cash_balance,
+            'cash_balance': self.cash,
             'cash_inflow': cash_inflow,
             'dividend_income':dividend_income,
             'total_value': self.get_value(prices),
@@ -185,6 +187,24 @@ class Portfolio:
         else:
             price_type = 'adj_close'
         return f'{price_type}_{ticker}'
+    
+    def invest(self,ticker : str, allocated_funds : float, prices : Dict[str,float]):
+
+        price = prices.get(ticker)
+
+        # Buy assets using allocated funds
+        if self.backtest_engine.strategy.allow_fractional_shares:
+            units_bought = allocated_funds / price
+        else:
+            units_bought = allocated_funds // price
+        self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
+        total_cost = round(units_bought * price,2)
+            
+        # Round units to 4 DP 
+        self.holdings[ticker] = round_down(self.holdings[ticker],4)
+
+        # Update cash balance
+        self.cash -= total_cost
 
     def add_cash(self, amount: float):
         """
@@ -198,7 +218,7 @@ class Portfolio:
         """
         if amount <= 0:
             raise ValueError("Invalid amount : amount to add to cash balance must be greater than zero")
-        self.cash_balance += amount
+        self.cash += amount
     
     def add_dividends(self, dividend_per_unit: Dict[str, float], holdings: Dict[str, float]) :
         """

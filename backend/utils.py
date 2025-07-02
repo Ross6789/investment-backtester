@@ -4,6 +4,7 @@ from datetime import datetime, date
 from typing import List
 from pathlib import Path
 from dateutil.relativedelta import relativedelta
+from math import floor
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
     metadata = (
@@ -42,6 +43,25 @@ def parse_date(date_str: str) -> date:
     except ValueError as e:
         raise ValueError(f"Invalid date format: '{date_str}'. Expected 'YYYY-MM-DD'.") from e
     
+def round_down(value: float, num_digits: int) -> float:
+    """
+    Round down (truncate) a floating-point number to a specified number of decimal places.
+
+    Args:
+        value (float): The number to be rounded down.
+        num_digits (int): The number of decimal places to round down to. Must be a non-negative integer.
+
+    Raises:
+        ValueError: If `num_digits` is negative.
+
+    Returns:
+        float: The value rounded down to the given number of decimal places.
+    """
+    if num_digits < 0:
+        raise ValueError('num_digits must be positive integer')
+    factor =  10 ** num_digits
+    return floor(value * factor) / factor
+
 # --- Scheduling Utilities ---
 
 def get_scheduling_dates(start_date: date, end_date: date, frequency: str,trading_dates: List[date]) -> List[date]:

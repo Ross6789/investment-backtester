@@ -2,11 +2,12 @@ import polars as pl
 from datetime import date
 from typing import Dict, Set, List, Optional
 from backend.backtest.portfolio import Portfolio, Strategy
-from backend.utils import get_scheduling_dates
+from backend.utils import round_down
 from backend.models import RecurringInvestment, TargetPortfolio
 from backend.pipelines.loader import get_backtest_data
 from backend.config import get_backtest_data_path
 from dateutil.relativedelta import relativedelta
+
 
 
 class BacktestEngine:
@@ -37,8 +38,9 @@ class BacktestEngine:
             self.end_date = end_date
             self.target_portfolio = target_portfolio
             self.mode = mode
+            self.initial_balance = initial_balance
             self.recurring_investment = recurring_investment
-            self.portfolio = Portfolio(initial_balance, Strategy(fractional_shares,reinvest_dividends,rebalance_frequency),self)
+            self.portfolio = Portfolio(Strategy(fractional_shares,reinvest_dividends,rebalance_frequency),self)
             self.backtest_data = self._load_backtest_data()
             self.master_calendar = self._generate_master_calendar()
             self.ticker_active_dates = self._generate_ticker_active_dates()
@@ -194,15 +196,16 @@ class BacktestEngine:
             return None
         return trading_date[0, 0]
     
-    def _queue_order(self, current_date: date, funds: float):
+    def _queue_order(self, current_date: date):
         
         normalized_weights = self._normalize_portfolio_targets(current_date)
         orders = []
+        available_cash = self.portfolio.cash
 
         for ticker, weight in normalized_weights.items():
             orders.append({
                     "ticker": ticker,
-                    "allocated_funds": round(weight * funds, 2),
+                    "allocated_funds": round_down(weight * available_cash, 2),
                     "date_placed": current_date,
                     "date_executed": self._next_trading_date(ticker,current_date)
                 })
@@ -231,8 +234,10 @@ class BacktestEngine:
             .filter(pl.col('date_executed')==current_date)
         )
 
+        prices = self._get_prices_on_date(current_date)
+
         for ticker, allocated_funds in executable_orders.iter_rows():
-            portfolio.invest(ticker, allocated_funds, prices)
+            self.portfolio.invest(ticker, allocated_funds, prices)
             
 
     def run(self) -> List[Dict[str, object]]:
@@ -346,7 +351,8 @@ class BacktestEngine:
             # Initial investment
             if current_date == self.start_date:
                 # queue order
-                pass
+                self._queue_order(current_date, self.initial_balance)
+                self.portfolio.add_cash(self.initial_balance)
 
             # Recurring investment
             if current_date in self.recurring_cashflow_dates:
