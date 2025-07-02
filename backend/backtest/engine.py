@@ -1,9 +1,11 @@
 import polars as pl
 from datetime import date
-from typing import Dict, Tuple, List, Optional
+from typing import Dict, Set, List, Optional
 from backend.backtest.portfolio import Portfolio, Strategy
 from backend.utils import get_scheduling_dates
-from backend.models import RecurringInvestment
+from backend.models import RecurringInvestment, TargetPortfolio
+from backend.pipelines.loader import get_backtest_data
+from backend.config import get_backtest_data_path
 
 
 class BacktestEngine:
@@ -29,16 +31,26 @@ class BacktestEngine:
         portfolio (Portfolio): The Portfolio object tracking holdings and strategy.
     """
 
-    def __init__(self, start_date: date, end_date: date, target_weights: Dict[str, float],backtest_data : pl.DataFrame,mode: str = 'manual',initial_balance: float = 1000,recurring_investment: Optional[RecurringInvestment] = None, fractional_shares: bool = False, reinvest_dividends: bool = True, rebalance_frequency: str = 'never'):
+    def __init__(self, start_date: date, end_date: date, target_portfolio: TargetPortfolio ,mode: str = 'manual',initial_balance: float = 1000,recurring_investment: Optional[RecurringInvestment] = None, fractional_shares: bool = False, reinvest_dividends: bool = True, rebalance_frequency: str = 'never'):
             self.start_date = start_date
             self.end_date = end_date
-            self.target_weights = target_weights
-            self.backtest_data = backtest_data
+            self.target_portfolio = target_portfolio
             self.mode = mode
             self.recurring_investment = recurring_investment
             self.portfolio = Portfolio(initial_balance, Strategy(fractional_shares,reinvest_dividends,rebalance_frequency),self)
+            self.backtest_data = self._load_backtest_data()
             self.master_calendar = self._generate_master_calendar()
+            self.ticker_active_dates = self._generate_ticker_active_dates()
+            self.last_rebalance_date = None
 
+    def _load_backtest_data(self) -> pl.DataFrame:
+        return get_backtest_data(
+            get_backtest_data_path(), 
+            self.target_portfolio.get_tickers(),
+            self.start_date, 
+            self.end_date
+        )
+    
     def _generate_master_calendar(self) -> pl.DataFrame:
         master_calendar = (
             self.backtest_data
@@ -63,13 +75,30 @@ class BacktestEngine:
         )
         return ticker_active_dates
 
+    def _find_active_tickers(self, date) -> Set[str]:
+        active_tickers = (
+            self.ticker_active_dates
+            .filter((pl.col('first_active_date')<=date)&(pl.col('last_active_date')>=date))
+            .select('ticker')
+            .to_series()
+            )
+        return set(active_tickers)
+            
+    def _find_trading_ticker(self, current_date: date) -> Set[str]:
+        trading_tickers = (
+            self.master_calendar
+            .filter(pl.col('date')==current_date)
+            .select('trading_tickers')
+            .to_series()
+            .explode()
+        )
+        return set(trading_tickers)
+    
+    def _all_active_tickers_trading(self, current_date: date) -> bool:
+        active_tickers = self._find_active_tickers(current_date)
+        trading_tickers = self._find_trading_ticker(current_date)
 
-    def _generate_rebalance_dates(self) -> List[pl.Date]:
-        pass
-
-    def _generate_invest_dates(self) -> List[pl.Date]:
-        pass
-        
+        return active_tickers==trading_tickers
     
     def _build_daily_dict(self, date: pl.Date) -> dict:
         daily_data = self.backtest_data.filter(pl.col('date')== date)
@@ -85,6 +114,10 @@ class BacktestEngine:
             for row in daily_data.iter_rows(named=True)
         }
     
+
+    def _should_rebalance(self, current_date: date) -> bool:
+        if 
+        pass
 
     def run(self) -> List[Dict[str, object]]:
         """

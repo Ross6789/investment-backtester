@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, List
 
 @dataclass
-class PortfolioWeights:
+class TargetPortfolio:
     """
     Represents a validated dictionary of portfolio asset weightings.
 
@@ -31,6 +31,9 @@ class PortfolioWeights:
         total = sum(self.weights.values())
         if not abs(total-1.0) < 1e-6:
             raise ValueError(f"Portfolio weightings add to {total}. Must equal 1.0")
+    
+    def get_tickers(self) -> List[str]:
+        return list(self.weights.keys())
 
 @dataclass
 class RecurringInvestment:
