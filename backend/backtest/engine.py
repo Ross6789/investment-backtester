@@ -45,6 +45,7 @@ class BacktestEngine:
             self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates()
             self.dividend_dates = self._load_dividend_dates()
             self.last_rebalance_date = start_date
+            self.order_book = None
 
     def _load_backtest_data(self) -> pl.DataFrame:
         return get_backtest_data(
@@ -170,6 +171,48 @@ class BacktestEngine:
                     return current_date >= last_rebalance  + relativedelta(years=1)
                 case _:
                     return False
+                
+    def _normalize_portfolio_targets(self, date: date) -> Dict[str,float]:
+        active_tickers = self._find_active_tickers(date)
+        filtered_weights = {ticker: weight for ticker, weight in self.target_portfolio.weights.items() if ticker in active_tickers}
+
+        total_weight = sum(filtered_weights.values())
+
+        normalized_weights = {ticker : weight / total_weight for ticker, weight in filtered_weights.items()}
+        
+        return normalized_weights
+
+    def _next_trading_date(self, ticker: str, target_date: date) -> date | None:
+        trading_date = (
+            self.master_calendar
+            .filter((pl.col('date') >= target_date) & (pl.col('trading_tickers').list.contains(ticker)))
+            .sort('date')
+            .select('date')
+            .limit(1)
+        )
+        if trading_date.is_empty():
+            return None
+        return trading_date[0, 0]
+    
+    def _queue_order(self, current_date: date, funds: float):
+        
+        normalized_weights = self._normalize_portfolio_targets(current_date)
+        orders = []
+
+        for ticker, weight in normalized_weights.items():
+            orders.append({
+                    "ticker": ticker,
+                    "allocated_fund": round(weight * funds, 2),
+                    "date_placed": current_date,
+                    "date_executed": self._next_trading_date(ticker,current_date)
+                })
+            
+        new_orders_df = pl.DataFrame(orders)
+        
+        if self.order_book is None:
+            self.order_book = new_orders_df
+        else:
+            self.order_book = pl.concat([self.order_book, new_orders_df])
 
     def run(self) -> List[Dict[str, object]]:
         """
