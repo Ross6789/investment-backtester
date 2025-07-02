@@ -6,6 +6,7 @@ from backend.utils import get_scheduling_dates
 from backend.models import RecurringInvestment, TargetPortfolio
 from backend.pipelines.loader import get_backtest_data
 from backend.config import get_backtest_data_path
+from dateutil.relativedelta import relativedelta
 
 
 class BacktestEngine:
@@ -41,7 +42,7 @@ class BacktestEngine:
             self.backtest_data = self._load_backtest_data()
             self.master_calendar = self._generate_master_calendar()
             self.ticker_active_dates = self._generate_ticker_active_dates()
-            self.last_rebalance_date = None
+            self.last_rebalance_date = start_date
 
     def _load_backtest_data(self) -> pl.DataFrame:
         return get_backtest_data(
@@ -113,11 +114,27 @@ class BacktestEngine:
             }
             for row in daily_data.iter_rows(named=True)
         }
-    
 
     def _should_rebalance(self, current_date: date) -> bool:
-        if 
-        pass
+        # rebalancing can not occur on days where live assets cannot be traded
+        if not self._all_active_tickers_trading(current_date):
+            return False
+        else:
+            freq = self.portfolio.strategy.rebalance_frequency
+            last_rebalance = self.last_rebalance_date
+            match freq :
+                case 'daily':
+                    return True
+                case 'weekly':
+                    return current_date >= last_rebalance + relativedelta(weeks=1)
+                case 'monthly':
+                    return current_date >= last_rebalance+ relativedelta(months=1)
+                case 'quarterly':
+                    return current_date >= last_rebalance + relativedelta(months=3)
+                case 'yearly':
+                    return current_date >= last_rebalance  + relativedelta(years=1)
+                case _:
+                    return False
 
     def run(self) -> List[Dict[str, object]]:
         """
