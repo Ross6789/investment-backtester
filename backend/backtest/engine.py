@@ -42,6 +42,8 @@ class BacktestEngine:
             self.backtest_data = self._load_backtest_data()
             self.master_calendar = self._generate_master_calendar()
             self.ticker_active_dates = self._generate_ticker_active_dates()
+            self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates()
+            self.dividend_dates = self._load_dividend_dates()
             self.last_rebalance_date = start_date
 
     def _load_backtest_data(self) -> pl.DataFrame:
@@ -75,6 +77,39 @@ class BacktestEngine:
             .sort('ticker')
         )
         return ticker_active_dates
+    
+    def _generate_recurring_cashflow_dates(self) -> Set[date]:
+        dates = []
+        cashflow_date = self.start_date
+        while True:
+            match self.recurring_investment.frequency.lower():
+                case 'daily':
+                    cashflow_date += relativedelta(days=1)
+                case 'weekly':
+                    cashflow_date += relativedelta(weeks=1)
+                case 'monthly':
+                    cashflow_date += relativedelta(months=1)
+                case 'quarterly':
+                    cashflow_date += relativedelta(months=3)
+                case 'yearly':
+                    cashflow_date += relativedelta(years=1)
+                case _:
+                    raise ValueError('Invalid recurring investment frequency')
+            if cashflow_date > self.end_date:
+                break
+            dates.append(cashflow_date)
+        
+        return set(dates)
+    
+    def _load_dividend_dates(self) -> Set[date]:
+        dividend_dates = (
+            self.backtest_data
+            .filter(pl.col('dividends').is_not_null())
+            .select('date')
+            .to_series()
+            .to_list()
+        )
+        return set(dividend_dates)
 
     def _find_active_tickers(self, date) -> Set[str]:
         active_tickers = (
@@ -230,11 +265,8 @@ class BacktestEngine:
         # Create empty list for portfolio snapshots
         snapshots = []
 
-        # Find unique dates in backtest 
-        dates = self.backtest_data.select('date').unique().to_series().sort()
-
-        # Iterate through date range, rebalance and collect daily data
-        for current_date in dates:
+        # Iterate through date range in master calendar
+        for current_date in self.master_calendar.iter_rows():
             
             # Initialise snapshot flags
             cash_inflow = 0.0
@@ -246,19 +278,18 @@ class BacktestEngine:
             # Create daily dict for each ticker
             daily_dict = self._build_daily_dict(current_date)
 
-            # Make initial investment
-            if current_date == _next_trading_date(start_date):
-                cash_inflow = self.portfolio.cash_balance
-                self.portfolio.invest_by_target(self.target_weights,date_prices)
-                invested = True
-        
-            # Rebalance
-            if current_date in rebalance_dates:
-                self.portfolio.rebalance(self.target_weights,date_prices)
-                rebalanced = True
+            # MANAGE CASHFLOW 
+            # Initial investment
+            if current_date == self.start_date:
+                # queue order
+                pass
+
+            # Recurring investment
+            if current_date in self.recurring_cashflow_dates:
+                # queue order
 
             # Dividends
-            if (self.mode == 'manual') and (current_date in dividend_dates):
+            if (self.mode == 'manual') and (current_date in self.dividend_dates):
                 # Add dividend which were distributed on current date to portfolio
                 dividend_dict = dividends.filter(pl.col('date')==current_date).drop('date').to_dicts()[0]
                 self.portfolio.add_dividends(dividend_dict, self.portfolio.holdings)
@@ -275,14 +306,15 @@ class BacktestEngine:
                     
             else:
                 self.portfolio.dividends = {}
+            
 
-            # Recurring investment
-            if self.recurring_investment:
-                 if current_date in investment_dates:
-                    self.portfolio.add_cash(self.recurring_investment.amount)
-                    cash_inflow += self.recurring_investment.amount
-                    self.portfolio.invest_by_target(self.target_weights,date_prices)
-                    invested = True
+            # PROCESS ORDERS
+            
+            
+            # REBALANCE
+            if self._should_rebalance(current_date):
+                #Rebalance method
+                pass
 
             snapshots.append(self.portfolio.snapshot(current_date,date_prices,cash_inflow,dividend_income,rebalanced,invested,dividends_received))
 
