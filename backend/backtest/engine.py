@@ -3,10 +3,11 @@ from datetime import date
 from typing import Dict, Set, List, Optional, Literal
 from backend.backtest.portfolio import Portfolio, Strategy
 from backend.utils import round_down
-from backend.models import RecurringInvestment, TargetPortfolio
+from backend.models import RecurringInvestment, TargetPortfolio, BacktestConfig
 from backend.pipelines.loader import get_backtest_data
 from backend.config import get_backtest_data_path
 from dateutil.relativedelta import relativedelta
+from backend.choices import RebalanceFrequency,ReinvestmentFrequency,BacktestMode
 
 
 
@@ -33,22 +34,30 @@ class BacktestEngine:
         portfolio (Portfolio): The Portfolio object tracking holdings and strategy.
     """
 
-    def __init__(self, start_date: date, end_date: date, target_portfolio: TargetPortfolio ,mode: str = 'manual',initial_balance: float = 1000,recurring_investment: Optional[RecurringInvestment] = None, fractional_shares: bool = False, reinvest_dividends: bool = True, rebalance_frequency: str = 'never'):
+    def __init__(self, start_date: date, end_date: date, target_portfolio: TargetPortfolio ,config: BacktestConfig, strategy: Strategy):
             self.start_date = start_date
             self.end_date = end_date
             self.target_portfolio = target_portfolio
-            self.mode = mode
-            self.initial_balance = initial_balance
-            self.recurring_investment = recurring_investment
-            self.portfolio = Portfolio(Strategy(fractional_shares,reinvest_dividends,rebalance_frequency),self)
+            self.config = config
+
+            # Instantiate portfolio and data
+            self.portfolio = Portfolio(strategy,self)
             self.backtest_data = self._load_backtest_data()
             self.master_calendar = self._generate_master_calendar()
             self.ticker_active_dates = self._generate_ticker_active_dates()
-            self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates()
-            self.dividend_dates = self._load_dividend_dates()
+                       
+            # Instantiate last rebalance day and order book
             self.last_rebalance_date = start_date
             self.pending_orders = None
             self.executed_orders = None
+
+            # Optional : recurring cashflow
+            if self.config.recurring_investment:
+                self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates()
+
+            # Optional : dividends (if in manual mode)
+            if self.config.mode == 'manual':
+                self.dividend_dates = self._load_dividend_dates()
 
     def _load_backtest_data(self) -> pl.DataFrame:
         return get_backtest_data(

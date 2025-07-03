@@ -33,3 +33,5 @@ def get_backtest_data(backtest_mode : BacktestMode, tickers : List[str], start_d
     )
 
     return data
+
+

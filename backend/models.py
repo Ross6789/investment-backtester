@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import Dict, List
-from backend.choices import RebalanceFrequency,ReinvestmentFrequency, validate_choice
+from typing import Dict, List, Optional
+from backend.choices import RebalanceFrequency,ReinvestmentFrequency, BacktestMode
+from backend.utils import validate_choice,validate_positive_amount
 
 @dataclass
 class TargetPortfolio:
@@ -44,8 +45,7 @@ class RecurringInvestment:
 
     def __post_init__(self):
         validate_choice(self.frequency,ReinvestmentFrequency,"reinvestment frequency")
-        if self.amount <= 0:
-            raise ValueError("Investment amount must be greater than zero.")
+        validate_positive_amount(self.amount,'recurring investment amount')
 
 @dataclass
 class Strategy:
@@ -63,3 +63,14 @@ class Strategy:
 
     def __post_init__(self):
         validate_choice(self.rebalance_frequency,RebalanceFrequency, "rebalance frequency")
+
+@dataclass
+class BacktestConfig:
+    mode : BacktestMode = 'adjusted'
+    strategy : Strategy = Strategy()
+    initial_investment : float = 10000
+    recurring_investment : Optional[RecurringInvestment] = None
+
+    def __post_init__(self):
+        validate_choice(self.mode,BacktestMode, "backtest mode")
+        validate_positive_amount(self.initial_investment, 'initial investment')

@@ -1,7 +1,7 @@
 import polars as pl
 from backend import config
 from datetime import datetime, date
-from typing import List
+from typing import List, Any, get_args
 from pathlib import Path
 from dateutil.relativedelta import relativedelta
 from math import floor
@@ -129,3 +129,18 @@ def get_scheduling_dates(start_date: date, end_date: date, frequency: str,tradin
                 raise ValueError(f"Invalid scheduling frequency : {frequency}")
 
     return schedule_dates
+
+# --- Validation Utilities ---
+
+def validate_choice(value: str,  choices: Any, field_name: str = 'value') -> None:
+    valid_choices = set(get_args(choices))
+    if value not in valid_choices:
+        raise ValueError(f"Invalid {field_name}: '{value}'. Must be one of {valid_choices}.")
+    
+def validate_positive_amount(amount: float, field_name: str) -> None:
+    if amount <= 0:
+        raise ValueError(f"Invalid {field_name}: '{amount}'. Must be positive.")
+    
+def validate_date_order(start_date: date, end_date: date) -> None:
+    if end_date < start_date :
+        raise ValueError("Invalid dates : start date must be before end date")
