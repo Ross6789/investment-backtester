@@ -55,46 +55,6 @@ class Portfolio:
     
     def get_available_cash(self) -> float:
         return self.cash
-
-    def rebalance(self, target_weights: Dict[str, float], prices: Dict[str, float]):
-        """
-        Rebalance the portfolio holdings according to target weights and current prices.
-
-        Sells all existing holdings to cash, then buys assets based on target weights.
-        Supports fractional shares rounding down to 4 decimal places if allowed.
-
-        Args:
-            target_weights (Dict[str, float]): Target portfolio weights by ticker (e.g. {'AAPL': 0.5}).
-            prices (Dict[str, float]): Current prices keyed by price column name (e.g. 'close_AAPL').
-        """
-        # Get starting balance
-        cash_balance = self.cash
-
-        # Sell all assets to get total balance
-        for ticker, units in self.holdings.items():
-            price = prices.get(self.get_price_col_name(ticker))
-            value = units * price
-            cash_balance += value
-        
-        # Reset holdings
-        self.holdings = {}
-
-        # Initialise remaining balance
-        remaining_balance = cash_balance
-
-        # Buy assets using defined target weights
-        for ticker, weight in target_weights.items():
-            balance_available = cash_balance * weight
-            price = prices.get(self.get_price_col_name(ticker))
-            if self.backtest_engine.strategy.allow_fractional_shares:
-                units_bought = floor((balance_available / price)*10000)/10000 # use a factor and floor to round down to 4 decimal places
-            else:
-                units_bought = balance_available // price
-            self.holdings[ticker] = units_bought
-            remaining_balance -= units_bought * price
-
-        # Update cash balance
-        self.cash = round(remaining_balance,2) 
         
     def snapshot(self, date: date, prices: Dict[str, float]):
 
@@ -143,9 +103,7 @@ class Portfolio:
             price_type = 'adj_close'
         return f'{price_type}_{ticker}'
     
-    def invest(self,ticker : str, allocated_funds : float, prices : Dict[str,float]):
-
-        price = prices.get(ticker)
+    def invest(self,ticker : str, allocated_funds : float, price : float):
 
         # Buy assets using allocated funds
         if self.backtest_engine.strategy.allow_fractional_shares:
@@ -160,6 +118,25 @@ class Portfolio:
 
         # Update cash balance
         self.cash -= total_cost
+
+    def sell(self,ticker : str, required_funds : float, price : float):
+
+        # Find units owned to ensure that units sold does not exceed units owned
+        units_owned = self.holdings.get(ticker,0.0)
+
+        # Sell assets to gain allocated funds
+        if self.backtest_engine.strategy.allow_fractional_shares:
+            units_sold = min(required_funds / price, units_owned)
+        else:
+            units_sold = min(required_funds // price, units_owned)
+        self.holdings[ticker] = units_owned - units_sold
+        total_earned = round(units_sold * price,2)
+            
+        # Round units to 4 DP 
+        self.holdings[ticker] = round_down(self.holdings[ticker],4)
+
+        # Update cash balance
+        self.cash += total_earned
 
     def add_cash(self, amount: float):
         """

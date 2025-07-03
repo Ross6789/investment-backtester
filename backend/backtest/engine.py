@@ -1,6 +1,6 @@
 import polars as pl
 from datetime import date
-from typing import Dict, Set, List, Optional
+from typing import Dict, Set, List, Optional, Literal
 from backend.backtest.portfolio import Portfolio, Strategy
 from backend.utils import round_down
 from backend.models import RecurringInvestment, TargetPortfolio
@@ -196,17 +196,20 @@ class BacktestEngine:
             return None
         return trading_date[0, 0]
     
-    def _queue_order(self, current_date: date, normalized_weights: Dict[str, float]):
+    def _get_ticker_allocations_by_target(self, normalized_weights: Dict[str, float], total_funds: float) -> Dict[str, float]:
+        return {ticker: round_down(weight*total_funds,2) for ticker, weight in normalized_weights.items()}
+     
+    def _queue_order(self, current_date: date, ticker_allocations: Dict[str, float], side : Literal['buy','sell'] = 'buy'):
         
         orders = []
-        available_cash = self.portfolio.cash
 
-        for ticker, weight in normalized_weights.items():
+        for ticker, allocated_funds in ticker_allocations.items():
             orders.append({
                     "ticker": ticker,
-                    "allocated_funds": round_down(weight * available_cash, 2),
+                    "allocated_funds": allocated_funds,
                     "date_placed": current_date,
-                    "date_executed": self._next_trading_date(ticker,current_date)
+                    "date_executed": self._next_trading_date(ticker,current_date),
+                    "side": side
                 })
             
         new_orders_df = pl.DataFrame(orders)
@@ -226,17 +229,27 @@ class BacktestEngine:
 
         return dict(zip(prices_df['ticker'], prices_df['price']))
 
-    def _process_orders(self, current_date: date):
+    def _process_orders(self, current_date: date, prices: Dict[str, float]):
 
         executable_orders = (
             self.order_book
             .filter(pl.col('date_executed')==current_date)
+            .select('ticker','allocated_funds','side')
         )
 
-        prices = self._get_prices_on_date(current_date)
 
-        for ticker, allocated_funds in executable_orders.iter_rows():
-            self.portfolio.invest(ticker, allocated_funds, prices)
+        for ticker, allocated_funds,side in executable_orders.iter_rows():
+
+            price = prices.get(ticker)
+            if price is None:
+                raise ValueError(f'Order cannont be completed - missing price for ticker : {ticker} on date : {current_date}')
+            match side:
+                case 'buy':
+                    self.portfolio.invest(ticker, allocated_funds, price)
+                case 'sell':
+                    self.portfolio.sell(ticker, allocated_funds, price)
+                case _:
+                    raise ValueError(f"Invalid order placed: side must be either 'buy' or 'sell', not {side}")
 
 
     def _get_dividends_on_date(self, current_date: date) -> Dict[str,float]:
@@ -249,6 +262,38 @@ class BacktestEngine:
         )
 
         return dict(zip(dividends_df['ticker'], dividends_df['dividend']))
+    
+
+    def rebalance(self, current_date: date, prices: Dict[str, float], target_weights: Dict[str, float]):
+        # Find portfolio value
+        total_value = self.portfolio.get_value(prices)
+
+        buy_order_targets = {}
+        sell_order_targets = {}
+
+        # Determine target allocations
+        for ticker, weight in target_weights.items():
+            
+
+            target_value = total_value * weight
+            actual_value = self.portfolio.holdings.get(ticker, 0.0) * prices.get(ticker, 0.0)
+            
+            correction_value = target_value - actual_value
+
+            if correction_value > 0:
+                buy_order_targets[ticker] = round_down(correction_value,2)
+            elif correction_value < 0:
+                sell_order_targets[ticker] = round_down(-correction_value,2)
+
+
+        # Queue sell order for each over-allocated ticker
+        if buy_order_targets:
+            self._queue_order(current_date,buy_order_targets)
+
+        # Queue buy order for each under_allocated ticker
+
+
+
             
 
     def run(self) -> List[Dict[str, object]]:
@@ -308,7 +353,7 @@ class BacktestEngine:
                 else:
                     self.portfolio.dividend_income = dividends_earned
 
-            # PLACE ORDERS
+            # PLACE INFLOW ORDERS
             if place_order:
 
                 # Compute normalized weights if not done already for date
@@ -317,18 +362,22 @@ class BacktestEngine:
 
                 self._queue_order(current_date, normalized_weights)
 
-            # PROCESS ORDERS
-            if not self.order_book.filter(pl.col('date_executed') == current_date).is_empty():
-                self._process_orders(current_date)
-
             # REBALANCE
             if self._should_rebalance(current_date):
 
+                # Drop previous inflow orders which are to executed today, since the rebalancing may adjust quantities
+                self.order_book = self.order_book.filter(pl.col('date_executed') != current_date)
+                
                 # Compute normalized weights if not done already for date
                 if normalized_weights is None:
                     normalized_weights = self._normalize_portfolio_targets(current_date)
 
-                self.portfolio.rebalance(normalized_weights,daily_prices)
+                self.rebalance(current_date,daily_prices,normalized_weights)
+
+            # PROCESS ORDERS
+            if not self.order_book.filter(pl.col('date_executed') == current_date).is_empty():
+                self._process_orders(current_date)
+
 
             snapshots.append(self.portfolio.snapshot(current_date,daily_prices))
 
