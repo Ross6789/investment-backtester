@@ -237,6 +237,18 @@ class BacktestEngine:
 
         for ticker, allocated_funds in executable_orders.iter_rows():
             self.portfolio.invest(ticker, allocated_funds, prices)
+
+
+    def _get_dividends_on_date(self, current_date: date) -> Dict[str,float]:
+
+        dividends_df = (
+            self.backtest_data
+            .filter(pl.col('date')==current_date)
+            .select(['ticker','dividend'])
+            .sort('ticker')  
+        )
+
+        return dict(zip(dividends_df['ticker'], dividends_df['dividend']))
             
 
     def run(self) -> List[Dict[str, object]]:
@@ -284,24 +296,17 @@ class BacktestEngine:
                 place_order = True
 
             # Dividends
-            # if (self.mode == 'manual') and (current_date in self.dividend_dates):
-            #     # Add dividend which were distributed on current date to portfolio
-            #     dividend_dict = dividends.filter(pl.col('date')==current_date).drop('date').to_dicts()[0]
-            #     self.portfolio.add_dividends(dividend_dict, self.portfolio.holdings)
-            #     dividends_received = True
-            #     # Process dividend
-            #     total_dividend = self.portfolio.get_total_dividends()
-            #     if self.portfolio.strategy.reinvest_dividends:
-            #         self.portfolio.add_cash(total_dividend)
-            #         cash_inflow += total_dividend
-            #         self.portfolio.invest_by_target(self.target_weights,date_prices)
-            #         invested = True
-            #     else:
-            #         dividend_income += total_dividend
-                    
-            # else:
-            #     self.portfolio.dividends = {}
-
+            self.portfolio.dividends = None
+            self.portfolio.dividend_income = 0.0
+            
+            if self.mode == 'manual' and current_date in self.dividend_dates:
+                unit_dividend_per_ticker = self._get_dividends_on_date(current_date)
+                dividends_earned = self.portfolio.process_dividends(unit_dividend_per_ticker)
+                if self.portfolio.strategy.reinvest_dividends:
+                    self.portfolio.add_cash(dividends_earned)
+                    place_order = True
+                else:
+                    self.portfolio.dividend_income = dividends_earned
 
             # PLACE ORDERS
             if place_order:
@@ -325,7 +330,7 @@ class BacktestEngine:
 
                 self.portfolio.rebalance(normalized_weights,daily_prices)
 
-            snapshots.append(self.portfolio.snapshot(current_date,daily_prices,cash_inflow,dividend_income,rebalanced,invested,dividends_received))
+            snapshots.append(self.portfolio.snapshot(current_date,daily_prices))
 
         # Save snapshots to object
         self.history = snapshots
