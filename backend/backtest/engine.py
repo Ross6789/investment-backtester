@@ -47,7 +47,8 @@ class BacktestEngine:
             self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates()
             self.dividend_dates = self._load_dividend_dates()
             self.last_rebalance_date = start_date
-            self.order_book = None
+            self.pending_orders = None
+            self.executed_orders = None
 
     def _load_backtest_data(self) -> pl.DataFrame:
         return get_backtest_data(
@@ -199,7 +200,7 @@ class BacktestEngine:
     def _get_ticker_allocations_by_target(self, normalized_weights: Dict[str, float], total_funds: float) -> Dict[str, float]:
         return {ticker: round_down(weight*total_funds,2) for ticker, weight in normalized_weights.items()}
      
-    def _queue_order(self, current_date: date, ticker_allocations: Dict[str, float], side : Literal['buy','sell'] = 'buy'):
+    def _queue_orders(self, current_date: date, ticker_allocations: Dict[str, float], side : Literal['buy','sell'] = 'buy'):
         
         orders = []
 
@@ -214,10 +215,10 @@ class BacktestEngine:
             
         new_orders_df = pl.DataFrame(orders)
         
-        if self.order_book is None:
-            self.order_book = new_orders_df
+        if self.pending_orders is None:
+            self.pending_orders = new_orders_df
         else:
-            self.order_book = pl.concat([self.order_book, new_orders_df])
+            self.pending_orders = pl.concat([self.pending_orders, new_orders_df])
 
     def _get_prices_on_date(self, current_date: date) -> Dict[str,float]:
         prices_df = (
@@ -229,16 +230,15 @@ class BacktestEngine:
 
         return dict(zip(prices_df['ticker'], prices_df['price']))
 
-    def _process_orders(self, current_date: date, prices: Dict[str, float]):
+    def _execute_orders(self, current_date: date, prices: Dict[str, float]):
 
         executable_orders = (
-            self.order_book
+            self.pending_orders
             .filter(pl.col('date_executed')==current_date)
             .select('ticker','allocated_funds','side')
         )
 
-
-        for ticker, allocated_funds,side in executable_orders.iter_rows():
+        for ticker, allocated_funds, side in executable_orders.iter_rows():
 
             price = prices.get(ticker)
             if price is None:
@@ -251,6 +251,14 @@ class BacktestEngine:
                 case _:
                     raise ValueError(f"Invalid order placed: side must be either 'buy' or 'sell', not {side}")
 
+        # Append executed orders to executed_orders DataFrame
+        if self.executed_orders is None:
+            self.executed_orders = executable_orders
+        else:
+            self.executed_orders = pl.concat([self.executed_orders, executable_orders])
+
+        # Remove executed orders from pending_orders
+        self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
 
     def _get_dividends_on_date(self, current_date: date) -> Dict[str,float]:
 
@@ -288,13 +296,12 @@ class BacktestEngine:
 
         # Queue sell order for each over-allocated ticker
         if buy_order_targets:
-            self._queue_order(current_date,buy_order_targets)
+            self._queue_orders(current_date,buy_order_targets,'buy')
 
         # Queue buy order for each under_allocated ticker
+        if sell_order_targets:
+            self._queue_orders(current_date,sell_order_targets, 'sell')
 
-
-
-            
 
     def run(self) -> List[Dict[str, object]]:
         """
@@ -312,17 +319,6 @@ class BacktestEngine:
         # Iterate through date range in master calendar
         for current_date in self.master_calendar.iter_rows():
             
-            # Initialise snapshot flags
-            cash_inflow = 0.0
-            dividend_income = 0.0
-            rebalanced = False
-            invested = False
-            dividends_received = False
-            order_required = False
-
-            # Create daily dict for each ticker
-            daily_dict = self._build_daily_dict(current_date)
-
             # Fetch daily prices
             daily_prices = self._get_prices_on_date(current_date)
 
@@ -360,13 +356,17 @@ class BacktestEngine:
                 if normalized_weights is None:
                     normalized_weights = self._normalize_portfolio_targets(current_date)
 
-                self._queue_order(current_date, normalized_weights)
+                # Inflow orders invest all available cash using target allocations (if wanted to just invest cashflow in for the day - add a cashflow var which sums daily cashflow)
+                funds = self.portfolio.get_available_cash()
+                ticker_allocations = self._get_ticker_allocations_by_target(normalized_weights,funds)
+
+                self._queue_orders(current_date, ticker_allocations,'buy')
 
             # REBALANCE
             if self._should_rebalance(current_date):
 
                 # Drop previous inflow orders which are to executed today, since the rebalancing may adjust quantities
-                self.order_book = self.order_book.filter(pl.col('date_executed') != current_date)
+                self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
                 
                 # Compute normalized weights if not done already for date
                 if normalized_weights is None:
@@ -374,10 +374,9 @@ class BacktestEngine:
 
                 self.rebalance(current_date,daily_prices,normalized_weights)
 
-            # PROCESS ORDERS
-            if not self.order_book.filter(pl.col('date_executed') == current_date).is_empty():
-                self._process_orders(current_date)
-
+            # EXECUTE ORDERS
+            if not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
+                self._execute_orders(current_date)
 
             snapshots.append(self.portfolio.snapshot(current_date,daily_prices))
 

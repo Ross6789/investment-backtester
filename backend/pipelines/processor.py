@@ -153,11 +153,11 @@ class CorporateActionProcessor:
                 raise KeyError(f"Required columns for ticker {ticker} not found in raw_data")
             
             # Rename column names
-            filtered_df.columns = ['dividends', 'stock_splits']
+            filtered_df.columns = ['dividend', 'stock_split']
 
             # Drop rows with missing price data
             filtered_df_clean = filtered_df.replace(0.0, None)
-            filtered_df_clean = filtered_df_clean.dropna(subset=['dividends', 'stock_splits'],how='all')
+            filtered_df_clean = filtered_df_clean.dropna(subset=['dividend', 'stock_split'],how='all')
 
             if filtered_df_clean.empty:
                 print(f"Downloaded data for ticker {ticker} is empty")
@@ -192,8 +192,8 @@ class CorporateActionProcessor:
         
         # Enforce column schema
         df_cols_cast = combined_data_pl.with_columns([
-            pl.col('dividends').cast(pl.Float64),
-            pl.col('stock_splits').cast(pl.Float64)
+            pl.col('dividend').cast(pl.Float64),
+            pl.col('stock_split').cast(pl.Float64)
             ])
 
         print('Corporate action data cleaned')
