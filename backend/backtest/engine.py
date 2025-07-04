@@ -1,47 +1,23 @@
 import polars as pl
 from datetime import date
-from typing import Dict, Set, List, Optional, Literal
-from backend.backtest.portfolio import Portfolio, Strategy
+from typing import Dict, Set, List
+from backend.backtest.portfolio import Portfolio
 from backend.utils import round_down
-from backend.models import RecurringInvestment, TargetPortfolio, BacktestConfig
+from backend.models import TargetPortfolio, BacktestConfig
+from backend.choices import OrderSide, RebalanceFrequency
 from backend.pipelines.loader import get_backtest_data
-from backend.config import get_backtest_data_path
 from dateutil.relativedelta import relativedelta
-from backend.choices import RebalanceFrequency,ReinvestmentFrequency,BacktestMode
-
-
 
 class BacktestEngine:
-    """
-    A backtesting engine to simulate a portfolio's performance over time 
-    based on historical price and corporate action data.
 
-    Args:
-        start_date (date): The start date of the backtest.
-        end_date (date): The end date of the backtest.
-        target_weights (Dict[str, float]): Target allocation weights for each asset.
-        price_data (Tuple[pl.DataFrame, List[date]]): Tuple of price DataFrame and list of trading dates.
-        corporate_action_data (Tuple[pl.DataFrame, pl.DataFrame]): Tuple of dividend and stock split data.
-        mode (str): Either 'manual' or 'auto'. Determines how corporate actions are handled.
-        initial_balance (float): Starting cash balance for the portfolio.
-        recurring_investment (Optional[RecurringInvestment]): Recurring investment configuration, if any.
-        fractional_shares (bool): Whether to allow fractional share investing.
-        reinvest_dividends (bool): Whether to reinvest dividends automatically.
-        rebalance_frequency (str): Rebalancing frequency (e.g. 'monthly', 'quarterly', 'never').
-
-    Attributes:
-        history (List[Dict[str, object]]): A list of portfolio snapshots over time.
-        portfolio (Portfolio): The Portfolio object tracking holdings and strategy.
-    """
-
-    def __init__(self, start_date: date, end_date: date, target_portfolio: TargetPortfolio ,config: BacktestConfig, strategy: Strategy):
+    def __init__(self, start_date: date, end_date: date, target_portfolio: TargetPortfolio ,config: BacktestConfig):
             self.start_date = start_date
             self.end_date = end_date
             self.target_portfolio = target_portfolio
             self.config = config
 
             # Instantiate portfolio and data
-            self.portfolio = Portfolio(strategy,self)
+            self.portfolio = Portfolio(self)
             self.backtest_data = self._load_backtest_data()
             self.master_calendar = self._generate_master_calendar()
             self.ticker_active_dates = self._generate_ticker_active_dates()
@@ -61,7 +37,7 @@ class BacktestEngine:
 
     def _load_backtest_data(self) -> pl.DataFrame:
         return get_backtest_data(
-            get_backtest_data_path(), 
+            self.config.mode, 
             self.target_portfolio.get_tickers(),
             self.start_date, 
             self.end_date
@@ -81,7 +57,6 @@ class BacktestEngine:
     def _generate_ticker_active_dates(self) -> pl.DataFrame:
         ticker_active_dates = (
             self.backtest_data
-            .filter(pl.col('is_trading_day')==True)
             .group_by('ticker')
             .agg([
                 pl.col('date').min().alias('first_active_date'),
@@ -95,7 +70,7 @@ class BacktestEngine:
         dates = []
         cashflow_date = self.start_date
         while True:
-            match self.recurring_investment.frequency.lower():
+            match self.config.recurring_investment.frequency:
                 case 'daily':
                     cashflow_date += relativedelta(days=1)
                 case 'weekly':
@@ -117,9 +92,8 @@ class BacktestEngine:
     def _load_dividend_dates(self) -> Set[date]:
         dividend_dates = (
             self.backtest_data
-            .filter(pl.col('dividends').is_not_null())
-            .select('date')
-            .to_series()
+            .filter(pl.col('dividend').is_not_null())
+            .get_column('date')
             .to_list()
         )
         return set(dividend_dates)
@@ -128,49 +102,36 @@ class BacktestEngine:
         active_tickers = (
             self.ticker_active_dates
             .filter((pl.col('first_active_date')<=date)&(pl.col('last_active_date')>=date))
-            .select('ticker')
-            .to_series()
+            .get_column('ticker')
             )
+        
+        if active_tickers.is_empty():
+            raise ValueError(f'No active tickers on date : {date}')
+        
         return set(active_tickers)
             
-    def _find_trading_ticker(self, current_date: date) -> Set[str]:
+    def _find_trading_tickers(self, current_date: date) -> Set[str]:
         trading_tickers = (
             self.master_calendar
             .filter(pl.col('date')==current_date)
-            .select('trading_tickers')
-            .to_series()
+            .get_column('trading_tickers')
             .explode()
         )
         return set(trading_tickers)
     
     def _all_active_tickers_trading(self, current_date: date) -> bool:
         active_tickers = self._find_active_tickers(current_date)
-        trading_tickers = self._find_trading_ticker(current_date)
+        trading_tickers = self._find_trading_tickers(current_date)
 
         return active_tickers==trading_tickers
-    
-    def _build_daily_dict(self, date: pl.Date) -> dict:
-        daily_data = self.backtest_data.filter(pl.col('date')== date)
-        
-        return {
-            row['ticker']: {
-                'adj_close': row['adj_close'],
-                'close': row['close'],
-                'is_trading_day': row['is_trading_day'],
-                'dividend': row['dividend'],
-                'stock_split': row['stock_split']
-            }
-            for row in daily_data.iter_rows(named=True)
-        }
 
-    def _should_rebalance(self, current_date: date) -> bool:
+    def _should_rebalance(self, current_date: date, last_rebalance_date: date, rebalance_frequency: RebalanceFrequency) -> bool:
         # rebalancing can not occur on days where live assets cannot be traded
         if not self._all_active_tickers_trading(current_date):
             return False
         else:
-            freq = self.portfolio.strategy.rebalance_frequency
-            last_rebalance = self.last_rebalance_date
-            match freq :
+            last_rebalance = last_rebalance_date
+            match rebalance_frequency:
                 case 'daily':
                     return True
                 case 'weekly':
@@ -209,7 +170,7 @@ class BacktestEngine:
     def _get_ticker_allocations_by_target(self, normalized_weights: Dict[str, float], total_funds: float) -> Dict[str, float]:
         return {ticker: round_down(weight*total_funds,2) for ticker, weight in normalized_weights.items()}
      
-    def _queue_orders(self, current_date: date, ticker_allocations: Dict[str, float], side : Literal['buy','sell'] = 'buy'):
+    def _queue_orders(self, current_date: date, ticker_allocations: Dict[str, float], side : OrderSide = 'buy'):
         
         orders = []
 
@@ -244,19 +205,21 @@ class BacktestEngine:
         executable_orders = (
             self.pending_orders
             .filter(pl.col('date_executed')==current_date)
-            .select('ticker','allocated_funds','side')
         )
 
-        for ticker, allocated_funds, side in executable_orders.iter_rows():
+        for row in executable_orders.iter_rows(named=True):
+            ticker = row['ticker']
+            allocated_funds = row['allocated_funds']
+            side = row['side']
 
             price = prices.get(ticker)
             if price is None:
                 raise ValueError(f'Order cannont be completed - missing price for ticker : {ticker} on date : {current_date}')
             match side:
                 case 'buy':
-                    self.portfolio.invest(ticker, allocated_funds, price)
+                    self.portfolio.invest(ticker, allocated_funds, price, self.config.strategy.allow_fractional_shares)
                 case 'sell':
-                    self.portfolio.sell(ticker, allocated_funds, price)
+                    self.portfolio.sell(ticker, allocated_funds, price, self.config.strategy.allow_fractional_shares)
                 case _:
                     raise ValueError(f"Invalid order placed: side must be either 'buy' or 'sell', not {side}")
 
@@ -311,6 +274,9 @@ class BacktestEngine:
         if sell_order_targets:
             self._queue_orders(current_date,sell_order_targets, 'sell')
 
+        # Update rebalance flag
+        self.portfolio.did_rebalance = True
+
 
     def run(self) -> List[Dict[str, object]]:
         """
@@ -326,7 +292,10 @@ class BacktestEngine:
         snapshots = []
 
         # Iterate through date range in master calendar
-        for current_date in self.master_calendar.iter_rows():
+        for current_date in self.master_calendar['date']:
+
+            # Reset portfolio flags and daily metrics
+            self.portfolio.daily_reset()
             
             # Fetch daily prices
             daily_prices = self._get_prices_on_date(current_date)
@@ -337,22 +306,19 @@ class BacktestEngine:
             # MANAGE CASHFLOW 
             # Initial investment
             if current_date == self.start_date:
-                self.portfolio.add_cash(self.initial_balance)
+                self.portfolio.add_cash(self.config.initial_investment)
                 place_order = True
 
             # Recurring investment
             if current_date in self.recurring_cashflow_dates:
-                self.portfolio.add_cash(self.recurring_investment.amount)
+                self.portfolio.add_cash(self.config.recurring_investment.amount)
                 place_order = True
-
-            # Dividends
-            self.portfolio.dividends = None
-            self.portfolio.dividend_income = 0.0
             
-            if self.mode == 'manual' and current_date in self.dividend_dates:
+            # Dividends
+            if self.config.mode == 'manual' and current_date in self.dividend_dates:
                 unit_dividend_per_ticker = self._get_dividends_on_date(current_date)
                 dividends_earned = self.portfolio.process_dividends(unit_dividend_per_ticker)
-                if self.portfolio.strategy.reinvest_dividends:
+                if self.config.strategy.reinvest_dividends:
                     self.portfolio.add_cash(dividends_earned)
                     place_order = True
                 else:
@@ -366,16 +332,17 @@ class BacktestEngine:
                     normalized_weights = self._normalize_portfolio_targets(current_date)
 
                 # Inflow orders invest all available cash using target allocations (if wanted to just invest cashflow in for the day - add a cashflow var which sums daily cashflow)
-                funds = self.portfolio.get_available_cash()
-                ticker_allocations = self._get_ticker_allocations_by_target(normalized_weights,funds)
+                available_funds = self.portfolio.get_available_cash()
+                ticker_allocations = self._get_ticker_allocations_by_target(normalized_weights,available_funds)
 
                 self._queue_orders(current_date, ticker_allocations,'buy')
 
             # REBALANCE
-            if self._should_rebalance(current_date):
+            if self._should_rebalance(current_date,self.last_rebalance_date,self.config.strategy.rebalance_frequency):
 
                 # Drop previous inflow orders which are to executed today, since the rebalancing may adjust quantities
-                self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
+                if self.pending_orders is not None:
+                    self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
                 
                 # Compute normalized weights if not done already for date
                 if normalized_weights is None:
@@ -384,12 +351,15 @@ class BacktestEngine:
                 self.rebalance(current_date,daily_prices,normalized_weights)
 
             # EXECUTE ORDERS
-            if not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
-                self._execute_orders(current_date)
+            if self.pending_orders is not None:
+                if not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
+                    self._execute_orders(current_date,daily_prices)
 
             snapshots.append(self.portfolio.snapshot(current_date,daily_prices))
 
         # Save snapshots to object
         self.history = snapshots
 
-        return snapshots
+
+        return self.history, self.pending_orders, self.executed_orders
+    

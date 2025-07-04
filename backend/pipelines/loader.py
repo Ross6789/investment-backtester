@@ -11,10 +11,10 @@ def get_backtest_data(backtest_mode : BacktestMode, tickers : List[str], start_d
     # Retrieve columns based on backtest mode
     match backtest_mode:
         case 'adjusted':
-            columns_required = ['date','ticker','adj_close']
+            columns_required = ['date','ticker','adj_close','is_trading_day']
             column_rename_mapping = {'adj_close' : 'price'}
         case 'manual':
-            columns_required = ['date','ticker','close','dividend']
+            columns_required = ['date','ticker','close','is_trading_day','dividend']
             column_rename_mapping = {'close': 'price'}
         case _:
             raise ValueError (f'Invalid backtest mode : {backtest_mode}')

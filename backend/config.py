@@ -14,5 +14,4 @@ def get_backtest_data_path() -> Path:
     return EXTERNAL_DATA_BASE_PATH / PARQUET_BACKTEST_DATA_PATH
 
 def get_csv_backtest_result_path() -> Path:
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    return EXTERNAL_DATA_BASE_PATH / CSV_BACKTEST_RESULT_PATH / f'backtest_{timestamp}.csv'
+    return EXTERNAL_DATA_BASE_PATH / CSV_BACKTEST_RESULT_PATH 

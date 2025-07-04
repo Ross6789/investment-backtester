@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 from backend.choices import RebalanceFrequency,ReinvestmentFrequency, BacktestMode
 from backend.utils import validate_choice,validate_positive_amount
@@ -67,7 +67,7 @@ class Strategy:
 @dataclass
 class BacktestConfig:
     mode : BacktestMode = 'adjusted'
-    strategy : Strategy = Strategy()
+    strategy: Strategy = field(default_factory=Strategy)
     initial_investment : float = 10000
     recurring_investment : Optional[RecurringInvestment] = None
 
