@@ -1,5 +1,6 @@
 from typing import Dict,Tuple
 from datetime import date
+from math import ceil
 
 from backend.utils import round_down, validate_positive_amount
 
@@ -115,7 +116,7 @@ class Portfolio:
         if allow_fractional_shares:
             units_sold = min(required_funds / price, units_owned)
         else:
-            units_sold = min(required_funds // price, units_owned)
+            units_sold = min(ceil(required_funds / price), units_owned)
         self.holdings[ticker] = units_owned - units_sold
         total_earned = round(units_sold * price,2)
             

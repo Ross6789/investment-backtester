@@ -318,7 +318,6 @@ class BacktestEngine:
             # Dividends
             if self.config.mode == 'manual' and current_date in self.dividend_dates:
                 unit_dividend_per_ticker = self._get_dividends_on_date(current_date)
-                print(f'processing dividend on date: {current_date}')
                 dividends_earned = self.portfolio.process_dividends(unit_dividend_per_ticker)
                 if self.config.strategy.reinvest_dividends:
                     self.portfolio.add_cash(dividends_earned)
@@ -350,7 +349,6 @@ class BacktestEngine:
                 if normalized_weights is None:
                     normalized_weights = self._normalize_portfolio_targets(current_date)
 
-                print(f'rebalancing on date : {current_date}')
                 self.rebalance(current_date,daily_prices,normalized_weights)
 
             # EXECUTE ORDERS
