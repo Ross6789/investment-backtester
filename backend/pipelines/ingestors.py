@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import List, Iterator
-import datetime
 import yfinance as yf
-import time
-import polars as pl
 import pandas as pd
+from pathlib import Path
+from datetime import date
+from time import sleep
 
 class BaseYFinanceIngestor(ABC):
-    def __init__(self, tickers: List[str], batch_size: int, start_date: datetime.date, end_date: datetime.date):
+    def __init__(self, tickers: List[str], batch_size: int, start_date: date, end_date: date):
         if not isinstance(batch_size, int):
             raise TypeError("Batch size must be an integer")
         if batch_size < 1:
@@ -17,8 +17,7 @@ class BaseYFinanceIngestor(ABC):
         self.tickers = tickers
         self.start_date = start_date
         self.batch_size = batch_size
-        self.end_date = end_date
-        self.data = None        
+        self.end_date = end_date  
 
     # Method to batch the tickers to prevent API ban or freezing (_ is convention for private methods)
     def _batch_tickers(self) -> Iterator[List[str]]:
@@ -26,7 +25,7 @@ class BaseYFinanceIngestor(ABC):
             yield self.tickers[i:i + self.batch_size]
 
     # Method to run internal methods in order
-    def run(self) -> pl.DataFrame:
+    def run(self) -> pd.DataFrame:
         batch_data = []
         for batch in self._batch_tickers():
             print(f"Downloading batch {batch}")
@@ -36,22 +35,17 @@ class BaseYFinanceIngestor(ABC):
                 print (f"Error downloading batch {batch} : {e}")
                 continue
             # add 2 second delay to prevent api restrictions
-            time.sleep(2)
+            sleep(2)
         try:
             combined_data = pd.concat(batch_data)
         except Exception as e:
             raise RuntimeError(f"Error during batch concatenation: {e}")
-        self.transform_data(combined_data)
-        return self.data
+        return combined_data
     
     @abstractmethod
     def download_data(self, tickers_batch: List[str]) -> pd.DataFrame:
         pass  
     
-    @abstractmethod
-    def transform_data(self, raw_data: pd.DataFrame) -> None:
-        pass
-
 class YFinancePriceIngestor(BaseYFinanceIngestor):
 
     # Method to download data using yfinance
@@ -67,135 +61,7 @@ class YFinancePriceIngestor(BaseYFinanceIngestor):
         print('Download complete.')
         return raw_data
     
-
-    # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
-    def transform_data(self, raw_data: pd.DataFrame) -> None:
-        dfs = []
-        
-        for ticker in self.tickers:
-
-            try:
-                # Filter relevant columns using pandas
-                filtered_df = raw_data.loc[:, [('Adj Close', ticker), ('Close', ticker)]] 
-            except KeyError:
-                raise KeyError(f"Required columns for ticker {ticker} not found in raw_data")
-            
-            # Rename column names
-            filtered_df.columns = ['adj_close', 'close']
-
-            # Drop rows with missing price data
-            filtered_df_clean = filtered_df.dropna(subset=['adj_close', 'close'])
-
-            if filtered_df_clean.empty:
-                print(f"Downloaded data for ticker {ticker} is empty")
-
-            # Reset index to return date to a regular column
-            filtered_df_clean.index.name = 'date'
-            filtered_df_reset = filtered_df_clean.reset_index()
-
-            # Add ticker column
-            filtered_df_reset['ticker'] = ticker
-
-            # Add df to list
-            dfs.append(filtered_df_reset)
-
-        try:
-            # Concatenate all tickers into a single pandas DataFrame
-            combined_data_pd = pd.concat(dfs, ignore_index=True)
-        except Exception as e:
-            raise Exception(f"Failed to concatenate pandas dfs: {e}")
-
-        try:
-            # Convert to Polars
-            combined_data_pl = pl.from_pandas(combined_data_pd)
-        except Exception as e:
-            raise Exception(f"Failed to convert to polars df: {e}")
-        
-        try:
-            # Convert datetime to date
-            combined_data_pl = combined_data_pl.with_columns(pl.col('date').cast(pl.Date))
-        except Exception as e:
-            raise Exception(f"Failed to cast date column: {e}")
-        
-        self.data = combined_data_pl
-
-        print('Data cleaned')
-    
-class CSVPriceIngestor:
-    def __init__(self, ticker, source_path, start_date, end_date):
-        if start_date and end_date:
-            if start_date > end_date:
-                raise ValueError("Start date must be after the end date")
-        self.ticker = ticker
-        self.source_path = source_path
-        self.start_date = start_date
-        self.end_date = end_date
-        self.data = None
-
-    # Method to download data from csv
-    def read_data(self) -> pl.DataFrame:
-        print(f"Reading file : {self.source_path}...")
-        try:
-            raw_data = pl.read_csv(self.source_path)
-        except FileNotFoundError:
-            raise FileNotFoundError(f"CSV file not found at path: {self.source_path}") 
-        except Exception as e:
-            raise RuntimeError(f"Error occured when trying to read csv: {e}")
-        print("Read complete.")
-        if raw_data.is_empty():
-            raise ValueError(f"CSV file at {self.source_path} is empty.")
-        return raw_data
-
-    # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
-    def transform_data(self, raw_data: pl.DataFrame): 
-
-        # Clean csv files based on column count      
-        if len(raw_data.columns)==3:
-            transformed_data = raw_data.rename({
-                raw_data.columns[0]:'date',
-                raw_data.columns[1]:'adj_close',
-                raw_data.columns[2]:'close',
-            })
-        elif len(raw_data.columns)==2:
-            transformed_data = raw_data.select([
-                pl.col(raw_data.columns[0]).alias('date'),
-                pl.col(raw_data.columns[1]).alias('adj_close'),
-                pl.col(raw_data.columns[1]).alias('close')
-            ])
-        else:
-            raise ValueError("Invalid number of columns in CSV file")
-        
-        # Add ticker column
-        transformed_data = transformed_data.with_columns(pl.lit(self.ticker).alias("ticker"))
-
-        try:
-            # Convert date column to date
-            transformed_data = transformed_data.with_columns(pl.col('date').str.strptime(pl.Date,"%d/%m/%Y"))
-        except Exception as e:
-            raise Exception(f"Error while trying to parse the csv date column, ensure it is in the format 'dd/mm/yyyy': {e}")
-
-        # Filter based on start date
-        if self.start_date:
-            transformed_data = transformed_data.filter(
-                pl.col('date') >= pl.lit(self.start_date).cast(pl .Date)
-                )
-
-        # Filter based on end date
-        if self.end_date:
-            transformed_data = transformed_data.filter(
-                pl.col('date') <= pl.lit(self.end_date).cast(pl.Date)
-                )
-
-        self.data = transformed_data.sort('date')
-        print('Data cleaned')
-        
-    def run(self) -> pl.DataFrame:
-        raw_data = self.read_data()
-        self.transform_data(raw_data)
-        return self.data
-
 class YFinanceCorporateActionsIngestor(BaseYFinanceIngestor):
-
     # Method to download data using yfinance
     def download_data(self, tickers_batch: List[str]) -> pd.DataFrame:
         print('Starting download...')
@@ -209,63 +75,27 @@ class YFinanceCorporateActionsIngestor(BaseYFinanceIngestor):
         print('Download complete.')
         return raw_data
     
+class CSVPriceIngestor:
+    def __init__(self,ticker: str,source_path: Path, start_date: date, end_date: date):
+        if start_date and end_date:
+            if start_date > end_date:
+                raise ValueError("Start date must be after the end date")
+        self.ticker = ticker
+        self.source_path = source_path
+        self.start_date = start_date
+        self.end_date = end_date
 
-    # Method to remove unnecessary columns, combine data for each ticker and convert to polars dataframe
-    def transform_data(self, raw_data: pd.DataFrame) -> None:
-        dfs = []
-        
-        for ticker in self.tickers:
+    # Method to download data from csv
+    def run(self) -> pd.DataFrame:
+        print(f"Reading file : {self.source_path}...")
+        all_data = pd.read_csv(self.source_path, parse_dates=['date'], dayfirst=True)
+        # Convert start and end date to pandas for comparison
+        start_date_pd = pd.Timestamp(self.start_date)
+        end_date_pd = pd.Timestamp(self.end_date)
+        # Ingest only rows within the date range
+        raw_data = all_data[(all_data['date'] >= start_date_pd) & (all_data['date'] <= end_date_pd)]
+        print("Read complete.")
+        if raw_data.empty:
+            raise ValueError(f"No data in {self.source_path} within the date range.")
+        return raw_data
 
-            try:
-                # Filter relevant columns using pandas
-                filtered_df = raw_data.loc[:, [('Dividends', ticker), ('Stock Splits', ticker)]] 
-            except KeyError:
-                raise KeyError(f"Required columns for ticker {ticker} not found in raw_data")
-            
-            # Rename column names
-            filtered_df.columns = ['dividends', 'stock_splits']
-
-            # Drop rows with missing price data
-            filtered_df_clean = filtered_df.replace(0.0, None)
-            filtered_df_clean = filtered_df_clean.dropna(subset=['dividends', 'stock_splits'],how='all')
-
-            if filtered_df_clean.empty:
-                print(f"Downloaded data for ticker {ticker} is empty")
-
-            # Reset index to return date to a regular column
-            filtered_df_clean.index.name = 'date'
-            filtered_df_reset = filtered_df_clean.reset_index()
-
-            # Add ticker column
-            filtered_df_reset['ticker'] = ticker
-
-            # Add df to list
-            dfs.append(filtered_df_reset)
-
-        try:
-            # Concatenate all tickers into a single pandas DataFrame
-            combined_data_pd = pd.concat(dfs, ignore_index=True)
-        except Exception as e:
-            raise Exception(f"Failed to concatenate pandas dfs: {e}")
-
-        try:
-            # Convert to Polars
-            combined_data_pl = pl.from_pandas(combined_data_pd)
-        except Exception as e:
-            raise Exception(f"Failed to convert to polars df: {e}")
-        
-        try:
-            # Convert datetime to date
-            combined_data_pl = combined_data_pl.with_columns(pl.col('date').cast(pl.Date))
-        except Exception as e:
-            raise Exception(f"Failed to cast date column: {e}")
-        
-        # Enforce column schema
-        df_cols_cast = combined_data_pl.with_columns([
-            pl.col('dividends').cast(pl.Float64),
-            pl.col('stock_splits').cast(pl.Float64)
-            ])
-        
-        self.data = df_cols_cast
-
-        print('Data cleaned')

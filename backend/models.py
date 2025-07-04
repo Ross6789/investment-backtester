@@ -1,8 +1,10 @@
-from dataclasses import dataclass
-from typing import Dict
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional
+from backend.choices import RebalanceFrequency,ReinvestmentFrequency, BacktestMode
+from backend.utils import validate_choice,validate_positive_amount
 
 @dataclass
-class PortfolioWeights:
+class TargetPortfolio:
     """
     Represents a validated dictionary of portfolio asset weightings.
 
@@ -31,26 +33,19 @@ class PortfolioWeights:
         total = sum(self.weights.values())
         if not abs(total-1.0) < 1e-6:
             raise ValueError(f"Portfolio weightings add to {total}. Must equal 1.0")
+    
+    def get_tickers(self) -> List[str]:
+        return list(self.weights.keys())
 
 @dataclass
 class RecurringInvestment:
-    """
-    Represents a recurring investment schedule for adding cash to the portfolio.
 
-    Attributes:
-        amount (float): The amount of cash to invest at each scheduled interval. Must be positive.
-        frequency (str): The frequency at which the investment occurs. 
-                         Options: 'daily', 'weekly', 'monthly', 'quarterly', 'yearly'.
-    """
     amount: float              
-    frequency: str          
+    frequency: ReinvestmentFrequency 
 
     def __post_init__(self):
-        valid_frequencies = {"daily", "weekly", "monthly", "quarterly", "yearly"}
-        if self.frequency.lower() not in valid_frequencies:
-            raise ValueError(f"Invalid frequency: '{self.frequency}'. Must be one of {valid_frequencies}.")
-        if self.amount <= 0:
-            raise ValueError("Investment amount must be greater than zero.")
+        validate_choice(self.frequency,ReinvestmentFrequency,"reinvestment frequency")
+        validate_positive_amount(self.amount,'recurring investment amount')
 
 @dataclass
 class Strategy:
@@ -64,4 +59,18 @@ class Strategy:
     """
     allow_fractional_shares: bool = True
     reinvest_dividends: bool = True
-    rebalance_frequency: str = "never"
+    rebalance_frequency: RebalanceFrequency = 'never'
+
+    def __post_init__(self):
+        validate_choice(self.rebalance_frequency,RebalanceFrequency, "rebalance frequency")
+
+@dataclass
+class BacktestConfig:
+    mode : BacktestMode = 'adjusted'
+    strategy: Strategy = field(default_factory=Strategy)
+    initial_investment : float = 10000
+    recurring_investment : Optional[RecurringInvestment] = None
+
+    def __post_init__(self):
+        validate_choice(self.mode,BacktestMode, "backtest mode")
+        validate_positive_amount(self.initial_investment, 'initial investment')

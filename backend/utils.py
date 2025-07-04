@@ -1,8 +1,10 @@
 import polars as pl
 from backend import config
 from datetime import datetime, date
-from typing import List
+from typing import List, Any, get_args
+from pathlib import Path
 from dateutil.relativedelta import relativedelta
+from math import floor
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
     metadata = (
@@ -11,18 +13,17 @@ def get_yfinance_tickers(asset_type: str) -> list[str]:
         .select("ticker")
         .collect()
     )
-    print(f"{asset_type} ticker subset :")
-    print(metadata.head())
+
     return metadata["ticker"].to_list()
 
-def get_csv_ticker_source_map() -> dict[str: str]:
+def get_csv_ticker_source_map() -> dict[str, Path]:
     metadata = (
         pl.scan_csv(config.get_asset_metadata_path())
         .filter(pl.col("source")=="local_csv")
         .select("ticker","source_file_path")
         .collect()
     )
-    return [{"ticker": ticker, "source_path": source_path} for ticker, source_path in metadata.select(["ticker","source_file_path"]).iter_rows()]
+    return {ticker: Path(source_path) for ticker, source_path in metadata.select(["ticker","source_file_path"]).iter_rows()}
 
 def parse_date(date_str: str) -> date:
     """
@@ -42,6 +43,25 @@ def parse_date(date_str: str) -> date:
     except ValueError as e:
         raise ValueError(f"Invalid date format: '{date_str}'. Expected 'YYYY-MM-DD'.") from e
     
+def round_down(value: float, num_digits: int) -> float:
+    """
+    Round down (truncate) a floating-point number to a specified number of decimal places.
+
+    Args:
+        value (float): The number to be rounded down.
+        num_digits (int): The number of decimal places to round down to. Must be a non-negative integer.
+
+    Raises:
+        ValueError: If `num_digits` is negative.
+
+    Returns:
+        float: The value rounded down to the given number of decimal places.
+    """
+    if num_digits < 0:
+        raise ValueError('num_digits must be positive integer')
+    factor =  10 ** num_digits
+    return floor(value * factor) / factor
+
 # --- Scheduling Utilities ---
 
 def get_scheduling_dates(start_date: date, end_date: date, frequency: str,trading_dates: List[date]) -> List[date]:
@@ -109,3 +129,18 @@ def get_scheduling_dates(start_date: date, end_date: date, frequency: str,tradin
                 raise ValueError(f"Invalid scheduling frequency : {frequency}")
 
     return schedule_dates
+
+# --- Validation Utilities ---
+
+def validate_choice(value: str,  choices: Any, field_name: str = 'value') -> None:
+    valid_choices = set(get_args(choices))
+    if value not in valid_choices:
+        raise ValueError(f"Invalid {field_name}: '{value}'. Must be one of {valid_choices}.")
+    
+def validate_positive_amount(amount: float, field_name: str) -> None:
+    if amount <= 0:
+        raise ValueError(f"Invalid {field_name}: '{amount}'. Must be positive.")
+    
+def validate_date_order(start_date: date, end_date: date) -> None:
+    if end_date < start_date :
+        raise ValueError("Invalid dates : start date must be before end date")

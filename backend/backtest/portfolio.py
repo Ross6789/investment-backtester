@@ -1,7 +1,7 @@
 from typing import Dict,Tuple
 from datetime import date
-from math import floor
-from backend.models import Strategy
+
+from backend.utils import round_down, validate_positive_amount
 
 
 class Portfolio:
@@ -18,21 +18,23 @@ class Portfolio:
     
     """
         
-    def __init__(self, initial_balance : float, strategy : Strategy, backtest_engine):
+    def __init__(self, backtest_engine):
         """
-        Initialize the portfolio with starting cash and strategy.
+        Initialize the portfolio with backtest engine.
 
         Args:
-            initial_cash (float): Initial amount of cash in the portfolio.
-            strategy (Strategy): The investment strategy instance.
             backtest_engine (BacktestEngine): The backtest engine instance
         """
-        self.cash_balance = initial_balance
-        self.strategy = strategy
         self.backtest_engine = backtest_engine
+        self.cash = 0.0
+        self.cash_inflow = 0.0
+        self.dividends = None
+        self.dividend_income = 0.0
+        self.did_receive_dividends = False
+        self.did_rebalance = False
+        self.did_buy = False
+        self.did_sell = False
         self.holdings = {}
-        self.dividends = []
-        
 
     def get_value(self, prices: Dict[str, float]) -> float:
         """
@@ -44,147 +46,87 @@ class Portfolio:
         Returns:
             float: The total portfolio value rounded to 2 decimal places.
         """
-        total_value = self.cash_balance
+        total_value = self.cash
         for ticker, units in self.holdings.items():
-            price = prices.get(self.get_price_col_name(ticker))
-            value = units * price
+            price = prices.get(ticker,0)
+            value = round_down(units * price,2)
             total_value += value
-        return round(total_value,2)
-
-    def invest_by_target(self, target_weights: Dict[str, float], prices: Dict[str, float]):
-        """
-        Invests the portfolio's available cash according to target weights and current prices.
-
-        This method does not rebalance existing holdings, but uses only the available cash balance
-        to buy assets according to the given target weights. Supports fractional shares (rounded 
-        down to 4 decimal places) if allowed by the strategy.
-
-        Args:
-            target_weights (Dict[str, float]): Target portfolio weights by ticker (e.g. {'AAPL': 0.5}).
-            prices (Dict[str, float]): Current prices keyed by price column name (e.g. {'close_AAPL': 187.3}).
-        """
-        # Get starting balance and initialise remaining balance
-        starting_balance = self.cash_balance
-        remaining_balance = starting_balance
-
-        # Buy assets using defined target weights
-        for ticker, weight in target_weights.items():
-            balance_available = starting_balance * weight
-            price = prices.get(self.get_price_col_name(ticker))
-            if self.strategy.allow_fractional_shares:
-                units_bought = floor((balance_available / price)*10000)/10000 # use a factor and floor to round down to 4 decimal places
-            else:
-                units_bought = balance_available // price
-            self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
-            remaining_balance -= units_bought * price
-            
-            # Round units to 4 DP - might have accrued more digits in addition
-            self.holdings[ticker] = floor(self.holdings[ticker]*10000)/10000
-
-        # Update cash balance
-        self.cash_balance = round(remaining_balance,2) 
-
-    def rebalance(self, target_weights: Dict[str, float], prices: Dict[str, float]):
-        """
-        Rebalance the portfolio holdings according to target weights and current prices.
-
-        Sells all existing holdings to cash, then buys assets based on target weights.
-        Supports fractional shares rounding down to 4 decimal places if allowed.
-
-        Args:
-            target_weights (Dict[str, float]): Target portfolio weights by ticker (e.g. {'AAPL': 0.5}).
-            prices (Dict[str, float]): Current prices keyed by price column name (e.g. 'close_AAPL').
-        """
-        # Get starting balance
-        cash_balance = self.cash_balance
-
-        # Sell all assets to get total balance
-        for ticker, units in self.holdings.items():
-            price = prices.get(self.get_price_col_name(ticker))
-            value = units * price
-            cash_balance += value
+        return total_value
+    
+    def get_available_cash(self) -> float:
+        return self.cash
         
-        # Reset holdings
-        self.holdings = {}
-
-        # Initialise remaining balance
-        remaining_balance = cash_balance
-
-        # Buy assets using defined target weights
-        for ticker, weight in target_weights.items():
-            balance_available = cash_balance * weight
-            price = prices.get(self.get_price_col_name(ticker))
-            if self.strategy.allow_fractional_shares:
-                units_bought = floor((balance_available / price)*10000)/10000 # use a factor and floor to round down to 4 decimal places
-            else:
-                units_bought = balance_available // price
-            self.holdings[ticker] = units_bought
-            remaining_balance -= units_bought * price
-
-        # Update cash balance
-        self.cash_balance = round(remaining_balance,2) 
-        
-    def snapshot(self, date: date, prices: Dict[str, float], cash_inflow: float, dividend_income: float, rebalanced: bool, invested: bool, dividends_received: bool):
-        """
-        Create a snapshot of the portfolio state at a given date.
-
-        Args:
-            date (date): The date of the snapshot.
-            prices (Dict[str, float]): Current prices keyed by ticker.
-            cash_inflow (float): New cash added on this date.
-            dividend_income (float): Dividend income received and not reinvested
-            rebalanced (bool): Whether a rebalance occurred on this date.
-            invested (bool): Whether a recurring investment was made.
-            div
-
-        Returns:
-            Dict[str, object]: Snapshot of the portfolio state.
-        """
-        # Condense the price dicts to contain only the applicable price (ie. adj close or close) keyed to each ticker
-        ticker_prices = {
-            ticker : round(prices.get(self.get_price_col_name(ticker),0),4)
-            for ticker in self.holdings
-        }
+    def snapshot(self, date: date, prices: Dict[str, float]):
 
         # Calculate the value of each different holding
         holding_values = {
-            ticker : round(self.holdings.get(ticker, 0) * ticker_prices.get((ticker), 0),2)
+            ticker : round_down(self.holdings.get(ticker, 0) * prices.get(ticker,0),2)
             for ticker in self.holdings
         }
 
         snapshot = {
             'date': date.isoformat(),
-            'cash_balance': self.cash_balance,
-            'cash_inflow': cash_inflow,
-            'dividend_income':dividend_income,
+            'cash_balance': self.cash,
+            'cash_inflow': self.cash_inflow,
+            'dividend_income':self.dividend_income,
             'total_value': self.get_value(prices),
             'holdings': self.holdings.copy(),
-            'prices': ticker_prices.copy(),
+            'prices': prices.copy(),
             'holding_values':holding_values.copy(),
-            'dividends':self.dividends.copy(),
-            'rebalanced': rebalanced,
-            'invested': invested,
-            'dividends_received': dividends_received
-            # 'stock_splits': 
-
+            'dividends': None if self.dividends is None else self.dividends.copy(),
+            'did_receive_dividends': self.did_receive_dividends,
+            'did_rebalance': self.did_rebalance,
+            'did_buy': self.did_buy,
+            'did_sell': self.did_sell
         }
         return snapshot
+    
+    def invest(self,ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool):
 
-    def get_price_col_name(self, ticker: str) -> str:
-        """
-        Determine the price column name to use based on the strategy's dividend reinvestment setting.
+        # Check funds entered is positive amount
+        # validate_positive_amount(allocated_funds,'allocated funds for investing')
 
-        Args:
-            ticker (str): The ticker symbol of the asset.
-
-        Returns:
-            str: The price column name in the format '{price_type}_{ticker}'.
-        """
-        if self.backtest_engine.mode == "manual":
-            price_type = 'close'
+        # Buy assets using allocated funds
+        if allow_fractional_shares:
+            units_bought = allocated_funds / price
         else:
-            price_type = 'adj_close'
-        return f'{price_type}_{ticker}'
+            units_bought = allocated_funds // price
+        self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
+        total_cost = round(units_bought * price,2)
+            
+        # Round units to 4 DP 
+        self.holdings[ticker] = round_down(self.holdings[ticker],4)
+
+        # Update cash balance
+        self.cash -= total_cost
+
+        # Update buy flag
+        self.did_buy = True
+
+    def sell(self,ticker : str, required_funds : float, price : float, allow_fractional_shares: bool):
+
+        # Check funds entered is positive amount
+        # validate_positive_amount(required_funds,'required funds for selling')
+
+        # Find units owned to ensure that units sold does not exceed units owned
+        units_owned = self.holdings.get(ticker,0.0)
+
+        # Sell assets to gain allocated funds
+        if allow_fractional_shares:
+            units_sold = min(required_funds / price, units_owned)
+        else:
+            units_sold = min(required_funds // price, units_owned)
+        self.holdings[ticker] = units_owned - units_sold
+        total_earned = round(units_sold * price,2)
+            
+        # Round units to 4 DP 
+        self.holdings[ticker] = round_down(self.holdings[ticker],4)
+
+        # Update cash balance
+        self.cash += total_earned
+
+        # Update sold flag
+        self.did_sell = True
 
     def add_cash(self, amount: float):
         """
@@ -196,34 +138,28 @@ class Portfolio:
         Raises:
             ValueError: If the amount is not positive.
         """
-        if amount <= 0:
-            raise ValueError("Invalid amount : amount to add to cash balance must be greater than zero")
-        self.cash_balance += amount
+        validate_positive_amount(amount,'added cash')
+        self.cash += amount
+        self.cash_inflow += amount
     
-    def add_dividends(self, dividend_per_unit: Dict[str, float], holdings: Dict[str, float]) :
-        """
-        Record dividend payouts for each ticker held in the portfolio.
-
-        For each ticker in holdings, this method calculates the total dividend income 
-        by multiplying the dividend per unit (if any) with the number of units held, 
-        and stores the results as a list of dictionaries in `self.dividends`.
-
-        Args:
-            dividend_per_unit (Dict[str, float]): Mapping from ticker symbol to dividend per unit.
-            holdings (Dict[str, float]): Mapping from ticker symbol to number of units held.
-        """
+    def process_dividends(self, dividend_ticker_dict: Dict[str, float]) -> float :
+        
         dividends = []
-        tickers = holdings.keys()
+        tickers = dividend_ticker_dict.keys()
         for ticker in tickers:
-            div_per_unit = dividend_per_unit.get(ticker,0.0)
-            units_held = holdings.get(ticker,0.0)
-            if div_per_unit and div_per_unit > 0 and units_held > 0:
+            div_per_unit = dividend_ticker_dict.get(ticker)
+            units_held = self.holdings.get(ticker,0.0)
+            if div_per_unit is not None and units_held > 0:
                 dividends.append({
                     'ticker': ticker,
                     'dividend_per_unit': div_per_unit,
-                    'total_dividend': round(div_per_unit * units_held,2)
+                    'total_dividend': round_down(div_per_unit * units_held,2)
                 })
-        self.dividends = dividends
+        if dividends:
+            self.dividends = dividends
+            self.did_receive_dividend = True
+        
+        return self.get_total_dividends()
 
     def get_total_dividends(self) -> float:
         """
@@ -238,3 +174,14 @@ class Portfolio:
             for div in self.dividends:
                 total += div.get('total_dividend',0.0)
         return total
+    
+    def daily_reset(self) -> None:
+        self.cash_inflow = 0.0
+        self.dividends = None
+        self.did_receive_dividend = False
+        self.dividend_income = 0.0
+        self.did_buy = False
+        self.did_sell = False
+        self.did_rebalance = False
+
+
