@@ -143,7 +143,6 @@ class Portfolio:
         self.cash_inflow += amount
     
     def process_dividends(self, dividend_ticker_dict: Dict[str, float]) -> float :
-        
         dividends = []
         tickers = dividend_ticker_dict.keys()
         for ticker in tickers:
