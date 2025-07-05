@@ -75,13 +75,7 @@ class BacktestResult:
         )
 
         # Join bool flags to portfolio summary and fill necessary nulls
-        portfolio_value_with_flags_lf = (
-            total_portfolio_value_lf.join(order_flags_lf, on="date", how="left")
-            .with_columns([
-                pl.col('did_buy').fill_null(False),
-                pl.col('did_sell').fill_null(False)
-            ])
-        )
+        portfolio_value_with_flags_lf = (total_portfolio_value_lf.join(order_flags_lf, on="date", how="left"))
 
         #  Pivot holding data for reporting (need to collect to convert from lazy to eager)
         pivoted_holdings_lf = (
@@ -96,8 +90,27 @@ class BacktestResult:
         # Final summary table
         summary_lf = portfolio_value_with_flags_lf.join(pivoted_holdings_lf, on="date", how="left")
 
-        # Collect and return
         return summary_lf.sort('date').collect()
+
+        ###### This method is used to fill nulls on datframe before export, opted instead to fill nulls during export
+        # # Fill all null values (except price since null indicates missing data)
+        # schema = summary_lf.collect_schema()
+
+        # non_price_cols = [col_name for col_name in schema.keys() if not col_name.startswith("price_")]
+
+        # fill_null_arguments = []
+        # for col_name, dtype in schema.items():
+        #     if col_name in non_price_cols:
+        #         if dtype == pl.Boolean:
+        #             fill_null_arguments.append(pl.col(col_name).fill_null(False))
+        #         elif dtype in [pl.Float64, pl.Float32]:
+        #             fill_null_arguments.append(pl.col(col_name).fill_null(0.0))
+        #         elif dtype in [pl.Int128, pl.Int64, pl.Int32, pl.Int16, pl.Int8]:
+        #             fill_null_arguments.append(pl.col(col_name).fill_null(0))
+
+        # filled_summary_lf = summary_lf.with_columns(fill_null_arguments)
+
+        # Collect and return
 
     def to_csv(self, base_path: Path, backtest_configuration: dict[str, object]):
 
@@ -177,23 +190,26 @@ class BacktestResult:
                     'Cash balance': row['cash_balance'],
                     'Total holding value': row['total_holding_value'],
                     'Total portfolio value': row['total_portfolio_value'],
-                    'Did buy': row['did_buy'],
-                    'Did sell': row['did_sell'],
+                    'Did buy': _replace_blank(row['did_buy'],False),
+                    'Did sell': _replace_blank(row['did_sell'],False),
                     'Did rebalance': row['did_rebalance'],
                 }
                 
                 for ticker in tickers:
 
-                    flat_row[f'{ticker} units'] = row[f'units_{ticker}']
+                    flat_row[f'{ticker} units'] = _replace_blank(row[f'units_{ticker}'],0)
                     flat_row[f'{ticker} price'] = row[f'price_{ticker}']
-                    flat_row[f'{ticker} total value'] = row[f'value_{ticker}']
-                    flat_row[f'{ticker} dividend per unit'] = row[f'dividend_per_unit_{ticker}']
-                    flat_row[f'{ticker} total dividend'] = row[f'total_dividend_{ticker}']
+                    flat_row[f'{ticker} total value'] = _replace_blank(row[f'value_{ticker}'],0)
+                    flat_row[f'{ticker} dividend per unit'] = _replace_blank(row[f'dividend_per_unit_{ticker}'],0)
+                    flat_row[f'{ticker} total dividend'] = _replace_blank(row[f'total_dividend_{ticker}'],0)
 
                 dict_writer.writerow(flat_row)
     
         print(f'Exported daily summmary to csv : {daily_portfolio_summary_path}')
-        
+
+@staticmethod
+def _replace_blank(value,  replace_with):
+    return replace_with if value is None else value
 
         # # Extract all tickers
         # tickers = set()

@@ -227,3 +227,4 @@ def validate_date_order(start_date: date, end_date: date) -> None:
     """
     if end_date < start_date :
         raise ValueError("Invalid dates : start date must be before end date")
+    
