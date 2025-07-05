@@ -82,52 +82,61 @@ class Portfolio:
         }
         return snapshot
     
-    def invest(self,ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool):
+    def invest(self,ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool) -> bool:
 
         # Check funds entered is positive amount
-        # validate_positive_amount(allocated_funds,'allocated funds for investing')
+        validate_positive_amount(allocated_funds,'allocated funds for investing')
 
-        # Buy assets using allocated funds
+        # Calculate amount of units which could be bought using allocated funds
         if allow_fractional_shares:
-            units_bought = allocated_funds / price
+            units_bought = round(allocated_funds / price, 4) # fractional shares rounded to 4 dp
         else:
             units_bought = allocated_funds // price
-        self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
+
+        # If purchase unsuccessful ie. insufficient funds
+        if units_bought <= 0:
+            return False
+        
+        # Find total cost
         total_cost = round(units_bought * price,2)
             
-        # Round units to 4 DP 
+        # Make investment
+        self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
         self.holdings[ticker] = round_down(self.holdings[ticker],4)
-
-        # Update cash balance
         self.cash -= total_cost
-
-        # Update buy flag
         self.did_buy = True
+        return True
 
-    def sell(self,ticker : str, required_funds : float, price : float, allow_fractional_shares: bool):
+
+    def sell(self,ticker : str, required_funds : float, price : float, allow_fractional_shares: bool) -> bool:
 
         # Check funds entered is positive amount
-        # validate_positive_amount(required_funds,'required funds for selling')
+        validate_positive_amount(required_funds,'required funds for selling')
 
-        # Find units owned to ensure that units sold does not exceed units owned
+        # Find units owned and abort if none held
         units_owned = self.holdings.get(ticker,0.0)
+        if units_owned <= 0:
+            return False
 
-        # Sell assets to gain allocated funds
+        # Calculate how many units are to be sold
         if allow_fractional_shares:
             units_sold = min(required_funds / price, units_owned)
         else:
             units_sold = min(ceil(required_funds / price), units_owned)
-        self.holdings[ticker] = units_owned - units_sold
+        
+        # If sale unsuccessful
+        if units_sold <= 0:
+            return False
+
+        # Find total earnings
         total_earned = round(units_sold * price,2)
-            
-        # Round units to 4 DP 
+
+        # Make sale
+        self.holdings[ticker] = units_owned - units_sold
         self.holdings[ticker] = round_down(self.holdings[ticker],4)
-
-        # Update cash balance
         self.cash += total_earned
-
-        # Update sold flag
         self.did_sell = True
+        return True
 
     def add_cash(self, amount: float):
         """

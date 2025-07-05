@@ -257,12 +257,12 @@ class BacktestEngine:
             target_value = total_value * weight
             actual_value = self.portfolio.holdings.get(ticker, 0.0) * prices.get(ticker, 0.0)
             
-            correction_value = target_value - actual_value
+            correction_value = round_down(target_value - actual_value,2)
 
             if correction_value > 0:
-                buy_order_targets[ticker] = round_down(correction_value,2)
+                buy_order_targets[ticker] = correction_value
             elif correction_value < 0:
-                sell_order_targets[ticker] = round_down(-correction_value,2)
+                sell_order_targets[ticker] = -correction_value
 
 
         # Queue sell order for each over-allocated ticker
@@ -306,7 +306,7 @@ class BacktestEngine:
 
             # MANAGE CASHFLOW 
             # Initial investment
-            if current_date == self.start_date:
+            if current_date == self.master_calendar[0, 'date']:
                 self.portfolio.add_cash(self.config.initial_investment)
                 place_order = True
 

@@ -4,7 +4,9 @@ from datetime import datetime, date
 from typing import List, Any, get_args
 from pathlib import Path
 from dateutil.relativedelta import relativedelta
-from math import floor
+from math import floor, ceil
+from constants import FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
+from choices import RoundMethod
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
     metadata = (
@@ -43,24 +45,72 @@ def parse_date(date_str: str) -> date:
     except ValueError as e:
         raise ValueError(f"Invalid date format: '{date_str}'. Expected 'YYYY-MM-DD'.") from e
     
-def round_down(value: float, num_digits: int) -> float:
+# --- Rounding Utilities ---
+
+def _round(value: float, decimals: int, method : RoundMethod ) -> float:
     """
-    Round down (truncate) a floating-point number to a specified number of decimal places.
+    Round a float value to a specified number of decimal places using a given rounding method.
 
     Args:
-        value (float): The number to be rounded down.
-        num_digits (int): The number of decimal places to round down to. Must be a non-negative integer.
-
-    Raises:
-        ValueError: If `num_digits` is negative.
+        value (float): The number to round.
+        decimals (int): The number of decimal places to round to.
+        method (RoundMethod): The rounding method to use. One of "nearest", "down", or "up".
 
     Returns:
-        float: The value rounded down to the given number of decimal places.
+        float: The rounded value.
+
+    Raises:
+        ValueError: If an invalid rounding method is provided.
     """
-    if num_digits < 0:
-        raise ValueError('num_digits must be positive integer')
-    factor =  10 ** num_digits
-    return floor(value * factor) / factor
+    factor =  10 ** decimals
+    match method:
+        case "nearest":
+            return round(value,decimals)
+        case "down":
+            return floor(value * factor) / factor
+        case "up":
+            return ceil(value * factor) / factor
+        case _:
+            raise ValueError(f"Invalid rounding method : {method}")
+
+def round_shares(share_qty: float, method: RoundMethod = "down") -> float:
+    """
+    Round the fractional share quantity to the configured fractional share precision.
+
+    Args:
+        share_qty (float): The quantity of shares to round.
+        method (RoundMethod, optional): The rounding method to use. Defaults to "down".
+
+    Returns:
+        float: The rounded share quantity.
+    """
+    return _round(share_qty,FRACTIONAL_SHARE_PRECISION,method)
+
+def round_price(price: float, method: RoundMethod = "nearest") -> float:
+    """
+    Round a price value to the configured price precision.
+
+    Args:
+        price (float): The price value to round.
+        method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
+
+    Returns:
+        float: The rounded price.
+    """
+    return _round(price,PRICE_PRECISION,method)
+
+def round_currency(price: float, method: RoundMethod = "nearest") -> float:
+    """
+    Round a currency amount to the configured currency precision.
+
+    Args:
+        price (float): The currency amount to round.
+        method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
+
+    Returns:
+        float: The rounded currency amount.
+    """
+    return _round(price,CURRENCY_PRECISION,method)
 
 # --- Scheduling Utilities ---
 
