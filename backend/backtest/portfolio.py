@@ -1,4 +1,4 @@
-from typing import Dict,Tuple
+from typing import Dict,List
 from datetime import date
 from math import ceil
 
@@ -29,12 +29,9 @@ class Portfolio:
         self.backtest_engine = backtest_engine
         self.cash = 0.0
         self.cash_inflow = 0.0
-        self.dividends = None
+        self.dividends = []
         self.dividend_income = 0.0
-        self.did_receive_dividends = False
         self.did_rebalance = False
-        self.did_buy = False
-        self.did_sell = False
         self.holdings = {}
 
     def get_value(self, prices: Dict[str, float]) -> float:
@@ -45,7 +42,7 @@ class Portfolio:
             prices (Dict[str, float]): A dictionary mapping price column names to their values.
 
         Returns:
-            float: The total portfolio value 
+            float: The total portfolio value rounded to 2 decimal places.
         """
         total_value = self.cash
         for ticker, units in self.holdings.items():
@@ -57,30 +54,54 @@ class Portfolio:
     def get_available_cash(self) -> float:
         return self.cash
         
-    def snapshot(self, date: date, prices: Dict[str, float]):
-
-        # Calculate the value of each different holding
-        holding_values = {
-            ticker : self.holdings.get(ticker, 0) * prices.get(ticker,0)
-            for ticker in self.holdings
-        }
-
-        snapshot = {
-            'date': date.isoformat(),
+    def _get_cash_snapshot(self, date: date) -> Dict:
+        
+        return {
+            'date': date,
             'cash_balance': self.cash,
             'cash_inflow': self.cash_inflow,
-            'dividend_income':self.dividend_income,
-            'total_value': self.get_value(prices),
-            'holdings': self.holdings.copy(),
-            'prices': prices.copy(),
-            'holding_values':holding_values.copy(),
-            'dividends': None if self.dividends is None else self.dividends.copy(),
-            'did_receive_dividends': self.did_receive_dividends,
-            'did_rebalance': self.did_rebalance,
-            'did_buy': self.did_buy,
-            'did_sell': self.did_sell
+            'dividend_income':self.dividend_income 
         }
-        return snapshot
+    
+    def _get_holdings_snapshot(self, date: date, prices: dict[str, float]) -> List[Dict]: 
+    
+        # Check for empty holdings before returning snapshot
+        if not self.holdings:
+            return []
+        
+        return [
+            {
+                'date': date,
+                'ticker': ticker,
+                'units': units,
+                'price': prices.get(ticker)
+            }
+            for ticker, units in self.holdings.items()
+        ]
+
+    def _get_dividends_snapshot(self, date: date) -> List[Dict]: 
+        
+        # Check for divdends before returning snapshot
+        if not self.dividends:
+            return []
+        
+        return [
+            {
+                'date': date,
+                'ticker': div['ticker'],
+                'dividend_per_unit': div['dividend_per_unit'],
+                'total_dividend': div['total_dividend']
+            }
+            for div in self.dividends
+        ]
+
+    def get_daily_snapshot(self, date: date, prices: Dict[str, float]) -> Dict:
+
+        return {
+            'cash': self._get_cash_snapshot(date),
+            'holdings': self._get_holdings_snapshot(date,prices),
+            'dividends':self._get_dividends_snapshot(date)
+        }
     
     def invest(self,ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool) -> bool:
 
@@ -104,7 +125,6 @@ class Portfolio:
         self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
         self.holdings[ticker] = self.holdings[ticker]
         self.cash -= total_cost
-        self.did_buy = True
         return True
 
 
@@ -135,7 +155,7 @@ class Portfolio:
         self.holdings[ticker] = units_owned - units_sold
         self.holdings[ticker] = self.holdings[ticker]
         self.cash += total_earned
-        self.did_sell = True
+
         return True
 
     def add_cash(self, amount: float):
@@ -152,45 +172,40 @@ class Portfolio:
         self.cash += amount
         self.cash_inflow += amount
     
-    def process_dividends(self, dividend_ticker_dict: Dict[str, float]) -> float :
+    def process_dividends(self, ticker_dividend_dict: Dict[str, float]) -> float :
         dividends = []
-        tickers = dividend_ticker_dict.keys()
-        for ticker in tickers:
-            div_per_unit = dividend_ticker_dict.get(ticker)
+        for ticker, dividend in ticker_dividend_dict.items():
             units_held = self.holdings.get(ticker,0.0)
-            if div_per_unit is not None and units_held > 0:
+            if dividend is not None and units_held > 0:
                 dividends.append({
                     'ticker': ticker,
-                    'dividend_per_unit': div_per_unit,
-                    'total_dividend': div_per_unit * units_held
+                    'dividend_per_unit': dividend,
+                    'total_dividend': dividend * units_held
                 })
-        if dividends:
-            self.dividends = dividends
-            self.did_receive_dividends = True
+        # Defensive safety net in case method is called for date with no dividends (unlikely)
+        if not dividends:
+            return 0.0
         
-        return self.get_total_dividends()
+        self.dividends = dividends
+        return self._get_total_dividends()
 
-    def get_total_dividends(self) -> float:
+    def _get_total_dividends(self) -> float:
         """
         Calculate the total dividend income from each of the portfolio's holdings in its current state (ie. on the current day)
 
         Returns:
-            float: Sum of all 'total_div_income' values from the dividends list.
+            float: Sum of all 'total_dividend' values from the dividends list.
                 Returns 0.0 if no dividends are recorded.
         """
         total = 0.0
-        if self.dividends:
-            for div in self.dividends:
-                total += div.get('total_dividend',0.0)
+        for div in self.dividends:
+            total += div.get('total_dividend',0.0)
         return total
     
     def daily_reset(self) -> None:
         self.cash_inflow = 0.0
-        self.dividends = None
-        self.did_receive_dividends = False
+        self.dividends = []
         self.dividend_income = 0.0
-        self.did_buy = False
-        self.did_sell = False
         self.did_rebalance = False
 
 

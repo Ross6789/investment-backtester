@@ -179,7 +179,8 @@ class BacktestEngine:
                     "value": value,
                     "date_placed": current_date,
                     "date_executed": self._next_trading_date(ticker,current_date),
-                    "side": side
+                    "side": side,
+                    'status': "pending"
                 })
             
         new_orders_df = pl.DataFrame(orders)
@@ -206,27 +207,36 @@ class BacktestEngine:
             .filter(pl.col('date_executed')==current_date)
         )
 
+        updated_orders = []
+
         for row in executable_orders.iter_rows(named=True):
             ticker = row['ticker']
             value = row['value']
             side = row['side']
-
             price = prices.get(ticker)
+
             if price is None:
                 raise ValueError(f'Order cannont be completed - missing price for ticker : {ticker} on date : {current_date}')
+            
             match side:
                 case 'buy':
-                    self.portfolio.invest(ticker, value, price, self.config.strategy.allow_fractional_shares)
+                    fulfilled = self.portfolio.invest(ticker, value, price, self.config.strategy.allow_fractional_shares)
                 case 'sell':
-                    self.portfolio.sell(ticker, value, price, self.config.strategy.allow_fractional_shares)
+                    fulfilled = self.portfolio.sell(ticker, value, price, self.config.strategy.allow_fractional_shares)
                 case _:
                     raise ValueError(f"Invalid order placed: side must be either 'buy' or 'sell', not {side}")
 
+            row['status'] = "fulfilled" if fulfilled else "failed"
+            updated_orders.append(row)
+
+        # Create new dataframe with updated orders
+        orders_executed_today = pl.DataFrame(updated_orders)
+
         # Append executed orders to executed_orders DataFrame
         if self.executed_orders is None:
-            self.executed_orders = executable_orders
+            self.executed_orders = orders_executed_today
         else:
-            self.executed_orders = pl.concat([self.executed_orders, executable_orders])
+            self.executed_orders = pl.concat([self.executed_orders, orders_executed_today])
 
         # Remove executed orders from pending_orders
         self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
@@ -289,7 +299,9 @@ class BacktestEngine:
         """
         
         # Create empty list for portfolio snapshots
-        snapshots = []
+        cash_snapshots = []
+        holding_snapshots = []
+        dividend_snapshots = []
 
         # Iterate through date range in master calendar
         for current_date in self.master_calendar['date']:
@@ -356,7 +368,7 @@ class BacktestEngine:
                 if not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
                     self._execute_orders(current_date,daily_prices)
 
-            snapshots.append(self.portfolio.snapshot(current_date,daily_prices))
+            snapshots.append(self.portfolio.get_daily_snapshot(current_date,daily_prices))
 
         # Save snapshots to object
         self.history = snapshots
