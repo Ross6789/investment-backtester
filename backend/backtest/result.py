@@ -90,27 +90,25 @@ class BacktestResult:
         # Final summary table
         summary_lf = portfolio_value_with_flags_lf.join(pivoted_holdings_lf, on="date", how="left")
 
-        return summary_lf.sort('date').collect()
+        # Fill all null values (except price since null indicates missing data)
+        schema = summary_lf.collect_schema()
 
-        ###### This method is used to fill nulls on datframe before export, opted instead to fill nulls during export
-        # # Fill all null values (except price since null indicates missing data)
-        # schema = summary_lf.collect_schema()
+        non_price_cols = [col_name for col_name in schema.keys() if not col_name.startswith("price_")]
 
-        # non_price_cols = [col_name for col_name in schema.keys() if not col_name.startswith("price_")]
+        fill_null_arguments = []
+        for col_name, dtype in schema.items():
+            if col_name in non_price_cols:
+                if dtype == pl.Boolean:
+                    fill_null_arguments.append(pl.col(col_name).fill_null(False))
+                elif dtype in [pl.Float64, pl.Float32]:
+                    fill_null_arguments.append(pl.col(col_name).fill_null(0.0))
+                elif dtype in [pl.Int128, pl.Int64, pl.Int32, pl.Int16, pl.Int8]:
+                    fill_null_arguments.append(pl.col(col_name).fill_null(0))
 
-        # fill_null_arguments = []
-        # for col_name, dtype in schema.items():
-        #     if col_name in non_price_cols:
-        #         if dtype == pl.Boolean:
-        #             fill_null_arguments.append(pl.col(col_name).fill_null(False))
-        #         elif dtype in [pl.Float64, pl.Float32]:
-        #             fill_null_arguments.append(pl.col(col_name).fill_null(0.0))
-        #         elif dtype in [pl.Int128, pl.Int64, pl.Int32, pl.Int16, pl.Int8]:
-        #             fill_null_arguments.append(pl.col(col_name).fill_null(0))
+        filled_summary_lf = summary_lf.with_columns(fill_null_arguments)
 
-        # filled_summary_lf = summary_lf.with_columns(fill_null_arguments)
-
-        # Collect and return
+        #Collect and return
+        return filled_summary_lf.sort('date').collect()
 
     def to_csv(self, base_path: Path, backtest_configuration: dict[str, object]):
 
@@ -151,10 +149,7 @@ class BacktestResult:
         self.order_history.write_csv(orders_path)
         print(f'Exported orders to csv : {orders_path}')
 
-        # #export daily summary
-        # self.compute_daily_summary().write_csv(daily_portfolio_summary_path)
-        # print(f'Exported summary to csv : {orders_path}')
-
+        # Export daily summary
         # Extract all tickers
         tickers = set()
         for row in self.holding_history.iter_rows(named=True):
@@ -190,83 +185,30 @@ class BacktestResult:
                     'Cash balance': row['cash_balance'],
                     'Total holding value': row['total_holding_value'],
                     'Total portfolio value': row['total_portfolio_value'],
-                    'Did buy': _replace_blank(row['did_buy'],False),
-                    'Did sell': _replace_blank(row['did_sell'],False),
-                    'Did rebalance': row['did_rebalance'],
+                    'Did buy': row['did_buy'],
+                    'Did sell': row['did_sell'],
+                    'Did rebalance': row['did_rebalance']
                 }
                 
                 for ticker in tickers:
 
-                    flat_row[f'{ticker} units'] = _replace_blank(row[f'units_{ticker}'],0)
+                    flat_row[f'{ticker} units'] = row[f'units_{ticker}']
                     flat_row[f'{ticker} price'] = row[f'price_{ticker}']
-                    flat_row[f'{ticker} total value'] = _replace_blank(row[f'value_{ticker}'],0)
-                    flat_row[f'{ticker} dividend per unit'] = _replace_blank(row[f'dividend_per_unit_{ticker}'],0)
-                    flat_row[f'{ticker} total dividend'] = _replace_blank(row[f'total_dividend_{ticker}'],0)
+                    flat_row[f'{ticker} total value'] = row[f'value_{ticker}']
+                    flat_row[f'{ticker} dividend per unit'] = row[f'dividend_per_unit_{ticker}']
+                    flat_row[f'{ticker} total dividend'] = row[f'total_dividend_{ticker}']
 
                 dict_writer.writerow(flat_row)
     
         print(f'Exported daily summmary to csv : {daily_portfolio_summary_path}')
 
-@staticmethod
-def _replace_blank(value,  replace_with):
-    return replace_with if value is None else value
+#### helper method which caqn be used to replace blanks before writing csv row
+# @staticmethod
+# def _replace_blank(value,  replace_with):
+#     return replace_with if value is None else value
 
-        # # Extract all tickers
-        # tickers = set()
-        # for row in self.history:
-        #     tickers.update(row.get('holdings', {}).keys())
-        # tickers = sorted(tickers)
-
-        # # Ticker columns
-        # ticker_cols = []
-        # for ticker in tickers:
-        #     ticker_cols.extend([f'{ticker} units',f'{ticker} price',f'{ticker} total value',f'{ticker} dividend per unit',f'{ticker} total dividend'])
-
-        # # CSV headers
-        # headers = ['Date','Cash balance','Cash inflow','Dividend income','Total value','Did receive dividends','Did rebalance','Did buy','Did sell'] + ticker_cols
-
-        # with open(daily_portfolio_summary_path, mode='w') as f:
-        #     writer = csv.writer(f)
-
-        #     # Write backtest_configuration as comments at top of csv file
-        #     for key, value in backtest_configuration.items():
-        #         writer.writerow([f'# {key}: {value}'])
-        #     writer.writerow([])  # Empty line between configuration and results
-
-        #     # Write data rows
-        #     dict_writer = csv.DictWriter(f, fieldnames=headers)
-        #     dict_writer.writeheader()
-
-        #     for row in self.history:
-        #         flat_row = {
-        #             'Date': row['date'],
-        #             'Cash balance': row['cash_balance'],
-        #             'Cash inflow': row['cash_inflow'],
-        #             'Dividend income': row['dividend_income'],
-        #             'Total value': row['total_value'],
-        #             'Did receive dividends': row['did_receive_dividends'],
-        #             'Did rebalance': row['did_rebalance'],
-        #             'Did buy': row['did_buy'],
-        #             'Did sell': row['did_sell']
-        #         }
-
-        #         units = row.get('holdings', {})
-        #         prices = row.get('prices',{})
-        #         values = row.get('holding_values',{})
-        #         dividends = row.get('dividends') or []
-                
-        #         for ticker in tickers:
-                    
-        #             dividend_per_unit = next((d['dividend_per_unit'] for d in dividends if d['ticker'] == ticker), 0.0)
-        #             total_dividend = next((d['total_dividend'] for d in dividends if d['ticker'] == ticker), 0.0)
-                    
-        #             flat_row[f'{ticker} units'] = units.get(ticker, 0.0)
-        #             flat_row[f'{ticker} price'] = prices.get(ticker, 0.0)
-        #             flat_row[f'{ticker} total value'] = values.get(ticker, 0.0)
-        #             flat_row[f'{ticker} dividend per unit'] = dividend_per_unit
-        #             flat_row[f'{ticker} total dividend'] = total_dividend
-
-        #         dict_writer.writerow(flat_row)
-    
-        # print(f'Exported history to csv : {daily_portfolio_summary_path}')
-        
+# flat_row[f'{ticker} units'] = _replace_blank(row[f'units_{ticker}'],0)
+# flat_row[f'{ticker} price'] = row[f'price_{ticker}']
+# flat_row[f'{ticker} total value'] = _replace_blank(row[f'value_{ticker}'],0)
+# flat_row[f'{ticker} dividend per unit'] = _replace_blank(row[f'dividend_per_unit_{ticker}'],0)
+# flat_row[f'{ticker} total dividend'] = _replace_blank(row[f'total_dividend_{ticker}'],0)
