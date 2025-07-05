@@ -1,5 +1,6 @@
 from typing import Dict,Tuple
 from datetime import date
+from math import ceil
 
 from backend.utils import round_down, validate_positive_amount
 
@@ -115,7 +116,7 @@ class Portfolio:
         if allow_fractional_shares:
             units_sold = min(required_funds / price, units_owned)
         else:
-            units_sold = min(required_funds // price, units_owned)
+            units_sold = min(ceil(required_funds / price), units_owned)
         self.holdings[ticker] = units_owned - units_sold
         total_earned = round(units_sold * price,2)
             
@@ -143,7 +144,6 @@ class Portfolio:
         self.cash_inflow += amount
     
     def process_dividends(self, dividend_ticker_dict: Dict[str, float]) -> float :
-        
         dividends = []
         tickers = dividend_ticker_dict.keys()
         for ticker in tickers:
@@ -157,7 +157,7 @@ class Portfolio:
                 })
         if dividends:
             self.dividends = dividends
-            self.did_receive_dividend = True
+            self.did_receive_dividends = True
         
         return self.get_total_dividends()
 
@@ -178,7 +178,7 @@ class Portfolio:
     def daily_reset(self) -> None:
         self.cash_inflow = 0.0
         self.dividends = None
-        self.did_receive_dividend = False
+        self.did_receive_dividends = False
         self.dividend_income = 0.0
         self.did_buy = False
         self.did_sell = False
