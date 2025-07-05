@@ -287,7 +287,7 @@ class BacktestEngine:
         self.last_rebalance_date = current_date
 
 
-    def run(self) -> tuple[dict[str, pl.DataFrame],pl.DataFrame]:
+    def run(self) -> dict[str, pl.DataFrame]:
         """
         Executes the full backtest simulation over the configured date range.
 
@@ -377,15 +377,16 @@ class BacktestEngine:
             holding_snapshots.extend(daily_snapshot['holdings'])
             dividend_snapshots.extend(daily_snapshot['dividends'])
 
-        # Bulk convert snapshots into polars dataframe for better processing
-        history = {
-            "cash":pl.DataFrame(cash_snapshots),
-            "holdings":pl.DataFrame(holding_snapshots),
-            "dividends":pl.DataFrame(dividend_snapshots)
-        }
-
         # Combine order books 
         orders = pl.concat([self.executed_orders,self.pending_orders])
 
-        return history, orders
+        # Bulk convert snapshots into polars dataframe for better processing and package within dictionary
+        history = {
+            "cash":pl.DataFrame(cash_snapshots),
+            "holdings":pl.DataFrame(holding_snapshots),
+            "dividends":pl.DataFrame(dividend_snapshots),
+            "orders": orders
+        }
+
+        return history
     

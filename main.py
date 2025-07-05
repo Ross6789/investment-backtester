@@ -12,7 +12,7 @@ csv_save_path = config.get_csv_backtest_result_path()
 # User choices
 mode = 'manual'
 start_date = date.fromisoformat("1950-01-01")
-end_date = date.fromisoformat("1990-01-01")
+end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
 initial_investment = 10000
 fractional_shares = False
@@ -42,9 +42,12 @@ configuration_dict = {
 
 # Create and run backtest
 backtest = BacktestEngine(start_date,end_date,target_portfolio,backtest_config)
-result = BacktestResult(*backtest.run())
+print('starting backtest...')
+history = backtest.run()
+print('finished backtest. Analysing results...')
+result = BacktestResult(history)
 
 # export results
-# result.to_csv(csv_save_path,configuration_dict)
-result.to_csv(csv_save_path)
+print('finished analysing. Exporting results to csv...')
+result.to_csv(csv_save_path,configuration_dict)
 

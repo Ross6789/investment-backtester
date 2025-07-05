@@ -59,7 +59,8 @@ class Portfolio:
             'date': date,
             'cash_balance': self.cash,
             'cash_inflow': self.cash_inflow,
-            'dividend_income':self.dividend_income 
+            'dividend_income':self.dividend_income,
+            'did_rebalance':self.did_rebalance
         }
     
     def _get_holdings_snapshot(self, date: date, prices: dict[str, float]) -> list[dict]: 
