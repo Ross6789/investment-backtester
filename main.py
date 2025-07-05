@@ -45,5 +45,6 @@ backtest = BacktestEngine(start_date,end_date,target_portfolio,backtest_config)
 result = BacktestResult(*backtest.run())
 
 # export results
-result.to_csv(csv_save_path,configuration_dict)
+# result.to_csv(csv_save_path,configuration_dict)
+result.to_csv(csv_save_path)
 

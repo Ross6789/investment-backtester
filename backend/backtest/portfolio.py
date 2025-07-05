@@ -1,4 +1,3 @@
-from typing import Dict,List
 from datetime import date
 from math import ceil
 
@@ -14,7 +13,7 @@ class Portfolio:
 
     Attributes:
         cash_balance (float): The current cash available.
-        holdings (Dict[str, float]): Dictionary mapping ticker symbols to number of shares held.
+        holdings (dict[str, float]): Dictionary mapping ticker symbols to number of shares held.
         strategy (Strategy): The investment strategy being followed.
     
     """
@@ -34,12 +33,12 @@ class Portfolio:
         self.did_rebalance = False
         self.holdings = {}
 
-    def get_value(self, prices: Dict[str, float]) -> float:
+    def get_value(self, prices: dict[str, float]) -> float:
         """
         Calculate the total portfolio value based on current holdings and cash balance.
 
         Args:
-            prices (Dict[str, float]): A dictionary mapping price column names to their values.
+            prices (dict[str, float]): A dictionary mapping price column names to their values.
 
         Returns:
             float: The total portfolio value rounded to 2 decimal places.
@@ -54,7 +53,7 @@ class Portfolio:
     def get_available_cash(self) -> float:
         return self.cash
         
-    def _get_cash_snapshot(self, date: date) -> Dict:
+    def _get_cash_snapshot(self, date: date) -> dict:
         
         return {
             'date': date,
@@ -63,7 +62,7 @@ class Portfolio:
             'dividend_income':self.dividend_income 
         }
     
-    def _get_holdings_snapshot(self, date: date, prices: dict[str, float]) -> List[Dict]: 
+    def _get_holdings_snapshot(self, date: date, prices: dict[str, float]) -> list[dict]: 
     
         # Check for empty holdings before returning snapshot
         if not self.holdings:
@@ -79,7 +78,7 @@ class Portfolio:
             for ticker, units in self.holdings.items()
         ]
 
-    def _get_dividends_snapshot(self, date: date) -> List[Dict]: 
+    def _get_dividends_snapshot(self, date: date) -> list[dict]: 
         
         # Check for divdends before returning snapshot
         if not self.dividends:
@@ -95,7 +94,7 @@ class Portfolio:
             for div in self.dividends
         ]
 
-    def get_daily_snapshot(self, date: date, prices: Dict[str, float]) -> Dict:
+    def get_daily_snapshot(self, date: date, prices: dict[str, float]) -> dict:
 
         return {
             'cash': self._get_cash_snapshot(date),
@@ -172,7 +171,7 @@ class Portfolio:
         self.cash += amount
         self.cash_inflow += amount
     
-    def process_dividends(self, ticker_dividend_dict: Dict[str, float]) -> float :
+    def process_dividends(self, ticker_dividend_dict: dict[str, float]) -> float :
         dividends = []
         for ticker, dividend in ticker_dividend_dict.items():
             units_held = self.holdings.get(ticker,0.0)

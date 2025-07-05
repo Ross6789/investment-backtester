@@ -1,6 +1,5 @@
 import polars as pl
 from datetime import date
-from typing import Dict, Set, List
 from backend.backtest.portfolio import Portfolio
 from backend.utils import round_shares, round_price, round_currency
 from backend.models import TargetPortfolio, BacktestConfig
@@ -66,7 +65,7 @@ class BacktestEngine:
         )
         return ticker_active_dates
     
-    def _generate_recurring_cashflow_dates(self) -> Set[date]:
+    def _generate_recurring_cashflow_dates(self) -> set[date]:
         dates = []
         cashflow_date = self.start_date
         while True:
@@ -89,7 +88,7 @@ class BacktestEngine:
         
         return set(dates)
     
-    def _load_dividend_dates(self) -> Set[date]:
+    def _load_dividend_dates(self) -> set[date]:
         dividend_dates = (
             self.backtest_data
             .filter(pl.col('dividend').is_not_null())
@@ -98,7 +97,7 @@ class BacktestEngine:
         )
         return set(dividend_dates)
 
-    def _find_active_tickers(self, date) -> Set[str]:
+    def _find_active_tickers(self, date) -> set[str]:
         active_tickers = (
             self.ticker_active_dates
             .filter((pl.col('first_active_date')<=date)&(pl.col('last_active_date')>=date))
@@ -110,7 +109,7 @@ class BacktestEngine:
         
         return set(active_tickers)
             
-    def _find_trading_tickers(self, current_date: date) -> Set[str]:
+    def _find_trading_tickers(self, current_date: date) -> set[str]:
         trading_tickers = (
             self.master_calendar
             .filter(pl.col('date')==current_date)
@@ -144,7 +143,7 @@ class BacktestEngine:
                 case _:
                     return False
                 
-    def _normalize_portfolio_targets(self, date: date) -> Dict[str,float]:
+    def _normalize_portfolio_targets(self, date: date) -> dict[str,float]:
         active_tickers = self._find_active_tickers(date)
         filtered_weights = {ticker: weight for ticker, weight in self.target_portfolio.weights.items() if ticker in active_tickers}
 
@@ -166,10 +165,10 @@ class BacktestEngine:
             return None
         return trading_date[0, 0]
     
-    def _get_ticker_allocations_by_target(self, normalized_weights: Dict[str, float], total_value_to_allocate: float) -> Dict[str, float]:
+    def _get_ticker_allocations_by_target(self, normalized_weights: dict[str, float], total_value_to_allocate: float) -> dict[str, float]:
         return {ticker: weight*total_value_to_allocate for ticker, weight in normalized_weights.items()}
      
-    def _queue_orders(self, current_date: date, ticker_allocations: Dict[str, float], side : OrderSide = 'buy'):
+    def _queue_orders(self, current_date: date, ticker_allocations: dict[str, float], side : OrderSide = 'buy'):
         
         orders = []
 
@@ -190,7 +189,7 @@ class BacktestEngine:
         else:
             self.pending_orders = pl.concat([self.pending_orders, new_orders_df])
 
-    def _get_prices_on_date(self, current_date: date) -> Dict[str,float]:
+    def _get_prices_on_date(self, current_date: date) -> dict[str,float]:
         prices_df = (
             self.backtest_data
             .filter(pl.col('date')==current_date)
@@ -200,7 +199,7 @@ class BacktestEngine:
 
         return dict(zip(prices_df['ticker'], prices_df['price']))
 
-    def _execute_orders(self, current_date: date, prices: Dict[str, float]):
+    def _execute_orders(self, current_date: date, prices: dict[str, float]):
 
         executable_orders = (
             self.pending_orders
@@ -241,7 +240,7 @@ class BacktestEngine:
         # Remove executed orders from pending_orders
         self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
 
-    def _get_dividends_on_date(self, current_date: date) -> Dict[str,float]:
+    def _get_dividends_on_date(self, current_date: date) -> dict[str,float]:
 
         dividends_df = (
             self.backtest_data
@@ -253,7 +252,7 @@ class BacktestEngine:
         return dict(zip(dividends_df['ticker'], dividends_df['dividend']))
     
 
-    def rebalance(self, current_date: date, prices: Dict[str, float], target_weights: Dict[str, float]):
+    def rebalance(self, current_date: date, prices: dict[str, float], target_weights: dict[str, float]):
         # Find portfolio value
         total_value = self.portfolio.get_value(prices)
 
@@ -288,14 +287,18 @@ class BacktestEngine:
         self.last_rebalance_date = current_date
 
 
-    def run(self) -> List[Dict[str, object]]:
+    def run(self) -> tuple[dict[str, pl.DataFrame],pl.DataFrame]:
         """
-        Runs the backtest simulation over the date range.
+        Executes the full backtest simulation over the configured date range.
 
         Returns:
-            List[Dict[str, object]]: A list of portfolio snapshots for each trading day,
-            including portfolio state, cash inflow, dividend income, and flags for events
-            like rebalancing and investing.
+            tuple[dict[str, pl.DataFrame], pl.DataFrame]: 
+                - A dictionary containing daily snapshots:
+                    - 'cash': Cash balances per day
+                    - 'holdings': Holdings per asset per day
+                    - 'dividends': Dividend records per day
+                - A combined Polars DataFrame of all orders (both fulfilled and failed), 
+                including order status and execution metadata.
         """
         
         # Create empty list for portfolio snapshots
@@ -368,11 +371,21 @@ class BacktestEngine:
                 if not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
                     self._execute_orders(current_date,daily_prices)
 
-            snapshots.append(self.portfolio.get_daily_snapshot(current_date,daily_prices))
+            # Fetch daily snapshot and add to relevant snapshot list
+            daily_snapshot = self.portfolio.get_daily_snapshot(current_date,daily_prices)
+            cash_snapshots.append(daily_snapshot['cash'])
+            holding_snapshots.extend(daily_snapshot['holdings'])
+            dividend_snapshots.extend(daily_snapshot['dividends'])
 
-        # Save snapshots to object
-        self.history = snapshots
+        # Bulk convert snapshots into polars dataframe for better processing
+        history = {
+            "cash":pl.DataFrame(cash_snapshots),
+            "holdings":pl.DataFrame(holding_snapshots),
+            "dividends":pl.DataFrame(dividend_snapshots)
+        }
 
+        # Combine order books 
+        orders = pl.concat([self.executed_orders,self.pending_orders])
 
-        return self.history, self.pending_orders, self.executed_orders
+        return history, orders
     

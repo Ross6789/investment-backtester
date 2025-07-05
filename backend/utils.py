@@ -1,12 +1,12 @@
 import polars as pl
 from backend import config
 from datetime import datetime, date
-from typing import List, Any, get_args
+from typing import get_args
 from pathlib import Path
 from dateutil.relativedelta import relativedelta
 from math import floor, ceil
-from constants import FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
-from choices import RoundMethod
+from backend.constants import FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
+from backend.choices import RoundMethod
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
     metadata = (
@@ -114,7 +114,7 @@ def round_currency(price: float, method: RoundMethod = "nearest") -> float:
 
 # --- Scheduling Utilities ---
 
-def get_scheduling_dates(start_date: date, end_date: date, frequency: str,trading_dates: List[date]) -> List[date]:
+def get_scheduling_dates(start_date: date, end_date: date, frequency: str,trading_dates: list[date]) -> list[date]:
         
     """
     Generate a list of rebalance dates between a start and end date based on the strategy's rebalance frequency.
@@ -126,10 +126,10 @@ def get_scheduling_dates(start_date: date, end_date: date, frequency: str,tradin
         start_date (date): The start date of the backtest period.
         end_date (date): The end date of the backtest period.
         frequency (str): The scheduling frequency e.g., 'daily', 'weekly', 'monthly', 'quarterly', 'yearly'.
-        trading_dates (List[date]): A list of all valid trading dates.
+        trading_dates (list[date]): A list of all valid trading dates.
 
     Returns:
-        List[date]:A list of dates aligned to trading days and seperated by the scheduling frequency period.
+        list[date]:A list of dates aligned to trading days and seperated by the scheduling frequency period.
 
     Raises:
         ValueError: If an invalid scheduling frequency is provided.
@@ -182,15 +182,48 @@ def get_scheduling_dates(start_date: date, end_date: date, frequency: str,tradin
 
 # --- Validation Utilities ---
 
-def validate_choice(value: str,  choices: Any, field_name: str = 'value') -> None:
+def validate_choice(value: str,  choices: type[any], field_name: str = 'value') -> None:
+    """
+    Validate that `value` is one of the allowed literal choices.
+
+    Args:
+        value: The string value to validate.
+        choices: A Literal type specifying the allowed values.
+        field_name: Name of the field for error messages.
+    
+    Raises:
+        ValueError: If value is not in choices.
+    """
     valid_choices = set(get_args(choices))
     if value not in valid_choices:
         raise ValueError(f"Invalid {field_name}: '{value}'. Must be one of {valid_choices}.")
-    
+
+
 def validate_positive_amount(amount: float, field_name: str) -> None:
+    """
+    Validate that the given amount is positive.
+
+    Args:
+        amount (float): The numeric value to validate.
+        field_name (str): The name of the field being validated, used in error messages.
+
+    Raises:
+        ValueError: If the amount is not greater than zero.
+    """
     if amount <= 0:
         raise ValueError(f"Invalid {field_name}: '{amount}'. Must be positive.")
     
+
 def validate_date_order(start_date: date, end_date: date) -> None:
+    """
+    Validate that the start_date is not after the end_date.
+
+    Args:
+        start_date (date): The start date.
+        end_date (date): The end date.
+
+    Raises:
+        ValueError: If end_date is earlier than start_date.
+    """
     if end_date < start_date :
         raise ValueError("Invalid dates : start date must be before end date")
