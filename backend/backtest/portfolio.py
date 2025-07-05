@@ -157,7 +157,7 @@ class Portfolio:
                 })
         if dividends:
             self.dividends = dividends
-            self.did_receive_dividend = True
+            self.did_receive_dividends = True
         
         return self.get_total_dividends()
 
@@ -178,7 +178,7 @@ class Portfolio:
     def daily_reset(self) -> None:
         self.cash_inflow = 0.0
         self.dividends = None
-        self.did_receive_dividend = False
+        self.did_receive_dividends = False
         self.dividend_income = 0.0
         self.did_buy = False
         self.did_sell = False
