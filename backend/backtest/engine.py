@@ -2,7 +2,7 @@ import polars as pl
 from datetime import date
 from typing import Dict, Set, List
 from backend.backtest.portfolio import Portfolio
-from backend.utils import round_down
+from backend.utils import round_shares, round_price, round_currency
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.choices import OrderSide, RebalanceFrequency
 from backend.pipelines.loader import get_backtest_data
@@ -167,7 +167,7 @@ class BacktestEngine:
         return trading_date[0, 0]
     
     def _get_ticker_allocations_by_target(self, normalized_weights: Dict[str, float], total_value_to_allocate: float) -> Dict[str, float]:
-        return {ticker: round_down(weight*total_value_to_allocate,2) for ticker, weight in normalized_weights.items()}
+        return {ticker: weight*total_value_to_allocate for ticker, weight in normalized_weights.items()}
      
     def _queue_orders(self, current_date: date, ticker_allocations: Dict[str, float], side : OrderSide = 'buy'):
         
@@ -257,7 +257,7 @@ class BacktestEngine:
             target_value = total_value * weight
             actual_value = self.portfolio.holdings.get(ticker, 0.0) * prices.get(ticker, 0.0)
             
-            correction_value = round_down(target_value - actual_value,2)
+            correction_value = target_value - actual_value
 
             if correction_value > 0:
                 buy_order_targets[ticker] = correction_value

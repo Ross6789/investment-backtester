@@ -2,7 +2,7 @@ from typing import Dict,Tuple
 from datetime import date
 from math import ceil
 
-from backend.utils import round_down, validate_positive_amount
+from backend.utils import validate_positive_amount
 
 
 class Portfolio:
@@ -45,12 +45,12 @@ class Portfolio:
             prices (Dict[str, float]): A dictionary mapping price column names to their values.
 
         Returns:
-            float: The total portfolio value rounded to 2 decimal places.
+            float: The total portfolio value 
         """
         total_value = self.cash
         for ticker, units in self.holdings.items():
             price = prices.get(ticker,0)
-            value = round_down(units * price,2)
+            value = units * price
             total_value += value
         return total_value
     
@@ -61,7 +61,7 @@ class Portfolio:
 
         # Calculate the value of each different holding
         holding_values = {
-            ticker : round_down(self.holdings.get(ticker, 0) * prices.get(ticker,0),2)
+            ticker : self.holdings.get(ticker, 0) * prices.get(ticker,0)
             for ticker in self.holdings
         }
 
@@ -89,7 +89,7 @@ class Portfolio:
 
         # Calculate amount of units which could be bought using allocated funds
         if allow_fractional_shares:
-            units_bought = round(allocated_funds / price, 4) # fractional shares rounded to 4 dp
+            units_bought = allocated_funds / price 
         else:
             units_bought = allocated_funds // price
 
@@ -98,11 +98,11 @@ class Portfolio:
             return False
         
         # Find total cost
-        total_cost = round(units_bought * price,2)
+        total_cost = units_bought * price
             
         # Make investment
         self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
-        self.holdings[ticker] = round_down(self.holdings[ticker],4)
+        self.holdings[ticker] = self.holdings[ticker]
         self.cash -= total_cost
         self.did_buy = True
         return True
@@ -129,11 +129,11 @@ class Portfolio:
             return False
 
         # Find total earnings
-        total_earned = round(units_sold * price,2)
+        total_earned = units_sold * price
 
         # Make sale
         self.holdings[ticker] = units_owned - units_sold
-        self.holdings[ticker] = round_down(self.holdings[ticker],4)
+        self.holdings[ticker] = self.holdings[ticker]
         self.cash += total_earned
         self.did_sell = True
         return True
@@ -162,7 +162,7 @@ class Portfolio:
                 dividends.append({
                     'ticker': ticker,
                     'dividend_per_unit': div_per_unit,
-                    'total_dividend': round_down(div_per_unit * units_held,2)
+                    'total_dividend': div_per_unit * units_held
                 })
         if dividends:
             self.dividends = dividends
