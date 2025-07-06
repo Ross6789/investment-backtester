@@ -2,6 +2,7 @@ import csv
 import polars as pl
 from pathlib import Path
 from datetime import datetime
+from backend.constants import CURRENCY_PRECISION,FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION
 
 class BacktestResult:
     """
@@ -170,8 +171,12 @@ class BacktestResult:
             # Write backtest_configuration as comments at top of csv file
             for key, value in backtest_configuration.items():
                 writer.writerow([f'# {key}: {value}'])
-            writer.writerow([])  # Empty line between configuration and results
+            writer.writerow([])  # Empty line between configuration and notes
 
+            # Add notes discussing accuracy of round
+            writer.writerow(["# IMPORTANT NOTE: Values in this report are rounded for display. Minor discrepancies may occur when performing manual calculations due to the backtest engine using higher floating-point precision."])  # Empty line between configuration and results
+            writer.writerow([])  # Empty line between notes and results
+            
             # Write data rows
             dict_writer = csv.DictWriter(f, fieldnames=headers)
             dict_writer.writeheader()
@@ -179,12 +184,12 @@ class BacktestResult:
             for row in self.compute_daily_summary().iter_rows(named=True):
                 flat_row = {
                     'Date': row['date'],
-                    'Dividend income': row['dividend_income'],
-                    'All dividends received': row['all_dividends_received'],
-                    'Cash inflow': row['cash_inflow'],
-                    'Cash balance': row['cash_balance'],
-                    'Total holding value': row['total_holding_value'],
-                    'Total portfolio value': row['total_portfolio_value'],
+                    'Dividend income': round(row['dividend_income'],CURRENCY_PRECISION),
+                    'All dividends received': round(row['all_dividends_received'],CURRENCY_PRECISION),
+                    'Cash inflow': round(row['cash_inflow'],CURRENCY_PRECISION),
+                    'Cash balance': round(row['cash_balance'],CURRENCY_PRECISION),
+                    'Total holding value': round(row['total_holding_value'],CURRENCY_PRECISION),
+                    'Total portfolio value': round(row['total_portfolio_value'],CURRENCY_PRECISION),
                     'Did buy': row['did_buy'],
                     'Did sell': row['did_sell'],
                     'Did rebalance': row['did_rebalance']
@@ -192,11 +197,12 @@ class BacktestResult:
                 
                 for ticker in tickers:
 
-                    flat_row[f'{ticker} units'] = row[f'units_{ticker}']
-                    flat_row[f'{ticker} price'] = row[f'price_{ticker}']
-                    flat_row[f'{ticker} total value'] = row[f'value_{ticker}']
-                    flat_row[f'{ticker} dividend per unit'] = row[f'dividend_per_unit_{ticker}']
-                    flat_row[f'{ticker} total dividend'] = row[f'total_dividend_{ticker}']
+                    price_val = row[f'price_{ticker}']
+                    flat_row[f'{ticker} price'] = round(price_val, PRICE_PRECISION) if price_val is not None else None
+                    flat_row[f'{ticker} units'] = round(row[f'units_{ticker}'],FRACTIONAL_SHARE_PRECISION)
+                    flat_row[f'{ticker} total value'] = round(row[f'value_{ticker}'],CURRENCY_PRECISION)
+                    flat_row[f'{ticker} dividend per unit'] = round(row[f'dividend_per_unit_{ticker}'],PRICE_PRECISION)
+                    flat_row[f'{ticker} total dividend'] = round(row[f'total_dividend_{ticker}'],CURRENCY_PRECISION)
 
                 dict_writer.writerow(flat_row)
     
