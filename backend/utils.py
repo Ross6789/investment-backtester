@@ -1,10 +1,12 @@
 import polars as pl
 from backend import config
 from datetime import datetime, date
-from typing import List, Any, get_args
+from typing import get_args
 from pathlib import Path
 from dateutil.relativedelta import relativedelta
-from math import floor
+from math import floor, ceil
+from backend.constants import FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
+from backend.choices import RoundMethod
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
     metadata = (
@@ -43,28 +45,76 @@ def parse_date(date_str: str) -> date:
     except ValueError as e:
         raise ValueError(f"Invalid date format: '{date_str}'. Expected 'YYYY-MM-DD'.") from e
     
-def round_down(value: float, num_digits: int) -> float:
+# --- Rounding Utilities ---
+
+def _round(value: float, decimals: int, method : RoundMethod ) -> float:
     """
-    Round down (truncate) a floating-point number to a specified number of decimal places.
+    Round a float value to a specified number of decimal places using a given rounding method.
 
     Args:
-        value (float): The number to be rounded down.
-        num_digits (int): The number of decimal places to round down to. Must be a non-negative integer.
-
-    Raises:
-        ValueError: If `num_digits` is negative.
+        value (float): The number to round.
+        decimals (int): The number of decimal places to round to.
+        method (RoundMethod): The rounding method to use. One of "nearest", "down", or "up".
 
     Returns:
-        float: The value rounded down to the given number of decimal places.
+        float: The rounded value.
+
+    Raises:
+        ValueError: If an invalid rounding method is provided.
     """
-    if num_digits < 0:
-        raise ValueError('num_digits must be positive integer')
-    factor =  10 ** num_digits
-    return floor(value * factor) / factor
+    factor =  10 ** decimals
+    match method:
+        case "nearest":
+            return round(value,decimals)
+        case "down":
+            return floor(value * factor) / factor
+        case "up":
+            return ceil(value * factor) / factor
+        case _:
+            raise ValueError(f"Invalid rounding method : {method}")
+
+def round_shares(share_qty: float, method: RoundMethod = "down") -> float:
+    """
+    Round the fractional share quantity to the configured fractional share precision.
+
+    Args:
+        share_qty (float): The quantity of shares to round.
+        method (RoundMethod, optional): The rounding method to use. Defaults to "down".
+
+    Returns:
+        float: The rounded share quantity.
+    """
+    return _round(share_qty,FRACTIONAL_SHARE_PRECISION,method)
+
+def round_price(price: float, method: RoundMethod = "nearest") -> float:
+    """
+    Round a price value to the configured price precision.
+
+    Args:
+        price (float): The price value to round.
+        method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
+
+    Returns:
+        float: The rounded price.
+    """
+    return _round(price,PRICE_PRECISION,method)
+
+def round_currency(price: float, method: RoundMethod = "nearest") -> float:
+    """
+    Round a currency amount to the configured currency precision.
+
+    Args:
+        price (float): The currency amount to round.
+        method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
+
+    Returns:
+        float: The rounded currency amount.
+    """
+    return _round(price,CURRENCY_PRECISION,method)
 
 # --- Scheduling Utilities ---
 
-def get_scheduling_dates(start_date: date, end_date: date, frequency: str,trading_dates: List[date]) -> List[date]:
+def get_scheduling_dates(start_date: date, end_date: date, frequency: str,trading_dates: list[date]) -> list[date]:
         
     """
     Generate a list of rebalance dates between a start and end date based on the strategy's rebalance frequency.
@@ -76,10 +126,10 @@ def get_scheduling_dates(start_date: date, end_date: date, frequency: str,tradin
         start_date (date): The start date of the backtest period.
         end_date (date): The end date of the backtest period.
         frequency (str): The scheduling frequency e.g., 'daily', 'weekly', 'monthly', 'quarterly', 'yearly'.
-        trading_dates (List[date]): A list of all valid trading dates.
+        trading_dates (list[date]): A list of all valid trading dates.
 
     Returns:
-        List[date]:A list of dates aligned to trading days and seperated by the scheduling frequency period.
+        list[date]:A list of dates aligned to trading days and seperated by the scheduling frequency period.
 
     Raises:
         ValueError: If an invalid scheduling frequency is provided.
@@ -132,15 +182,49 @@ def get_scheduling_dates(start_date: date, end_date: date, frequency: str,tradin
 
 # --- Validation Utilities ---
 
-def validate_choice(value: str,  choices: Any, field_name: str = 'value') -> None:
+def validate_choice(value: str,  choices: type[any], field_name: str = 'value') -> None:
+    """
+    Validate that `value` is one of the allowed literal choices.
+
+    Args:
+        value: The string value to validate.
+        choices: A Literal type specifying the allowed values.
+        field_name: Name of the field for error messages.
+    
+    Raises:
+        ValueError: If value is not in choices.
+    """
     valid_choices = set(get_args(choices))
     if value not in valid_choices:
         raise ValueError(f"Invalid {field_name}: '{value}'. Must be one of {valid_choices}.")
-    
+
+
 def validate_positive_amount(amount: float, field_name: str) -> None:
+    """
+    Validate that the given amount is positive.
+
+    Args:
+        amount (float): The numeric value to validate.
+        field_name (str): The name of the field being validated, used in error messages.
+
+    Raises:
+        ValueError: If the amount is not greater than zero.
+    """
     if amount <= 0:
         raise ValueError(f"Invalid {field_name}: '{amount}'. Must be positive.")
     
+
 def validate_date_order(start_date: date, end_date: date) -> None:
+    """
+    Validate that the start_date is not after the end_date.
+
+    Args:
+        start_date (date): The start date.
+        end_date (date): The end date.
+
+    Raises:
+        ValueError: If end_date is earlier than start_date.
+    """
     if end_date < start_date :
         raise ValueError("Invalid dates : start date must be before end date")
+    

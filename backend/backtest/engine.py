@@ -1,8 +1,7 @@
 import polars as pl
 from datetime import date
-from typing import Dict, Set, List
 from backend.backtest.portfolio import Portfolio
-from backend.utils import round_down
+from backend.utils import round_shares, round_price, round_currency
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.choices import OrderSide, RebalanceFrequency
 from backend.pipelines.loader import get_backtest_data
@@ -66,7 +65,7 @@ class BacktestEngine:
         )
         return ticker_active_dates
     
-    def _generate_recurring_cashflow_dates(self) -> Set[date]:
+    def _generate_recurring_cashflow_dates(self) -> set[date]:
         dates = []
         cashflow_date = self.start_date
         while True:
@@ -89,7 +88,7 @@ class BacktestEngine:
         
         return set(dates)
     
-    def _load_dividend_dates(self) -> Set[date]:
+    def _load_dividend_dates(self) -> set[date]:
         dividend_dates = (
             self.backtest_data
             .filter(pl.col('dividend').is_not_null())
@@ -98,7 +97,7 @@ class BacktestEngine:
         )
         return set(dividend_dates)
 
-    def _find_active_tickers(self, date) -> Set[str]:
+    def _find_active_tickers(self, date) -> set[str]:
         active_tickers = (
             self.ticker_active_dates
             .filter((pl.col('first_active_date')<=date)&(pl.col('last_active_date')>=date))
@@ -110,7 +109,7 @@ class BacktestEngine:
         
         return set(active_tickers)
             
-    def _find_trading_tickers(self, current_date: date) -> Set[str]:
+    def _find_trading_tickers(self, current_date: date) -> set[str]:
         trading_tickers = (
             self.master_calendar
             .filter(pl.col('date')==current_date)
@@ -144,7 +143,7 @@ class BacktestEngine:
                 case _:
                     return False
                 
-    def _normalize_portfolio_targets(self, date: date) -> Dict[str,float]:
+    def _normalize_portfolio_targets(self, date: date) -> dict[str,float]:
         active_tickers = self._find_active_tickers(date)
         filtered_weights = {ticker: weight for ticker, weight in self.target_portfolio.weights.items() if ticker in active_tickers}
 
@@ -166,10 +165,10 @@ class BacktestEngine:
             return None
         return trading_date[0, 0]
     
-    def _get_ticker_allocations_by_target(self, normalized_weights: Dict[str, float], total_value_to_allocate: float) -> Dict[str, float]:
-        return {ticker: round_down(weight*total_value_to_allocate,2) for ticker, weight in normalized_weights.items()}
+    def _get_ticker_allocations_by_target(self, normalized_weights: dict[str, float], total_value_to_allocate: float) -> dict[str, float]:
+        return {ticker: weight*total_value_to_allocate for ticker, weight in normalized_weights.items()}
      
-    def _queue_orders(self, current_date: date, ticker_allocations: Dict[str, float], side : OrderSide = 'buy'):
+    def _queue_orders(self, current_date: date, ticker_allocations: dict[str, float], side : OrderSide = 'buy'):
         
         orders = []
 
@@ -179,7 +178,8 @@ class BacktestEngine:
                     "value": value,
                     "date_placed": current_date,
                     "date_executed": self._next_trading_date(ticker,current_date),
-                    "side": side
+                    "side": side,
+                    'status': "pending"
                 })
             
         new_orders_df = pl.DataFrame(orders)
@@ -189,7 +189,7 @@ class BacktestEngine:
         else:
             self.pending_orders = pl.concat([self.pending_orders, new_orders_df])
 
-    def _get_prices_on_date(self, current_date: date) -> Dict[str,float]:
+    def _get_prices_on_date(self, current_date: date) -> dict[str,float]:
         prices_df = (
             self.backtest_data
             .filter(pl.col('date')==current_date)
@@ -199,39 +199,48 @@ class BacktestEngine:
 
         return dict(zip(prices_df['ticker'], prices_df['price']))
 
-    def _execute_orders(self, current_date: date, prices: Dict[str, float]):
+    def _execute_orders(self, current_date: date, prices: dict[str, float]):
 
         executable_orders = (
             self.pending_orders
             .filter(pl.col('date_executed')==current_date)
         )
 
+        updated_orders = []
+
         for row in executable_orders.iter_rows(named=True):
             ticker = row['ticker']
             value = row['value']
             side = row['side']
-
             price = prices.get(ticker)
+
             if price is None:
                 raise ValueError(f'Order cannont be completed - missing price for ticker : {ticker} on date : {current_date}')
+            
             match side:
                 case 'buy':
-                    self.portfolio.invest(ticker, value, price, self.config.strategy.allow_fractional_shares)
+                    fulfilled = self.portfolio.invest(ticker, value, price, self.config.strategy.allow_fractional_shares)
                 case 'sell':
-                    self.portfolio.sell(ticker, value, price, self.config.strategy.allow_fractional_shares)
+                    fulfilled = self.portfolio.sell(ticker, value, price, self.config.strategy.allow_fractional_shares)
                 case _:
                     raise ValueError(f"Invalid order placed: side must be either 'buy' or 'sell', not {side}")
 
+            row['status'] = "fulfilled" if fulfilled else "failed"
+            updated_orders.append(row)
+
+        # Create new dataframe with updated orders
+        orders_executed_today = pl.DataFrame(updated_orders)
+
         # Append executed orders to executed_orders DataFrame
         if self.executed_orders is None:
-            self.executed_orders = executable_orders
+            self.executed_orders = orders_executed_today
         else:
-            self.executed_orders = pl.concat([self.executed_orders, executable_orders])
+            self.executed_orders = pl.concat([self.executed_orders, orders_executed_today])
 
         # Remove executed orders from pending_orders
         self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
 
-    def _get_dividends_on_date(self, current_date: date) -> Dict[str,float]:
+    def _get_dividends_on_date(self, current_date: date) -> dict[str,float]:
 
         dividends_df = (
             self.backtest_data
@@ -243,7 +252,7 @@ class BacktestEngine:
         return dict(zip(dividends_df['ticker'], dividends_df['dividend']))
     
 
-    def rebalance(self, current_date: date, prices: Dict[str, float], target_weights: Dict[str, float]):
+    def rebalance(self, current_date: date, prices: dict[str, float], target_weights: dict[str, float]):
         # Find portfolio value
         total_value = self.portfolio.get_value(prices)
 
@@ -260,9 +269,9 @@ class BacktestEngine:
             correction_value = target_value - actual_value
 
             if correction_value > 0:
-                buy_order_targets[ticker] = round_down(correction_value,2)
+                buy_order_targets[ticker] = correction_value
             elif correction_value < 0:
-                sell_order_targets[ticker] = round_down(-correction_value,2)
+                sell_order_targets[ticker] = -correction_value
 
 
         # Queue sell order for each over-allocated ticker
@@ -278,18 +287,24 @@ class BacktestEngine:
         self.last_rebalance_date = current_date
 
 
-    def run(self) -> List[Dict[str, object]]:
+    def run(self) -> dict[str, pl.DataFrame]:
         """
-        Runs the backtest simulation over the date range.
+        Executes the full backtest simulation over the configured date range.
 
         Returns:
-            List[Dict[str, object]]: A list of portfolio snapshots for each trading day,
-            including portfolio state, cash inflow, dividend income, and flags for events
-            like rebalancing and investing.
+            tuple[dict[str, pl.DataFrame], pl.DataFrame]: 
+                - A dictionary containing daily snapshots:
+                    - 'cash': Cash balances per day
+                    - 'holdings': Holdings per asset per day
+                    - 'dividends': Dividend records per day
+                - A combined Polars DataFrame of all orders (both fulfilled and failed), 
+                including order status and execution metadata.
         """
         
         # Create empty list for portfolio snapshots
-        snapshots = []
+        cash_snapshots = []
+        holding_snapshots = []
+        dividend_snapshots = []
 
         # Iterate through date range in master calendar
         for current_date in self.master_calendar['date']:
@@ -306,7 +321,7 @@ class BacktestEngine:
 
             # MANAGE CASHFLOW 
             # Initial investment
-            if current_date == self.start_date:
+            if current_date == self.master_calendar[0, 'date']:
                 self.portfolio.add_cash(self.config.initial_investment)
                 place_order = True
 
@@ -356,11 +371,22 @@ class BacktestEngine:
                 if not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
                     self._execute_orders(current_date,daily_prices)
 
-            snapshots.append(self.portfolio.snapshot(current_date,daily_prices))
+            # Fetch daily snapshot and add to relevant snapshot list
+            daily_snapshot = self.portfolio.get_daily_snapshot(current_date,daily_prices)
+            cash_snapshots.append(daily_snapshot['cash'])
+            holding_snapshots.extend(daily_snapshot['holdings'])
+            dividend_snapshots.extend(daily_snapshot['dividends'])
 
-        # Save snapshots to object
-        self.history = snapshots
+        # Combine order books 
+        orders = pl.concat([self.executed_orders,self.pending_orders])
 
+        # Bulk convert snapshots into polars dataframe for better processing and package within dictionary
+        history = {
+            "cash":pl.DataFrame(cash_snapshots),
+            "holdings":pl.DataFrame(holding_snapshots),
+            "dividends":pl.DataFrame(dividend_snapshots),
+            "orders": orders
+        }
 
-        return self.history, self.pending_orders, self.executed_orders
+        return history
     
