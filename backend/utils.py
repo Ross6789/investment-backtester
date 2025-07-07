@@ -11,16 +11,31 @@ from backend.enums import RoundMethod
 # --- Metadata file utilities ---
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
+    """
+    Returns a list of yFinance tickers for the given asset type.
+
+    Args:
+        asset_type (str): Type of asset to filter by (e.g., 'stock', 'crypto').
+
+    Returns:
+        list[str]: List of matching ticker symbols from yFinance.
+    """
     metadata = (
         pl.scan_csv(config.get_asset_metadata_path())
         .filter((pl.col("source")=="yfinance") & (pl.col("asset_type")==asset_type))
         .select("ticker")
         .collect()
     )
-
     return metadata["ticker"].to_list()
 
+
 def get_csv_ticker_source_map() -> dict[str, Path]:
+    """
+    Returns a mapping of tickers to their local CSV file paths.
+
+    Returns:
+        dict[str, Path]: Dictionary where keys are ticker symbols and values are local CSV file paths.
+    """
     metadata = (
         pl.scan_csv(config.get_asset_metadata_path())
         .filter(pl.col("source")=="local_csv")
@@ -58,6 +73,7 @@ def _round(value: float, decimals: int, method : RoundMethod ) -> float:
         case _:
             raise ValueError(f"Invalid rounding method : {method}")
 
+
 def round_shares(share_qty: float, method: RoundMethod = "down") -> float:
     """
     Round the fractional share quantity to the configured fractional share precision.
@@ -71,6 +87,7 @@ def round_shares(share_qty: float, method: RoundMethod = "down") -> float:
     """
     return _round(share_qty,FRACTIONAL_SHARE_PRECISION,method)
 
+
 def round_price(price: float, method: RoundMethod = "nearest") -> float:
     """
     Round a price value to the configured price precision.
@@ -83,6 +100,7 @@ def round_price(price: float, method: RoundMethod = "nearest") -> float:
         float: The rounded price.
     """
     return _round(price,PRICE_PRECISION,method)
+
 
 def round_currency(price: float, method: RoundMethod = "nearest") -> float:
     """
