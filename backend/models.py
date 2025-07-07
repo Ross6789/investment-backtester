@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
-from backend.choices import RebalanceFrequency,ReinvestmentFrequency, BacktestMode
-from backend.utils import validate_choice,validate_positive_amount
+from backend.enums import RebalanceFrequency,ReinvestmentFrequency, BacktestMode
+from backend.utils import parse_enum,validate_positive_amount
 
 @dataclass
 class TargetPortfolio:
@@ -20,7 +19,7 @@ class TargetPortfolio:
         ValueError: If the weight dictionary is empty, contains weights <= 0 or > 1.0,
                     or the weights do not sum to 1.0.
     """
-    weights: Dict[str,float] 
+    weights: dict[str,float] 
 
     def __post_init__(self):
         if not self.weights:
@@ -34,43 +33,70 @@ class TargetPortfolio:
         if not abs(total-1.0) < 1e-6:
             raise ValueError(f"Portfolio weightings add to {total}. Must equal 1.0")
     
-    def get_tickers(self) -> List[str]:
+    def get_tickers(self) -> list[str]:
         return list(self.weights.keys())
 
 @dataclass
 class RecurringInvestment:
+    """
+    Defines recurring investment details.
 
+    Attributes:
+        amount (float): Investment amount, must be positive.
+        frequency (ReinvestmentFrequency or str): Investment interval.
+
+    Raises:
+        ValueError: If frequency string is invalid or amount is non-positive.
+    """
     amount: float              
-    frequency: ReinvestmentFrequency 
+    frequency: ReinvestmentFrequency = ReinvestmentFrequency.MONTHLY
 
     def __post_init__(self):
-        validate_choice(self.frequency,ReinvestmentFrequency,"reinvestment frequency")
+        if isinstance(self.frequency, str):
+            self.frequency = parse_enum(ReinvestmentFrequency, self.frequency)
         validate_positive_amount(self.amount,'recurring investment amount')
 
 @dataclass
 class Strategy:
     """
-    Represents a portfolio investment strategy used during backtesting.
+    Configuration for portfolio investment strategy in backtesting.
 
-    Encapsulates key configuration options:
-    - Whether fractional shares can be purchased.
-    - How dividends are treated.
-    - How often to rebalance the portfolio.
+    Attributes:
+        allow_fractional_shares (bool): Enable fractional share purchases.
+        reinvest_dividends (bool): Enable dividend reinvestment.
+        rebalance_frequency (RebalanceFrequency or str): Portfolio rebalance interval.
+
+    Raises:
+        ValueError: If rebalance_frequency string is invalid.
     """
     allow_fractional_shares: bool = True
     reinvest_dividends: bool = True
-    rebalance_frequency: RebalanceFrequency = 'never'
+    rebalance_frequency: RebalanceFrequency = RebalanceFrequency.NEVER
 
     def __post_init__(self):
-        validate_choice(self.rebalance_frequency,RebalanceFrequency, "rebalance frequency")
+        if isinstance(self.rebalance_frequency, str):
+            self.rebalance_frequency = parse_enum(RebalanceFrequency, self.rebalance_frequency)
 
 @dataclass
 class BacktestConfig:
-    mode : BacktestMode = 'adjusted'
+    """
+    Configuration for the backtest.
+
+    Attributes:
+        mode: Backtest mode, e.g. adjusted or manual.
+        strategy: Investment strategy parameters.
+        initial_investment: Initial capital amount for backtesting (must be positive).
+        recurring_investment: Optional recurring investment schedule.
+
+    Raises:
+        ValueError: If mode is an invalid value or initial_investment is not positive.
+    """
+    mode : BacktestMode = BacktestMode.MANUAL
     strategy: Strategy = field(default_factory=Strategy)
     initial_investment : float = 10000
-    recurring_investment : Optional[RecurringInvestment] = None
+    recurring_investment : RecurringInvestment | None = None
 
     def __post_init__(self):
-        validate_choice(self.mode,BacktestMode, "backtest mode")
+        if isinstance(self.mode, str):
+            self.mode = parse_enum(BacktestMode,self.mode)
         validate_positive_amount(self.initial_investment, 'initial investment')

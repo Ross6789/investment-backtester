@@ -1,7 +1,7 @@
 import backend.config as config
 import polars as pl
 from datetime import date
-
+from backend.pipelines.loader import get_backtest_data
 from backend.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
 from backend.backtest.engine import BacktestEngine
 from backend.backtest.result import BacktestResult
@@ -40,8 +40,11 @@ configuration_dict = {
     "Rebalance frequency": rebalance_frequency
 }
 
+# Fetch data for backtest
+backtest_data = get_backtest_data(mode,target_portfolio.get_tickers(),start_date,end_date)
+
 # Create and run backtest
-backtest = BacktestEngine(start_date,end_date,target_portfolio,backtest_config)
+backtest = BacktestEngine(start_date,end_date,backtest_data,target_portfolio,backtest_config)
 print('starting backtest...')
 history = backtest.run()
 print('finished backtest. Analysing results...')

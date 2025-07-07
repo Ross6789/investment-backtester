@@ -1,12 +1,13 @@
 import polars as pl
 from backend import config
 from datetime import datetime, date
+from enum import Enum
 from typing import get_args
 from pathlib import Path
 from dateutil.relativedelta import relativedelta
 from math import floor, ceil
 from backend.constants import FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
-from backend.choices import RoundMethod
+from backend.enums import RoundMethod
 
 def get_yfinance_tickers(asset_type: str) -> list[str]:
     metadata = (
@@ -180,24 +181,31 @@ def get_scheduling_dates(start_date: date, end_date: date, frequency: str,tradin
 
     return schedule_dates
 
-# --- Validation Utilities ---
+# --- Parse Utilities ---
 
-def validate_choice(value: str,  choices: type[any], field_name: str = 'value') -> None:
+def parse_enum(enum_class: type[Enum], input_str: str) -> Enum:
     """
-    Validate that `value` is one of the allowed literal choices.
+    Convert a string to an instance of the specified Enum class, case-insensitively.
 
     Args:
-        value: The string value to validate.
-        choices: A Literal type specifying the allowed values.
-        field_name: Name of the field for error messages.
-    
-    Raises:
-        ValueError: If value is not in choices.
-    """
-    valid_choices = set(get_args(choices))
-    if value not in valid_choices:
-        raise ValueError(f"Invalid {field_name}: '{value}'. Must be one of {valid_choices}.")
+        enum_class (type[Enum]): The Enum class to parse the string into.
+        input_str (str): The input string to convert to an Enum member.
 
+    Returns:
+        Enum: The corresponding Enum member matching the input string (case-insensitive).
+
+    Raises:
+        ValueError: If the input string does not match any Enum member values.
+    """
+    try:
+        return enum_class(input_str.lower())
+    except ValueError:
+        valid_values = [e.value for e in enum_class]
+        raise ValueError(
+            f"Invalid value for '{enum_class.__name__}': '{input_str}'. Must be one of {valid_values} "
+        )
+    
+# --- Validation Utilities ---
 
 def validate_positive_amount(amount: float, field_name: str) -> None:
     """

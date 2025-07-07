@@ -1,48 +1,64 @@
 import polars as pl
 from datetime import date
 from backend.backtest.portfolio import Portfolio
-from backend.utils import round_shares, round_price, round_currency
 from backend.models import TargetPortfolio, BacktestConfig
-from backend.choices import OrderSide, RebalanceFrequency
-from backend.pipelines.loader import get_backtest_data
+from backend.enums import OrderSide, RebalanceFrequency, BacktestMode, ReinvestmentFrequency
 from dateutil.relativedelta import relativedelta
 
 class BacktestEngine:
+    """
+    Runs portfolio backtests over a specified date range and dataset.
 
-    def __init__(self, start_date: date, end_date: date, target_portfolio: TargetPortfolio ,config: BacktestConfig):
+    Attributes:
+        start_date (date): Start date of the backtest.
+        end_date (date): End date of the backtest.
+        backtest_data (pl.DataFrame): Full dataset of all tickers and dates.
+        target_portfolio (TargetPortfolio): Desired portfolio allocation.
+        config (BacktestConfig): Strategy and investment settings.
+    """
+
+    # --- Initialization & Setup ---
+
+    def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
             self.start_date = start_date
             self.end_date = end_date
+            self.backtest_data = backtest_data
             self.target_portfolio = target_portfolio
             self.config = config
 
             # Instantiate portfolio and data
             self.portfolio = Portfolio(self)
-            self.backtest_data = self._load_backtest_data()
             self.master_calendar = self._generate_master_calendar()
             self.ticker_active_dates = self._generate_ticker_active_dates()
                        
             # Instantiate last rebalance day and order book
-            self.last_rebalance_date = start_date
+            self.last_rebalance_date = self.master_calendar.select(pl.col('date').min()).item()
             self.pending_orders = None
             self.executed_orders = None
 
             # Optional : recurring cashflow
             if self.config.recurring_investment:
-                self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates()
+                self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates(start_date,end_date, self.config.recurring_investment.frequency)
 
             # Optional : dividends (if in manual mode)
-            if self.config.mode == 'manual':
+            if self.config.mode == BacktestMode.MANUAL:
                 self.dividend_dates = self._load_dividend_dates()
+   
 
-    def _load_backtest_data(self) -> pl.DataFrame:
-        return get_backtest_data(
-            self.config.mode, 
-            self.target_portfolio.get_tickers(),
-            self.start_date, 
-            self.end_date
-        )
-    
+    # --- Data Generation & Loading ---
+
     def _generate_master_calendar(self) -> pl.DataFrame:
+        """
+        Generate a master calendar of trading days with active tickers.
+
+        Groups the backtest data by date and collects the unique tickers that are 
+        trading on each day.
+
+        Returns:
+            pl.DataFrame: A DataFrame with columns:
+                - 'date': The trading date.
+                - 'trading_tickers': A sorted list of unique tickers trading on that date.
+        """
         master_calendar = (
             self.backtest_data
             .group_by('date')
@@ -53,7 +69,20 @@ class BacktestEngine:
         )
         return master_calendar
     
+
     def _generate_ticker_active_dates(self) -> pl.DataFrame:
+        """
+        Determine the active date range for each ticker in the backtest data.
+
+        Groups data by ticker and calculates the earliest and latest dates 
+        each ticker appears in the dataset.
+
+        Returns:
+            pl.DataFrame: A DataFrame with columns:
+                - 'ticker': The asset ticker symbol.
+                - 'first_active_date': The first date the ticker appears.
+                - 'last_active_date': The last date the ticker appears.
+        """
         ticker_active_dates = (
             self.backtest_data
             .group_by('ticker')
@@ -65,30 +94,49 @@ class BacktestEngine:
         )
         return ticker_active_dates
     
-    def _generate_recurring_cashflow_dates(self) -> set[date]:
-        dates = []
-        cashflow_date = self.start_date
-        while True:
-            match self.config.recurring_investment.frequency:
-                case 'daily':
+
+    def _generate_recurring_cashflow_dates(self, start_date: date, end_date: date, frequency: ReinvestmentFrequency) -> set[date]:
+        """
+        Generate a set of recurring cashflow dates within a date range based on the given frequency.
+
+        Args:
+            start_date (date): The starting date for generating cashflow dates (inclusive).
+            end_date (date): The ending date for generating cashflow dates (inclusive).
+            frequency (ReinvestmentFrequency): Frequency of the recurring cashflows.
+
+        Returns:
+            set[date]: A set of dates on which recurring cashflows occur.
+
+        Raises:
+            ValueError: If the provided frequency is invalid.
+        """
+        dates = set()
+        cashflow_date = start_date
+        while cashflow_date <= end_date:
+            dates.add(cashflow_date)
+            match frequency:
+                case ReinvestmentFrequency.DAILY:
                     cashflow_date += relativedelta(days=1)
-                case 'weekly':
+                case ReinvestmentFrequency.WEEKLY:
                     cashflow_date += relativedelta(weeks=1)
-                case 'monthly':
+                case ReinvestmentFrequency.MONTHLY:
                     cashflow_date += relativedelta(months=1)
-                case 'quarterly':
+                case ReinvestmentFrequency.QUARTERLY:
                     cashflow_date += relativedelta(months=3)
-                case 'yearly':
+                case ReinvestmentFrequency.YEARLY:
                     cashflow_date += relativedelta(years=1)
                 case _:
                     raise ValueError('Invalid recurring investment frequency')
-            if cashflow_date > self.end_date:
-                break
-            dates.append(cashflow_date)
-        
         return set(dates)
     
+
     def _load_dividend_dates(self) -> set[date]:
+        """
+        Extract all unique dates from the backtest data where dividends were issued.
+
+        Returns:
+            set[date]: A set of dates on which at least one ticker paid a dividend.
+        """
         dividend_dates = (
             self.backtest_data
             .filter(pl.col('dividend').is_not_null())
@@ -97,7 +145,24 @@ class BacktestEngine:
         )
         return set(dividend_dates)
 
+
+    # --- Ticker Lookup & Filtering ---
+
     def _find_active_tickers(self, date) -> set[str]:
+        """
+        Find all tickers that are active on a given date.
+
+        A ticker is considered active if the given date falls between its first and last recorded price dates (inclusive).
+
+        Args:
+            date (date): The date to check for active tickers.
+
+        Returns:
+            set[str]: A set of ticker symbols active on the specified date.
+
+        Raises:
+            ValueError: If no tickers are active on the given date.
+        """
         active_tickers = (
             self.ticker_active_dates
             .filter((pl.col('first_active_date')<=date)&(pl.col('last_active_date')>=date))
@@ -109,7 +174,17 @@ class BacktestEngine:
         
         return set(active_tickers)
             
+
     def _find_trading_tickers(self, current_date: date) -> set[str]:
+        """
+        Retrieve the set of tickers that are actively trading on the specified date.
+
+        Args:
+            current_date (date): The date for which to find trading tickers.
+
+        Returns:
+            set[str]: A set of ticker symbols trading on the given date.
+        """
         trading_tickers = (
             self.master_calendar
             .filter(pl.col('date')==current_date)
@@ -118,32 +193,41 @@ class BacktestEngine:
         )
         return set(trading_tickers)
     
+    
     def _all_active_tickers_trading(self, current_date: date) -> bool:
+        """
+        Check if all active tickers on the given date are also trading on that date.
+
+        Args:
+            current_date (date): The date to check.
+
+        Returns:
+            bool: True if every active ticker is trading on the given date, False otherwise.
+
+        Raises:
+            ValueError: If no tickers are active on the given date. (i.e. no tickers had begin trading yet or had not trading permanently)
+        """
         active_tickers = self._find_active_tickers(current_date)
         trading_tickers = self._find_trading_tickers(current_date)
 
         return active_tickers==trading_tickers
-
-    def _should_rebalance(self, current_date: date, last_rebalance_date: date, rebalance_frequency: RebalanceFrequency) -> bool:
-        # rebalancing can not occur on days where live assets cannot be traded
-        if not self._all_active_tickers_trading(current_date):
-            return False
-        else:
-            match rebalance_frequency:
-                case 'daily':
-                    return True
-                case 'weekly':
-                    return current_date >= last_rebalance_date + relativedelta(weeks=1)
-                case 'monthly':
-                    return current_date >= last_rebalance_date + relativedelta(months=1)
-                case 'quarterly':
-                    return current_date >= last_rebalance_date + relativedelta(months=3)
-                case 'yearly':
-                    return current_date >= last_rebalance_date  + relativedelta(years=1)
-                case _:
-                    return False
                 
+
+    # --- Portfolio Normalization ---
+
     def _normalize_portfolio_targets(self, date: date) -> dict[str,float]:
+        """
+        Normalize target portfolio weights for tickers active on the given date.
+
+        Filters the target portfolio weights to include only tickers active on the specified date,
+        then normalizes these weights so their sum equals 1.
+
+        Args:
+            date (date): The date to determine which tickers are active.
+
+        Returns:
+            dict[str, float]: A dictionary mapping active tickers to their normalized target weights.
+        """
         active_tickers = self._find_active_tickers(date)
         filtered_weights = {ticker: weight for ticker, weight in self.target_portfolio.weights.items() if ticker in active_tickers}
 
@@ -153,7 +237,35 @@ class BacktestEngine:
         
         return normalized_weights
 
+    
+    def _get_ticker_allocations_by_target(self, normalized_weights: dict[str, float], total_value_to_allocate: float) -> dict[str, float]:
+        """
+        Calculate the dollar allocation for each ticker based on target normalized weights and total allocation amount.
+
+        Args:
+            normalized_weights (dict[str, float]): A dictionary mapping ticker symbols to their target portfolio weights (normalized to sum to 1).
+            total_value_to_allocate (float): The total dollar amount available to allocate among the tickers.
+
+        Returns:
+            dict[str, float]: A dictionary mapping each ticker to the dollar amount allocated based on its target weight.
+        """
+        return {ticker: weight*total_value_to_allocate for ticker, weight in normalized_weights.items()}
+
+
+    # --- Order Management ---
+
     def _next_trading_date(self, ticker: str, target_date: date) -> date | None:
+        """
+        Find the next trading date on or after the target date for the given ticker.
+
+        Args:
+            ticker (str): The ticker symbol to look for in the trading calendar.
+            target_date (date): The date from which to search forward (inclusive).
+
+        Returns:
+            date | None: The next trading date on or after `target_date` when the ticker is tradable.
+                        Returns None if no such date exists in the calendar.
+        """
         trading_date = (
             self.master_calendar
             .filter((pl.col('date') >= target_date) & (pl.col('trading_tickers').list.contains(ticker)))
@@ -164,12 +276,17 @@ class BacktestEngine:
         if trading_date.is_empty():
             return None
         return trading_date[0, 0]
-    
-    def _get_ticker_allocations_by_target(self, normalized_weights: dict[str, float], total_value_to_allocate: float) -> dict[str, float]:
-        return {ticker: weight*total_value_to_allocate for ticker, weight in normalized_weights.items()}
+
      
     def _queue_orders(self, current_date: date, ticker_allocations: dict[str, float], side : OrderSide = 'buy'):
-        
+        """
+        Create and add new orders for each ticker with allocated value to the pending orders.
+
+        Args:
+            current_date (date): Date when orders are placed.
+            ticker_allocations (dict[str, float]): Mapping of tickers to allocation amounts.
+            side (OrderSide, optional): Order side ('buy' or 'sell'). Defaults to 'buy'.
+        """
         orders = []
 
         for ticker, value in ticker_allocations.items():
@@ -189,18 +306,22 @@ class BacktestEngine:
         else:
             self.pending_orders = pl.concat([self.pending_orders, new_orders_df])
 
-    def _get_prices_on_date(self, current_date: date) -> dict[str,float]:
-        prices_df = (
-            self.backtest_data
-            .filter(pl.col('date')==current_date)
-            .select(['ticker','price'])
-            .sort('ticker')         
-        )
-
-        return dict(zip(prices_df['ticker'], prices_df['price']))
 
     def _execute_orders(self, current_date: date, prices: dict[str, float]):
+        """
+        Execute all pending orders scheduled for the current date using given prices.
 
+        Args:
+            current_date (date): The date on which to execute orders.
+            prices (dict[str, float]): Mapping of tickers to their prices on current_date.
+
+        Raises:
+            ValueError: If price for a ticker is missing or order side is invalid.
+
+        Updates:
+            - Marks orders as 'fulfilled' or 'failed' based on portfolio transaction success.
+            - Moves executed orders from pending_orders to executed_orders.
+        """
         executable_orders = (
             self.pending_orders
             .filter(pl.col('date_executed')==current_date)
@@ -240,18 +361,85 @@ class BacktestEngine:
         # Remove executed orders from pending_orders
         self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
 
-    def _get_dividends_on_date(self, current_date: date) -> dict[str,float]:
 
+    # --- Price and Dividend lookup ---
+
+    def _get_prices_on_date(self, current_date: date) -> dict[str,float]:
+        """
+        Retrieve prices for all tickers on the given date.
+
+        Args:
+            current_date (date): The date to fetch prices for.
+
+        Returns:
+            dict[str, float]: Mapping of ticker symbols to their prices on the date.
+        """
+        prices_df = (
+            self.backtest_data
+            .filter(pl.col('date')==current_date)
+            .select(['ticker','price'])
+            .sort('ticker')         
+        )
+        return dict(zip(prices_df['ticker'], prices_df['price']))
+    
+
+    def _get_dividends_on_date(self, current_date: date) -> dict[str,float]:
+        """
+        Retrieve dividend amounts for each ticker on a specific date.
+
+        Args:
+            current_date (date): The date to get dividends for.
+
+        Returns:
+            dict[str, float]: Mapping of ticker symbols to their dividend values on the date.
+        """
         dividends_df = (
             self.backtest_data
             .filter(pl.col('date')==current_date)
             .select(['ticker','dividend'])
             .sort('ticker')  
         )
-
         return dict(zip(dividends_df['ticker'], dividends_df['dividend']))
     
 
+    # --- Rebalancing ---
+
+    def _should_rebalance(self, current_date: date, last_rebalance_date: date, rebalance_frequency: RebalanceFrequency) -> bool:
+        """
+        Determine whether the portfolio should be rebalanced on the current date.
+
+        Rebalancing only occurs if all active tickers are trading on the current date
+        and the specified rebalance frequency interval has elapsed since the last rebalance.
+
+        Args:
+            current_date (date): The date to check for rebalancing.
+            last_rebalance_date (date): The date when the portfolio was last rebalanced.
+            rebalance_frequency (RebalanceFrequency): Frequency at which rebalancing should occur.
+
+        Returns:
+            bool: True if rebalancing should occur on current_date, False otherwise.
+
+        Raises:
+            ValueError: If the provided rebalance_frequency is invalid.
+        """
+        if not self._all_active_tickers_trading(current_date):
+            return False
+        else:
+            match rebalance_frequency:
+                case RebalanceFrequency.DAILY:
+                    return True
+                case RebalanceFrequency.WEEKLY:
+                    return current_date >= last_rebalance_date + relativedelta(weeks=1)
+                case RebalanceFrequency.MONTHLY:
+                    return current_date >= last_rebalance_date + relativedelta(months=1)
+                case RebalanceFrequency.QUARTERLY:
+                    return current_date >= last_rebalance_date + relativedelta(months=3)
+                case RebalanceFrequency.YEARLY:
+                    return current_date >= last_rebalance_date  + relativedelta(years=1)
+                case _:
+                    raise ValueError(f"Invalid rebalance frequency: {rebalance_frequency}")
+                
+                
     def rebalance(self, current_date: date, prices: dict[str, float], target_weights: dict[str, float]):
         # Find portfolio value
         total_value = self.portfolio.get_value(prices)
@@ -275,12 +463,12 @@ class BacktestEngine:
 
 
         # Queue sell order for each over-allocated ticker
-        if buy_order_targets:
-            self._queue_orders(current_date,buy_order_targets,'buy')
-
-        # Queue buy order for each under_allocated ticker
         if sell_order_targets:
             self._queue_orders(current_date,sell_order_targets, 'sell')
+
+        # Queue buy order for each under_allocated ticker
+        if buy_order_targets:
+            self._queue_orders(current_date,buy_order_targets,'buy')
 
         # Update rebalance flag and last rebalance date
         self.portfolio.did_rebalance = True
@@ -292,11 +480,12 @@ class BacktestEngine:
         Executes the full backtest simulation over the configured date range.
 
         Returns:
-            tuple[dict[str, pl.DataFrame], pl.DataFrame]: 
+            tuple[dict[str, pl.DataFrame]: 
                 - A dictionary containing daily snapshots:
                     - 'cash': Cash balances per day
                     - 'holdings': Holdings per asset per day
                     - 'dividends': Dividend records per day
+                    - 'orders': all orders completed throuhgout the backtest
                 - A combined Polars DataFrame of all orders (both fulfilled and failed), 
                 including order status and execution metadata.
         """
@@ -331,7 +520,7 @@ class BacktestEngine:
                 place_order = True
             
             # Dividends
-            if self.config.mode == 'manual' and current_date in self.dividend_dates:
+            if self.config.mode == BacktestMode.MANUAL and current_date in self.dividend_dates:
                 unit_dividend_per_ticker = self._get_dividends_on_date(current_date)
                 dividends_earned = self.portfolio.process_dividends(unit_dividend_per_ticker)
                 if self.config.strategy.reinvest_dividends:
