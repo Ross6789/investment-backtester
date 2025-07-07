@@ -2,7 +2,7 @@ import polars as pl
 from typing import List
 from datetime import date
 from backend.config import get_backtest_data_path
-from backend.choices import BacktestMode
+from backend.enums import BacktestMode
 
 def get_backtest_data(backtest_mode : BacktestMode, tickers : List[str], start_date: date, end_date: date) -> pl.DataFrame:
 
