@@ -318,3 +318,4 @@ class Portfolio:
             for div in self.dividends
         ]
 
+

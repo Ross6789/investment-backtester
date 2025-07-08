@@ -91,7 +91,7 @@ class BacktestConfig:
     Raises:
         ValueError: If mode is an invalid value or initial_investment is not positive.
     """
-    mode : BacktestMode = BacktestMode.MANUAL
+    mode : BacktestMode = BacktestMode.REALISTIC
     strategy: Strategy = field(default_factory=Strategy)
     initial_investment : float = 10000
     recurring_investment : RecurringInvestment | None = None

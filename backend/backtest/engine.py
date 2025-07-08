@@ -41,94 +41,11 @@ class BacktestEngine:
                 self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates(start_date,end_date, self.config.recurring_investment.frequency)
 
             # Optional : dividends (if in manual mode)
-            if self.config.mode == BacktestMode.MANUAL:
+            if self.config.mode == BacktestMode.REALISTIC:
                 self.dividend_dates = self._load_dividend_dates()
    
 
     # --- Data Generation & Loading ---
-
-    def _generate_master_calendar(self) -> pl.DataFrame:
-        """
-        Generate a master calendar of trading days with active tickers.
-
-        Groups the backtest data by date and collects the unique tickers that are 
-        trading on each day.
-
-        Returns:
-            pl.DataFrame: A DataFrame with columns:
-                - 'date': The trading date.
-                - 'trading_tickers': A sorted list of unique tickers trading on that date.
-        """
-        master_calendar = (
-            self.backtest_data
-            .group_by('date')
-            .agg([
-                pl.col('ticker').filter(pl.col('is_trading_day')==True).unique().sort().alias('trading_tickers')
-            ])
-            .sort('date')
-        )
-        return master_calendar
-    
-
-    def _generate_ticker_active_dates(self) -> pl.DataFrame:
-        """
-        Determine the active date range for each ticker in the backtest data.
-
-        Groups data by ticker and calculates the earliest and latest dates 
-        each ticker appears in the dataset.
-
-        Returns:
-            pl.DataFrame: A DataFrame with columns:
-                - 'ticker': The asset ticker symbol.
-                - 'first_active_date': The first date the ticker appears.
-                - 'last_active_date': The last date the ticker appears.
-        """
-        ticker_active_dates = (
-            self.backtest_data
-            .group_by('ticker')
-            .agg([
-                pl.col('date').min().alias('first_active_date'),
-                pl.col('date').max().alias('last_active_date')
-            ])
-            .sort('ticker')
-        )
-        return ticker_active_dates
-    
-
-    def _generate_recurring_cashflow_dates(self, start_date: date, end_date: date, frequency: ReinvestmentFrequency) -> set[date]:
-        """
-        Generate a set of recurring cashflow dates within a date range based on the given frequency.
-
-        Args:
-            start_date (date): The starting date for generating cashflow dates (inclusive).
-            end_date (date): The ending date for generating cashflow dates (inclusive).
-            frequency (ReinvestmentFrequency): Frequency of the recurring cashflows.
-
-        Returns:
-            set[date]: A set of dates on which recurring cashflows occur.
-
-        Raises:
-            ValueError: If the provided frequency is invalid.
-        """
-        dates = set()
-        cashflow_date = start_date
-        while cashflow_date <= end_date:
-            dates.add(cashflow_date)
-            match frequency:
-                case ReinvestmentFrequency.DAILY:
-                    cashflow_date += relativedelta(days=1)
-                case ReinvestmentFrequency.WEEKLY:
-                    cashflow_date += relativedelta(weeks=1)
-                case ReinvestmentFrequency.MONTHLY:
-                    cashflow_date += relativedelta(months=1)
-                case ReinvestmentFrequency.QUARTERLY:
-                    cashflow_date += relativedelta(months=3)
-                case ReinvestmentFrequency.YEARLY:
-                    cashflow_date += relativedelta(years=1)
-                case _:
-                    raise ValueError('Invalid recurring investment frequency')
-        return set(dates)
-    
 
     def _load_dividend_dates(self) -> set[date]:
         """
@@ -211,6 +128,9 @@ class BacktestEngine:
         trading_tickers = self._find_trading_tickers(current_date)
 
         return active_tickers==trading_tickers
+    
+    def is_fully_active_date(self, date: date) -> bool:
+        return self.first_date_all_active <= date <= self.last_date_all_active
                 
 
     # --- Portfolio Normalization ---
@@ -520,7 +440,7 @@ class BacktestEngine:
                 place_order = True
             
             # Dividends
-            if self.config.mode == BacktestMode.MANUAL and current_date in self.dividend_dates:
+            if self.config.mode == BacktestMode.REALISTIC and current_date in self.dividend_dates:
                 unit_dividend_per_ticker = self._get_dividends_on_date(current_date)
                 dividends_earned = self.portfolio.process_dividends(unit_dividend_per_ticker)
                 if self.config.strategy.reinvest_dividends:
