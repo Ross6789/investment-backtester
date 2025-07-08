@@ -1,9 +1,9 @@
 from datetime import date
 from math import ceil
 from backend.utils import validate_positive_amount
+from abc import ABC, abstractmethod
 
-
-class BasePortfolio:
+class BasePortfolio(ABC):
     """
     Represents an investment portfolio with cash and holdings.
 
@@ -19,18 +19,14 @@ class BasePortfolio:
 
     # --- Initialisation and reset ---
     
-    def __init__(self, backtest_engine):
+    def __init__(self, backtest):
         """
         Initialize the portfolio with backtest engine.
 
         Args:
-            backtest_engine (BacktestEngine): The backtest engine instance
+            backtest (Backtest): The backtest engine instance
         """
-        self.backtest_engine = backtest_engine
-        self.cash = 0.0
-        self.cash_inflow = 0.0
-        self.dividends = []
-        self.dividend_income = 0.0
+        self.backtest = backtest
         self.did_rebalance = False
         self.holdings = {}
 
@@ -39,42 +35,12 @@ class BasePortfolio:
         """
         Reset daily-tracked portfolio attributes.
         """
-        self.cash_inflow = 0.0
-        self.dividends = []
-        self.dividend_income = 0.0
         self.did_rebalance = False
-
-
-    # --- Cash management ---
-
-    def add_cash(self, amount: float):
-        """
-        Add a specified amount to the holdings cash balance.
-
-        Args:
-            amount (float): The amount of cash to add. Must be greater than 0.
-
-        Raises:
-            ValueError: If the amount is not positive.
-        """
-        validate_positive_amount(amount,'added cash')
-        self.cash += amount
-        self.cash_inflow += amount
-
-
-    def get_available_cash(self) -> float:
-        """
-        Return the current available cash in the portfolio.
-
-        Returns:
-            float: The cash balance.
-        """
-        return self.cash
 
 
     # --- Trading ---
 
-    def invest(self,ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool) -> bool:
+    def invest(self, ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool) -> bool:
         """
         Attempt to invest allocated funds into a specified asset.
 
