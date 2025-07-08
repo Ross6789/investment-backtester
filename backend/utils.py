@@ -190,3 +190,39 @@ def validate_date_order(start_date: date, end_date: date) -> None:
     if end_date < start_date :
         raise ValueError("Invalid dates : start date must be before end date")
     
+
+# --- Scheduling Utilities ---
+
+def generate_recurring_dates(self, start_date: date, end_date: date, frequency: str) -> set[date]:
+    """
+    Generate a set of recurring dates within a date range based on the given frequency.
+
+    Args:
+        start_date (date): The starting date for generating cashflow dates (inclusive).
+        end_date (date): The ending date for generating cashflow dates (inclusive).
+        frequency (str): Frequency of the recurring cashflows.
+
+    Returns:
+        set[date]: A set of dates evenly spaced based on the frequency.
+
+    Raises:
+        ValueError: If the provided frequency is invalid.
+    """
+    dates = set()
+    cashflow_date = start_date
+    while cashflow_date <= end_date:
+        dates.add(cashflow_date)
+        match frequency:
+            case 'daily':
+                cashflow_date += relativedelta(days=1)
+            case 'weekly':
+                cashflow_date += relativedelta(weeks=1)
+            case 'monthly':
+                cashflow_date += relativedelta(months=1)
+            case 'quarterly':
+                cashflow_date += relativedelta(months=3)
+            case 'yearly':
+                cashflow_date += relativedelta(years=1)
+            case _:
+                raise ValueError(f'Invalid frequency : {frequency}')
+    return set(dates)

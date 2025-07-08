@@ -3,7 +3,7 @@ from math import ceil
 from backend.utils import validate_positive_amount
 
 
-class Portfolio:
+class BasePortfolio:
     """
     Represents an investment portfolio with cash and holdings.
 

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import date
 import polars as pl
-from backend.backtest.portfolio import Portfolio
+from backend.backtest.portfolios.base_portfolio import BasePortfolio
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.enums import ReinvestmentFrequency
 from dateutil.relativedelta import relativedelta
@@ -14,10 +14,9 @@ class BacktestBase(ABC):
             self.target_portfolio = target_portfolio
             self.config = config
 
-                # Instantiate portfolio and data
-            self.portfolio = Portfolio(self)
+            # Instantiate portfolio and data
+            self.portfolio = BasePortfolio(self)
             self._generate_master_calendar()
-            self._generate_ticker_active_dates()
 
     @abstractmethod
     def run(self):
@@ -70,7 +69,9 @@ class BacktestBase(ABC):
         - Trading tickers are where 'is_trading_day' is True.
         - Result is saved to `self.master_calendar_dict`.
         """
-        
+
+        date_range = pl.DataFrame(pl.date_range(self.start_date,self.end_date,interval="1d",eager=True))
+
         ticker_active_dates = self._generate_ticker_active_dates()
         
         # Generate all dates where each ticker was active
@@ -106,11 +107,16 @@ class BacktestBase(ABC):
             .sort('date')
         )
 
-        # Join active and trading tickers
-        master_calendar = active_tickers_calendar.join(trading_tickers_calendar, on='date',how='left')
+        # Join active and trading tickers to full date range and fill nulls with empty lists
+        master_calendar = (
+            date_range
+            .join(active_tickers_calendar,on='date',how='left')
+            .join(trading_tickers_calendar, on='date',how='left')
+            .fill_null([])
+        )
 
         # Convert to dictionary for quick lookups
-        self.master_calendar_dict = {
+        self.master_calendar = {
             row["date"]: {
                 "active_tickers": set(row["active_tickers"]),
                 "trading_tickers": set(row["trading_tickers"])
@@ -118,37 +124,50 @@ class BacktestBase(ABC):
             for row in master_calendar.iter_rows(named=True)
         }
     
+    # --- Ticker Lookup & Filtering ---
 
-    def _generate_recurring_cashflow_dates(self, start_date: date, end_date: date, frequency: ReinvestmentFrequency) -> set[date]:
+    def _find_active_tickers(self, date) -> set[str]:
         """
-        Generate a set of recurring cashflow dates within a date range based on the given frequency.
+        Find all tickers that are active on a given date using the master calendar.
 
         Args:
-            start_date (date): The starting date for generating cashflow dates (inclusive).
-            end_date (date): The ending date for generating cashflow dates (inclusive).
-            frequency (ReinvestmentFrequency): Frequency of the recurring cashflows.
+            date (date): The date to check.
 
         Returns:
-            set[date]: A set of dates on which recurring cashflows occur.
-
-        Raises:
-            ValueError: If the provided frequency is invalid.
+            Set[str]: A set of ticker symbols active on the specified date.
         """
-        dates = set()
-        cashflow_date = start_date
-        while cashflow_date <= end_date:
-            dates.add(cashflow_date)
-            match frequency:
-                case ReinvestmentFrequency.DAILY:
-                    cashflow_date += relativedelta(days=1)
-                case ReinvestmentFrequency.WEEKLY:
-                    cashflow_date += relativedelta(weeks=1)
-                case ReinvestmentFrequency.MONTHLY:
-                    cashflow_date += relativedelta(months=1)
-                case ReinvestmentFrequency.QUARTERLY:
-                    cashflow_date += relativedelta(months=3)
-                case ReinvestmentFrequency.YEARLY:
-                    cashflow_date += relativedelta(years=1)
-                case _:
-                    raise ValueError('Invalid recurring investment frequency')
-        return set(dates)
+        active_tickers = self.master_calendar.get(date, {}).get("active_tickers", set())
+                
+        return active_tickers
+    
+    # def _find_trading_tickers(self, date) -> set[str]:
+    #     """
+    #     Find all tickers that are trading on a given date using the master calendar.
+
+    #     Args:
+    #         date (date): The date to check.
+
+    #     Returns:
+    #         Set[str]: A set of ticker symbols trading on the specified date.
+    #     """
+    #     trading_tickers = self.master_calendar.get(date, {}).get("trading_tickers", set())
+        
+    #     return trading_tickers
+    
+    def _all_active_tickers_trading(self, date: date) -> bool:
+        """
+        Check whether all active tickers on a given date are also trading.
+
+        Args:
+            date (date): The date to check.
+
+        Returns:
+            bool: True if all active tickers are trading and at least one ticker is active,
+                False otherwise.
+        """
+        day_info = self.master_calendar.get(date, {})
+        active_tickers = day_info.get("active_tickers", set())
+        trading_tickers = day_info.get("trading_tickers", set())
+
+        return active_tickers == trading_tickers and len(active_tickers) > 0
+

@@ -1,6 +1,6 @@
 import polars as pl
 from datetime import date
-from backend.backtest.portfolio import Portfolio
+from backend.backtest.portfolios.base_portfolio import BasePortfolio
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.enums import OrderSide, RebalanceFrequency, BacktestMode, ReinvestmentFrequency
 from dateutil.relativedelta import relativedelta
@@ -26,112 +26,10 @@ class BacktestEngine:
             self.target_portfolio = target_portfolio
             self.config = config
 
-            # Instantiate portfolio and data
-            self.portfolio = Portfolio(self)
-            self.master_calendar = self._generate_master_calendar()
-            self.ticker_active_dates = self._generate_ticker_active_dates()
-                       
-            # Instantiate last rebalance day and order book
-            self.last_rebalance_date = self.master_calendar.select(pl.col('date').min()).item()
-            self.pending_orders = None
-            self.executed_orders = None
 
-            # Optional : recurring cashflow
-            if self.config.recurring_investment:
-                self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates(start_date,end_date, self.config.recurring_investment.frequency)
 
-            # Optional : dividends (if in manual mode)
-            if self.config.mode == BacktestMode.REALISTIC:
-                self.dividend_dates = self._load_dividend_dates()
    
-
-    # --- Data Generation & Loading ---
-
-    def _load_dividend_dates(self) -> set[date]:
-        """
-        Extract all unique dates from the backtest data where dividends were issued.
-
-        Returns:
-            set[date]: A set of dates on which at least one ticker paid a dividend.
-        """
-        dividend_dates = (
-            self.backtest_data
-            .filter(pl.col('dividend').is_not_null())
-            .get_column('date')
-            .to_list()
-        )
-        return set(dividend_dates)
-
-
-    # --- Ticker Lookup & Filtering ---
-
-    def _find_active_tickers(self, date) -> set[str]:
-        """
-        Find all tickers that are active on a given date.
-
-        A ticker is considered active if the given date falls between its first and last recorded price dates (inclusive).
-
-        Args:
-            date (date): The date to check for active tickers.
-
-        Returns:
-            set[str]: A set of ticker symbols active on the specified date.
-
-        Raises:
-            ValueError: If no tickers are active on the given date.
-        """
-        active_tickers = (
-            self.ticker_active_dates
-            .filter((pl.col('first_active_date')<=date)&(pl.col('last_active_date')>=date))
-            .get_column('ticker')
-            )
-        
-        if active_tickers.is_empty():
-            raise ValueError(f'No active tickers on date : {date}')
-        
-        return set(active_tickers)
-            
-
-    def _find_trading_tickers(self, current_date: date) -> set[str]:
-        """
-        Retrieve the set of tickers that are actively trading on the specified date.
-
-        Args:
-            current_date (date): The date for which to find trading tickers.
-
-        Returns:
-            set[str]: A set of ticker symbols trading on the given date.
-        """
-        trading_tickers = (
-            self.master_calendar
-            .filter(pl.col('date')==current_date)
-            .get_column('trading_tickers')
-            .explode()
-        )
-        return set(trading_tickers)
-    
-    
-    def _all_active_tickers_trading(self, current_date: date) -> bool:
-        """
-        Check if all active tickers on the given date are also trading on that date.
-
-        Args:
-            current_date (date): The date to check.
-
-        Returns:
-            bool: True if every active ticker is trading on the given date, False otherwise.
-
-        Raises:
-            ValueError: If no tickers are active on the given date. (i.e. no tickers had begin trading yet or had not trading permanently)
-        """
-        active_tickers = self._find_active_tickers(current_date)
-        trading_tickers = self._find_trading_tickers(current_date)
-
-        return active_tickers==trading_tickers
-    
-    def is_fully_active_date(self, date: date) -> bool:
-        return self.first_date_all_active <= date <= self.last_date_all_active
-                
+               
 
     # --- Portfolio Normalization ---
 
