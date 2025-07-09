@@ -193,7 +193,7 @@ def validate_date_order(start_date: date, end_date: date) -> None:
 
 # --- Scheduling Utilities ---
 
-def generate_recurring_dates(self, start_date: date, end_date: date, frequency: str) -> set[date]:
+def generate_recurring_dates(start_date: date, end_date: date, frequency: str) -> set[date]:
     """
     Generate a set of recurring dates between start_date and end_date (inclusive),
     spaced according to the specified frequency. The start_date itself is excluded

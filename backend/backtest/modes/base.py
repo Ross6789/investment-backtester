@@ -16,10 +16,15 @@ class BaseBacktest(ABC):
             self.config = config
 
             # Generate master calendar
-            self._generate_master_calendar()
+            calender_df, calender_dict = self._generate_master_calendar()
+            self.calendar_df = calender_df
+            self.calendar_dict = calender_dict
+
+            # Find first trading day
+            self.first_trading_date = self._get_first_trading_date()
 
             # Scheduled cashflow : Compute dates in advance
-            recurring_freq = self.config.recurring_investment.frequency if self.config.recurring_investment is not None else None
+            recurring_freq = self.config.recurring_investment.frequency.value if self.config.recurring_investment is not None else None
             self.cashflow_dates = (
                 generate_recurring_dates(start_date,end_date, recurring_freq)
                 if recurring_freq is not None else set()
@@ -65,7 +70,7 @@ class BaseBacktest(ABC):
         return ticker_active_dates
 
 
-    def _generate_master_calendar(self) -> None:
+    def _generate_master_calendar(self) -> tuple[pl.DataFrame, dict]:
         """
         Build master calendar mapping each date to active and trading tickers.
 
@@ -73,12 +78,12 @@ class BaseBacktest(ABC):
         - active_tickers: tickers active within their first/last active date range.
         - trading_tickers: tickers trading on that date ('is_trading_day' == True).
 
-        Stores results in:
-        - self.master_calendar_df (Polars DataFrame) for efficient filtering.
+        Returns:
+        - master_calendar_df (Polars DataFrame) for efficient filtering.
         - self.master_calendar_dict (dict) for fast date-based lookup.
         """
 
-        date_range = pl.DataFrame(pl.date_range(self.start_date,self.end_date,interval="1d",eager=True))
+        date_range = pl.DataFrame(pl.date_range(self.start_date,self.end_date,interval="1d",eager=True).alias('date'))
 
         ticker_active_dates = self._generate_ticker_active_dates()
         
@@ -116,11 +121,21 @@ class BaseBacktest(ABC):
         )
 
         # Join active and trading tickers to full date range and fill nulls with empty lists
-        master_calendar = (
+        master_calendar_df = (
             date_range
             .join(active_tickers_calendar,on='date',how='left')
             .join(trading_tickers_calendar, on='date',how='left')
-            .fill_null([])
+            .with_columns([
+                pl.when(pl.col("active_tickers").is_null())
+                .then(pl.lit([]).cast(pl.List(pl.String)))
+                .otherwise(pl.col("active_tickers"))
+                .alias("active_tickers"),
+
+                pl.when(pl.col("trading_tickers").is_null())
+                .then(pl.lit([]).cast(pl.List(pl.String)))
+                .otherwise(pl.col("trading_tickers"))
+                .alias("trading_tickers"),
+            ])
         )
 
         # Convert to dictionary for quick lookups
@@ -129,13 +144,28 @@ class BaseBacktest(ABC):
                 "active_tickers": set(row["active_tickers"]),
                 "trading_tickers": set(row["trading_tickers"])
             }
-            for row in master_calendar.iter_rows(named=True)
+            for row in master_calendar_df.iter_rows(named=True)
         }
 
-        # Save internally
-        self.master_calendar_df =  master_calendar # For efficeint scan and fitlering
-        self.master_calendar_dict = master_calendar_dict # For efficient date lookups
+        return master_calendar_df , master_calendar_dict
 
+
+    def _get_first_trading_date(self) -> date:
+        """
+        Returns the earliest date where any ticker is trading.
+
+        Raises:
+            ValueError: If no tickers are active in the backtest date range.
+        """
+        filtered = self.calendar_df.filter(pl.col("trading_tickers") != [])
+
+        if filtered.height == 0:
+            raise ValueError("No tickers active during backtest date range")
+        
+        first_date = filtered.select(pl.col("date")).min()
+
+        return first_date[0, 0] 
+    
 
     # --- Ticker Lookup & Filtering ---
 
@@ -149,7 +179,7 @@ class BaseBacktest(ABC):
         Returns:
             Set[str]: A set of ticker symbols active on the specified date.
         """
-        active_tickers = self.master_calendar_dict.get(date, {}).get("active_tickers", set())
+        active_tickers = self.calendar_dict.get(date, {}).get("active_tickers", set())
                 
         return active_tickers
 
@@ -171,11 +201,8 @@ class BaseBacktest(ABC):
         """
         active_tickers = self._find_active_tickers(date)
         filtered_weights = {ticker: weight for ticker, weight in self.target_portfolio.weights.items() if ticker in active_tickers}
-
         total_weight = sum(filtered_weights.values())
-
         normalized_weights = {ticker : weight / total_weight for ticker, weight in filtered_weights.items()}
-        
         return normalized_weights
     
 

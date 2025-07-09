@@ -1,5 +1,5 @@
 from backend.backtest.modes.base import BaseBacktest
-from backend.backtest.portfolios.cashflow import CashflowPortfolio
+from backend.backtest.portfolios.realistic import RealisticPortfolio
 from datetime import date
 import polars as pl
 from backend.models import TargetPortfolio, BacktestConfig
@@ -28,7 +28,7 @@ class RealisticBacktest(BaseBacktest):
         super().__init__(start_date, end_date, backtest_data, target_portfolio,config)
 
         # Initialise specific portfolio for this mode
-        self.portfolio = CashflowPortfolio(self)
+        self.portfolio = RealisticPortfolio(self)
 
         # Instantiate previous rebalance day (set as first day a ticker is trading) and order books
         self.previous_rebalance_date = self._get_first_trading_date()
@@ -40,22 +40,6 @@ class RealisticBacktest(BaseBacktest):
 
 
     # --- Data Generation & Loading ---
-
-    def _get_first_trading_date(self) -> date:
-        """
-        Returns the earliest date where any ticker is trading.
-
-        Raises:
-            ValueError: If no tickers are active in the date range.
-        """
-        filtered = self.master_calendar_df.filter(pl.col("trading_tickers").arr.len() > 0)
-
-        if filtered.height == 0:
-            raise ValueError("No tickers active during specified date range")
-        
-        first_date = filtered.select(pl.col("date")).min()
-
-        return first_date[0, 0] 
     
     def _load_dividend_dates(self) -> set[date]:
         """
@@ -88,7 +72,7 @@ class RealisticBacktest(BaseBacktest):
                         Returns None if no such date exists in the calendar.
         """
         trading_date = (
-            self.master_calendar_df
+            self.calendar_df
             .filter((pl.col('date') >= target_date) & (pl.col('trading_tickers').list.contains(ticker)))
             .sort('date')
             .select('date')
@@ -126,7 +110,6 @@ class RealisticBacktest(BaseBacktest):
             self.pending_orders = new_orders_df
         else:
             self.pending_orders = pl.concat([self.pending_orders, new_orders_df])
-
 
     def _execute_orders(self, current_date: date, prices: dict[str, float]):
         """
@@ -214,7 +197,7 @@ class RealisticBacktest(BaseBacktest):
             bool: True if all active tickers are trading and at least one ticker is active,
                 False otherwise.
         """
-        day_info = self.master_calendar_dict.get(date, {})
+        day_info = self.calendar_dict.get(date, {})
         active_tickers = day_info.get("active_tickers", set())
         trading_tickers = day_info.get("trading_tickers", set())
 
@@ -275,7 +258,7 @@ class RealisticBacktest(BaseBacktest):
             - Updates rebalance status and records the date of last rebalance.
         """
         # Find portfolio value
-        total_value = self.portfolio.get_value(prices)
+        total_value = self.portfolio.get_total_value(prices)
 
         buy_order_targets = {}
         sell_order_targets = {}
@@ -333,15 +316,10 @@ class RealisticBacktest(BaseBacktest):
         dividend_snapshots = []
 
         # Iterate through date range in master calendar
-        for current_date in self.master_calendar_df['date']:
+        for current_date in self.calendar_df['date']:
 
-            # Reset portfolio flags and daily metrics and order flag
+            # Reset portfolio for the day
             self.portfolio.daily_reset()
-            place_order = False
-            normalized_weights = None
-            
-            # Fetch daily prices
-            daily_prices = self._get_prices_on_date(current_date)
 
             # --- HANDLE CASHFLOWS ---
 
@@ -354,6 +332,24 @@ class RealisticBacktest(BaseBacktest):
             if current_date in self.cashflow_dates:
                 self.portfolio.add_cash(self.config.recurring_investment.amount)
                 place_order = True
+
+            # --- CHECK PORTFOLIO ACTIVE ---
+
+            # Skip to next date if no tickers active active/trading yet, but still need to take a cash snapshot 
+            if current_date < self.first_trading_date:
+                cash_snapshots.append(self.portfolio.get_cash_snapshot(current_date))
+                continue
+
+            # --- PRICE FETCH AND PORTFOLIO RESET ---
+
+            # Fetch daily prices
+            daily_prices = self._get_prices_on_date(current_date)
+
+            # Reset order variables
+            place_order = False
+            normalized_weights = None
+
+            # --- DIVIDENDS ---
             
             # Dividends
             if current_date in self.dividend_dates:
@@ -386,8 +382,9 @@ class RealisticBacktest(BaseBacktest):
 
             # --- EXECUTE ORDERS ---
 
-            if self.pending_orders is not None and not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
-                self._execute_orders(current_date,daily_prices)
+            if self.pending_orders is not None: 
+                if not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
+                    self._execute_orders(current_date,daily_prices)
 
             # --- RECORD SNAPSHOTS ---
 
@@ -408,4 +405,6 @@ class RealisticBacktest(BaseBacktest):
         }
 
         return history
-    
+
+    def analyse(self):
+        pass

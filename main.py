@@ -10,7 +10,7 @@ from backend.backtest.result import BacktestResult
 csv_save_path = config.get_csv_backtest_result_path()
 
 # User choices
-mode = 'manual'
+mode = 'realistic'
 start_date = date.fromisoformat("1950-01-01")
 end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
@@ -34,7 +34,7 @@ configuration_dict = {
     "Target weights": target_weights,
     "Initial amount": initial_investment,
     "Recurring investment amount": None if recurring_investment == None else recurring_investment.amount,
-    "Recurring investment frequency": None if recurring_investment == None else recurring_investment.frequency,
+    "Recurring investment frequency": None if recurring_investment == None else recurring_investment_frequency,
     "Fractional shares allowed": fractional_shares,
     "Reinvest dividends": reinvest_dividends,
     "Rebalance frequency": rebalance_frequency

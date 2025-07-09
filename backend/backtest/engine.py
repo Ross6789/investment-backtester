@@ -6,6 +6,7 @@ from backend.enums import BacktestMode
 from backend.backtest.modes.base import BaseBacktest
 from backend.backtest.modes.basic import BasicBacktest
 from backend.backtest.modes.realistic import RealisticBacktest
+from backend.backtest.result import BacktestResult
 
 class BacktestEngine:
 
@@ -50,5 +51,6 @@ class BacktestEngine:
         )
 
         run_data = backtest.run()
-        return backtest.analyse(run_data)
+        return run_data
+
     

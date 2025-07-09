@@ -4,7 +4,7 @@ from backend.utils import validate_positive_amount
 from backend.backtest.portfolios.base import BasePortfolio
 
 
-class CashflowPortfolio(BasePortfolio):
+class RealisticPortfolio(BasePortfolio):
    
     # --- Initialisation  --- 
     
@@ -16,7 +16,6 @@ class CashflowPortfolio(BasePortfolio):
         Args:
             backtest (Backtest): The backtest engine instance
         """
-        self.cash = 0.0
         self.dividends = []
         self.dividend_income = 0.0
 
@@ -29,31 +28,6 @@ class CashflowPortfolio(BasePortfolio):
         self.dividends = []
         self.dividend_income = 0.0
 
-
-    # --- Cash management ---
-
-    def add_cash(self, amount: float):
-        """
-        Add a specified amount to the holdings cash balance and portfolio cash inflow.
-
-        Args:
-            amount (float): The amount of cash to add. Must be greater than 0.
-
-        Raises:
-            ValueError: If the amount is not positive.
-        """
-        super().add_cash(amount)
-        self.cash_inflow += amount
-
-
-    def get_available_cash(self) -> float:
-        """
-        Return the current available cash in the portfolio.
-
-        Returns:
-            float: The cash balance.
-        """
-        return self.cash
     
     # --- Trading ---
 
@@ -92,7 +66,7 @@ class CashflowPortfolio(BasePortfolio):
         # Make investment
         self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
         self.holdings[ticker] = self.holdings[ticker]
-        self.cash -= total_cost
+        self.cash_balance -= total_cost
         return True
 
 
@@ -136,7 +110,7 @@ class CashflowPortfolio(BasePortfolio):
         # Make sale
         self.holdings[ticker] = units_owned - units_sold
         self.holdings[ticker] = self.holdings[ticker]
-        self.cash += total_earned
+        self.cash_balance += total_earned
 
         return True
     
@@ -186,20 +160,6 @@ class CashflowPortfolio(BasePortfolio):
         for div in self.dividends:
             total += div.get('total_dividend',0.0)
         return total
-    
-    # --- Valuation ---
-
-    def get_value(self, prices: dict[str, float]) -> float:
-        """
-        Calculate the total portfolio value.
-
-        Args:
-            prices (dict[str, float]): Current prices for each ticker.
-
-        Returns:
-            float: Sum of cash on hand and the total value of holdings based on given prices.
-        """
-        return self.cash + self.get_total_holdings_value(prices)
 
 
     # --- Snapshotting ---
@@ -217,13 +177,13 @@ class CashflowPortfolio(BasePortfolio):
         """
 
         return {
-            'cash': self._get_cash_snapshot(date),
+            'cash': self.get_cash_snapshot(date),
             'holdings': self._get_holdings_snapshot(date,prices),
             'dividends':self._get_dividends_snapshot(date)
         }
 
 
-    def _get_cash_snapshot(self, date: date) -> dict:
+    def get_cash_snapshot(self, date: date) -> dict:
         """
         Create a snapshot of the portfolio's cash-related metrics for a specific date.
 
@@ -236,7 +196,7 @@ class CashflowPortfolio(BasePortfolio):
         
         return {
             'date': date,
-            'cash_balance': self.cash,
+            'cash_balance': self.cash_balance,
             'cash_inflow': self.cash_inflow,
             'dividend_income':self.dividend_income,
             'did_rebalance':self.did_rebalance

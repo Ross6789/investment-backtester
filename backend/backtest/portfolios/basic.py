@@ -80,12 +80,12 @@ class BasicPortfolio(BasePortfolio):
         """
 
         return {
-            'cash': self._get_cash_snapshot(date),
+            'cash': self.get_cash_snapshot(date),
             'holdings': self._get_holdings_snapshot(date,prices)
         }
 
 
-    def _get_cash_snapshot(self, date: date) -> dict:
+    def get_cash_snapshot(self, date: date) -> dict:
         """
         Create a snapshot of the portfolio's cash-related metrics for a specific date.
 
@@ -93,40 +93,15 @@ class BasicPortfolio(BasePortfolio):
             date (date): The date of the snapshot.
 
         Returns:
-            dict: Contains date, cash balance, cash inflow, dividend income, and rebalance flag.
+            dict: Contains date, cash balance, cash inflow and rebalance flag.
         """
         
         return {
             'date': date,
+            'cash_balance':self.cash_balance,
             'cash_inflow': self.cash_inflow,
             'did_rebalance':self.did_rebalance
         }
     
 
-    def _get_holdings_snapshot(self, date: date, prices: dict[str, float]) -> list[dict]: 
-        """
-        Generate a snapshot of the portfolio's holdings for a specific date.
-
-        Args:
-            date (date): The date of the snapshot.
-            prices (dict[str, float]): Current prices per ticker.
-
-        Returns:
-            list[dict]: A list of dictionaries, each containing date, ticker, units held, and price.
-                        Returns an empty list if no holdings exist.
-        """
-    
-        # Check for empty holdings before returning snapshot
-        if not self.holdings:
-            return []
-        
-        return [
-            {
-                'date': date,
-                'ticker': ticker,
-                'units': units,
-                'price': prices.get(ticker)
-            }
-            for ticker, units in self.holdings.items()
-        ]
 

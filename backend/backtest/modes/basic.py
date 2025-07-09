@@ -25,7 +25,7 @@ class BasicBacktest(BaseBacktest):
         self.portfolio = BasicPortfolio(self)
 
         # Scheduled rebalances : compute dates in advance
-        rebalance_freq = self.config.strategy.rebalance_frequency
+        rebalance_freq = self.config.strategy.rebalance_frequency.value
         self.rebalance_dates = (
             generate_recurring_dates(start_date,end_date, rebalance_freq)
             if rebalance_freq != 'never' else set()
@@ -42,7 +42,7 @@ class BasicBacktest(BaseBacktest):
             normalized_target_weights (dict[str, float]): Target asset weightings normalized to active tickers.
         """
         # Find total portfolio value
-        value = self.portfolio.get_total_holdings_value(prices)
+        value = self.portfolio.get_total_value(prices)
 
         # Find balanced allocations
         target_allocations = self._get_ticker_allocations_by_target(normalized_target_weights,value)
@@ -58,51 +58,79 @@ class BasicBacktest(BaseBacktest):
 
     def run(self) -> dict[str, pl.DataFrame]:
         """
-        Executes the backtest over the defined date range.
+        Runs the BASIC mode backtest over the full date range.
 
-        Iterates through each date in the master calendar to:
-        - Reset daily portfolio metrics
-        - Process initial and recurring cash inflows
-        - Invest cash inflows according to target allocations
-        - Rebalance portfolio on scheduled dates
-        - Capture daily portfolio snapshots of cash and holdings
+        Assumptions:
+        - Immediate investment of all available cash (fractional shares allowed)
+        - Uses adjusted prices
+        - Cash accumulates if no tickers are active
+
+        For each date:
+        - Apply cash inflows
+        - Skip dates before first tradable ticker
+        - Fetch prices and reset portfolio metrics
+        - Rebalance or invest cash based on target weights
+        - Record daily snapshots
 
         Returns:
-            dict[str, pl.DataFrame]: Dictionary containing time series of daily cash and holdings snapshots.
+            dict[str, pl.DataFrame]: 
+                - "cash": Daily cash balances
+                - "holdings": Daily asset holdings
         """
         # Create empty list for portfolio snapshots
         cash_snapshots = []
         holding_snapshots = []
 
         # Iterate through date range in master calendar
-        for current_date in self.master_calendar_df['date']:
-
-            # Reset portfolio flags and daily metrics and order flag
+        for current_date in self.calendar_df['date']:
+    
+            # Reset portfolio for the day
             self.portfolio.daily_reset()
-            normalized_weights = None
-            
+
+            # --- HANDLE CASHFLOWS ---
+
+            if current_date == self.start_date:
+                self.portfolio.add_cash(self.config.initial_investment)
+                invested = False
+            if current_date in self.cashflow_dates:
+                self.portfolio.add_cash(self.config.recurring_investment.amount)
+                invested = False
+
+            # --- CHECK PORTFOLIO ACTIVE ---
+
+            # Skip to next date if no tickers active active/trading yet, but still need to take a cash snapshot 
+            if current_date < self.first_trading_date:
+                cash_snapshots.append(self.portfolio.get_cash_snapshot(current_date))
+                continue
+
+            # --- PRICE FETCH AND PORTFOLIO RESET ---
+
             # Fetch daily prices
             daily_prices = self._get_prices_on_date(current_date)
 
-            # Cash inflows
-            if current_date == self.start_date:
-                self.portfolio.add_cash(self.config.initial_investment)
-            if current_date in self.cashflow_dates:
-                self.portfolio.add_cash(self.config.recurring_investment.amount)
-            daily_cashflow = self.portfolio.cash_inflow
+            # Reset target weights
+            normalized_weights = None
 
+            # --- MANAGE INVESTING ---
+            
             # Calculate normalized targets if required
-            if  daily_cashflow > 0 or current_date in self.rebalance_dates:
+            if  not invested or current_date in self.rebalance_dates:
                 normalized_weights = self._normalize_portfolio_targets(current_date)
 
-            # Invest daily cashflow
-            if daily_cashflow > 0:
-                allocated_targets = self._get_ticker_allocations_by_target(normalized_weights,daily_cashflow)
-                self.portfolio.invest(daily_cashflow,allocated_targets,daily_prices,True)
+                # Rebalancing overrides any other investing 
+                if current_date in self.rebalance_dates:
+                    self.rebalance(current_date,daily_prices,normalized_weights)
+
+                # No rebalancing - safe to invest available cash based on target allocations
+                else:
+                    total_amount = self.portfolio.get_available_cash()
+                    allocated_targets = self._get_ticker_allocations_by_target(normalized_weights,total_amount)
+                    for ticker, amount in allocated_targets:
+                        price = daily_prices.get(ticker)
+                        self.portfolio.invest(ticker,amount,price,True)
+                    invested = True
     
-            # Rebalance
-            if current_date in self.rebalance_dates:
-                self.rebalance(current_date,daily_prices,normalized_weights)
+            # --- SNAPSHOTS ---
 
             # Fetch daily snapshot and add to relevant snapshot list
             daily_snapshot = self.portfolio.get_daily_snapshot(current_date,daily_prices)

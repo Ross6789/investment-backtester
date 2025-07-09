@@ -12,7 +12,6 @@ class BasePortfolio(ABC):
     Attributes:
         cash_balance (float): The current cash available.
         holdings (dict[str, float]): Dictionary mapping ticker symbols to number of shares held.
-        strategy (Strategy): The investment strategy being followed.
     
     """
 
@@ -26,6 +25,7 @@ class BasePortfolio(ABC):
             backtest (Backtest): The backtest engine instance
         """
         self.backtest = backtest
+        self.cash_balance = 0.0
         self.cash_inflow = 0.0
         self.did_rebalance = False
         self.holdings = {}
@@ -39,7 +39,7 @@ class BasePortfolio(ABC):
         self.did_rebalance = False
 
 
-    # --- Cash ingestion ---
+    # --- Cash management ---
 
     def add_cash(self, amount: float):
         """       
@@ -52,7 +52,18 @@ class BasePortfolio(ABC):
             ValueError: If the amount is not positive.
         """
         validate_positive_amount(amount,'added cash')
+        self.cash_balance += amount
         self.cash_inflow += amount
+
+
+    def get_available_cash(self) -> float:
+        """
+        Return the current available cash in the portfolio.
+
+        Returns:
+            float: The cash balance.
+        """
+        return self.cash_balance
 
 
     # --- Trading ---
@@ -69,7 +80,7 @@ class BasePortfolio(ABC):
 
     # --- Valuations ---
 
-    def get_total_holdings_value(self, prices: dict[str, float]) -> float:
+    def get_total_value(self, prices: dict[str, float]) -> float:
         """
         Calculate the total value of current holdings.
 
@@ -79,12 +90,14 @@ class BasePortfolio(ABC):
         Returns:
             float: The total portfolio value.
         """
+        cash = self.get_available_cash()
+        holding_value = 0.0
         for ticker, units in self.holdings.items():
             price = prices.get(ticker,0)
             value = units * price
-            total_value += value
-        return total_value
-
+            holding_value += value
+        return cash + holding_value 
+    
 
     # --- Snapshotting ---
 
@@ -124,3 +137,4 @@ class BasePortfolio(ABC):
             }
             for ticker, units in self.holdings.items()
         ]
+    
