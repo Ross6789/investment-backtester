@@ -3,12 +3,10 @@ from datetime import date
 from typing import Type
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.enums import BacktestMode
-from backend.backtest.modes.base import BaseBacktest
-from backend.backtest.modes.basic import BasicBacktest
-from backend.backtest.modes.realistic import RealisticBacktest
-from backend.backtest.result import BacktestResult
+from backend.backtest.engine import BaseBacktest,BasicBacktest,RealisticBacktest
 
-class BacktestEngine:
+
+class BacktestRunner:
 
     BACKTEST_CLASS_MAP: dict[BacktestMode, Type[BaseBacktest]] = {
         BacktestMode.BASIC: BasicBacktest,

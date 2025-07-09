@@ -1,11 +1,10 @@
-from backend.backtest.modes.base import BaseBacktest
-from backend.backtest.portfolios.realistic import RealisticPortfolio
 from datetime import date
 import polars as pl
+from dateutil.relativedelta import relativedelta
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.enums import OrderSide, RebalanceFrequency
-from dateutil.relativedelta import relativedelta
-
+from backend.backtest.engine import BaseBacktest
+from backend.backtest.portfolios import RealisticPortfolio
 
 class RealisticBacktest(BaseBacktest):
 
@@ -305,6 +304,7 @@ class RealisticBacktest(BaseBacktest):
 
         Returns:
             dict[str, pl.DataFrame]: A dictionary containing historical portfolio data:
+                - "calendar": Master calendar with active and trading tickers per date
                 - "cash": Daily cash balances
                 - "holdings": Daily asset holdings
                 - "dividends": Dividend income earned or reinvested
@@ -398,6 +398,7 @@ class RealisticBacktest(BaseBacktest):
 
         # Bulk convert snapshots into polars dataframe for better processing and package within dictionary
         history = {
+            "calendar":self.calendar_df,
             "cash":pl.DataFrame(cash_snapshots),
             "holdings":pl.DataFrame(holding_snapshots),
             "dividends":pl.DataFrame(dividend_snapshots),
@@ -405,6 +406,3 @@ class RealisticBacktest(BaseBacktest):
         }
 
         return history
-
-    def analyse(self):
-        pass

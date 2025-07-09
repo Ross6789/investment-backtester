@@ -1,6 +1,6 @@
 from datetime import date
 from backend.utils import validate_positive_amount
-from backend.backtest.portfolios.base import BasePortfolio
+from backend.backtest.portfolios import BasePortfolio
 
 class BasicPortfolio(BasePortfolio):
 
@@ -81,7 +81,7 @@ class BasicPortfolio(BasePortfolio):
 
         return {
             'cash': self.get_cash_snapshot(date),
-            'holdings': self.get_holdings_snapshot(date,prices)
+            'holdings': self._get_holdings_snapshot(date,prices)
         }
 
 

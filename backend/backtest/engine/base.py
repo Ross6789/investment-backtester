@@ -1,11 +1,9 @@
 from abc import ABC, abstractmethod
 from datetime import date
 import polars as pl
-from backend.backtest.portfolios.base import BasePortfolio
 from backend.models import TargetPortfolio, BacktestConfig
-from backend.enums import ReinvestmentFrequency
-from dateutil.relativedelta import relativedelta
 from backend.utils import generate_recurring_dates
+
 
 class BaseBacktest(ABC):
     def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
@@ -35,13 +33,11 @@ class BaseBacktest(ABC):
     def rebalance(self, current_date: date, prices: dict[str, float], normalized_target_weights: dict[str, float]) -> None:
         pass
 
-    @abstractmethod
-    def run(self):
-        pass
 
     @abstractmethod
-    def analyse(self):
+    def run(self) -> dict[str, pl.DataFrame]:
         pass
+
 
     # --- Data Generation & Loading ---
 

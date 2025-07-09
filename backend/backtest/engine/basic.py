@@ -1,9 +1,9 @@
-from backend.backtest.modes.base import BaseBacktest
-from backend.backtest.portfolios.basic import BasicPortfolio
 from datetime import date
 import polars as pl
 from backend.models import TargetPortfolio, BacktestConfig, RebalanceFrequency
 from backend.utils import generate_recurring_dates
+from backend.backtest.engine import BaseBacktest
+from backend.backtest.portfolios import BasicPortfolio
 
 class BasicBacktest(BaseBacktest):
 
@@ -74,6 +74,7 @@ class BasicBacktest(BaseBacktest):
 
         Returns:
             dict[str, pl.DataFrame]: 
+                - "calendar": Master calendar with active and trading tickers per date
                 - "cash": Daily cash balances
                 - "holdings": Daily asset holdings
         """
@@ -125,7 +126,7 @@ class BasicBacktest(BaseBacktest):
                 else:
                     total_amount = self.portfolio.get_available_cash()
                     allocated_targets = self._get_ticker_allocations_by_target(normalized_weights,total_amount)
-                    for ticker, amount in allocated_targets:
+                    for ticker, amount in allocated_targets.items():
                         price = daily_prices.get(ticker)
                         self.portfolio.invest(ticker,amount,price,True)
                     invested = True
@@ -139,12 +140,9 @@ class BasicBacktest(BaseBacktest):
 
         # Bulk convert snapshots into polars dataframe for better processing and package within dictionary
         history = {
+            "calendar":self.calendar_df,
             "cash":pl.DataFrame(cash_snapshots),
             "holdings":pl.DataFrame(holding_snapshots),
         }
 
         return history
-
-
-    def analyse(self):
-        pass

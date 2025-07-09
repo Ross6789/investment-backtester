@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime
 from backend.constants import CURRENCY_PRECISION,FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION
 
-class BacktestResult:
+class BacktestExporter:
     """
     A container for the historical results of a portfolio backtest.
 
@@ -15,6 +15,7 @@ class BacktestResult:
         """
         Initialize the BacktestResult with a list of portfolio snapshots.
         """
+        self.calendar = history['calendar']
         self.cash_history = history['cash']
         self.holding_history = history['holdings']
         self.dividend_history = history['dividends']
@@ -33,6 +34,8 @@ class BacktestResult:
         # Convert dataframes to lazyframes
         cash_history_lf = self.cash_history.lazy()
         holding_history_lf = self.holding_history.lazy()
+
+        
         dividend_history_lf = self.dividend_history.lazy()
         order_history_lf = self.order_history.lazy()
 

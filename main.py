@@ -3,14 +3,14 @@ import polars as pl
 from datetime import date
 from backend.pipelines.loader import get_backtest_data
 from backend.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
-from backend.backtest.engine import BacktestEngine
-from backend.backtest.result import BacktestResult
+from backend.backtest.runner import BacktestRunner
+from backend.backtest.exporter import BacktestExporter
 
 # config
 csv_save_path = config.get_csv_backtest_result_path()
 
 # User choices
-mode = 'realistic'
+mode = 'basic'
 start_date = date.fromisoformat("1950-01-01")
 end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
@@ -44,11 +44,11 @@ configuration_dict = {
 backtest_data = get_backtest_data(mode,target_portfolio.get_tickers(),start_date,end_date)
 
 # Create and run backtest
-backtest = BacktestEngine(start_date,end_date,backtest_data,target_portfolio,backtest_config)
+backtest = BacktestRunner(start_date,end_date,backtest_data,target_portfolio,backtest_config)
 print('starting backtest...')
 history = backtest.run()
 print('finished backtest. Analysing results...')
-result = BacktestResult(history)
+result = BacktestExporter(history)
 
 # export results
 print('finished analysing. Exporting results to csv...')

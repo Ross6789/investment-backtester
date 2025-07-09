@@ -1,7 +1,7 @@
 from datetime import date
 from math import ceil
 from backend.utils import validate_positive_amount
-from backend.backtest.portfolios.base import BasePortfolio
+from backend.backtest.portfolios import BasePortfolio
 
 
 class RealisticPortfolio(BasePortfolio):
