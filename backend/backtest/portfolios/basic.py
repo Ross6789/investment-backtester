@@ -81,7 +81,7 @@ class BasicPortfolio(BasePortfolio):
 
         return {
             'cash': self.get_cash_snapshot(date),
-            'holdings': self._get_holdings_snapshot(date,prices)
+            'holdings': self.get_holdings_snapshot(date,prices)
         }
 
 
