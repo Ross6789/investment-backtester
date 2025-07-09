@@ -1,80 +1,37 @@
 from datetime import date
 from math import ceil
 from backend.utils import validate_positive_amount
+from backend.backtest.portfolios import BasePortfolio
 
 
-class Portfolio:
-    """
-    Represents an investment portfolio with cash and holdings.
-
-    Manages buying, selling, rebalancing assets, and tracking portfolio value.
-    Supports strategies with options like fractional shares and dividend reinvestment.
-
-    Attributes:
-        cash_balance (float): The current cash available.
-        holdings (dict[str, float]): Dictionary mapping ticker symbols to number of shares held.
-        strategy (Strategy): The investment strategy being followed.
+class RealisticPortfolio(BasePortfolio):
+   
+    # --- Initialisation  --- 
     
-    """
-
-    # --- Initialisation and reset ---
-    
-    def __init__(self, backtest_engine):
+    def __init__(self, backtest):
+        super().__init__(backtest)
         """
         Initialize the portfolio with backtest engine.
 
         Args:
-            backtest_engine (BacktestEngine): The backtest engine instance
+            backtest (Backtest): The backtest engine instance
         """
-        self.backtest_engine = backtest_engine
-        self.cash = 0.0
-        self.cash_inflow = 0.0
         self.dividends = []
         self.dividend_income = 0.0
-        self.did_rebalance = False
-        self.holdings = {}
 
 
     def daily_reset(self) -> None:
         """
         Reset daily-tracked portfolio attributes.
         """
-        self.cash_inflow = 0.0
+        super().daily_reset()
         self.dividends = []
         self.dividend_income = 0.0
-        self.did_rebalance = False
 
-
-    # --- Cash management ---
-
-    def add_cash(self, amount: float):
-        """
-        Add a specified amount to the holdings cash balance.
-
-        Args:
-            amount (float): The amount of cash to add. Must be greater than 0.
-
-        Raises:
-            ValueError: If the amount is not positive.
-        """
-        validate_positive_amount(amount,'added cash')
-        self.cash += amount
-        self.cash_inflow += amount
-
-
-    def get_available_cash(self) -> float:
-        """
-        Return the current available cash in the portfolio.
-
-        Returns:
-            float: The cash balance.
-        """
-        return self.cash
-
-
+    
     # --- Trading ---
 
-    def invest(self,ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool) -> bool:
+    def invest(self, ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool) -> bool:
         """
         Attempt to invest allocated funds into a specified asset.
 
@@ -109,7 +66,7 @@ class Portfolio:
         # Make investment
         self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
         self.holdings[ticker] = self.holdings[ticker]
-        self.cash -= total_cost
+        self.cash_balance -= total_cost
         return True
 
 
@@ -153,10 +110,10 @@ class Portfolio:
         # Make sale
         self.holdings[ticker] = units_owned - units_sold
         self.holdings[ticker] = self.holdings[ticker]
-        self.cash += total_earned
+        self.cash_balance += total_earned
 
         return True
-
+    
 
     # --- Dividends ---
 
@@ -203,27 +160,9 @@ class Portfolio:
         for div in self.dividends:
             total += div.get('total_dividend',0.0)
         return total
-    
+
 
     # --- Snapshotting ---
-
-    def get_value(self, prices: dict[str, float]) -> float:
-        """
-        Calculate the total portfolio value based on current holdings and cash balance.
-
-        Args:
-            prices (dict[str, float]): A dictionary mapping price column names to their values.
-
-        Returns:
-            float: The total portfolio value rounded to 2 decimal places.
-        """
-        total_value = self.cash
-        for ticker, units in self.holdings.items():
-            price = prices.get(ticker,0)
-            value = units * price
-            total_value += value
-        return total_value
-
 
     def get_daily_snapshot(self, date: date, prices: dict[str, float]) -> dict:
         """
@@ -238,13 +177,13 @@ class Portfolio:
         """
 
         return {
-            'cash': self._get_cash_snapshot(date),
+            'cash': self.get_cash_snapshot(date),
             'holdings': self._get_holdings_snapshot(date,prices),
             'dividends':self._get_dividends_snapshot(date)
         }
 
 
-    def _get_cash_snapshot(self, date: date) -> dict:
+    def get_cash_snapshot(self, date: date) -> dict:
         """
         Create a snapshot of the portfolio's cash-related metrics for a specific date.
 
@@ -257,40 +196,12 @@ class Portfolio:
         
         return {
             'date': date,
-            'cash_balance': self.cash,
+            'cash_balance': self.cash_balance,
             'cash_inflow': self.cash_inflow,
             'dividend_income':self.dividend_income,
             'did_rebalance':self.did_rebalance
         }
     
-
-    def _get_holdings_snapshot(self, date: date, prices: dict[str, float]) -> list[dict]: 
-        """
-        Generate a snapshot of the portfolio's holdings for a specific date.
-
-        Args:
-            date (date): The date of the snapshot.
-            prices (dict[str, float]): Current prices per ticker.
-
-        Returns:
-            list[dict]: A list of dictionaries, each containing date, ticker, units held, and price.
-                        Returns an empty list if no holdings exist.
-        """
-    
-        # Check for empty holdings before returning snapshot
-        if not self.holdings:
-            return []
-        
-        return [
-            {
-                'date': date,
-                'ticker': ticker,
-                'units': units,
-                'price': prices.get(ticker)
-            }
-            for ticker, units in self.holdings.items()
-        ]
-
 
     def _get_dividends_snapshot(self, date: date) -> list[dict]: 
         """
@@ -317,4 +228,5 @@ class Portfolio:
             }
             for div in self.dividends
         ]
+
 

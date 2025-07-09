@@ -2,8 +2,8 @@ from enum import Enum
 
 # Include str inheritance within the method signature to allow enums to behave like strings
 class BacktestMode(str, Enum):
-    ADJUSTED = "adjusted"
-    MANUAL = "manual"
+    BASIC = "basic"
+    REALISTIC = "realistic"
 
 class RebalanceFrequency(str, Enum):
     NEVER = "never"

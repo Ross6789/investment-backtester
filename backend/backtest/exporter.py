@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime
 from backend.constants import CURRENCY_PRECISION,FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION
 
-class BacktestResult:
+class BacktestExporter:
     """
     A container for the historical results of a portfolio backtest.
 
@@ -15,6 +15,7 @@ class BacktestResult:
         """
         Initialize the BacktestResult with a list of portfolio snapshots.
         """
+        self.calendar = history['calendar']
         self.cash_history = history['cash']
         self.holding_history = history['holdings']
         self.dividend_history = history['dividends']
@@ -33,6 +34,8 @@ class BacktestResult:
         # Convert dataframes to lazyframes
         cash_history_lf = self.cash_history.lazy()
         holding_history_lf = self.holding_history.lazy()
+
+        
         dividend_history_lf = self.dividend_history.lazy()
         order_history_lf = self.order_history.lazy()
 
@@ -151,6 +154,8 @@ class BacktestResult:
         print(f'Exported orders to csv : {orders_path}')
 
         # Export daily summary
+        daily_summary = self.compute_daily_summary()
+
         # Extract all tickers
         tickers = set()
         for row in self.holding_history.iter_rows(named=True):
@@ -181,7 +186,7 @@ class BacktestResult:
             dict_writer = csv.DictWriter(f, fieldnames=headers)
             dict_writer.writeheader()
 
-            for row in self.compute_daily_summary().iter_rows(named=True):
+            for row in daily_summary.iter_rows(named=True):
                 flat_row = {
                     'Date': row['date'],
                     'Dividend income': round(row['dividend_income'],CURRENCY_PRECISION),
