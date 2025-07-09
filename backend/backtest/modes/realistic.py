@@ -1,38 +1,62 @@
 from backend.backtest.modes.base import BaseBacktest
-from backend.backtest.portfolios.base import BasePortfolio
+from backend.backtest.portfolios.cashflow import CashflowPortfolio
 from datetime import date
 import polars as pl
 from backend.models import TargetPortfolio, BacktestConfig
-from backend.utils import generate_recurring_dates
+from backend.enums import OrderSide, RebalanceFrequency
+from dateutil.relativedelta import relativedelta
 
-class BasicBacktest(BaseBacktest):
+
+class RealisticBacktest(BaseBacktest):
+
     def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
-        
+        """
+        Initialize the realistic backtest mode.
+
+        Sets up the portfolio, rebalance tracking, order books, and dividend schedule.
+        This mode models more realistic behavior, including cashflow timing, order queuing, 
+        and delayed execution.
+
+        Args:
+            start_date (date): The starting date of the backtest.
+            end_date (date): The ending date of the backtest.
+            backtest_data (pl.DataFrame): Historical market data used in the backtest.
+            target_portfolio (TargetPortfolio): The portfolio containing target asset weights.
+            config (BacktestConfig): Configuration object specifying backtest parameters and strategy.
+        """
+        # Run superclass constructor
         super().__init__(start_date, end_date, backtest_data, target_portfolio,config)
-        
-        self.portfolio = RealisticPortfolio(self)
-        
-        # Optional : recurring cashflow
-        if self.config.recurring_investment:
-            self.recurring_cashflow_dates = generate_recurring_dates(start_date,end_date, self.config.recurring_investment.frequency)
+
+        # Initialise specific portfolio for this mode
+        self.portfolio = CashflowPortfolio(self)
+
+        # Instantiate previous rebalance day (set as first day a ticker is trading) and order books
+        self.previous_rebalance_date = self._get_first_trading_date()
+        self.pending_orders = None
+        self.executed_orders = None
+
+        # Load dividend dates
+        self.dividend_dates = self._load_dividend_dates()
+
 
     # --- Data Generation & Loading ---
 
-            # Instantiate last rebalance day and order book
-            self.last_rebalance_date = self.master_calendar.select(pl.col('date').min()).item()
-            self.pending_orders = None
-            self.executed_orders = None
+    def _get_first_trading_date(self) -> date:
+        """
+        Returns the earliest date where any ticker is trading.
 
-            # Optional : dividends (if in manual mode)
-            if self.config.mode == BacktestMode.REALISTIC:
-                self.dividend_dates = self._load_dividend_dates()
+        Raises:
+            ValueError: If no tickers are active in the date range.
+        """
+        filtered = self.master_calendar_df.filter(pl.col("trading_tickers").arr.len() > 0)
 
-            # Optional : recurring cashflow
-            if self.config.recurring_investment:
-                self.recurring_cashflow_dates = self._generate_recurring_cashflow_dates(start_date,end_date, self.config.recurring_investment.frequency)
+        if filtered.height == 0:
+            raise ValueError("No tickers active during specified date range")
+        
+        first_date = filtered.select(pl.col("date")).min()
 
-
-
+        return first_date[0, 0] 
+    
     def _load_dividend_dates(self) -> set[date]:
         """
         Extract all unique dates from the backtest data where dividends were issued.
@@ -64,7 +88,7 @@ class BasicBacktest(BaseBacktest):
                         Returns None if no such date exists in the calendar.
         """
         trading_date = (
-            self.master_calendar
+            self.master_calendar_df
             .filter((pl.col('date') >= target_date) & (pl.col('trading_tickers').list.contains(ticker)))
             .sort('date')
             .select('date')
@@ -177,11 +201,31 @@ class BasicBacktest(BaseBacktest):
         return dict(zip(dividends_df['ticker'], dividends_df['dividend']))
 
 
+    # --- Ticker trading check ---
+
+    def _all_active_tickers_trading(self, date: date) -> bool:
+        """
+        Check whether all active tickers on a given date are also trading.
+
+        Args:
+            date (date): The date to check.
+
+        Returns:
+            bool: True if all active tickers are trading and at least one ticker is active,
+                False otherwise.
+        """
+        day_info = self.master_calendar_dict.get(date, {})
+        active_tickers = day_info.get("active_tickers", set())
+        trading_tickers = day_info.get("trading_tickers", set())
+
+        return active_tickers == trading_tickers and len(active_tickers) > 0
+
+
     # --- Rebalancing ---
 
     def _should_rebalance(self, current_date: date, last_rebalance_date: date, rebalance_frequency: RebalanceFrequency) -> bool:
         """
-        Determine whether the portfolio should be rebalanced on the current date.
+        Dynamically determine whether the portfolio should be rebalanced on the current date.
 
         Rebalancing only occurs if all active tickers are trading on the current date
         and the specified rebalance frequency interval has elapsed since the last rebalance.
@@ -215,7 +259,21 @@ class BasicBacktest(BaseBacktest):
                     raise ValueError(f"Invalid rebalance frequency: {rebalance_frequency}")
                 
                 
-    def rebalance(self, current_date: date, prices: dict[str, float], target_weights: dict[str, float]):
+    def rebalance(self, current_date: date, prices: dict[str, float], normalized_target_weights: dict[str, float]) -> None:
+        """
+        Adjust portfolio holdings to match target weights by generating buy and sell orders.
+
+        Args:
+            current_date (date): The date on which rebalancing is performed.
+            prices (dict[str, float]): Current market prices for each ticker.
+            normalized_target_weights (dict[str, float]): Target portfolio weights for each ticker, normalized to sum to 1.
+
+        Behavior:
+            - Calculates the target dollar allocation for each ticker based on total portfolio value.
+            - Compares with current holding values to determine buy or sell amounts.
+            - Queues sell orders for tickers over-allocated and buy orders for tickers under-allocated.
+            - Updates rebalance status and records the date of last rebalance.
+        """
         # Find portfolio value
         total_value = self.portfolio.get_value(prices)
 
@@ -223,7 +281,7 @@ class BasicBacktest(BaseBacktest):
         sell_order_targets = {}
 
         # Determine target allocations
-        for ticker, weight in target_weights.items():
+        for ticker, weight in normalized_target_weights.items():
             
 
             target_value = total_value * weight
@@ -247,54 +305,58 @@ class BasicBacktest(BaseBacktest):
 
         # Update rebalance flag and last rebalance date
         self.portfolio.did_rebalance = True
-        self.last_rebalance_date = current_date
+        self.previous_rebalance_date = current_date
+
 
     def run(self) -> dict[str, pl.DataFrame]:
         """
-        Executes the full backtest simulation over the configured date range.
+        Executes the full portfolio backtest over the master calendar date range.
+
+        This method simulates day-by-day portfolio activity, including:
+        - Applying initial and recurring cash injections
+        - Processing dividends (with or without reinvestment)
+        - Determining whether to place new buy orders based on cash inflow
+        - Evaluating and applying rebalancing strategies at defined intervals
+        - Executing pending orders using available market prices
+        - Recording daily snapshots of cash, holdings, and dividends
 
         Returns:
-            tuple[dict[str, pl.DataFrame]: 
-                - A dictionary containing daily snapshots:
-                    - 'cash': Cash balances per day
-                    - 'holdings': Holdings per asset per day
-                    - 'dividends': Dividend records per day
-                    - 'orders': all orders completed throuhgout the backtest
-                - A combined Polars DataFrame of all orders (both fulfilled and failed), 
-                including order status and execution metadata.
+            dict[str, pl.DataFrame]: A dictionary containing historical portfolio data:
+                - "cash": Daily cash balances
+                - "holdings": Daily asset holdings
+                - "dividends": Dividend income earned or reinvested
+                - "orders": All executed and pending orders throughout the backtest
         """
-        
-        # Create empty list for portfolio snapshots
+        # Initialize empty lists for portfolio snapshots
         cash_snapshots = []
         holding_snapshots = []
         dividend_snapshots = []
 
         # Iterate through date range in master calendar
-        for current_date in self.master_calendar['date']:
+        for current_date in self.master_calendar_df['date']:
 
             # Reset portfolio flags and daily metrics and order flag
             self.portfolio.daily_reset()
             place_order = False
+            normalized_weights = None
             
             # Fetch daily prices
             daily_prices = self._get_prices_on_date(current_date)
 
-            # Normalized target weights ie. the target portfolio based on active tickers, shoudl only be computed once and could eb reused iin both order and rebalance
-            normalized_weights = None
+            # --- HANDLE CASHFLOWS ---
 
-            # MANAGE CASHFLOW 
             # Initial investment
-            if current_date == self.master_calendar[0, 'date']:
+            if current_date == self.start_date:
                 self.portfolio.add_cash(self.config.initial_investment)
                 place_order = True
 
             # Recurring investment
-            if current_date in self.recurring_cashflow_dates:
+            if current_date in self.cashflow_dates:
                 self.portfolio.add_cash(self.config.recurring_investment.amount)
                 place_order = True
             
             # Dividends
-            if self.config.mode == BacktestMode.REALISTIC and current_date in self.dividend_dates:
+            if current_date in self.dividend_dates:
                 unit_dividend_per_ticker = self._get_dividends_on_date(current_date)
                 dividends_earned = self.portfolio.process_dividends(unit_dividend_per_ticker)
                 if self.config.strategy.reinvest_dividends:
@@ -303,38 +365,32 @@ class BasicBacktest(BaseBacktest):
                 else:
                     self.portfolio.dividend_income = dividends_earned
 
-            # PLACE INFLOW ORDERS
-            if place_order:
+            # --- QUEUE ORDERS ---
 
-                # Compute normalized weights if not done already for date
-                if normalized_weights is None:
-                    normalized_weights = self._normalize_portfolio_targets(current_date)
+            # Determine if rebalacing will occur
+            rebalancing = self._should_rebalance(current_date,self.previous_rebalance_date,self.config.strategy.rebalance_frequency)
 
-                # Inflow orders invest all available cash using target allocations (if wanted to just invest cashflow in for the day - add a cashflow var which sums daily cashflow)
-                available_funds = self.portfolio.get_available_cash()
-                ticker_allocations = self._get_ticker_allocations_by_target(normalized_weights,available_funds)
+            # If there's cash to invest or a rebalance scheduled, compute the normalized target weights for each ticker
+            if place_order or rebalancing:
+                normalized_weights = self._normalize_portfolio_targets(current_date)
 
-                self._queue_orders(current_date, ticker_allocations,'buy')
+                # Rebalancing overrides any inflow buy orders 
+                if rebalancing:
+                    self.rebalance(current_date,daily_prices,normalized_weights)
 
-            # REBALANCE
-            if self._should_rebalance(current_date,self.last_rebalance_date,self.config.strategy.rebalance_frequency):
+                # No rebalancing - safe to invest available cash based on target allocations
+                else:
+                    available_funds = self.portfolio.get_available_cash()
+                    ticker_allocations = self._get_ticker_allocations_by_target(normalized_weights,available_funds)
+                    self._queue_orders(current_date, ticker_allocations,'buy')
 
-                # Drop previous inflow orders which are to executed today, since the rebalancing may adjust quantities
-                if self.pending_orders is not None:
-                    self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
-                
-                # Compute normalized weights if not done already for date
-                if normalized_weights is None:
-                    normalized_weights = self._normalize_portfolio_targets(current_date)
+            # --- EXECUTE ORDERS ---
 
-                self.rebalance(current_date,daily_prices,normalized_weights)
+            if self.pending_orders is not None and not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
+                self._execute_orders(current_date,daily_prices)
 
-            # EXECUTE ORDERS
-            if self.pending_orders is not None:
-                if not self.pending_orders.filter(pl.col('date_executed') == current_date).is_empty():
-                    self._execute_orders(current_date,daily_prices)
+            # --- RECORD SNAPSHOTS ---
 
-            # Fetch daily snapshot and add to relevant snapshot list
             daily_snapshot = self.portfolio.get_daily_snapshot(current_date,daily_prices)
             cash_snapshots.append(daily_snapshot['cash'])
             holding_snapshots.extend(daily_snapshot['holdings'])

@@ -5,6 +5,7 @@ from backend.backtest.portfolios.base import BasePortfolio
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.enums import ReinvestmentFrequency
 from dateutil.relativedelta import relativedelta
+from backend.utils import generate_recurring_dates
 
 class BaseBacktest(ABC):
     def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
@@ -16,13 +17,17 @@ class BaseBacktest(ABC):
 
             # Generate master calendar
             self._generate_master_calendar()
-    
-    @abstractmethod
-    def _should_rebalance(self):
-        pass
+
+            # Scheduled cashflow : Compute dates in advance
+            recurring_freq = self.config.recurring_investment.frequency if self.config.recurring_investment is not None else None
+            self.cashflow_dates = (
+                generate_recurring_dates(start_date,end_date, recurring_freq)
+                if recurring_freq is not None else set()
+            )
+
 
     @abstractmethod
-    def rebalance(self):
+    def rebalance(self, current_date: date, prices: dict[str, float], normalized_target_weights: dict[str, float]) -> None:
         pass
 
     @abstractmethod
@@ -62,19 +67,15 @@ class BaseBacktest(ABC):
 
     def _generate_master_calendar(self) -> None:
         """
-        Generate a per-date dictionary of active and trading tickers.
+        Build master calendar mapping each date to active and trading tickers.
 
-        For each date where at least one ticker is active, store:
-            {
-                date: {
-                    "active_tickers": set[str],
-                    "trading_tickers": set[str]
-                }
-            }
+        For each date from start to end:
+        - active_tickers: tickers active within their first/last active date range.
+        - trading_tickers: tickers trading on that date ('is_trading_day' == True).
 
-        - Active tickers are based on first/last active date ranges.
-        - Trading tickers are where 'is_trading_day' is True.
-        - Result is saved to `self.master_calendar_dict`.
+        Stores results in:
+        - self.master_calendar_df (Polars DataFrame) for efficient filtering.
+        - self.master_calendar_dict (dict) for fast date-based lookup.
         """
 
         date_range = pl.DataFrame(pl.date_range(self.start_date,self.end_date,interval="1d",eager=True))
@@ -152,23 +153,6 @@ class BaseBacktest(ABC):
                 
         return active_tickers
 
-    
-    def _all_active_tickers_trading(self, date: date) -> bool:
-        """
-        Check whether all active tickers on a given date are also trading.
-
-        Args:
-            date (date): The date to check.
-
-        Returns:
-            bool: True if all active tickers are trading and at least one ticker is active,
-                False otherwise.
-        """
-        day_info = self.master_calendar_dict.get(date, {})
-        active_tickers = day_info.get("active_tickers", set())
-        trading_tickers = day_info.get("trading_tickers", set())
-
-        return active_tickers == trading_tickers and len(active_tickers) > 0
 
     # --- Portfolio Normalization ---
 

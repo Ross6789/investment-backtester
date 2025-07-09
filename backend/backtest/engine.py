@@ -1,13 +1,19 @@
 import polars as pl
 from datetime import date
-from backend.backtest.portfolios.base import BasePortfolio
+from typing import Type
 from backend.models import TargetPortfolio, BacktestConfig
-from backend.enums import OrderSide, RebalanceFrequency, BacktestMode, ReinvestmentFrequency
-from dateutil.relativedelta import relativedelta
-from backend.backtest.modes.basic import BasicBacktest, RealisticBacktest
-from backend.backtest.portfolios.base import BasePortfolio
+from backend.enums import BacktestMode
+from backend.backtest.modes.base import BaseBacktest
+from backend.backtest.modes.basic import BasicBacktest
+from backend.backtest.modes.realistic import RealisticBacktest
 
 class BacktestEngine:
+
+    BACKTEST_CLASS_MAP: dict[BacktestMode, Type[BaseBacktest]] = {
+        BacktestMode.BASIC: BasicBacktest,
+        BacktestMode.REALISTIC: RealisticBacktest,
+    }
+
     """
     Runs portfolio backtests over a specified date range and dataset.
 
@@ -25,20 +31,24 @@ class BacktestEngine:
             self.target_portfolio = target_portfolio
             self.config = config
 
-    def run(self):
 
-        backtest = _find_backtest_class()
+    def run(self):
+        """
+        Instantiates and runs the selected backtest mode and returns analysed results.
+        """
+        backtest_class = self.BACKTEST_CLASS_MAP.get(self.config.mode)
+
+        if backtest_class is None:
+            raise ValueError(f"Unsupported backtest mode: {self.config.mode}")
+
+        backtest = backtest_class(
+            self.start_date,
+            self.end_date,
+            self.backtest_data,
+            self.target_portfolio,
+            self.config,
+        )
 
         run_data = backtest.run()
-        result_data = backtest.analyse(run_data)
-
-
-    def _find_backtest_class(self):
-        match self.config.mode:
-            case BacktestMode.BASIC:
-                return BasicBacktest()
-            case BacktestMode.REALISTIC:
-                return RealisticBacktest()
-            case _:
-                raise ValueError(f"Unsupported backtest mode: {self.config.mode}")
+        return backtest.analyse(run_data)
     

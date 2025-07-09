@@ -186,6 +186,20 @@ class CashflowPortfolio(BasePortfolio):
         for div in self.dividends:
             total += div.get('total_dividend',0.0)
         return total
+    
+    # --- Valuation ---
+
+    def get_value(self, prices: dict[str, float]) -> float:
+        """
+        Calculate the total portfolio value.
+
+        Args:
+            prices (dict[str, float]): Current prices for each ticker.
+
+        Returns:
+            float: Sum of cash on hand and the total value of holdings based on given prices.
+        """
+        return self.cash + self.get_total_holdings_value(prices)
 
 
     # --- Snapshotting ---
