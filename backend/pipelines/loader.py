@@ -1,12 +1,13 @@
 import polars as pl
 from typing import List
 from datetime import date
-from backend.config import get_backtest_data_path
-from backend.enums import BacktestMode
+from backend.config import get_backtest_data_path, get_asset_metadata_path
+from backend.enums import BacktestMode, BaseCurrency
 
-def get_backtest_data(backtest_mode : BacktestMode, tickers : List[str], start_date: date, end_date: date) -> pl.DataFrame:
+def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency , tickers : List[str], start_date: date, end_date: date) -> pl.DataFrame:
 
     backtest_data_path = get_backtest_data_path()
+    metadata_path = get_asset_metadata_path()
 
     # Retrieve columns based on backtest mode
     match backtest_mode:

@@ -75,12 +75,11 @@ class YFinanceCorporateActionsIngestor(BaseYFinanceIngestor):
         print('Download complete.')
         return raw_data
     
-class CSVPriceIngestor:
-    def __init__(self,ticker: str,source_path: Path, start_date: date, end_date: date):
+class CSVIngestor:
+    def __init__(self,source_path: Path, start_date: date, end_date: date):
         if start_date and end_date:
             if start_date > end_date:
                 raise ValueError("Start date must be after the end date")
-        self.ticker = ticker
         self.source_path = source_path
         self.start_date = start_date
         self.end_date = end_date
@@ -98,4 +97,5 @@ class CSVPriceIngestor:
         if raw_data.empty:
             raise ValueError(f"No data in {self.source_path} within the date range.")
         return raw_data
+
 

@@ -1,6 +1,7 @@
 import polars as pl
 import pandas as pd
 from typing import List
+from pathlib import Path
 
 class PriceProcessor:
     @staticmethod
@@ -198,3 +199,62 @@ class CorporateActionProcessor:
 
         print('Corporate action data cleaned')
         return df_cols_cast.sort(['ticker','date'])
+
+class FXProcessor:
+
+    @staticmethod
+    # Method to convert to polars, cast the date column and add to and from currency columns
+    def clean_fx_data(raw_data: pd.DataFrame, source_path: Path) -> pl.DataFrame:
+        
+        dfs = []
+        
+        try:
+            # Convert to Polars
+            fx_data_pl = pl.from_pandas(raw_data)
+        except Exception as e:
+            raise Exception(f"Failed to convert to polars df: {e}")
+        
+        try:
+            # Convert datetime to date
+            fx_data_pl = fx_data_pl.with_columns(pl.col('date').cast(pl.Date))
+        except Exception as e:
+            raise Exception(f"Failed to cast date column: {e}")
+        
+        # Retrieve currency pair from source path ie. the csv file name
+        from_currency, to_currency = source_path.stem.split('-')
+        
+        # Add to and from cols
+        fx_data_pl.with_columns([
+            pl.lit(from_currency.upper()).alias('from_currency'),
+            pl.lit(to_currency.upper()).alias('to_currency')
+        ])
+        
+        print('FX rate processed')
+        return fx_data_pl
+    
+    @staticmethod
+    # Method to find the inverted rate for every entry ie. if have GBP -> USD, need to find rate for USD -> GBP
+    def fill_reversed_fx(cleaned_fx: pl.DataFrame) -> pl.DataFrame:
+        
+        # Create reversed pairs
+        inverted_fx = (
+            cleaned_fx
+            .with_columns([
+                pl.col("from_currency").alias("to"),
+                pl.col("to").alias("from"),
+                (1 / pl.col("rate")).alias("rate")
+            ])
+            .select([
+                pl.col("to").alias("to_currency"),
+                pl.col("from").alias("from_currency"),
+                "rate",
+                "date"
+            ])
+        )
+
+        # Combine original and inverted
+        fx_full = pl.concat([cleaned_fx, inverted_fx]).unique()
+        
+        print('FX data processed')
+
+        return fx_full.sort(['from','to','date'])
