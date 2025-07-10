@@ -1,8 +1,8 @@
 import polars as pl
 from pathlib import Path
-from backend.pipelines.ingestors import YFinancePriceIngestor,YFinanceCorporateActionsIngestor, CSVIngestor
-from backend.pipelines.processor import PriceProcessor,CorporateActionProcessor, FXProcessor
-from backend.pipelines.compiler import Compiler
+from backend.data_pipeline.ingestors import YFinancePriceIngestor,YFinanceCorporateActionsIngestor, CSVIngestor
+from backend.data_pipeline.processor import PriceProcessor,CorporateActionProcessor, FXProcessor
+from backend.data_pipeline.compiler import Compiler
 
 class PricePipeline:
     def __init__(self, ingestors):
@@ -50,8 +50,7 @@ class CorporateActionPipeline:
                 raw_data = ingestor.run()
                 if not raw_data.empty:
                     if isinstance(ingestor, YFinanceCorporateActionsIngestor):
-                        
-                        cleaned_data = FXProcessor.clean_fx_data(raw_data,ingestor.tickers)
+                        cleaned_data = CorporateActionProcessor.clean_yfinance_data(raw_data,ingestor.tickers)
                     else:
                         raise ValueError(f'Unkown ingestor type: {ingestor}')
                     cleaned_dfs.append(cleaned_data)

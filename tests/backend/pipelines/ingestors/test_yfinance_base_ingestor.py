@@ -2,7 +2,7 @@ from unittest.mock import patch
 import pytest
 import pandas as pd
 import polars as pl
-from backend.pipelines.ingestors import YFinancePriceIngestor
+from backend.data_pipeline.ingestors import YFinancePriceIngestor
 from datetime import date
 from polars.testing import assert_frame_equal as pl_assert_frame_equal
 

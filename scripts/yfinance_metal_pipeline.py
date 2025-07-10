@@ -1,4 +1,4 @@
-from backend.pipelines.ingestors import YFinancePriceIngestor
+from backend.data_pipeline.ingestors import YFinancePriceIngestor
 
 # Configuration
 tickers = ["GC=F","SI=F"]

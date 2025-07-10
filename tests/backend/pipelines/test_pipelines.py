@@ -2,7 +2,7 @@ import pytest
 from datetime import date
 import polars as pl
 from unittest.mock import MagicMock, patch
-from backend.pipelines.pipeline import DataPipeline 
+from backend.data_pipeline.pipeline import DataPipeline 
 from polars.testing import assert_frame_equal
 
 @pytest.fixture

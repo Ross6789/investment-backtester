@@ -1,7 +1,7 @@
 import backend.config as config
 import polars as pl
 from datetime import date
-from backend.pipelines.loader import get_backtest_data
+from backend.backtest.data_loader import get_backtest_data
 from backend.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
 from backend.backtest.runner import BacktestRunner
 from backend.backtest.exporter import BacktestExporter

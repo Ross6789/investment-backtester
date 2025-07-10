@@ -30,8 +30,9 @@ def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency 
         )
         .select(columns_required)
         .rename(column_rename_mapping)
-        .collect()
     )
+
+    # Retrieve 
 
     return data
 
