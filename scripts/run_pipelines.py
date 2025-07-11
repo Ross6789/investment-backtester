@@ -2,8 +2,8 @@ import os
 import polars as pl
 import backend.config as config
 import backend.utils as utils
-from backend.pipelines.pipeline import DataPipeline
-from backend.pipelines.ingestors import YFinancePriceIngestor,CSVPriceIngestor, YFinanceCorporateActionsIngestor
+from backend.data_pipeline.runner import DataPipeline
+from backend.data_pipeline.ingestors import YFinancePriceIngestor,CSVIngestor, YFinanceCorporateActionsIngestor
 
 # Configuration
 yfinance_batch_size = 100

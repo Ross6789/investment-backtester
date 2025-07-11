@@ -28,3 +28,8 @@ class RoundMethod(str, Enum):
     NEAREST = "nearest"
     UP = "up"
     DOWN = "down"
+
+class BaseCurrency(str, Enum):
+    GBP = "GBP"
+    USD = "USD"
+    EUR = "EUR"

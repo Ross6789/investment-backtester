@@ -133,7 +133,7 @@ class BasePortfolio(ABC):
                 'date': date,
                 'ticker': ticker,
                 'units': units,
-                'price': prices.get(ticker)
+                'base_price': prices.get(ticker)
             }
             for ticker, units in self.holdings.items()
         ]

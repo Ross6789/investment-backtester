@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
-from backend.enums import RebalanceFrequency,ReinvestmentFrequency, BacktestMode
+from backend.enums import RebalanceFrequency,ReinvestmentFrequency, BacktestMode, BaseCurrency
 from backend.utils import parse_enum,validate_positive_amount
+
 
 @dataclass
 class TargetPortfolio:
@@ -36,6 +37,7 @@ class TargetPortfolio:
     def get_tickers(self) -> list[str]:
         return list(self.weights.keys())
 
+
 @dataclass
 class RecurringInvestment:
     """
@@ -55,6 +57,7 @@ class RecurringInvestment:
         if isinstance(self.frequency, str):
             self.frequency = parse_enum(ReinvestmentFrequency, self.frequency)
         validate_positive_amount(self.amount,'recurring investment amount')
+
 
 @dataclass
 class Strategy:
@@ -77,21 +80,24 @@ class Strategy:
         if isinstance(self.rebalance_frequency, str):
             self.rebalance_frequency = parse_enum(RebalanceFrequency, self.rebalance_frequency)
 
+
 @dataclass
 class BacktestConfig:
     """
     Configuration for the backtest.
 
     Attributes:
-        mode: Backtest mode, e.g. adjusted or manual.
+        mode: BacktestMode, e.g. basic or realistic.
+        base_currency: BaseCurrency eg.  GBP, USD
         strategy: Investment strategy parameters.
         initial_investment: Initial capital amount for backtesting (must be positive).
         recurring_investment: Optional recurring investment schedule.
 
     Raises:
-        ValueError: If mode is an invalid value or initial_investment is not positive.
+        ValueError: If mode or base currency is an invalid value or initial_investment is not positive.
     """
     mode : BacktestMode = BacktestMode.REALISTIC
+    base_currency : BaseCurrency = BaseCurrency.GBP
     strategy: Strategy = field(default_factory=Strategy)
     initial_investment : float = 10000
     recurring_investment : RecurringInvestment | None = None
@@ -99,4 +105,6 @@ class BacktestConfig:
     def __post_init__(self):
         if isinstance(self.mode, str):
             self.mode = parse_enum(BacktestMode,self.mode)
+        if isinstance(self.base_currency, str):
+            self.base_currency = parse_enum(BaseCurrency,self.base_currency)
         validate_positive_amount(self.initial_investment, 'initial investment')

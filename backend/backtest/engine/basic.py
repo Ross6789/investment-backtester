@@ -74,6 +74,7 @@ class BasicBacktest(BaseBacktest):
 
         Returns:
             dict[str, pl.DataFrame]: 
+                - "data": Full backtest data used during run
                 - "calendar": Master calendar with active and trading tickers per date
                 - "cash": Daily cash balances
                 - "holdings": Daily asset holdings
@@ -140,6 +141,7 @@ class BasicBacktest(BaseBacktest):
 
         # Bulk convert snapshots into polars dataframe for better processing and package within dictionary
         history = {
+            "data":self.backtest_data,
             "calendar":self.calendar_df,
             "cash":pl.DataFrame(cash_snapshots),
             "holdings":pl.DataFrame(holding_snapshots),

@@ -1,7 +1,7 @@
 from unittest.mock import patch
 import pytest
 import polars as pl
-from backend.pipelines.ingestors import CSVPriceIngestor
+from backend.data_pipeline.ingestors import CSVIngestor
 from datetime import date
 from polars.testing import assert_frame_equal as pl_assert_frame_equal
 
@@ -77,11 +77,11 @@ def sample_invalid_4col_df_raw():
 
 @pytest.fixture
 def sample_ingestor_with_dates():
-    return CSVPriceIngestor('AAPL','dummy_source_path.csv','2025-01-02','2025-01-03')
+    return CSVIngestor('AAPL','dummy_source_path.csv','2025-01-02','2025-01-03')
 
 @pytest.fixture
 def sample_ingestor_without_dates():
-    return CSVPriceIngestor('AAPL','dummy_source_path.csv',None,None)
+    return CSVIngestor('AAPL','dummy_source_path.csv',None,None)
 
 
 @patch('backend.pipelines.ingestors.pl.read_csv')
