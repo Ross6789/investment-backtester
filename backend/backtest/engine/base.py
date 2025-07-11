@@ -230,6 +230,6 @@ class BaseBacktest(ABC):
         prices_df = (
             self.backtest_data
             .filter(pl.col('date')==date)
-            .select(['ticker','price'])
+            .select(['ticker','base_price'])
         )
-        return dict(zip(prices_df['ticker'], prices_df['price']))
+        return dict(zip(prices_df['ticker'], prices_df['base_price']))

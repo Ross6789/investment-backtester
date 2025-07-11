@@ -28,7 +28,11 @@ class BacktestExporter:
         run_folder_path.mkdir(parents = True, exist_ok=False)
         return run_folder_path
     
-    
+    def compute_holdings_summary(self) -> pl.DataFrame:
+        holdings = self.holding_history
+
+        holdings
+
     def compute_daily_summary(self) -> pl.DataFrame:
 
         # Convert dataframes to lazyframes
@@ -44,7 +48,7 @@ class BacktestExporter:
             holding_history_lf
             .join(dividend_history_lf, on=["date", "ticker"], how="left")
             .with_columns([
-                (pl.col("units") * pl.col("price")).alias("value")
+                (pl.col("units") * pl.col("base_price")).alias("value")
             ])
         )
 
@@ -85,7 +89,7 @@ class BacktestExporter:
         pivoted_holdings_lf = (
             holding_div_lf
             .collect()
-            .pivot(values=["units", "price", "value", "dividend_per_unit", "total_dividend"], 
+            .pivot(values=["units", "base_price", "value", "dividend_per_unit", "total_dividend"], 
                 index="date", 
                 on="ticker")
                 .lazy()
@@ -97,7 +101,7 @@ class BacktestExporter:
         # Fill all null values (except price since null indicates missing data)
         schema = summary_lf.collect_schema()
 
-        non_price_cols = [col_name for col_name in schema.keys() if not col_name.startswith("price_")]
+        non_price_cols = [col_name for col_name in schema.keys() if not col_name.startswith("base_price_")]
 
         fill_null_arguments = []
         for col_name, dtype in schema.items():
@@ -165,7 +169,7 @@ class BacktestExporter:
         # Ticker columns
         ticker_cols = []
         for ticker in tickers:
-            ticker_cols.extend([f'{ticker} units',f'{ticker} price',f'{ticker} total value',f'{ticker} dividend per unit',f'{ticker} total dividend'])
+            ticker_cols.extend([f'{ticker} units',f'{ticker} base price',f'{ticker} total value',f'{ticker} dividend per unit',f'{ticker} total dividend'])
 
         # CSV headers
         headers = ['Date','Dividend income','All dividends received','Cash inflow','Cash balance','Total holding value','Total portfolio value','Did buy','Did sell','Did rebalance'] + ticker_cols
@@ -202,8 +206,8 @@ class BacktestExporter:
                 
                 for ticker in tickers:
 
-                    price_val = row[f'price_{ticker}']
-                    flat_row[f'{ticker} price'] = round(price_val, PRICE_PRECISION) if price_val is not None else None
+                    price_val = row[f'base_price_{ticker}']
+                    flat_row[f'{ticker} base price'] = round(price_val, PRICE_PRECISION) if price_val is not None else None
                     flat_row[f'{ticker} units'] = round(row[f'units_{ticker}'],FRACTIONAL_SHARE_PRECISION)
                     flat_row[f'{ticker} total value'] = round(row[f'value_{ticker}'],CURRENCY_PRECISION)
                     flat_row[f'{ticker} dividend per unit'] = round(row[f'dividend_per_unit_{ticker}'],PRICE_PRECISION)
@@ -219,7 +223,7 @@ class BacktestExporter:
 #     return replace_with if value is None else value
 
 # flat_row[f'{ticker} units'] = _replace_blank(row[f'units_{ticker}'],0)
-# flat_row[f'{ticker} price'] = row[f'price_{ticker}']
+# flat_row[f'{ticker} base price'] = row[f'base_price_{ticker}']
 # flat_row[f'{ticker} total value'] = _replace_blank(row[f'value_{ticker}'],0)
 # flat_row[f'{ticker} dividend per unit'] = _replace_blank(row[f'dividend_per_unit_{ticker}'],0)
 # flat_row[f'{ticker} total dividend'] = _replace_blank(row[f'total_dividend_{ticker}'],0)

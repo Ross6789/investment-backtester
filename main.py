@@ -17,7 +17,7 @@ end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
 initial_investment = 10000
 fractional_shares = False
-reinvest_dividends = True
+reinvest_dividends = False
 rebalance_frequency = RebalanceFrequency.MONTHLY
 recurring_investment_amount = 2500
 recurring_investment_frequency = ReinvestmentFrequency.MONTHLY
@@ -30,6 +30,7 @@ backtest_config = BacktestConfig(mode,base_currency,strategy,initial_investment,
 
 configuration_dict = {
     "Mode" : mode,
+    "Base Currency" : base_currency.value,
     "Start date": start_date.isoformat(),
     "End date": end_date.isoformat(),
     "Target weights": target_weights,
