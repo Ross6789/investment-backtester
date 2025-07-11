@@ -78,11 +78,10 @@ class BaseBacktest(ABC):
         - master_calendar_df (Polars DataFrame) for efficient filtering.
         - self.master_calendar_dict (dict) for fast date-based lookup.
         """
-
         date_range = pl.DataFrame(pl.date_range(self.start_date,self.end_date,interval="1d",eager=True).alias('date'))
 
         ticker_active_dates = self._generate_ticker_active_dates()
-        
+
         # Generate all dates where each ticker was active
         active_tickers = (
             self.backtest_data.join(
@@ -95,7 +94,7 @@ class BaseBacktest(ABC):
             )
             .select(["date", "ticker"])
         )
-        
+
         # Group active tickers by date
         active_tickers_calendar = (
             active_tickers
@@ -117,7 +116,7 @@ class BaseBacktest(ABC):
         )
 
         # Join active and trading tickers to full date range and fill nulls with empty lists
-        master_calendar_df = (
+        calendar_df = (
             date_range
             .join(active_tickers_calendar,on='date',how='left')
             .join(trading_tickers_calendar, on='date',how='left')
@@ -135,15 +134,15 @@ class BaseBacktest(ABC):
         )
 
         # Convert to dictionary for quick lookups
-        master_calendar_dict = {
+        calendar_dict = {
             row["date"]: {
                 "active_tickers": set(row["active_tickers"]),
                 "trading_tickers": set(row["trading_tickers"])
             }
-            for row in master_calendar_df.iter_rows(named=True)
+            for row in calendar_df.iter_rows(named=True)
         }
 
-        return master_calendar_df , master_calendar_dict
+        return calendar_df, calendar_dict
 
 
     def _get_first_trading_date(self) -> date:

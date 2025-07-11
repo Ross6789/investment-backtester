@@ -151,6 +151,7 @@ def round_currency(price: float, method: RoundMethod = "nearest") -> float:
     """
     return _round(price,CURRENCY_PRECISION,method)
 
+
 # --- Parse Utilities ---
 
 def parse_enum(enum_class: type[Enum], input_str: str) -> Enum:
@@ -167,13 +168,11 @@ def parse_enum(enum_class: type[Enum], input_str: str) -> Enum:
     Raises:
         ValueError: If the input string does not match any Enum member values.
     """
-    try:
-        return enum_class(input_str.lower())
-    except ValueError:
-        valid_values = [e.value for e in enum_class]
-        raise ValueError(
-            f"Invalid value for '{enum_class.__name__}': '{input_str}'. Must be one of {valid_values} "
-        )
+    for member in enum_class:
+        if member.value.lower() == input_str.lower():
+            return member
+    valid_values = [e.value for e in enum_class]
+    raise ValueError(f"Invalid value for '{enum_class.__name__}': '{input_str}'. Must be one of {valid_values}")
     
 
 def parse_date(date_str: str) -> date:
