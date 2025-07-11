@@ -2,7 +2,7 @@ import polars as pl
 import warnings
 from backend.data_pipeline.ingestors import CSVIngestor
 from backend.data_pipeline.pipelines import BasePipeline
-from backend.data_pipeline.processor import FXProcessor
+from backend.data_pipeline.processors import FXProcessor
 
 
 class FXPipeline(BasePipeline):
@@ -45,9 +45,11 @@ class FXPipeline(BasePipeline):
 
     def process(self):
         """
-        Generate inverse FX rates and store the result in `self.processed_data`.
+        Forward fill rates for all dates, generate inverse FX rates and store the result in `self.processed_data`.
         """
-        self.processed_data = FXProcessor.generate_inverse_rates(self.cleaned_data)
+        filled_data = FXProcessor.forward_fill(self.cleaned_data)
+        filled_and_inverse_data = FXProcessor.generate_inverse_rates(filled_data)
+        self.processed_data = filled_and_inverse_data
 
 
     def run(self) -> None:

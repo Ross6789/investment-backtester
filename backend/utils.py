@@ -178,21 +178,26 @@ def parse_enum(enum_class: type[Enum], input_str: str) -> Enum:
 
 def parse_date(date_str: str) -> date:
     """
-    Converts a date string in 'YYYY-MM-DD' format to a datetime.date object.
+    Parses a date string into a `datetime.date` object using known formats.
+
+    Tries multiple common date formats (e.g., "DD/MM/YYYY", "MM/DD/YYYY", "YYYY-MM-DD")
 
     Args:
-        date_str (str): Date string, e.g. '2024-01-01'
+        date_str (str): The date string to parse.
 
     Returns:
-        datetime.date: Parsed date object
+        date: The parsed date as a `datetime.date` object.
 
     Raises:
-        ValueError: If the input string is not in the expected format.
+        ValueError: If the date string does not match any known format.
     """
-    try:
-        return datetime.strptime(date_str, "%Y-%m-%d").date()
-    except ValueError as e:
-        raise ValueError(f"Invalid date format: '{date_str}'. Expected 'YYYY-MM-DD'.") from e
+    known_formats = ["%d/%m/%Y", "%m/%d/%Y", "%Y-%m-%d"]  # Add more if needed
+    for fmt in known_formats:
+        try:
+            return datetime.strptime(date_str.strip(), fmt).date()
+        except ValueError:
+            continue
+    raise ValueError(f"Unknown date format: '{date_str}'")
 
 
 # --- Validation Utilities ---

@@ -1,9 +1,19 @@
 import backend.config as config
 import backend.utils as utils
+import warnings
 from datetime import date
 from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeline, FXPipeline
 from backend.data_pipeline.ingestors import YFinanceIngestor, CSVIngestor
 from backend.data_pipeline.runner import PipelineRunner
+
+
+YELLOW = "\033[93m"
+RESET = "\033[0m"
+
+# Configure warning messages
+# warnings.simplefilter('always')
+# warnings.formatwarning = lambda msg, *args, **kwargs: f"{YELLOW}⚠️ {msg}{RESET}\n"
+# warnings.filterwarnings("ignore", message="unclosed database.*") # suppress warnings coming from yfinance, already upgraded to most modern version
 
 # Configuration
 yfinance_batch_size = 100
@@ -37,7 +47,7 @@ for relative_source in csv_sources:
 corporate_action_ingestors.append(YFinanceIngestor(yfinance_test_tickers,yfinance_batch_size,start_date,end_date, include_actions=True))
 
 # Add fx ingestors
-for relative_source in csv_sources:
+for relative_source in fx_sources:
     full_source_path = base_path / relative_source
     fx_ingestors.append(CSVIngestor(full_source_path,start_date,end_date))
 

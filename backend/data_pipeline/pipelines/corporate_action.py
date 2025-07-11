@@ -2,7 +2,7 @@ import polars as pl
 import warnings
 from backend.data_pipeline.ingestors import YFinanceIngestor, CSVIngestor
 from backend.data_pipeline.pipelines import BasePipeline
-from backend.data_pipeline.processor import CorporateActionProcessor
+from backend.data_pipeline.processors import CorporateActionProcessor
 
 
 class CorporateActionPipeline(BasePipeline):
@@ -12,7 +12,7 @@ class CorporateActionPipeline(BasePipeline):
     Currently supports ingestion from YFinance-based ingestors.
     Applies appropriate cleaning and stores the cleaned data.
     """
-    
+
     def ingest(self):
         """
         Run all configured ingestors and clean the corporate action data.
@@ -49,3 +49,10 @@ class CorporateActionPipeline(BasePipeline):
         """
         self.processed_data = self.cleaned_data
 
+
+    def run(self) -> None:
+        """
+        Ingest and process the corporate action data in sequence.
+        """
+        self.ingest()
+        self.process()

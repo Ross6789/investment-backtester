@@ -2,7 +2,7 @@ import os
 import polars as pl
 import backend.config as config
 import backend.utils as utils
-from backend.data_pipeline.pipeline import DataPipeline
+from backend.data_pipeline.runner import DataPipeline
 from backend.data_pipeline.ingestors import YFinancePriceIngestor,CSVIngestor, YFinanceCorporateActionsIngestor
 
 # Configuration

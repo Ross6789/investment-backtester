@@ -40,7 +40,7 @@ class YFinanceIngestor(BaseIngestor):
             ValueError: If batch_size < 1 or start_date is after end_date.
         """
         validate_int(batch_size,'batch_size')
-        validate_positive_amount(batch_size)
+        validate_positive_amount(batch_size, 'batch_size')
         validate_date_order(start_date,end_date)
     
         self.tickers = tickers

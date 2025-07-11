@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 from datetime import date
 from backend.data_pipeline.ingestors import BaseIngestor
-from backend.utils import validate_date_order
+from backend.utils import validate_date_order, parse_date
 
 
 class CSVIngestor(BaseIngestor):
@@ -58,7 +58,8 @@ class CSVIngestor(BaseIngestor):
         print(f"Reading file : {self.source_path}...")
 
         try:
-            data = pd.read_csv(self.source_path, parse_dates=['date'], dayfirst=True)
+            data = pd.read_csv(self.source_path)
+            data['date'] = data['date'].apply(parse_date)
         except Exception as e:
             raise RuntimeError(f"Error reading CSV file {self.source_path}: {e}")
         
@@ -67,11 +68,11 @@ class CSVIngestor(BaseIngestor):
 
         # Filter by start date (if present)
         if self.start_date:
-            data = data[(data['date'] >= pd.Timestamp(self.start_date))]
+            data = data[(data['date'] >= self.start_date)]
 
         # Filter by end date (if present)
         if self.end_date:
-            data = data[(data['date'] <= pd.Timestamp(self.end_date))]
+            data = data[(data['date'] <= self.end_date)]
 
         print("Read complete.")
 

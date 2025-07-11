@@ -2,7 +2,7 @@ import polars as pl
 import warnings
 from backend.data_pipeline.ingestors import YFinanceIngestor, CSVIngestor
 from backend.data_pipeline.pipelines import BasePipeline
-from backend.data_pipeline.processor import PriceProcessor
+from backend.data_pipeline.processors import PriceProcessor
 
 
 class PricePipeline(BasePipeline):

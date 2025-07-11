@@ -11,6 +11,7 @@ csv_save_path = config.get_csv_backtest_result_path()
 
 # User choices
 mode = 'basic'
+base_currency = 'GBP'
 start_date = date.fromisoformat("1950-01-01")
 end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
@@ -41,7 +42,7 @@ configuration_dict = {
 }
 
 # Fetch data for backtest
-backtest_data = get_backtest_data(mode,target_portfolio.get_tickers(),start_date,end_date)
+backtest_data = get_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date)
 
 # Create and run backtest
 backtest = BacktestRunner(start_date,end_date,backtest_data,target_portfolio,backtest_config)
