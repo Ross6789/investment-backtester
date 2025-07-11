@@ -1,8 +1,9 @@
 import backend.config as config
 import backend.utils as utils
 from datetime import date
-from backend.pipelines.pipeline import PricePipeline, CorporateActionPipeline, MasterPipeline
-from backend.pipelines.ingestors import YFinancePriceIngestor,CSVPriceIngestor, YFinanceCorporateActionsIngestor
+from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeline, FXPipeline
+from backend.data_pipeline.ingestors import YFinanceIngestor, CSVIngestor
+from backend.data_pipeline.runner import PipelineRunner
 
 # Configuration
 yfinance_batch_size = 100
@@ -17,25 +18,34 @@ yfinance_tickers_cryptocurrency = utils.get_yfinance_tickers("cryptocurrency")
 yfinance_tickers_etf = utils.get_yfinance_tickers("etf")
 yfinance_tickers_usstock = utils.get_yfinance_tickers("us stock")
 yfinance_tickers_mutualfund = utils.get_yfinance_tickers("mutual fund")
-csv_ticker_source_map = utils.get_csv_ticker_source_map()
+csv_sources = utils.get_asset_csv_sources()
+fx_sources = utils.get_fx_csv_sources()
+# csv_ticker_source_map = utils.get_csv_ticker_source_map()
 
 # Instantiate list of ingestors
 price_ingestors = []
 corporate_action_ingestors = []
+fx_ingestors = []
 
 # Add price ingestors
-price_ingestors.append(YFinancePriceIngestor(yfinance_test_tickers,yfinance_batch_size,start_date,end_date))
-for ticker, relative_source in csv_ticker_source_map.items():
+price_ingestors.append(YFinanceIngestor(yfinance_test_tickers,yfinance_batch_size,start_date,end_date, include_actions= False))
+for relative_source in csv_sources:
     full_source_path = base_path / relative_source
-    price_ingestors.append(CSVPriceIngestor(ticker,full_source_path,start_date,end_date))
+    price_ingestors.append(CSVIngestor(full_source_path,start_date,end_date))
 
 # Add action ingestors
-corporate_action_ingestors.append(YFinanceCorporateActionsIngestor(yfinance_test_tickers,yfinance_batch_size,start_date,end_date))
+corporate_action_ingestors.append(YFinanceIngestor(yfinance_test_tickers,yfinance_batch_size,start_date,end_date, include_actions=True))
 
-# Instantiate minor pipelines
+# Add fx ingestors
+for relative_source in csv_sources:
+    full_source_path = base_path / relative_source
+    fx_ingestors.append(CSVIngestor(full_source_path,start_date,end_date))
+
+# Instantiate sub pipelines
 price_pipeline = PricePipeline(price_ingestors)
 action_pipeline = CorporateActionPipeline(corporate_action_ingestors)
+fx_pipeline = FXPipeline(fx_ingestors)
 
 # Instantiate major pipeline and run
-master_pipeline = MasterPipeline(price_pipeline,action_pipeline,base_path)
+master_pipeline = PipelineRunner(price_pipeline,action_pipeline,fx_pipeline,base_path)
 master_pipeline.run()

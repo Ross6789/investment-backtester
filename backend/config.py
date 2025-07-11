@@ -1,12 +1,16 @@
 from pathlib import Path
 
 EXTERNAL_DATA_BASE_PATH = Path("/Volumes/T7/investment_backtester_data")  
-METADATA_PATH = Path("data/asset_metadata.csv")
+ASSET_METADATA_PATH = Path("data/asset_metadata.csv")
+FX_METADATA_PATH = Path("data/fx_metadata.csv")
 PARQUET_BACKTEST_DATA_PATH = Path("compiled/parquet/data")
 CSV_BACKTEST_RESULT_PATH = Path("results/csv")
 
 def get_asset_metadata_path() -> Path:
-    return Path(__file__).parent / METADATA_PATH
+    return Path(__file__).parent / ASSET_METADATA_PATH
+
+def get_fx_metadata_path() -> Path:
+    return Path(__file__).parent / FX_METADATA_PATH
 
 def get_backtest_data_path() -> Path:
     return EXTERNAL_DATA_BASE_PATH / PARQUET_BACKTEST_DATA_PATH

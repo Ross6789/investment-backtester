@@ -3,4 +3,5 @@ __pycache__/
 *.pyc
 .env
 .DS_Store
-/backend/data/asset_metadata.csv
+/backend/data/
+

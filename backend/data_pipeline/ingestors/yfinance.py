@@ -4,8 +4,10 @@ import warnings
 import pandas as pd
 from datetime import date
 from time import sleep
+from backend.utils import validate_date_order, validate_int, validate_positive_amount
+from backend.data_pipeline.ingestors import BaseIngestor
 
-class YFinanceIngestor:
+class YFinanceIngestor(BaseIngestor):
     """
     A class to ingest financial data from Yahoo Finance in batches.
 
@@ -20,9 +22,11 @@ class YFinanceIngestor:
         end_date (date): End date for data download.
         include_actions (bool): Whether to include corporate actions data.
     """
+
+
     def __init__(self, tickers: list[str], batch_size: int, start_date: date, end_date: date, include_actions : bool = False):
         """
-        Initializes the YFinanceIngestor with tickers, batch size, date range, and options.
+        Initialize a YFinanceIngestor with tickers, batch size, date range, and options.
 
         Args:
             tickers (list[str]): List of ticker symbols to fetch data for.
@@ -35,12 +39,10 @@ class YFinanceIngestor:
             TypeError: If batch_size is not an integer.
             ValueError: If batch_size < 1 or start_date is after end_date.
         """
-        if not isinstance(batch_size, int):
-            raise TypeError("Batch size must be an integer")
-        if batch_size < 1:
-            raise ValueError("Batch size must be greater than zero")
-        if start_date > end_date:
-            raise ValueError("Start date must be after the end date")
+        validate_int(batch_size,'batch_size')
+        validate_positive_amount(batch_size)
+        validate_date_order(start_date,end_date)
+    
         self.tickers = tickers
         self.start_date = start_date
         self.batch_size = batch_size
@@ -59,6 +61,7 @@ class YFinanceIngestor:
         """
         for i in range(0, len(self.tickers), self.batch_size):
             yield self.tickers[i:i + self.batch_size]
+
 
     def _download_data(self, tickers_batch: list[str]) -> pd.DataFrame:
         """
@@ -90,7 +93,7 @@ class YFinanceIngestor:
         except Exception as e:
             raise RuntimeError(f"Failed download : {e}")
 
-    # Method to run internal methods in order
+
     def run(self) -> pd.DataFrame:
         """
         Execute the full download process over all batches of tickers.

@@ -29,6 +29,42 @@ def get_yfinance_tickers(asset_type: str) -> list[str]:
     return metadata["ticker"].to_list()
 
 
+def get_fx_csv_sources() -> list[Path]:
+    """
+    Returns a list of all csv source paths for fx data
+
+    Returns:
+        list[Path]: List of all csv sources paths within the fx metadata file.
+    """
+    sources = (
+        pl.scan_csv(config.get_fx_metadata_path())
+        .filter(pl.col("source")=="local_csv")
+        .select("source_file_path")
+        .collect()
+        .to_series()
+        .to_list()
+    )
+    return sources
+
+
+def get_asset_csv_sources() -> list[Path]:
+    """
+    Returns a list of all csv source paths for asset data
+
+    Returns:
+        list[Path]: List of all csv sources paths within the metadata file.
+    """
+    sources = (
+        pl.scan_csv(config.get_asset_metadata_path())
+        .filter(pl.col("source")=="local_csv")
+        .select("source_file_path")
+        .collect()
+        .to_series()
+        .to_list()
+    )
+    return sources
+
+
 def get_csv_ticker_source_map() -> dict[str, Path]:
     """
     Returns a mapping of tickers to their local CSV file paths.
@@ -189,6 +225,20 @@ def validate_date_order(start_date: date, end_date: date) -> None:
     """
     if end_date < start_date :
         raise ValueError("Invalid dates : start date must be before end date")
+
+
+def validate_int(obj, name : str) -> None:
+    """Validate that the given object is an integer.
+
+    Args:
+        obj: The object to validate.
+        name: The name of the variable (used for error messages).
+
+    Raises:
+        TypeError: If the object is not an instance of int.
+    """
+    if not isinstance(obj, int):
+        raise TypeError(f"{name} must be an integer. Currently {type(obj)} : {obj} ")
     
 
 # --- Scheduling Utilities ---
@@ -232,3 +282,64 @@ def generate_recurring_dates(start_date: date, end_date: date, frequency: str) -
         current_date += time_spacing
 
     return dates
+
+
+# --- Saving Utilities ---
+
+def save_partitioned_parquet(data : pl.DataFrame, directory_save_path: Path) -> None:
+    """
+    Save a Polars DataFrame as a partitioned Parquet dataset, grouped by ticker.
+
+    Each group (by 'ticker') is saved in its own subdirectory, suitable for efficient querying.
+
+    Args:
+        data (pl.DataFrame): The DataFrame to save. Must contain a 'ticker' column.
+        directory_save_path (Path): Root directory to save the partitioned dataset.
+
+    Raises:
+        RuntimeError: If any error occurs while writing the Parquet files.
+    """
+    try:
+        for (ticker,) , ticker_df in data.group_by("ticker"):
+            folder = directory_save_path / f"ticker={ticker}"
+            folder.mkdir(parents=True, exist_ok=True)
+            ticker_df.write_parquet(folder / "data.parquet")
+        print(f"Data saved to {directory_save_path}.") 
+    except Exception as e:
+        raise RuntimeError(f"Failed to save partitioned parquet to {directory_save_path}: {e}") from e
+
+
+def save_regular_parquet(data : pl.DataFrame, save_path: Path) -> None:
+    """
+    Save a Polars DataFrame as a single flat Parquet file.
+
+    Args:
+        data (pl.DataFrame): The DataFrame to save.
+        save_path (Path): The full file path where the Parquet file should be saved.
+
+    Raises:
+        RuntimeError: If saving fails for any reason.
+    """
+    try:
+        data.write_parquet(save_path)
+        print(f"Data saved to {save_path}.") 
+    except Exception as e:
+        raise RuntimeError(f"Failed to save regular parquet to {save_path}: {e}") from e
+
+
+def save_csv(data : pl.DataFrame, save_path: Path) -> None: 
+    """
+    Save a Polars DataFrame as a CSV file.
+
+    Args:
+        data (pl.DataFrame): The DataFrame to save.
+        save_path (Path): The full file path where the CSV should be saved.
+
+    Raises:
+        RuntimeError: If writing the CSV file fails.
+    """
+    try:
+        data.write_csv(save_path)
+        print(f"Data saved to {save_path}.") 
+    except Exception as e:
+        raise RuntimeError(f"Failed to save CSV to {save_path}: {e}") from e
