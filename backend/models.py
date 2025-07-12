@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from backend.enums import RebalanceFrequency,ReinvestmentFrequency, BacktestMode, BaseCurrency
 from backend.utils import parse_enum,validate_positive_amount
-
+import polars as pl
 
 @dataclass
 class TargetPortfolio:
@@ -108,3 +108,33 @@ class BacktestConfig:
         if isinstance(self.base_currency, str):
             self.base_currency = parse_enum(BaseCurrency,self.base_currency)
         validate_positive_amount(self.initial_investment, 'initial investment')
+
+
+@dataclass
+class BacktestResult:
+    """
+    Container for storing the results of a backtest in basic mode.
+
+    Attributes:
+        data (pl.DataFrame): The raw price and dividend data used during the backtest.
+        calendar (pl.DataFrame): The calendar of all backtest dates with asset activity flags.
+        cash (pl.DataFrame): Daily snapshots of the portfolio's cash balance.
+        holdings (pl.DataFrame): Daily snapshots of the holdings across all assets.
+    """
+    data : pl.DataFrame
+    calendar : pl.DataFrame
+    cash : pl.DataFrame
+    holdings : pl.DataFrame
+
+
+@dataclass
+class RealisticBacktestResult(BacktestResult):
+    """
+    Extended backtest result class for realistic mode, including additional trading information.
+
+    Attributes:
+        dividends (pl.DataFrame): Dividend payments received during the backtest.
+        orders (pl.DataFrame): Executed trade orders including buys, sells, and rebalances.
+    """
+    dividends : pl.DataFrame
+    orders : pl.DataFrame
