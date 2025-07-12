@@ -1,25 +1,22 @@
 from datetime import date
 import polars as pl
-from backend.models import TargetPortfolio, BacktestConfig, RebalanceFrequency
+from backend.models import TargetPortfolio, BacktestConfig, BacktestResult
 from backend.utils import generate_recurring_dates
 from backend.backtest.engine import BaseBacktest
 from backend.backtest.portfolios import BasicPortfolio
 
 class BasicBacktest(BaseBacktest):
 
-    def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
+    def __init__(self,config: BacktestConfig, backtest_data: pl.DataFrame):
         """
-        Initialize BasicBacktest with data, portfolio, and rebalance schedule.
+        Initialize BasicBacktest with data and configuration
 
         Args:
-            start_date (date): Backtest start date.
-            end_date (date): Backtest end date.
-            backtest_data (pl.DataFrame): Market data.
-            target_portfolio (TargetPortfolio): Target portfolio config.
             config (BacktestConfig): Strategy and backtest settings.
+            backtest_data (pl.DataFrame): Market data.
         """
         # Run superclass constructor
-        super().__init__(start_date, end_date, backtest_data, target_portfolio,config)
+        super().__init__(config, backtest_data)
        
         # Initialise specific portfolio for this mode
         self.portfolio = BasicPortfolio(self)
@@ -27,7 +24,7 @@ class BasicBacktest(BaseBacktest):
         # Scheduled rebalances : compute dates in advance
         rebalance_freq = self.config.strategy.rebalance_frequency.value
         self.rebalance_dates = (
-            generate_recurring_dates(start_date,end_date, rebalance_freq)
+            generate_recurring_dates(self.config.start_date,self.config.end_date, rebalance_freq)
             if rebalance_freq != 'never' else set()
         )
     
@@ -56,7 +53,7 @@ class BasicBacktest(BaseBacktest):
         self.portfolio.did_rebalance = True
 
 
-    def run(self) -> dict[str, pl.DataFrame]:
+    def run(self) -> BacktestResult:
         """
         Runs the BASIC mode backtest over the full date range.
 
@@ -91,7 +88,7 @@ class BasicBacktest(BaseBacktest):
 
             # --- HANDLE CASHFLOWS ---
 
-            if current_date == self.start_date:
+            if current_date == self.config.start_date:
                 self.portfolio.add_cash(self.config.initial_investment)
                 invested = False
             if current_date in self.cashflow_dates:
@@ -139,12 +136,12 @@ class BasicBacktest(BaseBacktest):
             cash_snapshots.append(daily_snapshot['cash'])
             holding_snapshots.extend(daily_snapshot['holdings'])
 
-        # Bulk convert snapshots into polars dataframe for better processing and package within dictionary
-        history = {
-            "data":self.backtest_data,
-            "calendar":self.calendar_df,
-            "cash":pl.DataFrame(cash_snapshots),
-            "holdings":pl.DataFrame(holding_snapshots),
-        }
+        # Bulk convert snapshots into polars dataframe for better processing and package within backtest result dataclass
+        result = BacktestResult(
+            self.backtest_data,
+            self.calendar_df,
+            pl.DataFrame(cash_snapshots),
+            pl.DataFrame(holding_snapshots)
+            )
 
-        return history
+        return result

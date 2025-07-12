@@ -1,14 +1,14 @@
 from datetime import date
 import polars as pl
 from dateutil.relativedelta import relativedelta
-from backend.models import TargetPortfolio, BacktestConfig
+from backend.models import TargetPortfolio, BacktestConfig, RealisticBacktestResult
 from backend.enums import OrderSide, RebalanceFrequency
 from backend.backtest.engine import BaseBacktest
 from backend.backtest.portfolios import RealisticPortfolio
 
 class RealisticBacktest(BaseBacktest):
 
-    def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
+    def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame):
         """
         Initialize the realistic backtest mode.
 
@@ -17,14 +17,11 @@ class RealisticBacktest(BaseBacktest):
         and delayed execution.
 
         Args:
-            start_date (date): The starting date of the backtest.
-            end_date (date): The ending date of the backtest.
-            backtest_data (pl.DataFrame): Historical market data used in the backtest.
-            target_portfolio (TargetPortfolio): The portfolio containing target asset weights.
             config (BacktestConfig): Configuration object specifying backtest parameters and strategy.
+            backtest_data (pl.DataFrame): Historical market data used in the backtest.
         """
         # Run superclass constructor
-        super().__init__(start_date, end_date, backtest_data, target_portfolio,config)
+        super().__init__(config,backtest_data)
 
         # Initialise specific portfolio for this mode
         self.portfolio = RealisticPortfolio(self)
@@ -290,7 +287,7 @@ class RealisticBacktest(BaseBacktest):
         self.previous_rebalance_date = current_date
 
 
-    def run(self) -> dict[str, pl.DataFrame]:
+    def run(self) -> RealisticBacktestResult:
         """
         Executes the full portfolio backtest over the master calendar date range.
 
@@ -397,14 +394,14 @@ class RealisticBacktest(BaseBacktest):
         # Combine order books 
         orders = pl.concat([self.executed_orders,self.pending_orders])
 
-        # Bulk convert snapshots into polars dataframe for better processing and package within dictionary
-        history = {
-            "data":self.backtest_data,
-            "calendar":self.calendar_df,
-            "cash":pl.DataFrame(cash_snapshots),
-            "holdings":pl.DataFrame(holding_snapshots),
-            "dividends":pl.DataFrame(dividend_snapshots),
-            "orders": orders
-        }
+        # Bulk convert snapshots into polars dataframe for better processing and package within result dataclass
+        result = RealisticBacktestResult(
+            self.backtest_data,
+            self.calendar_df,
+            pl.DataFrame(cash_snapshots),
+            pl.DataFrame(holding_snapshots),
+            pl.DataFrame(dividend_snapshots),
+            orders
+        )
 
-        return history
+        return result

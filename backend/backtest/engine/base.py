@@ -1,17 +1,14 @@
 from abc import ABC, abstractmethod
 from datetime import date
 import polars as pl
-from backend.models import TargetPortfolio, BacktestConfig
+from backend.models import TargetPortfolio, BacktestConfig, BacktestResult
 from backend.utils import generate_recurring_dates
 
 
 class BaseBacktest(ABC):
-    def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
-            self.start_date = start_date
-            self.end_date = end_date
-            self.backtest_data = backtest_data
-            self.target_portfolio = target_portfolio
+    def __init__(self,config: BacktestConfig, backtest_data: pl.DataFrame,):
             self.config = config
+            self.backtest_data = backtest_data
 
             # Generate master calendar
             calender_df, calender_dict = self._generate_master_calendar()
@@ -24,7 +21,7 @@ class BaseBacktest(ABC):
             # Scheduled cashflow : Compute dates in advance
             recurring_freq = self.config.recurring_investment.frequency.value if self.config.recurring_investment is not None else None
             self.cashflow_dates = (
-                generate_recurring_dates(start_date,end_date, recurring_freq)
+                generate_recurring_dates(self.config.start_date,self.config.end_date, recurring_freq)
                 if recurring_freq is not None else set()
             )
 
@@ -35,7 +32,7 @@ class BaseBacktest(ABC):
 
 
     @abstractmethod
-    def run(self) -> dict[str, pl.DataFrame]:
+    def run(self) -> BacktestResult:
         pass
 
 
@@ -78,7 +75,7 @@ class BaseBacktest(ABC):
         - master_calendar_df (Polars DataFrame) for efficient filtering.
         - self.master_calendar_dict (dict) for fast date-based lookup.
         """
-        date_range = pl.DataFrame(pl.date_range(self.start_date,self.end_date,interval="1d",eager=True).alias('date'))
+        date_range = pl.DataFrame(pl.date_range(self.config.start_date,self.config.end_date,interval="1d",eager=True).alias('date'))
 
         ticker_active_dates = self._generate_ticker_active_dates()
 
@@ -195,7 +192,7 @@ class BaseBacktest(ABC):
             dict[str, float]: A dictionary mapping active tickers to their normalized target weights.
         """
         active_tickers = self._find_active_tickers(date)
-        filtered_weights = {ticker: weight for ticker, weight in self.target_portfolio.weights.items() if ticker in active_tickers}
+        filtered_weights = {ticker: weight for ticker, weight in self.config.target_portfolio.weights.items() if ticker in active_tickers}
         total_weight = sum(filtered_weights.values())
         normalized_weights = {ticker : weight / total_weight for ticker, weight in filtered_weights.items()}
         return normalized_weights

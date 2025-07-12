@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from backend.enums import RebalanceFrequency,ReinvestmentFrequency, BacktestMode, BaseCurrency
-from backend.utils import parse_enum,validate_positive_amount
+from backend.utils import parse_enum,validate_positive_amount, validate_date_order
 import polars as pl
+from datetime import date
 
 @dataclass
 class TargetPortfolio:
@@ -84,20 +85,29 @@ class Strategy:
 @dataclass
 class BacktestConfig:
     """
-    Configuration for the backtest.
+    Configuration for running a backtest, including parameters defining the
+    backtest mode, portfolio, investment schedule, and time period.
 
     Attributes:
-        mode: BacktestMode, e.g. basic or realistic.
-        base_currency: BaseCurrency eg.  GBP, USD
-        strategy: Investment strategy parameters.
-        initial_investment: Initial capital amount for backtesting (must be positive).
-        recurring_investment: Optional recurring investment schedule.
+        mode (BacktestMode): The backtest mode to use (e.g., basic, realistic).
+        base_currency (BaseCurrency): The currency in which the portfolio is denominated (e.g., GBP, USD).
+        start_date (date): The start date of the backtest period.
+        end_date (date): The end date of the backtest period.
+        target_portfolio (TargetPortfolio): The target allocation of assets for the strategy.
+        strategy (Strategy): Parameters defining the investment strategy.
+        initial_investment (float): The initial capital amount for the backtest (must be positive).
+        recurring_investment (RecurringInvestment | None): Optional recurring investment schedule.
 
     Raises:
-        ValueError: If mode or base currency is an invalid value or initial_investment is not positive.
+        ValueError: If `mode` or `base_currency` values are invalid.
+        ValueError: If `start_date` is after `end_date`.
+        ValueError: If `initial_investment` is not a positive value.
     """
     mode : BacktestMode = BacktestMode.REALISTIC
     base_currency : BaseCurrency = BaseCurrency.GBP
+    start_date : date
+    end_date : date
+    target_portfolio : TargetPortfolio
     strategy: Strategy = field(default_factory=Strategy)
     initial_investment : float = 10000
     recurring_investment : RecurringInvestment | None = None
@@ -107,6 +117,7 @@ class BacktestConfig:
             self.mode = parse_enum(BacktestMode,self.mode)
         if isinstance(self.base_currency, str):
             self.base_currency = parse_enum(BaseCurrency,self.base_currency)
+        validate_date_order(self.start_date,self.end_date)
         validate_positive_amount(self.initial_investment, 'initial investment')
 
 

@@ -26,7 +26,7 @@ recurring_investment_frequency = ReinvestmentFrequency.MONTHLY
 target_portfolio = TargetPortfolio(target_weights)
 strategy = Strategy(fractional_shares,reinvest_dividends,rebalance_frequency)
 recurring_investment = RecurringInvestment(recurring_investment_amount,recurring_investment_frequency)
-backtest_config = BacktestConfig(mode,base_currency,strategy,initial_investment,recurring_investment)
+backtest_config = BacktestConfig(mode,base_currency,start_date,end_date,target_portfolio,strategy,initial_investment,recurring_investment)
 
 configuration_dict = {
     "Mode" : mode,
@@ -46,12 +46,12 @@ configuration_dict = {
 backtest_data = get_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date)
 
 # Create and run backtest
-backtest = BacktestRunner(start_date,end_date,backtest_data,target_portfolio,backtest_config)
+backtest = BacktestRunner(backtest_config, backtest_data)
 print('starting backtest...')
-history = backtest.run()
+result = backtest.run()
 
 # export results
-result = BacktestExporter(history)
+result = BacktestExporter(result)
 print('Exporting results to csv...')
 result.to_csv(csv_save_path,configuration_dict)
 

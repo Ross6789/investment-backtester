@@ -17,18 +17,12 @@ class BacktestRunner:
     Runs portfolio backtests over a specified date range and dataset.
 
     Attributes:
-        start_date (date): Start date of the backtest.
-        end_date (date): End date of the backtest.
-        backtest_data (pl.DataFrame): Full dataset of all tickers and dates.
-        target_portfolio (TargetPortfolio): Desired portfolio allocation.
         config (BacktestConfig): Strategy and investment settings.
+        backtest_data (pl.DataFrame): Full dataset of all tickers and dates.
     """
-    def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
-            self.start_date = start_date
-            self.end_date = end_date
-            self.backtest_data = backtest_data
-            self.target_portfolio = target_portfolio
+    def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame):
             self.config = config
+            self.backtest_data = backtest_data
 
 
     def run(self):
@@ -41,14 +35,11 @@ class BacktestRunner:
             raise ValueError(f"Unsupported backtest mode: {self.config.mode}")
 
         backtest = backtest_class(
-            self.start_date,
-            self.end_date,
-            self.backtest_data,
-            self.target_portfolio,
             self.config,
+            self.backtest_data,
         )
 
-        run_data = backtest.run()
-        return run_data
+        result = backtest.run()
+        return result
 
     
