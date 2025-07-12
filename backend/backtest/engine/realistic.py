@@ -322,7 +322,7 @@ class RealisticBacktest(BaseBacktest):
             # --- HANDLE CASHFLOWS ---
 
             # Initial investment
-            if current_date == self.start_date:
+            if current_date == self.config.start_date:
                 self.portfolio.add_cash(self.config.initial_investment)
                 place_order = True
 

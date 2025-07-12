@@ -347,3 +347,36 @@ def save_csv(data : pl.DataFrame, save_path: Path) -> None:
         print(f"Data saved to {save_path}.") 
     except Exception as e:
         raise RuntimeError(f"Failed to save CSV to {save_path}: {e}") from e
+  
+
+# --- Reporting Utilities --- 
+
+def build_pivoted_col_names(pivot_values : list[str] , columns : list [str]) -> list[str]:
+        """
+        Generate new column names by combining each pivot value with each column name.
+
+        Each new name is formatted as '<pivot_value>_<column>', effectively expanding 
+        the original column names with a prefix for each pivot value.
+
+        Args:
+            pivot_values (list[str]): A list of pivot values (e.g. categories or keys).
+            columns (list[str]): A list of column names to be prefixed.
+
+        Returns:
+            list[str]: A list of combined column names.
+        """
+        return [f'{col}_{pivot}' for pivot in pivot_values for col in columns]
+
+
+def build_drop_col_list(excluded_cols : list[str], all_cols : list[str]) -> list[str]:
+    """
+    Generate a list of column names to drop by excluding specified columns.
+
+    Args:
+        excluded_cols (list[str]): Columns to keep (e.g. join keys).
+        all_cols (list[str]): All column names from a DataFrame.
+
+    Returns:
+        list[str]: Columns to drop (i.e. those not in excluded_cols).
+    """
+    return [col for col in all_cols if col not in excluded_cols]

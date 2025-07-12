@@ -89,11 +89,11 @@ class BacktestConfig:
     backtest mode, portfolio, investment schedule, and time period.
 
     Attributes:
-        mode (BacktestMode): The backtest mode to use (e.g., basic, realistic).
-        base_currency (BaseCurrency): The currency in which the portfolio is denominated (e.g., GBP, USD).
         start_date (date): The start date of the backtest period.
         end_date (date): The end date of the backtest period.
         target_portfolio (TargetPortfolio): The target allocation of assets for the strategy.
+        mode (BacktestMode): The backtest mode to use (e.g., basic, realistic).
+        base_currency (BaseCurrency): The currency in which the portfolio is denominated (e.g., GBP, USD).
         strategy (Strategy): Parameters defining the investment strategy.
         initial_investment (float): The initial capital amount for the backtest (must be positive).
         recurring_investment (RecurringInvestment | None): Optional recurring investment schedule.
@@ -103,11 +103,11 @@ class BacktestConfig:
         ValueError: If `start_date` is after `end_date`.
         ValueError: If `initial_investment` is not a positive value.
     """
-    mode : BacktestMode = BacktestMode.REALISTIC
-    base_currency : BaseCurrency = BaseCurrency.GBP
     start_date : date
     end_date : date
     target_portfolio : TargetPortfolio
+    mode : BacktestMode = BacktestMode.REALISTIC
+    base_currency : BaseCurrency = BaseCurrency.GBP
     strategy: Strategy = field(default_factory=Strategy)
     initial_investment : float = 10000
     recurring_investment : RecurringInvestment | None = None

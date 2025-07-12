@@ -5,13 +5,8 @@ from datetime import datetime
 from backend.constants import CURRENCY_PRECISION,FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION
 
 class BacktestExporter:
-    """
-    A container for the historical results of a portfolio backtest.
 
-    Attributes:
-        history (list[dict[str, object]]): A list of snapshots, each representing the portfolio state on a specific date.
-    """
-    def __init__(self, history: dict[str, pl.DataFrame]):
+    def __init__(self, backtest_result, Bac):
         """
         Initialize the BacktestResult with a list of portfolio snapshots.
         """
@@ -38,8 +33,6 @@ class BacktestExporter:
         # Convert dataframes to lazyframes
         cash_history_lf = self.cash_history.lazy()
         holding_history_lf = self.holding_history.lazy()
-
-        
         dividend_history_lf = self.dividend_history.lazy()
         order_history_lf = self.order_history.lazy()
 
