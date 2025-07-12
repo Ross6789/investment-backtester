@@ -74,8 +74,7 @@ class BaseAnalyser(ABC):
 
     def _add_portfolio_weighting(self) -> pl.LazyFrame:  
         
-        drop_cols = build_drop_col_list(['date'], self.portfolio_lf.collect_schema().names())
-
+        drop_cols = build_drop_col_list(['date'], self.portfolio_lf.schema.keys())
         holdings_with_weighting = (
             self.holdings_lf
             .join(self.portfolio_lf, on='date')
@@ -91,7 +90,7 @@ class BaseAnalyser(ABC):
 
         wide_holdings_total_value = (
             self.holdings_lf
-            .select(["date","ticker"] + PIVOT_VALUES)
+            .select(["date","ticker", *PIVOT_VALUES])
             .collect()
             .pivot(values=PIVOT_VALUES, 
                 index="date", 
@@ -130,7 +129,7 @@ class BaseAnalyser(ABC):
             self.holdings_lf
             .join(self.data_lf, on=['date','ticker','base_price'])
             .join(self.portfolio_lf, on='date')
-            .select(['date','ticker'] + PIVOT_VALUES)
+            .select(['date','ticker', *PIVOT_VALUES])
         )
         
         holdings_summary = (
@@ -142,7 +141,7 @@ class BaseAnalyser(ABC):
 
         # Order columns
         pivot_cols = build_pivoted_col_names(self.tickers, PIVOT_VALUES)
-        holdings_summary_ordered = holdings_summary.select(['date'] + pivot_cols)
+        holdings_summary_ordered = holdings_summary.select(['date', *pivot_cols])
             
         return holdings_summary_ordered
 
