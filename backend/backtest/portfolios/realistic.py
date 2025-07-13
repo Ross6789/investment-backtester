@@ -31,7 +31,7 @@ class RealisticPortfolio(BasePortfolio):
     
     # --- Trading ---
 
-    def invest(self, ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool) -> bool:
+    def invest(self, ticker : str, allocated_funds : float, price : float, allow_fractional_shares: bool) -> float:
         """
         Attempt to invest allocated funds into a specified asset.
 
@@ -42,7 +42,7 @@ class RealisticPortfolio(BasePortfolio):
             allow_fractional_shares (bool): If True, allows partial units to be purchased.
 
         Returns:
-            bool: True if the investment succeeds; False if insufficient funds.
+            float: Number of units bought; 0.0 indicates a failed transaction (insufficient funds).
 
         Raises:
             ValueError: If allocated_funds is not positive.
@@ -57,8 +57,8 @@ class RealisticPortfolio(BasePortfolio):
             units_bought = allocated_funds // price
 
         # If purchase unsuccessful ie. insufficient funds
-        if units_bought <= 0:
-            return False
+        if units_bought == 0:
+            return 0.0
         
         # Find total cost
         total_cost = units_bought * price
@@ -67,7 +67,7 @@ class RealisticPortfolio(BasePortfolio):
         self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
         self.holdings[ticker] = self.holdings[ticker]
         self.cash_balance -= total_cost
-        return True
+        return units_bought
 
 
     def sell(self,ticker : str, required_funds : float, price : float, allow_fractional_shares: bool) -> bool:
@@ -81,7 +81,7 @@ class RealisticPortfolio(BasePortfolio):
             allow_fractional_shares (bool): If True, allows partial units to be sold.
 
         Returns:
-            bool: True if the sale succeeds; False if insufficient holdings.
+            float: Number of units sold; 0.0 indicates a failed transaction (insufficient holdings).
 
         Raises:
             ValueError: If required_funds is not positive.
@@ -91,8 +91,8 @@ class RealisticPortfolio(BasePortfolio):
 
         # Find units owned and abort if none held
         units_owned = self.holdings.get(ticker,0.0)
-        if units_owned <= 0:
-            return False
+        if units_owned == 0:
+            return 0.0
 
         # Calculate how many units are to be sold
         if allow_fractional_shares:
@@ -101,8 +101,8 @@ class RealisticPortfolio(BasePortfolio):
             units_sold = min(ceil(required_funds / price), units_owned)
         
         # If sale unsuccessful
-        if units_sold <= 0:
-            return False
+        if units_sold == 0:
+            return 0.0
 
         # Find total earnings
         total_earned = units_sold * price
@@ -112,7 +112,7 @@ class RealisticPortfolio(BasePortfolio):
         self.holdings[ticker] = self.holdings[ticker]
         self.cash_balance += total_earned
 
-        return True
+        return units_sold
     
 
     # --- Dividends ---

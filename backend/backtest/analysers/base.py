@@ -5,33 +5,45 @@ from backend.utils import build_pivoted_col_names, build_drop_col_list
 
 
 class BaseAnalyser(ABC):
+    """
+    Basic analyser class for processing backtest results.
+
+    Initializes lazy dataframes for key backtest components
+    and caches unique tickers for efficient access in analysis methods.
+
+    Attributes:
+        data_lf (pl.LazyFrame): LazyFrame of backtest price data.
+        calendar_lf (pl.LazyFrame): LazyFrame of the calendar data.
+        cash_lf (pl.LazyFrame): LazyFrame of cash balances over time.
+        holdings_lf (pl.LazyFrame): LazyFrame of holdings over time.
+        tickers (list[str]): List of unique ticker symbols from holdings.
+    """
 
     def __init__(self, backtest_results : BacktestResult):
-        # Convert dataframes to lazyframes
+        """
+        Initialize the BaseAnalyser with backtest result data.
+
+        Args:
+            backtest_results (BacktestResult): Object containing backtest dataframes.
+        """
+        # Initialize lazy dataframes
         self.data_lf = backtest_results.data.lazy()
         self.calendar_lf = backtest_results.calendar.lazy()
         self.cash_lf = backtest_results.cash.lazy()
         self.holdings_lf = backtest_results.holdings.lazy()
 
-        print(backtest_results.data)
-        print(backtest_results.calendar)
-        print(backtest_results.cash)
-        print(backtest_results.holdings)
-
-        # Save tickers
+        # Cache tickers for use in future methods
         self.tickers = self._get_all_tickers()
 
-        # Cache common enrichments (placed in constructor if core enrichment and used in mutliple future methods)
-        self.holdings_lf = self._enrich_with_holding_values()
-        self.portfolio_lf = self._compute_portfolio_totals()
-        self.holdings_lf = self._enrich_with_portfolio_weighting()
-
-
-    # --- Helper methods--- # 
 
     def _get_all_tickers(self) -> list[str]:       
-        
-        tickers = (
+        """
+        Retrieve a list of unique ticker symbols from the holdings data.
+
+        Returns:
+            list[str]: Unique tickers present in holdings_lf.
+        """
+        return (
             self.holdings_lf
             .select('ticker')
             .unique()
@@ -39,26 +51,59 @@ class BaseAnalyser(ABC):
             .to_series()
             .to_list()
         )
-        return tickers
+ 
+
+    # --- Enrichment methods --- # 
+
+    @staticmethod
+    def _enrich_with_year(date_col: str, lf: pl.LazyFrame) -> pl.LazyFrame:
+        """
+        Adds a 'year' column to the given LazyFrame based on the specified date column.
+
+        Args:
+            date_col (str): Name of the date column to extract the year from.
+            lf (pl.LazyFrame): A Polars LazyFrame containing a 'date' column of type Date.
+
+        Returns:
+            pl.LazyFrame: A LazyFrame with an additional 'year' column.
+        """
+        return lf.with_columns( pl.col(date_col).dt.year().alias('year'))
     
 
-    # --- Enrichment helper methods --- # 
+    @staticmethod
+    def _enrich_holdings_with_values(holdings_lf: pl.LazyFrame) -> pl.LazyFrame:  
+        """
+        Calculate the total value of each holding by multiplying units by base price.
 
-    def _enrich_with_holding_values(self) -> pl.LazyFrame:       
-        
+        Args:
+            holdings_lf (pl.LazyFrame): Holdings data including 'units' and 'base_price' columns.
+
+        Returns:
+            pl.LazyFrame: Holdings with an added 'value' column representing total holding value.
+        """     
         return (
-            self.holdings_lf
+            holdings_lf
             .with_columns((pl.col("units") * pl.col("base_price")).alias("value"))
         )
 
+    @staticmethod
+    def _enrich_holdings_with_portfolio_weighting(holdings_lf: pl.LazyFrame, portfolio_lf: pl.LazyFrame) -> pl.LazyFrame:  
+        """
+        Add portfolio weighting (%) to each holding based on its value proportion of total holdings.
 
-    def _enrich_with_portfolio_weighting(self) -> pl.LazyFrame:  
+        Args:
+            holdings_lf (pl.LazyFrame): Holdings data with 'value' per asset per date.
+            portfolio_lf (pl.LazyFrame): Portfolio totals data with 'total_holding_value' per date.
 
-        drop_cols = build_drop_col_list(['date'], self.portfolio_lf.schema.keys())
+        Returns:
+            pl.LazyFrame: Holdings enriched with 'portfolio_weighting' column representing 
+                        the percentage of each holding relative to total holdings on that date.
+        """
+        drop_cols = build_drop_col_list(['date'], portfolio_lf.schema.keys())
 
         holdings_with_weighting = (
-            self.holdings_lf
-            .join(self.portfolio_lf, on='date')
+            holdings_lf
+            .join(portfolio_lf, on='date')
             .with_columns((pl.col('value') / pl.col('total_holding_value')*100).alias('portfolio_weighting'))
             .drop(drop_cols)
         )
@@ -67,18 +112,28 @@ class BaseAnalyser(ABC):
 
     # --- Computation methods--- #    
 
-    def _compute_portfolio_totals(self) -> pl.LazyFrame:
+    @staticmethod
+    def _compute_portfolio_totals(holdings_lf: pl.LazyFrame, cash_lf: pl.LazyFrame) -> pl.LazyFrame:
+        """
+        Calculate daily portfolio totals by combining holdings and cash balances.
 
+        Args:
+            holdings_lf (pl.LazyFrame): Holdings data with 'value' column per asset per date.
+            cash_lf (pl.LazyFrame): Cash balance data per date.
+
+        Returns:
+            pl.LazyFrame: DataFrame with columns 'date', 'total_holding_value', and 'total_portfolio_value'.
+        """
         # Add total holdings value column
         total_holdings_value = (
-            self.holdings_lf
+            holdings_lf
             .group_by('date')
             .agg(pl.sum('value').fill_null(0).alias('total_holding_value'))
         )
 
         # Add total portfolio value column
         total_portoflio_value = (
-            self.cash_lf.join(total_holdings_value, on='date',how='left')
+            cash_lf.join(total_holdings_value, on='date',how='left')
             .with_columns(
                 (pl.col('cash_balance')+pl.col('total_holding_value')).alias('total_portfolio_value')
             )
@@ -87,14 +142,36 @@ class BaseAnalyser(ABC):
         return total_portoflio_value
 
 
-    # --- Formation / generation methods --- #    
+    # --- LazyFrame compilation --- #   
+
+    def _compile_enriched_data(self) -> None:
+        """
+        Compile enriched holdings and portfolio data.
+
+        Enhances holdings with value calculations, computes portfolio totals, 
+        and enriches holdings with portfolio weighting, storing results as instance attributes.
+        """
+        holdings_with_values = self._enrich_holdings_with_values(self.holdings_lf)
+
+        self.portfolio_lf = self._compute_portfolio_totals(holdings_with_values,self.cash_lf)
+        self.enriched_holdings_lf = self._enrich_holdings_with_portfolio_weighting(holdings_with_values,self.portfolio_lf)
+   
+
+    # --- Report formatting --- #
 
     def _format_wide_holdings_summary(self) -> pl.LazyFrame:
-       
+        """
+        Pivot enriched holdings data to wide format with 'value' and 'portfolio_weighting' per ticker.
+
+        Collects and pivots data on 'date' and 'ticker', then orders columns consistently.
+
+        Returns:
+            pl.LazyFrame: Pivoted holdings data in wide format with ordered columns.
+        """
         PIVOT_VALUES = ["value","portfolio_weighting"]
 
         wide_holdings_total_value = (
-            self.holdings_lf
+            self.enriched_holdings_lf
             .select(["date","ticker", *PIVOT_VALUES])
             .collect()
             .pivot(values=PIVOT_VALUES, 
@@ -110,9 +187,20 @@ class BaseAnalyser(ABC):
         return wide_holdings_total_value_ordered
     
 
-    #  --- Final reports --- #  
+    # --- Final report generation --- #
     
     def generate_daily_summary(self) -> pl.DataFrame:
+        """
+        Generate a daily summary by joining cash, portfolio, and holdings data.
+
+        Ensures enriched holdings data is compiled, formats holdings in wide format,
+        then joins cash and portfolio data on date.
+
+        Returns:
+            pl.DataFrame: Combined daily summary with cash, portfolio, and holdings info.
+        """
+        if not hasattr(self, 'enriched_holdings_lf'):
+            self._compile_enriched_data()
 
         wide_holdings_summary = self._format_wide_holdings_summary()
 
@@ -120,17 +208,29 @@ class BaseAnalyser(ABC):
             self.cash_lf
             .join(self.portfolio_lf, on='date', how='left')
             .join(wide_holdings_summary, on='date',how='left')
+            .fill_null(0)
             .collect()
         )
         return daily_summary
 
 
     def generate_holdings_summary(self) -> pl.DataFrame:
-       
+        """
+        Generate a pivoted summary of holdings with FX and portfolio data.
+
+        Joins enriched holdings with FX and portfolio data, 
+        then pivots the specified columns by date and ticker.
+
+        Returns:
+            pl.DataFrame: Pivoted holdings summary with columns for each ticker and value type.
+        """
         PIVOT_VALUES = ['units','native_currency','native_price','exchange_rate','value','portfolio_weighting']
 
+        if not hasattr(self, 'enriched_holdings_lf'):
+            self._compile_enriched_data()
+
         holdings_fx = (
-            self.holdings_lf
+            self.enriched_holdings_lf
             .join(self.data_lf, on=['date','ticker','base_price'])
             .join(self.portfolio_lf, on='date')
             .select(['date','ticker', *PIVOT_VALUES])
@@ -181,8 +281,6 @@ orders = pl.read_parquet(save_path / 'backtest_orders.parquet')
 test_results = RealisticBacktestResult(data,calendar,cash,holdings,dividends,orders)
 test_analyser = BaseAnalyser(test_results)
 
-print(test_analyser.holdings_lf.collect())
-print(test_analyser.portfolio_lf.collect())
 
 daily_summary = test_analyser.generate_daily_summary()
 print(daily_summary)

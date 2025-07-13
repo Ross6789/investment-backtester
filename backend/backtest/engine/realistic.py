@@ -90,13 +90,15 @@ class RealisticBacktest(BaseBacktest):
         """
         orders = []
 
-        for ticker, value in ticker_allocations.items():
+        for ticker, traget_value in ticker_allocations.items():
             orders.append({
                     "ticker": ticker,
-                    "value": value,
+                    "target_value": traget_value,
                     "date_placed": current_date,
                     "date_executed": self._next_trading_date(ticker,current_date),
                     "side": side,
+                    "base_price": None,
+                    "units": None,
                     'status': "pending"
                 })
             
@@ -120,6 +122,8 @@ class RealisticBacktest(BaseBacktest):
 
         Updates:
             - Marks orders as 'fulfilled' or 'failed' based on portfolio transaction success.
+            - Adds 'units' column to indicate number of units bought or sold.
+            - Adds 'base_price' column to record the price used for execution.
             - Moves executed orders from pending_orders to executed_orders.
         """
         executable_orders = (
@@ -131,7 +135,7 @@ class RealisticBacktest(BaseBacktest):
 
         for row in executable_orders.iter_rows(named=True):
             ticker = row['ticker']
-            value = row['value']
+            target_value = row['target_value']
             side = row['side']
             price = prices.get(ticker)
 
@@ -140,13 +144,16 @@ class RealisticBacktest(BaseBacktest):
             
             match side:
                 case 'buy':
-                    fulfilled = self.portfolio.invest(ticker, value, price, self.config.strategy.allow_fractional_shares)
+                    units_moved = self.portfolio.invest(ticker, target_value, price, self.config.strategy.allow_fractional_shares)
                 case 'sell':
-                    fulfilled = self.portfolio.sell(ticker, value, price, self.config.strategy.allow_fractional_shares)
+                    units_moved = self.portfolio.sell(ticker, target_value, price, self.config.strategy.allow_fractional_shares)
                 case _:
                     raise ValueError(f"Invalid order placed: side must be either 'buy' or 'sell', not {side}")
 
-            row['status'] = "fulfilled" if fulfilled else "failed"
+            row['base_price'] = price
+            row['units'] = units_moved
+            row['status'] = "fulfilled" if units_moved > 0 else "failed"
+            
             updated_orders.append(row)
 
         # Create new dataframe with updated orders
