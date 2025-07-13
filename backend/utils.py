@@ -168,7 +168,7 @@ def round_dataframe_columns(df: pl.DataFrame, price_precision: int | None = None
         # Identify currency-related columns by keywords
         elif any(keyword in col.lower() for keyword in ['price','cost','exchange_rate']):
             rounded_cols.append(pl.col(col).round(price_precision).alias(col))
-        elif any(keyword in col.lower() for keyword in ['value','dividend']):
+        elif any(keyword in col.lower() for keyword in ['value','dividend','cash']):
             rounded_cols.append(pl.col(col).round(currency_precision).alias(col))
         else:
             rounded_cols.append(pl.col(col).round(general_precision).alias(col))

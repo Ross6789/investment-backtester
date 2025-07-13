@@ -32,17 +32,6 @@ class ReportGenerator:
     def _format_metadata(metadata: dict[str, str] | None) -> list[str]:
         if not metadata:
             return []
-        return [f"# {key}: {value}" for key, value in metadata.items()]
+        return [f"# {key}: {value} \n" for key, value in metadata.items()]
     
-
-# test_df = pl.DataFrame({
-#     "id": [1, 2],
-#     "person": ['Alice','Bob'],
-#     "scores": [30,40],
-#     "hair": ['blond','brown']
-# })
-
-# print(test_df)
-
-# print(ReportGenerator.generate_csv(test_df))
 

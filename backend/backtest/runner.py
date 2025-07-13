@@ -56,9 +56,9 @@ class BacktestRunner:
             self.config,
             self.backtest_data,
         )
+        flat_config_dict = backtest.config.to_flat_dict()
 
         result = backtest.run()
-
 
         # export raw results
         raw_result_exporter.save_dataframe_to_csv(result.cash,'cash_history')
@@ -66,11 +66,11 @@ class BacktestRunner:
 
         analyser = analyser_class(result)
 
-        daily_summary_report = ReportGenerator(analyser.generate_daily_summary())
-        formatted_exporter.save_report_to_csv(daily_summary_report)
+        daily_summary_report = ReportGenerator.generate_csv(analyser.generate_daily_summary(),flat_config_dict)
+        formatted_exporter.save_report_to_csv(daily_summary_report, 'daily_summary')
         
-        daily_holdings_report = ReportGenerator(analyser.generate_holdings_summary())
-        formatted_exporter.save_report_to_csv(daily_holdings_report)
+        daily_holdings_report = ReportGenerator.generate_csv(analyser.generate_holdings_summary(),flat_config_dict)
+        formatted_exporter.save_report_to_csv(daily_holdings_report, 'holdings_summary')
     
 
 

@@ -20,14 +20,18 @@ class Exporter:
 
     def save_report_to_csv(self, csv_report: CSVReport, file_name: str) -> None:
         
+        # Generate full save path
         save_path = self.timestamped_folder / 'csv' / f'{file_name}.csv'
+
+        # Create the directory if it doesn't exist
+        save_path.parent.mkdir(parents=True, exist_ok=True)
     
-        with open(save_path, mode='w', newline='') as f:
+        with open(save_path, mode='w') as f:
                 writer = csv.writer(f)
 
                 # Write backtest_configuration as comments at top of csv file
-                for comment in csv_report.comments:
-                    writer.writerow(comment)
+                for line in csv_report.comments:
+                    writer.writerow([line])
                 writer.writerow([])  # Empty line between configuration and notes
 
                 # Add notes discussing accuracy of round
@@ -36,7 +40,7 @@ class Exporter:
 
                 # Write main body of report
                 writer.writerow(csv_report.headers)
-                writer.writerow(csv_report.rows)
+                writer.writerows(csv_report.rows)
 
         print(f'Exported {file_name} to : {save_path}')
 

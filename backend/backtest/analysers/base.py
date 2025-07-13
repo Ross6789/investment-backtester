@@ -97,7 +97,7 @@ class BaseAnalyser(ABC):
         Returns:
             pl.LazyFrame: Holdings enriched with 'portfolio_weighting' column representing the percentage of each holding relative to total holdings on that date.
         """
-        drop_cols = build_drop_col_list(['date'], portfolio_lf.schema.keys())
+        drop_cols = build_drop_col_list(['date'], portfolio_lf.collect_schema().keys())
 
         holdings_with_weighting = (
             holdings_lf
