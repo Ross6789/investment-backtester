@@ -25,6 +25,10 @@ class BaseBacktest(ABC):
                 if recurring_freq is not None else set()
             )
 
+    def get_config_metata():
+        return {
+            ""
+        }
 
     @abstractmethod
     def rebalance(self, current_date: date, prices: dict[str, float], normalized_target_weights: dict[str, float]) -> None:

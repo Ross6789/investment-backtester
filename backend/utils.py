@@ -232,7 +232,8 @@ def validate_date_order(start_date: date, end_date: date) -> None:
 
 
 def validate_int(obj, name : str) -> None:
-    """Validate that the given object is an integer.
+    """
+    Validate that the given object is an integer.
 
     Args:
         obj: The object to validate.
@@ -243,6 +244,21 @@ def validate_int(obj, name : str) -> None:
     """
     if not isinstance(obj, int):
         raise TypeError(f"{name} must be an integer. Currently {type(obj)} : {obj} ")
+    
+
+def validate_flat_dataframe(df: pl.DataFrame):
+    """
+    Validate that the DataFrame contains only flat (non-nested) columns.
+
+    Args:
+        df (pl.DataFrame): The DataFrame to validate.
+
+    Raises:
+        ValueError: If any column is of type List, Struct, or Object.
+    """
+    for col, dtype in df.schema.items():
+        if dtype.base_type() in [pl.List, pl.Struct, pl.Object]:
+            raise ValueError(f"Non-flat column detected: '{col}' has type {dtype}")
     
 
 # --- Scheduling Utilities ---
