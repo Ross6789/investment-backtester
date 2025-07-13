@@ -63,7 +63,6 @@ from backend.backtest.data_loader import get_backtest_data
 from backend.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
 from backend.enums import BacktestMode, BaseCurrency, RebalanceFrequency, ReinvestmentFrequency
 from backend.backtest.runner import BacktestRunner
-from backend.backtest.exporter import BacktestExporter
 
 # User choices
 mode = BacktestMode.REALISTIC
@@ -88,23 +87,23 @@ backtest_config = BacktestConfig(start_date,end_date,target_portfolio,mode,base_
 backtest_data = get_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date)
 
 # Create and run backtest
-backtest = BacktestRunner(backtest_config, backtest_data)
+backtest = BacktestRunner(backtest_config, backtest_data,config.get_export_base_path())
 print('starting backtest...')
 result = backtest.run()
 
-save_path = config.get_parquet_backtest_result_path()
+# save_path = config.get_parquet_backtest_result_path()
 
-print(result.data.schema)
-print(result.calendar.schema)
-print(result.cash.schema)
-print(result.holdings.schema)
-print(result.dividends.schema)
-print(result.orders.schema)
+# print(result.data.schema)
+# print(result.calendar.schema)
+# print(result.cash.schema)
+# print(result.holdings.schema)
+# print(result.dividends.schema)
+# print(result.orders.schema)
 
 
-result.data.write_parquet(save_path / 'backtest_data.parquet')
-result.calendar.write_parquet(save_path / 'backtest_calendar.parquet')
-result.cash.write_parquet(save_path / 'backtest_cash.parquet')
-result.holdings.write_parquet(save_path / 'backtest_holdings.parquet')
-result.dividends.write_parquet(save_path / 'backtest_dividends.parquet')
-result.orders.write_parquet(save_path / 'backtest_orders.parquet')
+# result.data.write_parquet(save_path / 'backtest_data.parquet')
+# result.calendar.write_parquet(save_path / 'backtest_calendar.parquet')
+# result.cash.write_parquet(save_path / 'backtest_cash.parquet')
+# result.holdings.write_parquet(save_path / 'backtest_holdings.parquet')
+# result.dividends.write_parquet(save_path / 'backtest_dividends.parquet')
+# result.orders.write_parquet(save_path / 'backtest_orders.parquet')

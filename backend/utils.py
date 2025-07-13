@@ -328,7 +328,19 @@ def generate_recurring_dates(start_date: date, end_date: date, frequency: str) -
     return dates
 
 
+
+
 # --- Saving Utilities ---
+
+def generate_timestamp() -> str:
+    """
+    Generate a timestamp string representing the current date and time.
+
+    Returns:
+        str: The current timestamp in the format 'YYYYMMDD_HHMMSS'.
+    """
+    return datetime.now().strftime('%Y%m%d_%H%M%S')
+
 
 def save_partitioned_parquet(data : pl.DataFrame, directory_save_path: Path) -> None:
     """

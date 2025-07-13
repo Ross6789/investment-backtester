@@ -40,13 +40,12 @@ class RealisticAnalyser(BaseAnalyser):
     @staticmethod
     def _enrich_cash_with_order_flags(orders_lf : pl.LazyFrame, cash_lf : pl.LazyFrame) -> pl.LazyFrame:
         """
-        Add `did_buy` and `did_sell` flags to the cash LazyFrame based on fulfilled orders.
+        Adds `did_buy` and `did_sell` flags to the cash LazyFrame based on fulfilled orders.
 
-        Joins cash data with fulfilled order data on `date`, marking buy/sell activity
-        with boolean columns. Missing values are filled with `False`.
+        Aggregates order activity by date, joins with the cash data, and fills missing flags with `False`.
 
         Returns:
-            pl.LazyFrame: Cash data enriched with buy/sell flags.
+            pl.LazyFrame: Cash data with `did_buy` and `did_sell` boolean columns.
         """
         order_flags = (
             orders_lf
@@ -56,12 +55,19 @@ class RealisticAnalyser(BaseAnalyser):
                 (pl.col('side') == 'buy').alias('did_buy'),
                 (pl.col('side') == 'sell').alias('did_sell'),
             ])
+            .group_by('date')
+            .agg([
+                pl.col('did_buy').any().alias('did_buy'),
+                pl.col('did_sell').any().alias('did_sell'),
+            ])
+            
         )
 
         cash_with_flags = (
             cash_lf.join(order_flags,on='date',how='left')
             .fill_null(False)
         )
+
         return cash_with_flags
 
     @staticmethod
@@ -371,28 +377,28 @@ class RealisticAnalyser(BaseAnalyser):
         return rounded_summary
 
 
-import backend.config as config
+# import backend.config as config
 
-save_path = config.get_parquet_backtest_result_path()
+# save_path = config.get_parquet_backtest_result_path()
 
-data = pl.read_parquet(save_path / 'backtest_data.parquet')
-calendar = pl.read_parquet(save_path / 'backtest_calendar.parquet')
-cash = pl.read_parquet(save_path / 'backtest_cash.parquet')
-holdings = pl.read_parquet(save_path / 'backtest_holdings.parquet')
-dividends = pl.read_parquet(save_path / 'backtest_dividends.parquet')
-orders = pl.read_parquet(save_path / 'backtest_orders.parquet')
+# data = pl.read_parquet(save_path / 'backtest_data.parquet')
+# calendar = pl.read_parquet(save_path / 'backtest_calendar.parquet')
+# cash = pl.read_parquet(save_path / 'backtest_cash.parquet')
+# holdings = pl.read_parquet(save_path / 'backtest_holdings.parquet')
+# dividends = pl.read_parquet(save_path / 'backtest_dividends.parquet')
+# orders = pl.read_parquet(save_path / 'backtest_orders.parquet')
 
-test_results = RealisticBacktestResult(data,calendar,cash,holdings,dividends,orders)
-test_analyser = RealisticAnalyser(test_results)
+# test_results = RealisticBacktestResult(data,calendar,cash,holdings,dividends,orders)
+# test_analyser = RealisticAnalyser(test_results)
 
-dividend_summary = test_analyser.generate_dividend_summary()
-print(dividend_summary)
+# dividend_summary = test_analyser.generate_dividend_summary()
+# print(dividend_summary)
 
-dividend_pivot_summary = test_analyser.generate_pivoted_yearly_dividend_summary()
-print(dividend_pivot_summary)
+# dividend_pivot_summary = test_analyser.generate_pivoted_yearly_dividend_summary()
+# print(dividend_pivot_summary)
 
-order_summary = test_analyser.generate_order_summary()
-print(order_summary)
+# order_summary = test_analyser.generate_order_summary()
+# print(order_summary)
 
-order_pivot_summary = test_analyser.generate_pivoted_yearly_order_summary()
-print(order_pivot_summary)
+# order_pivot_summary = test_analyser.generate_pivoted_yearly_order_summary()
+# print(order_pivot_summary)

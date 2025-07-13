@@ -151,8 +151,9 @@ class BaseAnalyser(ABC):
         holdings_with_values = self._enrich_holdings_with_values(self.holdings_lf)
 
         self.portfolio_lf = self._compute_portfolio_totals(holdings_with_values,self.cash_lf)
+
         self.enriched_holdings_lf = self._enrich_holdings_with_portfolio_weighting(holdings_with_values,self.portfolio_lf)
-   
+
 
     # --- Report formatting --- #
 
@@ -165,7 +166,7 @@ class BaseAnalyser(ABC):
         Returns:
             pl.LazyFrame: Pivoted holdings data in wide format with ordered columns.
         """
-        PIVOT_VALUES = ["value","portfolio_weighting"]
+        PIVOT_VALUES = ["value","portfolio_weighting"] 
 
         wide_holdings_total_value = (
             self.enriched_holdings_lf
@@ -278,26 +279,26 @@ class BaseAnalyser(ABC):
 
 
 
-import backend.config as config
+# import backend.config as config
 
-save_path = config.get_parquet_backtest_result_path()
+# save_path = config.get_parquet_backtest_result_path()
 
-data = pl.read_parquet(save_path / 'backtest_data.parquet')
-calendar = pl.read_parquet(save_path / 'backtest_calendar.parquet')
-cash = pl.read_parquet(save_path / 'backtest_cash.parquet')
-holdings = pl.read_parquet(save_path / 'backtest_holdings.parquet')
-dividends = pl.read_parquet(save_path / 'backtest_dividends.parquet')
-orders = pl.read_parquet(save_path / 'backtest_orders.parquet')
+# data = pl.read_parquet(save_path / 'backtest_data.parquet')
+# calendar = pl.read_parquet(save_path / 'backtest_calendar.parquet')
+# cash = pl.read_parquet(save_path / 'backtest_cash.parquet')
+# holdings = pl.read_parquet(save_path / 'backtest_holdings.parquet')
+# dividends = pl.read_parquet(save_path / 'backtest_dividends.parquet')
+# orders = pl.read_parquet(save_path / 'backtest_orders.parquet')
 
-test_results = RealisticBacktestResult(data,calendar,cash,holdings,dividends,orders)
-test_analyser = BaseAnalyser(test_results)
+# test_results = RealisticBacktestResult(data,calendar,cash,holdings,dividends,orders)
+# test_analyser = BaseAnalyser(test_results)
 
 
-daily_summary = test_analyser.generate_daily_summary()
-print(daily_summary)
+# daily_summary = test_analyser.generate_daily_summary()
+# print(daily_summary)
 
-holdings_summary = test_analyser.generate_holdings_summary()
-print(holdings_summary)
+# holdings_summary = test_analyser.generate_holdings_summary()
+# print(holdings_summary)
 
 
 

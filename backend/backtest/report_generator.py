@@ -6,7 +6,7 @@ from backend.utils import validate_flat_dataframe
 class ReportGenerator:
 
     @staticmethod
-    def generate_csv(df: pl.DataFrame, metadata: dict[str, str] = None) -> CSVReport:
+    def generate_csv(df: pl.DataFrame, metadata: dict[str, str] | None = None) -> CSVReport:
         """
         Generates a CSVReport with formatted metadata, headers and rows.
 
