@@ -1,73 +1,68 @@
+from backend.models import BacktestConfig
 import polars as pl
-from datetime import date
-from typing import Type
-from backend.config import get_backtest_run_base_path
-from backend.models import TargetPortfolio, BacktestConfig
-from backend.enums import BacktestMode
-from backend.backtest.engine import BaseEngine,BasicEngine,RealisticEngine
-from backend.backtest.analysers import BaseAnalyser, RealisticAnalyser
-from backend.backtest.exporter import Exporter
-from backend.backtest.report_generator import ReportGenerator
-from backend.backtest.export_handlers import BaseResultExportHandler
-from backend.utils import generate_timestamp
 from pathlib import Path
-
+from backend.utils import generate_timestamp
+from backend.backtest.factory import BacktestFactory
+from backend.backtest.exporter import Exporter
 
 class BacktestRunner:
-
-    BACKTEST_ENGINE_CLASS_MAP: dict[BacktestMode, Type[BaseEngine]] = {
-        BacktestMode.BASIC: BasicEngine,
-        BacktestMode.REALISTIC: RealisticEngine,
-    }
-
-    BACKTEST_ANALYSER_CLASS_MAP: dict[BacktestMode, Type[BaseAnalyser]] = {
-        BacktestMode.BASIC: BaseAnalyser,
-        BacktestMode.REALISTIC: RealisticAnalyser,
-    }
-
     """
-    Runs portfolio backtests over a specified date range and dataset.
+    Coordinates the execution of portfolio backtests, analysis, and result exporting.
+
+    This class serves as the main orchestrator for running backtests according to
+    the provided configuration and dataset. It selects and instantiates the appropriate
+    engine, analyser, and export handler based on the backtest mode, executes the backtest,
+    generates analyses, and exports all results and reports to the designated output folder.
 
     Attributes:
-        config (BacktestConfig): Strategy and investment settings.
-        backtest_data (pl.DataFrame): Full dataset of all tickers and dates.
-        base)save_path (Path): Base save path where raw results and summaries will be exported
+        config (BacktestConfig): Configuration detailing strategy, mode, and parameters.
+        backtest_data (pl.DataFrame): The dataset containing all relevant financial data.
+        base_save_path (Path): Directory where all backtest outputs will be saved.
+        timestamp (str): Timestamp used to create unique output folders per run.
     """
+
     def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame, base_save_path: Path):
+            """
+            Initializes the BacktestRunner with configuration, data, and save path.
+
+            Args:
+                config: BacktestConfig object containing strategy and mode.
+                backtest_data: Polars DataFrame with all backtest input data.
+                base_save_path: Base directory path to save outputs.
+            """
             self.config = config
             self.backtest_data = backtest_data
             self.base_save_path = base_save_path
             self.timestamp = generate_timestamp()
 
+    def run(self) -> None:
+        """
+        Runs the backtest process:
+        - Instantiates engine, analyser, exporter, and export handler based on mode.
+        - Executes the backtest engine.
+        - Generates and exports all results and reports.
+        """
 
-    def run(self):
-        """
-        Instantiates and runs the selected backtest mode and returns analysed results.
-        """
-        engine_class = self.BACKTEST_ENGINE_CLASS_MAP.get(self.config.mode)
-        analyser_class = self.BACKTEST_ANALYSER_CLASS_MAP.get(self.config.mode)
+        print("Running backtest...")
+        mode = self.config.mode
+        
+        # Create engine and run backtest
+        print("Starting engine...")
+        engine = BacktestFactory.get_engine(mode,self.config,self.backtest_data)
+        result = engine.run()
+        print("Engine finished! Starting analysis and export...")
+
+        # Create analyser based on mode and backtest results
+        analyser = BacktestFactory.get_analyser(mode,result)
+
+        # Setup exporter for saving results
         exporter = Exporter(self.base_save_path, self.timestamp)
 
+        # Get export handler and export all results/reports
+        result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
+        result_export_handler.export_all()
+        print("Export finished!")
         
-
-        if engine_class is None:
-            raise ValueError(f"Unsupported backtest mode: {self.config.mode}")
-
-        backtest = engine_class(
-            self.config,
-            self.backtest_data,
-        )
-        flat_config_dict = backtest.config.to_flat_dict()
-
-        result = backtest.run()
-
-        analyser = analyser_class(result)
-
-        result_exporter = BaseResultExportHandler(result,exporter,analyser,flat_config_dict)
-
-        result_exporter.export_all()
-
-
 
 
 

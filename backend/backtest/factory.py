@@ -64,9 +64,9 @@ class BacktestFactory:
 
 
     @staticmethod
-    def get_export_handler(mode: BacktestMode, result : BacktestResult, exporter: Exporter, analyser : BaseAnalyser, flat_config_dict : dict[str, str]) -> BaseResultExportHandler:
+    def get_result_export_handler(mode: BacktestMode, result : BacktestResult, exporter: Exporter, analyser : BaseAnalyser, flat_config_dict : dict[str, str]) -> BaseResultExportHandler:
         """
-        Returns the appropriate export handler for saving raw results and summaries.
+        Returns the appropriate result export handler for saving raw results and summaries.
 
         Args:
             mode (BacktestMode): The selected backtest mode.

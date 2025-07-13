@@ -1,6 +1,6 @@
 from abc import ABC
 import polars as pl
-from backend.models import RealisticBacktestResult, BacktestResult
+from backend.models import BacktestResult
 from backend.utils import build_pivoted_col_names, build_drop_col_list, round_dataframe_columns
 
 
@@ -262,16 +262,20 @@ class BaseAnalyser(ABC):
         
         return rounded_summary
 
+
     # --- Calculating overall metrics --- # 
 
     def calculate_cagr(self):
         pass
 
+
     def calculate_drawdown(self):
         pass
 
+
     def calculate_best_periods(self):
         pass
+
 
     def calculate_worst_periods(self):
         pass 
@@ -279,26 +283,6 @@ class BaseAnalyser(ABC):
 
 
 
-# import backend.config as config
-
-# save_path = config.get_parquet_backtest_result_path()
-
-# data = pl.read_parquet(save_path / 'backtest_data.parquet')
-# calendar = pl.read_parquet(save_path / 'backtest_calendar.parquet')
-# cash = pl.read_parquet(save_path / 'backtest_cash.parquet')
-# holdings = pl.read_parquet(save_path / 'backtest_holdings.parquet')
-# dividends = pl.read_parquet(save_path / 'backtest_dividends.parquet')
-# orders = pl.read_parquet(save_path / 'backtest_orders.parquet')
-
-# test_results = RealisticBacktestResult(data,calendar,cash,holdings,dividends,orders)
-# test_analyser = BaseAnalyser(test_results)
-
-
-# daily_summary = test_analyser.generate_daily_summary()
-# print(daily_summary)
-
-# holdings_summary = test_analyser.generate_holdings_summary()
-# print(holdings_summary)
 
 
 

@@ -81,62 +81,64 @@ def get_csv_ticker_source_map() -> dict[str, Path]:
     return {ticker: Path(source_path) for ticker, source_path in metadata.select(["ticker","source_file_path"]).iter_rows()}
 
     
-# --- Rounding Utilities ---
+# # --- Rounding Utilities ---
 
-def _round(value: float, decimals: int, method : RoundMethod ) -> float:
-    """
-    Round a float value to a specified number of decimal places using a given rounding method.
+# def _round(value: float, decimals: int, method : RoundMethod ) -> float:
+#     """
+#     Round a float value to a specified number of decimal places using a given rounding method.
 
-    Args:
-        value (float): The number to round.
-        decimals (int): The number of decimal places to round to.
-        method (RoundMethod): The rounding method to use. One of "nearest", "down", or "up".
+#     Args:
+#         value (float): The number to round.
+#         decimals (int): The number of decimal places to round to.
+#         method (RoundMethod): The rounding method to use. One of "nearest", "down", or "up".
 
-    Returns:
-        float: The rounded value.
+#     Returns:
+#         float: The rounded value.
 
-    Raises:
-        ValueError: If an invalid rounding method is provided.
-    """
-    factor =  10 ** decimals
-    match method:
-        case "nearest":
-            return round(value,decimals)
-        case "down":
-            return floor(value * factor) / factor
-        case "up":
-            return ceil(value * factor) / factor
-        case _:
-            raise ValueError(f"Invalid rounding method : {method}")
-
-
-def round_price(price: float, method: RoundMethod = "nearest") -> float:
-    """
-    Round a price value to the configured price precision.
-
-    Args:
-        price (float): The price value to round.
-        method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
-
-    Returns:
-        float: The rounded price.
-    """
-    return _round(price,PRICE_PRECISION,method)
+#     Raises:
+#         ValueError: If an invalid rounding method is provided.
+#     """
+#     factor =  10 ** decimals
+#     match method:
+#         case "nearest":
+#             return round(value,decimals)
+#         case "down":
+#             return floor(value * factor) / factor
+#         case "up":
+#             return ceil(value * factor) / factor
+#         case _:
+#             raise ValueError(f"Invalid rounding method : {method}")
 
 
-def round_currency(price: float, method: RoundMethod = "nearest") -> float:
-    """
-    Round a currency amount to the configured currency precision.
+# def round_price(price: float, method: RoundMethod = "nearest") -> float:
+#     """
+#     Round a price value to the configured price precision.
 
-    Args:
-        price (float): The currency amount to round.
-        method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
+#     Args:
+#         price (float): The price value to round.
+#         method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
 
-    Returns:
-        float: The rounded currency amount.
-    """
-    return _round(price,CURRENCY_PRECISION,method)
+#     Returns:
+#         float: The rounded price.
+#     """
+#     return _round(price,PRICE_PRECISION,method)
 
+
+# def round_currency(price: float, method: RoundMethod = "nearest") -> float:
+#     """
+#     Round a currency amount to the configured currency precision.
+
+#     Args:
+#         price (float): The currency amount to round.
+#         method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
+
+#     Returns:
+#         float: The rounded currency amount.
+#     """
+#     return _round(price,CURRENCY_PRECISION,method)
+
+
+# --- Dataframe transformation Utilities ---
 
 def round_dataframe_columns(df: pl.DataFrame, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
     """
@@ -174,6 +176,45 @@ def round_dataframe_columns(df: pl.DataFrame, price_precision: int | None = None
             rounded_cols.append(pl.col(col).round(general_precision).alias(col))
 
     return df.with_columns(rounded_cols)
+
+
+# def stringify_list_columns(df: pl.DataFrame) -> pl.DataFrame:
+#     """
+#     Converts all list-type columns in a Polars DataFrame to comma-separated strings. (required for exporting to CSV)
+
+#     Args:
+#         df (pl.DataFrame): The Polars DataFrame containing potentially nested list columns.
+
+#     Returns:
+#         pl.DataFrame: A new DataFrame where all list-type columns have been converted to string representations.
+#     """
+#     new_cols = []
+#     for col, dtype in df.schema.items():
+#         if isinstance(dtype, pl.List):
+#             # Convert List(String) to a comma-separated string
+#             new_col = df[col].arr.join(separator=",").alias(col)
+#             new_cols.append(new_col)
+#         else:
+#             new_cols.append(df[col])
+#     return pl.DataFrame(new_cols)
+
+def flatten_dataframe_columns(df: pl.DataFrame) -> pl.DataFrame:
+    """
+    Flattens a Polars DataFrame for CSV export:
+    - Unnests Struct columns.
+    - Converts List columns to comma-separated strings.
+    """
+    for col, dtype in df.schema.items():
+        if isinstance(dtype, pl.Struct):
+            df = df.unnest(col)
+        elif isinstance(dtype, pl.List):
+            df = df.with_columns(
+                pl.col(col).map_elements(
+                    lambda x: ", ".join(map(str, x)) if x is not None else "",
+                    return_dtype=pl.String
+                ).alias(col)
+            )
+    return df
 
 
 # --- Parse Utilities ---

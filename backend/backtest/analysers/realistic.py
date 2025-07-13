@@ -376,29 +376,3 @@ class RealisticAnalyser(BaseAnalyser):
         
         return rounded_summary
 
-
-# import backend.config as config
-
-# save_path = config.get_parquet_backtest_result_path()
-
-# data = pl.read_parquet(save_path / 'backtest_data.parquet')
-# calendar = pl.read_parquet(save_path / 'backtest_calendar.parquet')
-# cash = pl.read_parquet(save_path / 'backtest_cash.parquet')
-# holdings = pl.read_parquet(save_path / 'backtest_holdings.parquet')
-# dividends = pl.read_parquet(save_path / 'backtest_dividends.parquet')
-# orders = pl.read_parquet(save_path / 'backtest_orders.parquet')
-
-# test_results = RealisticBacktestResult(data,calendar,cash,holdings,dividends,orders)
-# test_analyser = RealisticAnalyser(test_results)
-
-# dividend_summary = test_analyser.generate_dividend_summary()
-# print(dividend_summary)
-
-# dividend_pivot_summary = test_analyser.generate_pivoted_yearly_dividend_summary()
-# print(dividend_pivot_summary)
-
-# order_summary = test_analyser.generate_order_summary()
-# print(order_summary)
-
-# order_pivot_summary = test_analyser.generate_pivoted_yearly_order_summary()
-# print(order_pivot_summary)
