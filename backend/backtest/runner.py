@@ -1,13 +1,14 @@
 import polars as pl
 from datetime import date
 from typing import Type
-from backend.config import get_result_base_path, get_export_base_path
+from backend.config import get_backtest_run_base_path
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.enums import BacktestMode
 from backend.backtest.engine import BaseBacktest,BasicBacktest,RealisticBacktest
 from backend.backtest.analysers import BaseAnalyser, RealisticAnalyser
-from backend.backtest.new_exporter import Exporter
+from backend.backtest.exporter import Exporter
 from backend.backtest.report_generator import ReportGenerator
+from backend.backtest.export_handlers import BaseResultExportHandler
 from backend.utils import generate_timestamp
 from pathlib import Path
 
@@ -45,8 +46,8 @@ class BacktestRunner:
         """
         engine_class = self.BACKTEST_ENGINE_CLASS_MAP.get(self.config.mode)
         analyser_class = self.BACKTEST_ANALYSER_CLASS_MAP.get(self.config.mode)
-        raw_result_exporter = Exporter(get_result_base_path(), self.timestamp)
-        formatted_exporter = Exporter(get_export_base_path(), self.timestamp)
+        exporter = Exporter(self.base_save_path, self.timestamp)
+
         
 
         if engine_class is None:
@@ -60,18 +61,13 @@ class BacktestRunner:
 
         result = backtest.run()
 
-        # export raw results
-        raw_result_exporter.save_dataframe_to_csv(result.cash,'cash_history')
-        raw_result_exporter.save_dataframe_to_csv(result.holdings,'cash_history')
-
         analyser = analyser_class(result)
 
-        daily_summary_report = ReportGenerator.generate_csv(analyser.generate_daily_summary(),flat_config_dict)
-        formatted_exporter.save_report_to_csv(daily_summary_report, 'daily_summary')
-        
-        daily_holdings_report = ReportGenerator.generate_csv(analyser.generate_holdings_summary(),flat_config_dict)
-        formatted_exporter.save_report_to_csv(daily_holdings_report, 'holdings_summary')
-    
+        result_exporter = BaseResultExportHandler(result,exporter,analyser,flat_config_dict)
+
+        result_exporter.export_all()
+
+
 
 
 

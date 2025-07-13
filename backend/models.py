@@ -134,15 +134,15 @@ class BacktestConfig:
         return {
             "Start date": str(self.start_date),
             "End date": str(self.end_date),
-            "Target portfolio": " | ".join(f"{k}:{v}" for k, v in self.target_portfolio.weights.items()),
-            "Backtest mode": str(self.mode),
+            "Target portfolio": " ; ".join(f"{k} = {v}" for k, v in self.target_portfolio.weights.items()),
+            "Backtest mode": str(self.mode.value),
             "Base currency": str(self.base_currency),
             "Allow fractional shares": str(self.strategy.allow_fractional_shares),
             "Reinvest dividends": str(self.strategy.reinvest_dividends),
-            "Rebalance frequency": str(self.strategy.rebalance_frequency),
+            "Rebalance frequency": str(self.strategy.rebalance_frequency.value),
             "Initial investment": f"{self.initial_investment:.2f}",
             "Recurring investment amount": f"{self.recurring_investment.amount:.2f}" if self.recurring_investment else "0.00",
-            "Recurring investment frequency": str(self.recurring_investment.frequency) if self.recurring_investment else "N/A",
+            "Recurring investment frequency": str(self.recurring_investment.frequency.value) if self.recurring_investment else "N/A",
         }
 
 

@@ -87,7 +87,7 @@ backtest_config = BacktestConfig(start_date,end_date,target_portfolio,mode,base_
 backtest_data = get_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date)
 
 # Create and run backtest
-backtest = BacktestRunner(backtest_config, backtest_data,config.get_export_base_path())
+backtest = BacktestRunner(backtest_config, backtest_data,config.get_backtest_run_base_path())
 print('starting backtest...')
 result = backtest.run()
 
