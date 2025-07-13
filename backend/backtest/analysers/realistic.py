@@ -12,8 +12,8 @@ class RealisticAnalyser(BaseAnalyser):
         self.dividends_lf = backtest_results.dividends.lazy()
         self.orders_lf = backtest_results.orders.lazy()
 
-        # Cache common enrichments (placed in constructor if core enrichment and used in mutliple future methods)
-        self.cash_lf = self._add_buy_sell_bool_flags()
+        # Cache enriched cash_lf so daily summary will include order flags
+        self.cash_lf = self._enrich_cash_with_order_flags()
 
         print(backtest_results.data)
         print(backtest_results.calendar)
@@ -26,12 +26,18 @@ class RealisticAnalyser(BaseAnalyser):
         print(self.dividends_lf.collect())
 
 
-    # --- Enriching helper methods--- # 
+    # --- Enrichment helper methods--- # 
 
-    def _add_buy_sell_bool_flags(self) -> pl.LazyFrame:
-        
-    # Daily Summary
+    def _enrich_cash_with_order_flags(self) -> pl.LazyFrame:
+        """
+        Add `did_buy` and `did_sell` flags to the cash LazyFrame based on fulfilled orders.
 
+        Joins cash data with fulfilled order data on `date`, marking buy/sell activity
+        with boolean columns. Missing values are filled with `False`.
+
+        Returns:
+            pl.LazyFrame: Cash data enriched with buy/sell flags.
+        """
         order_flags = (
             self.orders_lf
             .filter(pl.col('status') == 'fulfilled')
@@ -47,10 +53,7 @@ class RealisticAnalyser(BaseAnalyser):
             .fill_null(False)
         )
         return cash_with_flags
-    
 
-
-    # Dividends
 
     def _enrich_dividends_with_holdings(self) -> pl.LazyFrame:
         """
@@ -65,7 +68,9 @@ class RealisticAnalyser(BaseAnalyser):
         )
     
 
-    def _calculate_yields(self, enriched_dividends : pl.LazyFrame) -> pl.LazyFrame:
+    # --- Calculation helper methods--- # 
+
+    def _compute_dividend_yields(self, enriched_dividends : pl.LazyFrame) -> pl.LazyFrame:
         """
         Calculate dividend yield as percentage based on base_price.
 
@@ -82,7 +87,7 @@ class RealisticAnalyser(BaseAnalyser):
         )
     
 
-    def _add_cumulative_columns(self, enriched_dividends : pl.LazyFrame) -> pl.LazyFrame:
+    def _compute_cumulative_dividends(self, enriched_dividends : pl.LazyFrame) -> pl.LazyFrame:
         """
         Add year, cumulative all-time dividend, and cumulative yearly dividend and yield columns.
 
@@ -116,8 +121,10 @@ class RealisticAnalyser(BaseAnalyser):
         # join all cumulative columns
         return alltime_cumulative.join(yearly_cumulative, on='date', how='left')
     
+    
+    # --- Compilation methods--- # 
 
-    def _generate_compiled_dividend_summary(self) -> pl.LazyFrame:
+    def _compile_dividend_summary(self) -> pl.LazyFrame:
         """
         Generate a compiled dividend summary as a LazyFrame.
 
@@ -132,15 +139,15 @@ class RealisticAnalyser(BaseAnalyser):
         enriched_divs = self._enrich_dividends_with_holdings()
 
         # Add yield column
-        enriched_divs_with_yield = self._calculate_yields(enriched_divs)
+        enriched_divs_with_yield = self._compute_dividend_yields(enriched_divs)
 
         # Add cumulative columns
-        enriched_divs_with_cumulatives = self._add_cumulative_columns(enriched_divs_with_yield)
+        enriched_divs_with_cumulatives = self._compute_cumulative_dividends(enriched_divs_with_yield)
 
         return enriched_divs_with_cumulatives
 
 
-    # --- Generating formatted summary dataframes --- # 
+    # --- Generating formatted summary dataframes --- #   
 
     def generate_dividend_summary(self) -> pl.DataFrame:
         """
@@ -156,7 +163,7 @@ class RealisticAnalyser(BaseAnalyser):
         COL_ORDER = ['date','year','ticker','units','dividend_per_unit','total_dividend','yield','cumulative_yield_year','cumulative_dividend_year','cumulative_dividend_alltime']
         
         if not hasattr(self, 'dividend_summary_lf'):
-            self.dividend_summary_lf = self._generate_compiled_dividend_summary()
+            self.dividend_summary_lf = self._compile_dividend_summary()
 
         div_summary = (self.dividend_summary_lf.select(COL_ORDER).collect())
 
@@ -176,7 +183,7 @@ class RealisticAnalyser(BaseAnalyser):
                         per ticker.
         """
         if not hasattr(self, 'dividend_summary_lf'):
-            self.dividend_summary_lf = self._generate_compiled_dividend_summary()
+            self.dividend_summary_lf = self._compile_dividend_summary()
 
         pivot_summary = self.dividend_summary_lf.collect().pivot(
             index='year',
@@ -192,20 +199,6 @@ class RealisticAnalyser(BaseAnalyser):
         pass
 
 
-
-
-
-
-
-
-
-    # def generate_dividend_summary(self) -> pl.LazyFrame:
-        
-    #     dividend_summary = (
-    #         self.dividends_lf.join(self.holdings_lf, on=['date','ticker'],how='left')
-    #         .select(['date','ticker','units','dividend_per_unit','total_dividend'])
-    #     )
-    #     return dividend_summary
 
 import backend.config as config
 

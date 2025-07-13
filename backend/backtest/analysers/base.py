@@ -1,5 +1,4 @@
-from abc import ABC, abstractmethod
-from datetime import date
+from abc import ABC
 import polars as pl
 from backend.models import RealisticBacktestResult, BacktestResult
 from backend.utils import build_pivoted_col_names, build_drop_col_list
@@ -22,10 +21,10 @@ class BaseAnalyser(ABC):
         # Save tickers
         self.tickers = self._get_all_tickers()
 
-        # Update / Create enriched dataframes
-        self.holdings_lf = self._add_holding_value()
-        self.portfolio_lf = self._generate_portfolio_total_value()
-        self.holdings_lf = self._add_portfolio_weighting()
+        # Cache common enrichments (placed in constructor if core enrichment and used in mutliple future methods)
+        self.holdings_lf = self._enrich_with_holding_values()
+        self.portfolio_lf = self._compute_portfolio_totals()
+        self.holdings_lf = self._enrich_with_portfolio_weighting()
 
 
     # --- Helper methods--- # 
@@ -43,38 +42,20 @@ class BaseAnalyser(ABC):
         return tickers
     
 
-    # --- Enriching result dataframes --- # 
+    # --- Enrichment helper methods --- # 
 
-    def _add_holding_value(self) -> pl.LazyFrame:       
+    def _enrich_with_holding_values(self) -> pl.LazyFrame:       
         
-        holdings_with_value = (
+        return (
             self.holdings_lf
             .with_columns((pl.col("units") * pl.col("base_price")).alias("value"))
         )
-        return holdings_with_value
 
 
-    def _generate_portfolio_total_value(self) -> pl.LazyFrame:
+    def _enrich_with_portfolio_weighting(self) -> pl.LazyFrame:  
 
-        total_holdings_value = (
-            self.holdings_lf
-            .group_by('date')
-            .agg(pl.sum('value').fill_null(0).alias('total_holding_value'))
-        )
-
-        total_portoflio_value = (
-            self.cash_lf.join(total_holdings_value, on='date',how='left')
-            .with_columns(
-                (pl.col('cash_balance')+pl.col('total_holding_value')).alias('total_portfolio_value')
-            )
-            .select('date','total_holding_value','total_portfolio_value')
-        )
-        return total_portoflio_value
-    
-
-    def _add_portfolio_weighting(self) -> pl.LazyFrame:  
-        
         drop_cols = build_drop_col_list(['date'], self.portfolio_lf.schema.keys())
+
         holdings_with_weighting = (
             self.holdings_lf
             .join(self.portfolio_lf, on='date')
@@ -84,7 +65,31 @@ class BaseAnalyser(ABC):
         return holdings_with_weighting
     
 
-    def _generate_wide_holdings_total_value(self) -> pl.LazyFrame:
+    # --- Computation methods--- #    
+
+    def _compute_portfolio_totals(self) -> pl.LazyFrame:
+
+        # Add total holdings value column
+        total_holdings_value = (
+            self.holdings_lf
+            .group_by('date')
+            .agg(pl.sum('value').fill_null(0).alias('total_holding_value'))
+        )
+
+        # Add total portfolio value column
+        total_portoflio_value = (
+            self.cash_lf.join(total_holdings_value, on='date',how='left')
+            .with_columns(
+                (pl.col('cash_balance')+pl.col('total_holding_value')).alias('total_portfolio_value')
+            )
+            .select('date','total_holding_value','total_portfolio_value')
+        )
+        return total_portoflio_value
+
+
+    # --- Formation / generation methods --- #    
+
+    def _format_wide_holdings_summary(self) -> pl.LazyFrame:
        
         PIVOT_VALUES = ["value","portfolio_weighting"]
 
@@ -104,12 +109,12 @@ class BaseAnalyser(ABC):
 
         return wide_holdings_total_value_ordered
     
-    
-    # --- Generating formatted summary dataframes --- # 
+
+    #  --- Final reports --- #  
     
     def generate_daily_summary(self) -> pl.DataFrame:
 
-        wide_holdings_summary = self._generate_wide_holdings_total_value()
+        wide_holdings_summary = self._format_wide_holdings_summary()
 
         daily_summary = (
             self.cash_lf
@@ -117,7 +122,6 @@ class BaseAnalyser(ABC):
             .join(wide_holdings_summary, on='date',how='left')
             .collect()
         )
-
         return daily_summary
 
 
@@ -159,6 +163,8 @@ class BaseAnalyser(ABC):
 
     def calculate_worst_periods(self):
         pass 
+
+
 
 
 import backend.config as config
