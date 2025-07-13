@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 from dateutil.relativedelta import relativedelta
 from math import floor, ceil
-from backend.constants import FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
+from backend.constants import GENERAL_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
 from backend.enums import RoundMethod
 
 # --- Metadata file utilities ---
@@ -110,20 +110,6 @@ def _round(value: float, decimals: int, method : RoundMethod ) -> float:
             raise ValueError(f"Invalid rounding method : {method}")
 
 
-def round_shares(share_qty: float, method: RoundMethod = "down") -> float:
-    """
-    Round the fractional share quantity to the configured fractional share precision.
-
-    Args:
-        share_qty (float): The quantity of shares to round.
-        method (RoundMethod, optional): The rounding method to use. Defaults to "down".
-
-    Returns:
-        float: The rounded share quantity.
-    """
-    return _round(share_qty,FRACTIONAL_SHARE_PRECISION,method)
-
-
 def round_price(price: float, method: RoundMethod = "nearest") -> float:
     """
     Round a price value to the configured price precision.
@@ -150,6 +136,44 @@ def round_currency(price: float, method: RoundMethod = "nearest") -> float:
         float: The rounded currency amount.
     """
     return _round(price,CURRENCY_PRECISION,method)
+
+
+def round_dataframe_columns(df: pl.DataFrame, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
+    """
+    Round float columns in the DataFrame based on their semantic role.
+
+    - Price columns (e.g. prices, costs) are rounded with price precision.
+    - Value and dividend columns are rounded with currency precision.
+    - Other float columns are rounded to a general precision.
+    - Non-float columns are left unchanged.
+
+    Args:
+        df (pl.DataFrame): Input DataFrame to round.
+        price_precision (int | None): Decimal places for price-related columns.
+        currency_precision (int | None): Decimal places for monetary value and dividend columns.
+        general_precision (int | None): Decimal places for other float columns.
+
+    Returns:
+        pl.DataFrame: DataFrame with rounded numeric columns.
+    """
+    # Set default values if no precisions are pass in
+    price_precision = price_precision if price_precision is not None else PRICE_PRECISION
+    currency_precision = currency_precision if currency_precision is not None else CURRENCY_PRECISION
+    general_precision = general_precision if general_precision is not None else GENERAL_PRECISION
+
+    rounded_cols = []
+    for col, dtype in df.schema.items():
+        if not dtype.is_float():
+            continue  # Skip non-float columns
+        # Identify currency-related columns by keywords
+        elif any(keyword in col.lower() for keyword in ['price','cost','exchange_rate']):
+            rounded_cols.append(pl.col(col).round(price_precision).alias(col))
+        elif any(keyword in col.lower() for keyword in ['value','dividend']):
+            rounded_cols.append(pl.col(col).round(currency_precision).alias(col))
+        else:
+            rounded_cols.append(pl.col(col).round(general_precision).alias(col))
+
+    return df.with_columns(rounded_cols)
 
 
 # --- Parse Utilities ---

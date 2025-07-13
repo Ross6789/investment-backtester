@@ -1,6 +1,6 @@
 import polars as pl
 from backend.models import RealisticBacktestResult
-from backend.utils import build_pivoted_col_names
+from backend.utils import build_pivoted_col_names, round_dataframe_columns
 from backend.backtest.analysers import BaseAnalyser
 
 
@@ -219,16 +219,20 @@ class RealisticAnalyser(BaseAnalyser):
         
     # --- Final report generation --- #
 
-    def generate_dividend_summary(self) -> pl.DataFrame:
+    def generate_dividend_summary(self, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
         """
         Generate a formatted dividend summary as a collected DataFrame.
 
-        Selects and orders key dividend-related columns from the compiled dividend
-        summary and collects the lazy frame into an eager DataFrame.
+        Selects and orders key dividend-related columns from the compiled dividend summary and collects the lazy frame into an eager DataFrame. 
+        Optionally applies rounding to float columns based on their semantic meaning.
+
+        Args:
+            price_precision (int | None): Decimal precision for price-like values (e.g., exchange rates). If None, uses default precision.
+            currency_precision (int | None): Decimal precision for currency-related values (e.g., total dividends). If None, uses default precision.
+            general_precision (int | None): Decimal precision for other float values (e.g., units, yields). If None, uses default precision.
 
         Returns:
-            pl.DataFrame: A dataframe with columns for date, year, ticker, units, 
-                        dividend per unit, total dividend, yield, and cumulative metrics.
+            pl.DataFrame: A rounded DataFrame with columns for date, year, ticker, units, dividend per unit, total dividend, yield, and cumulative metrics.
         """
         COL_ORDER = ['date','year','ticker','units','dividend_per_unit','total_dividend','yield','cumulative_yield_year','cumulative_dividend_year','cumulative_dividend_alltime']
         
@@ -237,20 +241,25 @@ class RealisticAnalyser(BaseAnalyser):
 
         enriched_divs = (self.enriched_dividend_lf.select(COL_ORDER).collect())
 
-        return enriched_divs
+        rounded_summary = round_dataframe_columns(enriched_divs, price_precision, currency_precision, general_precision)
+        
+        return rounded_summary
 
 
-    def generate_pivoted_yearly_dividend_summary(self) -> pl.DataFrame:
+    def generate_pivoted_yearly_dividend_summary(self, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
         """
         Generate a pivoted yearly dividend summary DataFrame.
 
-        Pivots the compiled dividend summary to create a wide-format dataframe 
-        indexed by year, with tickers as columns and aggregated dividend and yield 
-        metrics as values. Missing values are filled with zeros.
+        Pivots the compiled dividend summary to create a wide-format dataframe indexed by year, with tickers as columns and aggregated dividend and yield metrics as values. 
+        Missing values are filled with zeros. Optionally rounds numeric columns based on their semantic roles.
+
+        Args:
+            price_precision (int | None): Decimal precision for price-like values. If None, uses default precision.
+            currency_precision (int | None): Decimal precision for currency-related values. If None, uses default precision.
+            general_precision (int | None): Decimal precision for other float values. If None, uses default precision.
 
         Returns:
-            pl.DataFrame: Pivoted dataframe with yearly dividend and yield metrics 
-                        per ticker.
+            pl.DataFrame: Pivoted dataframe with yearly dividend and yield metrics per ticker, rounded appropriately.
         """
 
         PIVOT_VALUES = ['total_dividend','yield','cumulative_yield_year','cumulative_dividend_year','cumulative_dividend_alltime']
@@ -264,20 +273,26 @@ class RealisticAnalyser(BaseAnalyser):
             values=PIVOT_VALUES,  
             aggregate_function='sum'
         ).fill_null(0)  # fill missing values with zero
-
-        return pivot_summary
     
-
-    def generate_order_summary(self) -> pl.DataFrame:
+        rounded_summary = round_dataframe_columns(pivot_summary, price_precision, currency_precision, general_precision)
+        
+        return rounded_summary
+    
+    
+    def generate_order_summary(self, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
         """
         Return a detailed DataFrame of orders with selected columns.
 
-        Ensures enriched orders are compiled, then selects key columns such as
-        dates, ticker, pricing, units, status, and currency info, collecting
-        the LazyFrame into a DataFrame.
+        Ensures enriched orders are compiled, then selects key columns such as dates, ticker, pricing, units, status, and currency info, collecting the LazyFrame into an eager DataFrame. 
+        Numeric columns are optionally rounded based on their semantic roles.
+
+        Args:
+            price_precision (int | None): Decimal precision for price-like columns. If None, default precision is used.
+            currency_precision (int | None): Decimal precision for currency-related columns. If None, default precision is used.
+            general_precision (int | None): Decimal precision for other float columns. If None, default precision is used.
 
         Returns:
-            pl.DataFrame: Order details with specified columns.
+            pl.DataFrame: Order details with specified columns, rounded appropriately.
         """
         COL_ORDER = ['date_placed','date_executed','ticker','target_value','side','status','native_currency','native_price','exchange_rate','base_price','units','executed_value']
         
@@ -285,17 +300,22 @@ class RealisticAnalyser(BaseAnalyser):
             self._compile_enriched_orders()
 
         order_summary = self.enriched_orders_lf.select(COL_ORDER).collect()
+    
+        rounded_summary = round_dataframe_columns(order_summary, price_precision, currency_precision, general_precision)
         
-        return order_summary
+        return rounded_summary
     
 
-    def generate_pivoted_yearly_order_summary(self) -> pl.DataFrame:
+    def generate_pivoted_yearly_order_summary(self, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
         """
         Create a yearly summary of fulfilled orders grouped by year, side, and ticker.
 
-        Aggregates counts, average and weighted prices, units, executed values,
-        and price volatility. The results are pivoted with tickers as columns,
-        sorted by year and side, and numeric columns cast appropriately.
+        Aggregates counts, average and weighted prices, units, executed values,and price volatility. The results are pivoted with tickers as columns, sorted by year and side, and numeric columns cast appropriately.
+
+        Args:
+            price_precision (int | None): Decimal precision for price-like columns. If None, default precision is used.
+            currency_precision (int | None): Decimal precision for currency-related columns. If None, default precision is used.
+            general_precision (int | None): Decimal precision for other float columns. If None, default precision is used.
 
         Returns:
             pl.DataFrame: Pivoted yearly order summary with key metrics per ticker.
@@ -345,7 +365,10 @@ class RealisticAnalyser(BaseAnalyser):
                 *[pl.col(col).cast(pl.Int32).alias(col) for col in pivot_cols]
             ])
         )
-        return cast_pivot_summary
+    
+        rounded_summary = round_dataframe_columns(cast_pivot_summary, price_precision, currency_precision, general_precision)
+        
+        return rounded_summary
 
 
 import backend.config as config

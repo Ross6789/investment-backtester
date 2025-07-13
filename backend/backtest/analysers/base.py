@@ -1,15 +1,14 @@
 from abc import ABC
 import polars as pl
 from backend.models import RealisticBacktestResult, BacktestResult
-from backend.utils import build_pivoted_col_names, build_drop_col_list
+from backend.utils import build_pivoted_col_names, build_drop_col_list, round_dataframe_columns
 
 
 class BaseAnalyser(ABC):
     """
     Basic analyser class for processing backtest results.
 
-    Initializes lazy dataframes for key backtest components
-    and caches unique tickers for efficient access in analysis methods.
+    Initializes lazy dataframes for key backtest components and caches unique tickers for efficient access in analysis methods.
 
     Attributes:
         data_lf (pl.LazyFrame): LazyFrame of backtest price data.
@@ -96,8 +95,7 @@ class BaseAnalyser(ABC):
             portfolio_lf (pl.LazyFrame): Portfolio totals data with 'total_holding_value' per date.
 
         Returns:
-            pl.LazyFrame: Holdings enriched with 'portfolio_weighting' column representing 
-                        the percentage of each holding relative to total holdings on that date.
+            pl.LazyFrame: Holdings enriched with 'portfolio_weighting' column representing the percentage of each holding relative to total holdings on that date.
         """
         drop_cols = build_drop_col_list(['date'], portfolio_lf.schema.keys())
 
@@ -148,8 +146,7 @@ class BaseAnalyser(ABC):
         """
         Compile enriched holdings and portfolio data.
 
-        Enhances holdings with value calculations, computes portfolio totals, 
-        and enriches holdings with portfolio weighting, storing results as instance attributes.
+        Enhances holdings with value calculations, computes portfolio totals, and enriches holdings with portfolio weighting, storing results as instance attributes.
         """
         holdings_with_values = self._enrich_holdings_with_values(self.holdings_lf)
 
@@ -189,15 +186,19 @@ class BaseAnalyser(ABC):
 
     # --- Final report generation --- #
     
-    def generate_daily_summary(self) -> pl.DataFrame:
+    def generate_daily_summary(self, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
         """
         Generate a daily summary by joining cash, portfolio, and holdings data.
 
-        Ensures enriched holdings data is compiled, formats holdings in wide format,
-        then joins cash and portfolio data on date.
+        Ensures enriched holdings data is compiled, formats holdings in wide format, then joins cash and portfolio data on date. Rounds float values based on column semantics.
+
+        Args:
+            price_precision (int | None): Optional number of decimal places to round price-related columns (e.g. prices, costs, exchange rates). If None, uses default.
+            currency_precision (int | None): Optional number of decimal places to round currency-related columns (e.g. value, dividends). If None, uses default.
+            general_precision (int | None): Optional number of decimal places to round all other float columns. If None, uses default.
 
         Returns:
-            pl.DataFrame: Combined daily summary with cash, portfolio, and holdings info.
+            pl.DataFrame: Combined and rounded daily summary with cash, portfolio, and holdings info.
         """
         if not hasattr(self, 'enriched_holdings_lf'):
             self._compile_enriched_data()
@@ -211,18 +212,27 @@ class BaseAnalyser(ABC):
             .fill_null(0)
             .collect()
         )
-        return daily_summary
+
+        rounded_summary = round_dataframe_columns(daily_summary, price_precision, currency_precision, general_precision)
+        
+        return rounded_summary
 
 
-    def generate_holdings_summary(self) -> pl.DataFrame:
+    def generate_holdings_summary(self, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
         """
         Generate a pivoted summary of holdings with FX and portfolio data.
 
-        Joins enriched holdings with FX and portfolio data, 
-        then pivots the specified columns by date and ticker.
+        Joins enriched holdings with FX and portfolio data, then pivots specified value columns by date and ticker to create a wide-format summary. 
+        Optionally applies precision-based rounding to float columns based on their semantic role.
+
+        Args:
+            price_precision (int | None): Number of decimal places to round price-related columns (e.g., prices, costs, exchange rates). If None, uses the default.
+            currency_precision (int | None): Number of decimal places to round currency-related columns (e.g., value, dividends). If None, uses the default.
+            general_precision (int | None): Number of decimal places to round all other float columns. If None, uses the default.
 
         Returns:
-            pl.DataFrame: Pivoted holdings summary with columns for each ticker and value type.
+            pl.DataFrame: Pivoted and rounded holdings summary with one column per 
+            (ticker, value type) combination, plus the date column.
         """
         PIVOT_VALUES = ['units','native_currency','native_price','exchange_rate','value','portfolio_weighting']
 
@@ -247,8 +257,9 @@ class BaseAnalyser(ABC):
         pivot_cols = build_pivoted_col_names(self.tickers, PIVOT_VALUES)
         holdings_summary_ordered = holdings_summary.select(['date', *pivot_cols])
             
-        return holdings_summary_ordered
-
+        rounded_summary = round_dataframe_columns(holdings_summary_ordered, price_precision, currency_precision, general_precision)
+        
+        return rounded_summary
 
     # --- Calculating overall metrics --- # 
 
