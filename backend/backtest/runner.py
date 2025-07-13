@@ -4,7 +4,7 @@ from typing import Type
 from backend.config import get_backtest_run_base_path
 from backend.models import TargetPortfolio, BacktestConfig
 from backend.enums import BacktestMode
-from backend.backtest.engine import BaseBacktest,BasicBacktest,RealisticBacktest
+from backend.backtest.engine import BaseEngine,BasicEngine,RealisticEngine
 from backend.backtest.analysers import BaseAnalyser, RealisticAnalyser
 from backend.backtest.exporter import Exporter
 from backend.backtest.report_generator import ReportGenerator
@@ -15,9 +15,9 @@ from pathlib import Path
 
 class BacktestRunner:
 
-    BACKTEST_ENGINE_CLASS_MAP: dict[BacktestMode, Type[BaseBacktest]] = {
-        BacktestMode.BASIC: BasicBacktest,
-        BacktestMode.REALISTIC: RealisticBacktest,
+    BACKTEST_ENGINE_CLASS_MAP: dict[BacktestMode, Type[BaseEngine]] = {
+        BacktestMode.BASIC: BasicEngine,
+        BacktestMode.REALISTIC: RealisticEngine,
     }
 
     BACKTEST_ANALYSER_CLASS_MAP: dict[BacktestMode, Type[BaseAnalyser]] = {

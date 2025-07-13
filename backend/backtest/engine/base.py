@@ -5,8 +5,8 @@ from backend.models import TargetPortfolio, BacktestConfig, BacktestResult
 from backend.utils import generate_recurring_dates
 
 
-class BaseBacktest(ABC):
-    def __init__(self,config: BacktestConfig, backtest_data: pl.DataFrame,):
+class BaseEngine(ABC):
+    def __init__(self,config: BacktestConfig, backtest_data: pl.DataFrame):
             self.config = config
             self.backtest_data = backtest_data
 
