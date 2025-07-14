@@ -1,14 +1,14 @@
 from datetime import date
 import polars as pl
 from dateutil.relativedelta import relativedelta
-from backend.models import TargetPortfolio, BacktestConfig
+from backend.models import TargetPortfolio, BacktestConfig, RealisticBacktestResult
 from backend.enums import OrderSide, RebalanceFrequency
-from backend.backtest.engine import BaseBacktest
+from backend.backtest.engine import BaseEngine
 from backend.backtest.portfolios import RealisticPortfolio
 
-class RealisticBacktest(BaseBacktest):
+class RealisticEngine(BaseEngine):
 
-    def __init__(self, start_date: date, end_date: date, backtest_data: pl.DataFrame, target_portfolio: TargetPortfolio ,config: BacktestConfig):
+    def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame):
         """
         Initialize the realistic backtest mode.
 
@@ -17,14 +17,11 @@ class RealisticBacktest(BaseBacktest):
         and delayed execution.
 
         Args:
-            start_date (date): The starting date of the backtest.
-            end_date (date): The ending date of the backtest.
-            backtest_data (pl.DataFrame): Historical market data used in the backtest.
-            target_portfolio (TargetPortfolio): The portfolio containing target asset weights.
             config (BacktestConfig): Configuration object specifying backtest parameters and strategy.
+            backtest_data (pl.DataFrame): Historical market data used in the backtest.
         """
         # Run superclass constructor
-        super().__init__(start_date, end_date, backtest_data, target_portfolio,config)
+        super().__init__(config,backtest_data)
 
         # Initialise specific portfolio for this mode
         self.portfolio = RealisticPortfolio(self)
@@ -93,13 +90,15 @@ class RealisticBacktest(BaseBacktest):
         """
         orders = []
 
-        for ticker, value in ticker_allocations.items():
+        for ticker, traget_value in ticker_allocations.items():
             orders.append({
                     "ticker": ticker,
-                    "value": value,
+                    "target_value": traget_value,
                     "date_placed": current_date,
                     "date_executed": self._next_trading_date(ticker,current_date),
                     "side": side,
+                    "base_price": None,
+                    "units": None,
                     'status': "pending"
                 })
             
@@ -123,6 +122,8 @@ class RealisticBacktest(BaseBacktest):
 
         Updates:
             - Marks orders as 'fulfilled' or 'failed' based on portfolio transaction success.
+            - Adds 'units' column to indicate number of units bought or sold.
+            - Adds 'base_price' column to record the price used for execution.
             - Moves executed orders from pending_orders to executed_orders.
         """
         executable_orders = (
@@ -134,7 +135,7 @@ class RealisticBacktest(BaseBacktest):
 
         for row in executable_orders.iter_rows(named=True):
             ticker = row['ticker']
-            value = row['value']
+            target_value = row['target_value']
             side = row['side']
             price = prices.get(ticker)
 
@@ -143,13 +144,16 @@ class RealisticBacktest(BaseBacktest):
             
             match side:
                 case 'buy':
-                    fulfilled = self.portfolio.invest(ticker, value, price, self.config.strategy.allow_fractional_shares)
+                    units_moved = self.portfolio.invest(ticker, target_value, price, self.config.strategy.allow_fractional_shares)
                 case 'sell':
-                    fulfilled = self.portfolio.sell(ticker, value, price, self.config.strategy.allow_fractional_shares)
+                    units_moved = self.portfolio.sell(ticker, target_value, price, self.config.strategy.allow_fractional_shares)
                 case _:
                     raise ValueError(f"Invalid order placed: side must be either 'buy' or 'sell', not {side}")
 
-            row['status'] = "fulfilled" if fulfilled else "failed"
+            row['base_price'] = price
+            row['units'] = units_moved
+            row['status'] = "fulfilled" if units_moved > 0 else "failed"
+            
             updated_orders.append(row)
 
         # Create new dataframe with updated orders
@@ -290,7 +294,7 @@ class RealisticBacktest(BaseBacktest):
         self.previous_rebalance_date = current_date
 
 
-    def run(self) -> dict[str, pl.DataFrame]:
+    def run(self) -> RealisticBacktestResult:
         """
         Executes the full portfolio backtest over the master calendar date range.
 
@@ -325,7 +329,7 @@ class RealisticBacktest(BaseBacktest):
             # --- HANDLE CASHFLOWS ---
 
             # Initial investment
-            if current_date == self.start_date:
+            if current_date == self.config.start_date:
                 self.portfolio.add_cash(self.config.initial_investment)
                 place_order = True
 
@@ -397,14 +401,14 @@ class RealisticBacktest(BaseBacktest):
         # Combine order books 
         orders = pl.concat([self.executed_orders,self.pending_orders])
 
-        # Bulk convert snapshots into polars dataframe for better processing and package within dictionary
-        history = {
-            "data":self.backtest_data,
-            "calendar":self.calendar_df,
-            "cash":pl.DataFrame(cash_snapshots),
-            "holdings":pl.DataFrame(holding_snapshots),
-            "dividends":pl.DataFrame(dividend_snapshots),
-            "orders": orders
-        }
+        # Bulk convert snapshots into polars dataframe for better processing and package within result dataclass
+        result = RealisticBacktestResult(
+            self.backtest_data,
+            self.calendar_df,
+            pl.DataFrame(cash_snapshots),
+            pl.DataFrame(holding_snapshots),
+            pl.DataFrame(dividend_snapshots),
+            orders
+        )
 
-        return history
+        return result

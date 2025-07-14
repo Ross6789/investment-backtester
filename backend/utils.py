@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 from dateutil.relativedelta import relativedelta
 from math import floor, ceil
-from backend.constants import FRACTIONAL_SHARE_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
+from backend.constants import GENERAL_PRECISION,PRICE_PRECISION, CURRENCY_PRECISION
 from backend.enums import RoundMethod
 
 # --- Metadata file utilities ---
@@ -81,75 +81,140 @@ def get_csv_ticker_source_map() -> dict[str, Path]:
     return {ticker: Path(source_path) for ticker, source_path in metadata.select(["ticker","source_file_path"]).iter_rows()}
 
     
-# --- Rounding Utilities ---
+# # --- Rounding Utilities ---
 
-def _round(value: float, decimals: int, method : RoundMethod ) -> float:
+# def _round(value: float, decimals: int, method : RoundMethod ) -> float:
+#     """
+#     Round a float value to a specified number of decimal places using a given rounding method.
+
+#     Args:
+#         value (float): The number to round.
+#         decimals (int): The number of decimal places to round to.
+#         method (RoundMethod): The rounding method to use. One of "nearest", "down", or "up".
+
+#     Returns:
+#         float: The rounded value.
+
+#     Raises:
+#         ValueError: If an invalid rounding method is provided.
+#     """
+#     factor =  10 ** decimals
+#     match method:
+#         case "nearest":
+#             return round(value,decimals)
+#         case "down":
+#             return floor(value * factor) / factor
+#         case "up":
+#             return ceil(value * factor) / factor
+#         case _:
+#             raise ValueError(f"Invalid rounding method : {method}")
+
+
+# def round_price(price: float, method: RoundMethod = "nearest") -> float:
+#     """
+#     Round a price value to the configured price precision.
+
+#     Args:
+#         price (float): The price value to round.
+#         method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
+
+#     Returns:
+#         float: The rounded price.
+#     """
+#     return _round(price,PRICE_PRECISION,method)
+
+
+# def round_currency(price: float, method: RoundMethod = "nearest") -> float:
+#     """
+#     Round a currency amount to the configured currency precision.
+
+#     Args:
+#         price (float): The currency amount to round.
+#         method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
+
+#     Returns:
+#         float: The rounded currency amount.
+#     """
+#     return _round(price,CURRENCY_PRECISION,method)
+
+
+# --- Dataframe transformation Utilities ---
+
+def round_dataframe_columns(df: pl.DataFrame, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
     """
-    Round a float value to a specified number of decimal places using a given rounding method.
+    Round float columns in the DataFrame based on their semantic role.
+
+    - Price columns (e.g. prices, costs) are rounded with price precision.
+    - Value and dividend columns are rounded with currency precision.
+    - Other float columns are rounded to a general precision.
+    - Non-float columns are left unchanged.
 
     Args:
-        value (float): The number to round.
-        decimals (int): The number of decimal places to round to.
-        method (RoundMethod): The rounding method to use. One of "nearest", "down", or "up".
+        df (pl.DataFrame): Input DataFrame to round.
+        price_precision (int | None): Decimal places for price-related columns.
+        currency_precision (int | None): Decimal places for monetary value and dividend columns.
+        general_precision (int | None): Decimal places for other float columns.
 
     Returns:
-        float: The rounded value.
-
-    Raises:
-        ValueError: If an invalid rounding method is provided.
+        pl.DataFrame: DataFrame with rounded numeric columns.
     """
-    factor =  10 ** decimals
-    match method:
-        case "nearest":
-            return round(value,decimals)
-        case "down":
-            return floor(value * factor) / factor
-        case "up":
-            return ceil(value * factor) / factor
-        case _:
-            raise ValueError(f"Invalid rounding method : {method}")
+    # Set default values if no precisions are pass in
+    price_precision = price_precision if price_precision is not None else PRICE_PRECISION
+    currency_precision = currency_precision if currency_precision is not None else CURRENCY_PRECISION
+    general_precision = general_precision if general_precision is not None else GENERAL_PRECISION
+
+    rounded_cols = []
+    for col, dtype in df.schema.items():
+        if not dtype.is_float():
+            continue  # Skip non-float columns
+        # Identify currency-related columns by keywords
+        elif any(keyword in col.lower() for keyword in ['price','cost','exchange_rate']):
+            rounded_cols.append(pl.col(col).round(price_precision).alias(col))
+        elif any(keyword in col.lower() for keyword in ['value','dividend','cash']):
+            rounded_cols.append(pl.col(col).round(currency_precision).alias(col))
+        else:
+            rounded_cols.append(pl.col(col).round(general_precision).alias(col))
+
+    return df.with_columns(rounded_cols)
 
 
-def round_shares(share_qty: float, method: RoundMethod = "down") -> float:
+# def stringify_list_columns(df: pl.DataFrame) -> pl.DataFrame:
+#     """
+#     Converts all list-type columns in a Polars DataFrame to comma-separated strings. (required for exporting to CSV)
+
+#     Args:
+#         df (pl.DataFrame): The Polars DataFrame containing potentially nested list columns.
+
+#     Returns:
+#         pl.DataFrame: A new DataFrame where all list-type columns have been converted to string representations.
+#     """
+#     new_cols = []
+#     for col, dtype in df.schema.items():
+#         if isinstance(dtype, pl.List):
+#             # Convert List(String) to a comma-separated string
+#             new_col = df[col].arr.join(separator=",").alias(col)
+#             new_cols.append(new_col)
+#         else:
+#             new_cols.append(df[col])
+#     return pl.DataFrame(new_cols)
+
+def flatten_dataframe_columns(df: pl.DataFrame) -> pl.DataFrame:
     """
-    Round the fractional share quantity to the configured fractional share precision.
-
-    Args:
-        share_qty (float): The quantity of shares to round.
-        method (RoundMethod, optional): The rounding method to use. Defaults to "down".
-
-    Returns:
-        float: The rounded share quantity.
+    Flattens a Polars DataFrame for CSV export:
+    - Unnests Struct columns.
+    - Converts List columns to comma-separated strings.
     """
-    return _round(share_qty,FRACTIONAL_SHARE_PRECISION,method)
-
-
-def round_price(price: float, method: RoundMethod = "nearest") -> float:
-    """
-    Round a price value to the configured price precision.
-
-    Args:
-        price (float): The price value to round.
-        method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
-
-    Returns:
-        float: The rounded price.
-    """
-    return _round(price,PRICE_PRECISION,method)
-
-
-def round_currency(price: float, method: RoundMethod = "nearest") -> float:
-    """
-    Round a currency amount to the configured currency precision.
-
-    Args:
-        price (float): The currency amount to round.
-        method (RoundMethod, optional): The rounding method to use. Defaults to "nearest".
-
-    Returns:
-        float: The rounded currency amount.
-    """
-    return _round(price,CURRENCY_PRECISION,method)
+    for col, dtype in df.schema.items():
+        if isinstance(dtype, pl.Struct):
+            df = df.unnest(col)
+        elif isinstance(dtype, pl.List):
+            df = df.with_columns(
+                pl.col(col).map_elements(
+                    lambda x: ", ".join(map(str, x)) if x is not None else "",
+                    return_dtype=pl.String
+                ).alias(col)
+            )
+    return df
 
 
 # --- Parse Utilities ---
@@ -232,7 +297,8 @@ def validate_date_order(start_date: date, end_date: date) -> None:
 
 
 def validate_int(obj, name : str) -> None:
-    """Validate that the given object is an integer.
+    """
+    Validate that the given object is an integer.
 
     Args:
         obj: The object to validate.
@@ -243,6 +309,21 @@ def validate_int(obj, name : str) -> None:
     """
     if not isinstance(obj, int):
         raise TypeError(f"{name} must be an integer. Currently {type(obj)} : {obj} ")
+    
+
+def validate_flat_dataframe(df: pl.DataFrame):
+    """
+    Validate that the DataFrame contains only flat (non-nested) columns.
+
+    Args:
+        df (pl.DataFrame): The DataFrame to validate.
+
+    Raises:
+        ValueError: If any column is of type List, Struct, or Object.
+    """
+    for col, dtype in df.schema.items():
+        if dtype.base_type() in [pl.List, pl.Struct, pl.Object]:
+            raise ValueError(f"Non-flat column detected: '{col}' has type {dtype}")
     
 
 # --- Scheduling Utilities ---
@@ -288,7 +369,19 @@ def generate_recurring_dates(start_date: date, end_date: date, frequency: str) -
     return dates
 
 
+
+
 # --- Saving Utilities ---
+
+def generate_timestamp() -> str:
+    """
+    Generate a timestamp string representing the current date and time.
+
+    Returns:
+        str: The current timestamp in the format 'YYYYMMDD_HHMMSS'.
+    """
+    return datetime.now().strftime('%Y%m%d_%H%M%S')
+
 
 def save_partitioned_parquet(data : pl.DataFrame, directory_save_path: Path) -> None:
     """
@@ -347,3 +440,36 @@ def save_csv(data : pl.DataFrame, save_path: Path) -> None:
         print(f"Data saved to {save_path}.") 
     except Exception as e:
         raise RuntimeError(f"Failed to save CSV to {save_path}: {e}") from e
+  
+
+# --- Reporting Utilities --- 
+
+def build_pivoted_col_names(pivot_values : list[str] , columns : list [str]) -> list[str]:
+        """
+        Generate new column names by combining each pivot value with each column name.
+
+        Each new name is formatted as '<pivot_value>_<column>', effectively expanding 
+        the original column names with a prefix for each pivot value.
+
+        Args:
+            pivot_values (list[str]): A list of pivot values (e.g. categories or keys).
+            columns (list[str]): A list of column names to be prefixed.
+
+        Returns:
+            list[str]: A list of combined column names.
+        """
+        return [f'{col}_{pivot}' for pivot in pivot_values for col in columns]
+
+
+def build_drop_col_list(excluded_cols : list[str], all_cols : list[str]) -> list[str]:
+    """
+    Generate a list of column names to drop by excluding specified columns.
+
+    Args:
+        excluded_cols (list[str]): Columns to keep (e.g. join keys).
+        all_cols (list[str]): All column names from a DataFrame.
+
+    Returns:
+        list[str]: Columns to drop (i.e. those not in excluded_cols).
+    """
+    return [col for col in all_cols if col not in excluded_cols]
