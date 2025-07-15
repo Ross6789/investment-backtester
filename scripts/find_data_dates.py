@@ -3,7 +3,7 @@ import polars as pl
 
 # Configuration
 asset_metadata_path = config.get_asset_metadata_path()
-parquet_price_path = config.get_parquet_price_base_path()
+parquet_price_path = config.get_backtest_data_path()
 csv_ticker_date_range_path = '/Volumes/T7/investment_backtester_data/processed/csv/find_ticker_date_range.csv'
 
 # Read parquet actions file

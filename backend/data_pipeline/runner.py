@@ -1,7 +1,7 @@
 import polars as pl
 import warnings
 from pathlib import Path
-from backend.utils import save_csv, save_regular_parquet,save_partitioned_parquet
+from backend.utils import save_csv, save_regular_parquet,save_partitioned_parquet, timing
 from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeline, FXPipeline
 from backend.data_pipeline.compiler import Compiler
 
@@ -63,37 +63,47 @@ class PipelineRunner:
         Raises:
             RuntimeError: If compilation of backtest data fails.
         """
-        
+        timings = {}
         # --- PRICE PIPELINE ---
         try:
-            self.price_pipeline.run()
-            self._save_csv_only('prices',self.price_pipeline.cleaned_data,'cleaned')
-            self._save_csv_only('prices',self.price_pipeline.processed_data,'processed')
+            with timing("Price pipeline",timings):
+                self.price_pipeline.run()
+                self._save_csv_only('prices',self.price_pipeline.cleaned_data,'cleaned')
+                self._save_csv_only('prices',self.price_pipeline.processed_data,'processed')
         except Exception as e:
             warnings.warn(f"Error in price pipeline : {e}")
 
         # --- CORPORATE ACTION PIPELINE ---
         try:
-            self.action_pipeline.run()
-            self._save_csv_only('corporate_actions',self.action_pipeline.cleaned_data,'cleaned')
-            self._save_csv_only('corporate_actions',self.action_pipeline.processed_data,'processed')
+            with timing("Corporate action pipeline",timings):
+                self.action_pipeline.run()
+                self._save_csv_only('corporate_actions',self.action_pipeline.cleaned_data,'cleaned')
+                self._save_csv_only('corporate_actions',self.action_pipeline.processed_data,'processed')
         except Exception as e:
             warnings.warn(f"Error in corporate action pipeline : {e}")
         
         # --- COMPILE TO FINAL BACKTEST DATASET ---
         try:
             print("Running backtest data compilation...")
-            self.compiled_data = Compiler.compile(self.price_pipeline.processed_data, self.action_pipeline.processed_data)
-            self._save_csv_and_parquet('data',self.compiled_data,'compiled',partitioned=True)
+            with timing("Data compilation",timings):
+                self.compiled_data = Compiler.compile(self.price_pipeline.processed_data, self.action_pipeline.processed_data)
+                self._save_csv_and_parquet('data',self.compiled_data,'compiled',partitioned=True)
         except Exception as e:
             raise RuntimeError(f"Critical error when compiling backtest data.") from e
         
         # --- FX PIPELINE ---
         try:
-            self.fx_pipeline.run()
-            self._save_csv_only('fx',self.fx_pipeline.cleaned_data,'cleaned')
-            self._save_csv_and_parquet('fx',self.fx_pipeline.processed_data,'processed',partitioned=False)
+            with timing("FX pipeline",timings):
+                self.fx_pipeline.run()
+                self._save_csv_only('fx',self.fx_pipeline.cleaned_data,'cleaned')
+                self._save_csv_and_parquet('fx',self.fx_pipeline.processed_data,'processed',partitioned=False)
         except Exception as e:
             warnings.warn(f"Error in fx pipeline : {e}")
         
         print("Pipeline execution complete.")
+
+        # Print timings
+        print("\n--- Pipeline Timings ---")
+        for stage, seconds in timings.items():
+            print(f"{stage:<30} {seconds:.2f} seconds")
+        print("\n")
