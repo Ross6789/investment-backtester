@@ -1,10 +1,10 @@
-import backend.config as config
+import backend.core.paths as paths
 import polars as pl
 
 # Configuration
-asset_metadata_path = config.get_asset_metadata_path()
-parquet_corporate_actions_path = config.get_parquet_corporate_action_base_path()
-csv_has_corporate_actions_path = config.get_csv_has_corporate_action_path()
+asset_metadata_path = paths.get_asset_metadata_path()
+parquet_corporate_actions_path = paths.get_parquet_corporate_action_base_path()
+csv_has_corporate_actions_path = paths.get_csv_has_corporate_action_path()
 
 # Read parquet actions file
 actions_df_eager = pl.read_parquet(parquet_corporate_actions_path)

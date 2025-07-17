@@ -1,8 +1,8 @@
 from datetime import date
 import polars as pl
 from dateutil.relativedelta import relativedelta
-from backend.models import TargetPortfolio, BacktestConfig, RealisticBacktestResult
-from backend.enums import OrderSide, RebalanceFrequency
+from backend.core.models import BacktestConfig, RealisticBacktestResult
+from backend.core.enums import OrderSide, RebalanceFrequency
 from backend.backtest.engine import BaseEngine
 from backend.backtest.portfolios import RealisticPortfolio
 

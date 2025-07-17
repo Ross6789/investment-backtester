@@ -1,6 +1,6 @@
 import polars as pl
-from backend.models import BacktestConfig, BacktestResult
-from backend.enums import BacktestMode
+from backend.core.models import BacktestConfig, BacktestResult
+from backend.core.enums import BacktestMode
 from backend.backtest.engine import BaseEngine,BasicEngine,RealisticEngine
 from backend.backtest.analysers import BaseAnalyser, RealisticAnalyser
 from backend.backtest.exporter import Exporter

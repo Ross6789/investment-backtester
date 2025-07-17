@@ -1,8 +1,9 @@
 from abc import ABC
-from backend.models import BacktestResult
+from backend.core.models import BacktestResult
 from backend.backtest.exporter import Exporter
 from backend.backtest.analysers import BaseAnalyser
 from backend.backtest.report_generator import ReportGenerator
+from backend.utils.reporting import generate_suffixed_col_names
 
 class BaseResultExportHandler(ABC):
     """
@@ -63,12 +64,11 @@ class BaseResultExportHandler(ABC):
         Uses the analyser to generate daily summary and holdings summary reports,
         then saves them with configuration metadata as comments.
         """
-        daily_summary_report = ReportGenerator.generate_csv(self.analyser.generate_daily_summary(),self.flat_config_dict)
+        daily_summary_report = ReportGenerator.generate_csv(df=self.analyser.generate_daily_summary(),metadata=self.flat_config_dict,percentify_cols=['daily_return'])
         self.exporter.save_report_to_csv(daily_summary_report, 'daily_summary')
         
-        daily_holdings_report = ReportGenerator.generate_csv(self.analyser.generate_holdings_summary(),self.flat_config_dict)
+        pivoted_precentage_cols = generate_suffixed_col_names(['portfolio_weighting'], self.analyser.tickers) # Find pivoted col names for percentage conversion
+        daily_holdings_report = ReportGenerator.generate_csv(df=self.analyser.generate_holdings_summary(),metadata=self.flat_config_dict,percentify_cols=pivoted_precentage_cols)
         self.exporter.save_report_to_csv(daily_holdings_report, 'holdings_summary')
     
 
-
-    

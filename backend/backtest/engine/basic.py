@@ -1,7 +1,7 @@
 from datetime import date
 import polars as pl
-from backend.models import TargetPortfolio, BacktestConfig, BacktestResult
-from backend.utils import generate_recurring_dates
+from backend.core.models import BacktestConfig, BacktestResult
+from backend.utils.scheduling import generate_recurring_dates
 from backend.backtest.engine import BaseEngine
 from backend.backtest.portfolios import BasicPortfolio
 

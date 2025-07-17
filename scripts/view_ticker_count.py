@@ -1,4 +1,4 @@
-import backend.config as config
+import backend.core.paths as paths
 import backend.utils as utils
 import polars as pl
 import pandas as pd
@@ -8,9 +8,9 @@ from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeli
 from backend.data_pipeline.compiler import Compiler
 
 # Configuration
-save_path = config.get_backtest_data_path()
-metadata_path = config.get_asset_metadata_path()
-fx_path = config.get_fx_data_path()
+save_path = paths.get_backtest_data_path()
+metadata_path = paths.get_asset_metadata_path()
+fx_path = paths.get_fx_data_path()
 
 # Quick test to confirm it works and count number of rows for each ticker ie. how much price data
 prices = pl.read_parquet(save_path)

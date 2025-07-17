@@ -1,6 +1,7 @@
 import polars as pl
-from backend.models import CSVReport
-from backend.utils import validate_flat_dataframe
+from backend.core.models import CSVReport, RoundingConfig
+from backend.core.validators import validate_flat_dataframe
+from backend.utils.dataframes import convert_columns_to_percentage, round_dataframe_columns
 
 class ReportGenerator:
     """
@@ -12,20 +13,48 @@ class ReportGenerator:
     """
 
     @staticmethod
-    def generate_csv(df: pl.DataFrame, metadata: dict[str, str] | None = None) -> CSVReport:
+    def _format_for_readability(df: pl.DataFrame, percentify_cols: list[str] | None = None, rounding_config: RoundingConfig | None = None) -> pl.DataFrame:
         """
-        Generates a CSVReport with formatted metadata, headers and rows.
+        Improves readability of a DataFrame for reporting by optionally converting selected columns to percentages and rounding float values based on semantic roles.
 
         Args:
-            df: The Polars DataFrame to export.
-            metadata: Optional dictionary to format as comments at top of file.
+            df (pl.DataFrame): The input DataFrame to format.
+            percentify_cols (list[str] | None): List of column names to convert to percentages.
+            rounding_config (RoundingConfig | None): Optional configuration for rounding precision. If not provided, default rounding settings will be used.
 
         Returns:
-            CSVReport containing comment lines, headers, and rows.
+            pl.DataFrame: A formatted DataFrame with improved readability.
+        """
+        # Convert to percentages (replace original columns)
+        if percentify_cols:
+            df = convert_columns_to_percentage(df,percentify_cols)
+
+        # Apply rounding
+        df = round_dataframe_columns(df, rounding_config)
+
+        return df
+
+
+    @staticmethod
+    def generate_csv(df: pl.DataFrame, metadata: dict[str, str] | None = None, percentify_cols: list[str] | None = None, rounding_config : RoundingConfig | None = None) -> CSVReport:
+        """
+        Generates a structured CSVReport from a Polars DataFrame, optionally
+        including metadata and applying formatting for readability.
+
+        Args:
+            df (pl.DataFrame): The DataFrame to export.
+            metadata (dict[str, str] | None): Optional dictionary to include as comments at the top of the CSV file.
+            percentify_cols (list[str] | None): Optional list of columns to convert to percentages for the report.
+            rounding_config (RoundingConfig | None): Optional rounding precision configuration. If not provided, defaults will be applied.
+
+        Returns:
+            CSVReport: An object containing comment lines, headers, and rows
+            suitable for structured CSV export.
         """
         validate_flat_dataframe(df)
 
         comments = ReportGenerator._format_metadata(metadata)
+        df = ReportGenerator._format_for_readability(df,percentify_cols, rounding_config)
 
         return CSVReport(
             comments=comments,

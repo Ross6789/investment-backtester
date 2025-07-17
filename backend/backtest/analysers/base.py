@@ -1,7 +1,7 @@
 from abc import ABC
 import polars as pl
-from backend.models import BacktestResult
-from backend.utils import build_pivoted_col_names, build_drop_col_list, round_dataframe_columns
+from backend.core.models import BacktestResult
+from backend.utils.reporting import generate_suffixed_col_names, build_drop_col_list
 
 
 class BaseAnalyser(ABC):
@@ -95,14 +95,14 @@ class BaseAnalyser(ABC):
             portfolio_lf (pl.LazyFrame): Portfolio totals data with 'total_holding_value' per date.
 
         Returns:
-            pl.LazyFrame: Holdings enriched with 'portfolio_weighting' column representing the percentage of each holding relative to total holdings on that date.
+            pl.LazyFrame: Holdings enriched with 'portfolio_weighting' column representing the proportion of each holding relative to total holdings on that date.
         """
         drop_cols = build_drop_col_list(['date'], portfolio_lf.collect_schema().keys())
 
         holdings_with_weighting = (
             holdings_lf
             .join(portfolio_lf, on='date')
-            .with_columns((pl.col('value') / pl.col('total_holding_value')*100).alias('portfolio_weighting'))
+            .with_columns((pl.col('value') / pl.col('total_holding_value')).alias('portfolio_weighting'))
             .drop(drop_cols)
         )
         return holdings_with_weighting
@@ -138,6 +138,36 @@ class BaseAnalyser(ABC):
             .select('date','total_holding_value','total_portfolio_value')
         )
         return total_portoflio_value
+    
+
+    # --- Post-pivot calculation expressions--- #    
+
+    @staticmethod
+    def _daily_gain_expr() -> pl.Expr:
+        """
+        Return an expression to compute the absolute daily gain in total portfolio value.
+
+        This calculates the difference between the current and previous day's
+        'total_portfolio_value'.
+
+        Returns:
+            pl.Expr: An expression representing the 'daily_gain' column.
+        """
+        return pl.col("total_portfolio_value").diff().alias("daily_gain")
+    
+
+    @staticmethod
+    def _daily_return_expr() -> pl.Expr:
+        """
+        Return an expression to compute the percentage daily return in total portfolio value.
+
+        This calculates the return as the relative change between the current and previous day's
+        'total_portfolio_value'.
+
+        Returns:
+            pl.Expr: An expression representing the 'daily_return' column.
+        """
+        return ((pl.col("total_portfolio_value") / pl.col("total_portfolio_value").shift(1)) - 1).alias("daily_return")
 
 
     # --- LazyFrame compilation --- #   
@@ -179,7 +209,7 @@ class BaseAnalyser(ABC):
         )
 
         # Order columns
-        pivot_cols = build_pivoted_col_names(self.tickers, PIVOT_VALUES)
+        pivot_cols = generate_suffixed_col_names(PIVOT_VALUES, self.tickers)
         wide_holdings_total_value_ordered = wide_holdings_total_value.select(['date'] + pivot_cols)
 
         return wide_holdings_total_value_ordered
@@ -187,19 +217,14 @@ class BaseAnalyser(ABC):
 
     # --- Final report generation --- #
     
-    def generate_daily_summary(self, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
+    def generate_daily_summary(self) -> pl.DataFrame:
         """
         Generate a daily summary by joining cash, portfolio, and holdings data.
 
-        Ensures enriched holdings data is compiled, formats holdings in wide format, then joins cash and portfolio data on date. Rounds float values based on column semantics.
-
-        Args:
-            price_precision (int | None): Optional number of decimal places to round price-related columns (e.g. prices, costs, exchange rates). If None, uses default.
-            currency_precision (int | None): Optional number of decimal places to round currency-related columns (e.g. value, dividends). If None, uses default.
-            general_precision (int | None): Optional number of decimal places to round all other float columns. If None, uses default.
+        Ensures enriched holdings data is compiled, formats holdings in wide format, then joins cash and portfolio data on date.
 
         Returns:
-            pl.DataFrame: Combined and rounded daily summary with cash, portfolio, and holdings info.
+            pl.DataFrame: Combined daily summary with cash, portfolio, and holdings info.
         """
         if not hasattr(self, 'enriched_holdings_lf'):
             self._compile_enriched_data()
@@ -214,29 +239,23 @@ class BaseAnalyser(ABC):
             .collect()
         )
         
-        
+        # Apply post-pivot calculations
+        daily_summary = daily_summary.with_columns([
+            self._daily_gain_expr(),
+            self._daily_return_expr()
+        ])
+
+        return daily_summary
 
 
-        rounded_summary = round_dataframe_columns(daily_summary, price_precision, currency_precision, general_precision)
-        
-        return rounded_summary
-
-
-    def generate_holdings_summary(self, price_precision: int | None = None, currency_precision: int | None = None, general_precision: int | None = None) -> pl.DataFrame:
+    def generate_holdings_summary(self) -> pl.DataFrame:
         """
         Generate a pivoted summary of holdings with FX and portfolio data.
 
         Joins enriched holdings with FX and portfolio data, then pivots specified value columns by date and ticker to create a wide-format summary. 
-        Optionally applies precision-based rounding to float columns based on their semantic role.
-
-        Args:
-            price_precision (int | None): Number of decimal places to round price-related columns (e.g., prices, costs, exchange rates). If None, uses the default.
-            currency_precision (int | None): Number of decimal places to round currency-related columns (e.g., value, dividends). If None, uses the default.
-            general_precision (int | None): Number of decimal places to round all other float columns. If None, uses the default.
 
         Returns:
-            pl.DataFrame: Pivoted and rounded holdings summary with one column per 
-            (ticker, value type) combination, plus the date column.
+            pl.DataFrame: Pivoted holdings summary with one column per (ticker, value type) combination, plus the date column.
         """
         PIVOT_VALUES = ['units','native_currency','native_price','exchange_rate','value','portfolio_weighting']
 
@@ -258,12 +277,10 @@ class BaseAnalyser(ABC):
         )
 
         # Order columns
-        pivot_cols = build_pivoted_col_names(self.tickers, PIVOT_VALUES)
+        pivot_cols = generate_suffixed_col_names(PIVOT_VALUES, self.tickers)
         holdings_summary_ordered = holdings_summary.select(['date', *pivot_cols])
-            
-        rounded_summary = round_dataframe_columns(holdings_summary_ordered, price_precision, currency_precision, general_precision)
         
-        return rounded_summary
+        return holdings_summary_ordered
 
 
     # --- Calculating overall metrics --- # 

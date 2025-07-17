@@ -1,8 +1,8 @@
 import csv
 import polars as pl
 from pathlib import Path
-from backend.models import CSVReport
-from backend.utils import round_dataframe_columns, flatten_dataframe_columns
+from backend.core.models import CSVReport
+from backend.utils.dataframes import round_dataframe_columns, flatten_dataframe_columns
 
 class Exporter:
     """
