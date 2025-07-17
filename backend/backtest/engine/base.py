@@ -15,8 +15,8 @@ class BaseEngine(ABC):
             self.calendar_df = calender_df
             self.calendar_dict = calender_dict
 
-            # Find first trading day
-            self.first_trading_date = self._get_first_trading_date()
+            # Find first active day
+            self.first_active_date = self._get_first_active_date()
 
             # Scheduled cashflow : Compute dates in advance
             recurring_freq = self.config.recurring_investment.frequency.value if self.config.recurring_investment is not None else None
@@ -146,14 +146,14 @@ class BaseEngine(ABC):
         return calendar_df, calendar_dict
 
 
-    def _get_first_trading_date(self) -> date:
+    def _get_first_active_date(self) -> date:
         """
-        Returns the earliest date where any ticker is trading.
+        Returns the earliest date where any ticker is active.
 
         Raises:
             ValueError: If no tickers are active in the backtest date range.
         """
-        filtered = self.calendar_df.filter(pl.col("trading_tickers") != [])
+        filtered = self.calendar_df.filter(pl.col("active_tickers") != [])
 
         if filtered.height == 0:
             raise ValueError("No tickers active during backtest date range")

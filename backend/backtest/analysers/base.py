@@ -213,6 +213,9 @@ class BaseAnalyser(ABC):
             .fill_null(0)
             .collect()
         )
+        
+        
+
 
         rounded_summary = round_dataframe_columns(daily_summary, price_precision, currency_precision, general_precision)
         
