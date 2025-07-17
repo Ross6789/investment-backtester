@@ -6,7 +6,7 @@ from backend.core.enums import BacktestMode, BaseCurrency, RebalanceFrequency, R
 from backend.backtest.runner import BacktestRunner
 
 # User choices
-mode = BacktestMode.BASIC
+mode = BacktestMode.REALISTIC
 base_currency = BaseCurrency.GBP
 start_date = date.fromisoformat("2020-01-01")
 end_date = date.fromisoformat("2025-01-01")

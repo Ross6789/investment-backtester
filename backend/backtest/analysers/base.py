@@ -70,6 +70,11 @@ class BaseAnalyser(ABC):
     
 
     @staticmethod
+    def _enrich_cash_with_cumulative_cashflow(cash_lf: pl.LazyFrame) -> pl.LazyFrame:
+        return cash_lf.with_columns(pl.col("cash_inflow").cum_sum().alias("cumulative_cashflow"))
+
+
+    @staticmethod
     def _enrich_holdings_with_values(holdings_lf: pl.LazyFrame) -> pl.LazyFrame:  
         """
         Calculate the total value of each holding by multiplying units by base price.
@@ -126,48 +131,39 @@ class BaseAnalyser(ABC):
         total_holdings_value = (
             holdings_lf
             .group_by('date')
-            .agg(pl.sum('value').fill_null(0).alias('total_holding_value'))
+            .agg(pl.sum('value').alias('total_holding_value'))
         )
 
         # Add total portfolio value column
-        total_portoflio_value = (
+        total_portfolio_value = (
             cash_lf.join(total_holdings_value, on='date',how='left')
+            .fill_null(0) # Fill any empty holding totals
             .with_columns(
                 (pl.col('cash_balance')+pl.col('total_holding_value')).alias('total_portfolio_value')
             )
             .select('date','total_holding_value','total_portfolio_value')
         )
-        return total_portoflio_value
+        return total_portfolio_value
     
 
     # --- Post-pivot calculation expressions--- #    
 
     @staticmethod
-    def _daily_gain_expr() -> pl.Expr:
-        """
-        Return an expression to compute the absolute daily gain in total portfolio value.
+    def _gain_exprs() -> list[pl.Expr]:
 
-        This calculates the difference between the current and previous day's
-        'total_portfolio_value'.
-
-        Returns:
-            pl.Expr: An expression representing the 'daily_gain' column.
-        """
-        return pl.col("total_portfolio_value").diff().alias("daily_gain")
+        return [
+            ((pl.col("total_portfolio_value").diff())-(pl.col("cash_inflow"))).alias("net_daily_gain"),
+            (pl.col("total_portfolio_value") - pl.col("cumulative_cashflow")).alias("net_cumulative_gain")
+        ]
     
 
     @staticmethod
-    def _daily_return_expr() -> pl.Expr:
-        """
-        Return an expression to compute the percentage daily return in total portfolio value.
+    def _return_exprs() -> list[pl.Expr]:
 
-        This calculates the return as the relative change between the current and previous day's
-        'total_portfolio_value'.
-
-        Returns:
-            pl.Expr: An expression representing the 'daily_return' column.
-        """
-        return ((pl.col("total_portfolio_value") / pl.col("total_portfolio_value").shift(1)) - 1).alias("daily_return")
+        return [
+            (((pl.col("total_portfolio_value")-pl.col("cash_inflow"))/ pl.col("total_portfolio_value").shift(1)) - 1).alias("net_daily_return"),
+            ((pl.col("total_portfolio_value") / pl.col("cumulative_cashflow")) - 1).alias("net_cumulative_return"),
+        ]
 
 
     # --- LazyFrame compilation --- #   
@@ -178,6 +174,8 @@ class BaseAnalyser(ABC):
 
         Enhances holdings with value calculations, computes portfolio totals, and enriches holdings with portfolio weighting, storing results as instance attributes.
         """
+        self.enriched_cash_lf = self._enrich_cash_with_cumulative_cashflow(self.cash_lf)
+
         holdings_with_values = self._enrich_holdings_with_values(self.holdings_lf)
 
         self.portfolio_lf = self._compute_portfolio_totals(holdings_with_values,self.cash_lf)
@@ -232,20 +230,19 @@ class BaseAnalyser(ABC):
         wide_holdings_summary = self._format_wide_holdings_summary()
 
         daily_summary = (
-            self.cash_lf
+            self.enriched_cash_lf
             .join(self.portfolio_lf, on='date', how='left')
             .join(wide_holdings_summary, on='date',how='left')
             .fill_null(0)
-            .collect()
         )
         
         # Apply post-pivot calculations
         daily_summary = daily_summary.with_columns([
-            self._daily_gain_expr(),
-            self._daily_return_expr()
+            *self._gain_exprs(),
+            *self._return_exprs()
         ])
 
-        return daily_summary
+        return daily_summary.collect()
 
 
     def generate_holdings_summary(self) -> pl.DataFrame:
@@ -259,7 +256,7 @@ class BaseAnalyser(ABC):
         """
         PIVOT_VALUES = ['units','native_currency','native_price','exchange_rate','value','portfolio_weighting']
 
-        if not hasattr(self, 'enriched_holdings_lf'):
+        if not hasattr(self, 'portfolio_lf'): # we know enrichment has not occured if a portolio lf does not exist
             self._compile_enriched_data()
 
         holdings_fx = (

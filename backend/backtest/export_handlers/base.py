@@ -64,7 +64,7 @@ class BaseResultExportHandler(ABC):
         Uses the analyser to generate daily summary and holdings summary reports,
         then saves them with configuration metadata as comments.
         """
-        daily_summary_report = ReportGenerator.generate_csv(df=self.analyser.generate_daily_summary(),metadata=self.flat_config_dict,percentify_cols=['daily_return'])
+        daily_summary_report = ReportGenerator.generate_csv(df=self.analyser.generate_daily_summary(),metadata=self.flat_config_dict,percentify_cols=['net_daily_return'])
         self.exporter.save_report_to_csv(daily_summary_report, 'daily_summary')
         
         pivoted_precentage_cols = generate_suffixed_col_names(['portfolio_weighting'], self.analyser.tickers) # Find pivoted col names for percentage conversion
