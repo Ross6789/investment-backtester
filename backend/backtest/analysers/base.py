@@ -316,11 +316,11 @@ class BaseAnalyser(ABC):
         # Aggregated returns
         agg_returns_pd = stats.monthly_returns(returns)
 
-        # Monthly returns
+        # Monthly returns - quantstats 
         monthly_returns_pd = agg_returns_pd.drop(columns=['EOY'])
         calc_monthly_returns_dict = monthly_returns_pd.T.reset_index().rename(columns={'index': 'month'}).to_dict(orient='records')
 
-        # Annual returns
+        # Annual returns - quantstats
         yearly_returns_pd = agg_returns_pd['EOY']
         calc_yearly_returns_dict = yearly_returns_pd.to_dict()
 
@@ -333,40 +333,80 @@ class BaseAnalyser(ABC):
         # calc_max_drawdown = stats.max_drawdown(returns) #quantstat max drawdown used to check accuracy of dict retrieval : results match (although one is float and other is percentage) 
         calc_max_drawdown_dict = min(calc_drawdown_dict, key=lambda d: d['max_drawdown'], default={})
 
+        # Period returns
+        period_returns = self._aggregate_returns_by_periods(returns_df)
 
-        # # Best periods
-        # best_day = stats.best(returns,'D')
-        # best_week = stats.best(returns,'W')
-        # best_month = stats.best(returns,'M')
-        # best_quarter = stats.best(returns,'Q')
-        # best_year = stats.best(returns,'Y')
+        # Best periods
+        best_periods = {}
 
-        # # # Worst periods
-        # worst_day = stats.worst(returns,'D')
-        # worst_week = stats.worst(returns,'W')
-        # worst_month = stats.worst(returns,'M')
-        # worst_quarter = stats.worst(returns,'Q')
-        # worst_year = stats.worst(returns,'Y')
+        for period, df in period_returns.items():
+            best_row = df.filter(pl.col('return') == pl.col('return').max()).row(0)
+            best_periods[period] = {
+                'period_start':best_row[0].strftime('%Y-%m-%d'),
+                'return':best_row[1]
+            }
+
+        # Worst periods
+        worst_periods = {}
+
+        for period, df in period_returns.items():
+            worst_row = df.filter(pl.col('return')== pl.col('return').min()).row(0)
+            worst_periods[period] = {
+                'period_start':worst_row[0].strftime('%Y-%m-%d'),
+                'return':worst_row[1]
+            }
 
         return {
             "cagr": calc_cagr,
             "sharpe": calc_sharpe,
             "yearly_returns": calc_yearly_returns_dict,
+            "yearly_returns_polars": period_returns.get('yearly').to_dict(),
             "monthly_returns": calc_monthly_returns_dict,
             "drawdown": calc_drawdown_dict,
-            "max_drawdown": calc_max_drawdown_dict
+            "max_drawdown": calc_max_drawdown_dict,
+            "best_periods": best_periods,
+            "worst_periods": worst_periods
         }
     
 
 
 
 
-    def calculate_best_periods(self):
-        pass
-
-
-    def calculate_worst_periods(self):
-        pass 
+    def _aggregate_returns_by_periods(self, net_daily_returns_df : pl.DataFrame) -> dict[str, pl.DataFrame]:
+        
+        # Add period columns to returns df
+        returns_with_period_cols = net_daily_returns_df.with_columns(
+            pl.col('date').dt.truncate('1w').alias('week'),
+            pl.col('date').dt.truncate('1mo').alias('month'),
+            pl.col('date').dt.truncate('1q').alias('quarter'),
+            pl.col('date').dt.truncate('1y').alias('year')
+        )
+        
+        daily_returns = net_daily_returns_df.rename({'date':'day','net_daily_return':"return"})
+        weekly_returns = BaseAnalyser._aggregate_return_for_period(returns_with_period_cols,'week')
+        monthly_returns = BaseAnalyser._aggregate_return_for_period(returns_with_period_cols,'month')
+        quarterly_returns = BaseAnalyser._aggregate_return_for_period(returns_with_period_cols,'quarter')
+        yearly_returns = BaseAnalyser._aggregate_return_for_period(returns_with_period_cols,'year')
+        
+        return {
+        "daily": daily_returns,
+        "weekly": weekly_returns,
+        "monthly": monthly_returns,
+        "quarterly": quarterly_returns,
+        "yearly": yearly_returns        
+        }
+    
+    @staticmethod
+    def _aggregate_return_for_period(returns_with_periods: pl.DataFrame, period: str):
+        return (
+            returns_with_periods
+            .group_by(period)
+            .agg(
+                ((1 + pl.col('net_daily_return')).product() - 1).alias('return')
+            )
+            .sort(period)
+        )
+            
 
 
 
