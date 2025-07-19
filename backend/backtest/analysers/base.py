@@ -325,7 +325,11 @@ class BaseAnalyser(ABC):
         calc_yearly_returns_dict = yearly_returns_pd.to_dict()
 
         # Drawdown
-        
+        drawdown = stats.to_drawdown_series(returns)
+        all_drawdown_details = stats.drawdown_details(drawdown)
+        formatted_drawdown_details = all_drawdown_details[['start','end','days','max drawdown','valley']].rename(columns={'max drawdown':'max_drawdown','valley':'max_drawdown_date'}) 
+        calc_drawdown_dict = formatted_drawdown_details.to_dict(orient='records')
+        calc_max_drawdown = min(drawdown)
 
         # # Best periods
         # best_day = stats.best(returns,'D')
@@ -345,7 +349,9 @@ class BaseAnalyser(ABC):
             "cagr": calc_cagr,
             "sharpe": calc_sharpe,
             "yearly_returns": calc_yearly_returns_dict,
-            "monthly_returns": calc_monthly_returns_dict
+            "monthly_returns": calc_monthly_returns_dict,
+            "drawdown": calc_drawdown_dict,
+            "max_drawdown": calc_max_drawdown
         }
     
 
