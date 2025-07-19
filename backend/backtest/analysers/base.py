@@ -336,59 +336,61 @@ class BaseAnalyser(ABC):
         # Period returns
         period_returns = self._aggregate_returns_by_periods(returns_df)
 
-        # Best periods
-        
-        # best_periods = {}
+        # Likely move to Exporter (JSON) adn add handler method to adhere to DRY
+        # daily_df = period_returns.get('daily')
+        # daily_dates = daily_df['day'].to_list()
+        # daily_returns = daily_df['return'].to_list()
+        # formatted_daily_rows = [{"period": date.strftime('%Y-%m-%d'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(daily_dates, daily_returns)]
 
-        # for period, df in period_returns.items():
-        #     best_row = df.filter(pl.col('return') == pl.col('return').max()).row(0)
-        #     best_periods[period] = {
-        #         'period_start':best_row[0].strftime('%Y-%m-%d'),
-        #         'return':best_row[1]
+        # weekly_df = period_returns.get('weekly')
+        # weekly_start_dates = weekly_df['week'].to_list()
+        # weekly_returns = weekly_df['return'].to_list()
+        # formatted_weekly_rows = [{"period": date.strftime('%Y-%m-%d'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(weekly_start_dates, weekly_returns)]
+        
+        # monthly_df = period_returns.get('monthly')
+        # monthly_start_dates = monthly_df['month'].to_list()
+        # monthly_returns = monthly_df['return'].to_list()
+        # formatted_monthly_rows = [{"period": date.strftime('%Y_%m'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(monthly_start_dates, monthly_returns)]
+        
+        # quarterly_df = period_returns.get('quarterly')
+        # quarterly_start_dates = quarterly_df['quarter'].to_list()
+        # quarterly_returns = quarterly_df['return'].to_list()
+        # formatted_quarterly_rows = [{"period": f"{date.year}-Q{((date.month - 1) // 3) + 1}", "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(quarterly_start_dates, quarterly_returns)]
+        
+        # yearly_df = period_returns.get('yearly')
+        # yearly_start_dates = yearly_df['year'].to_list()
+        # yearly_returns = yearly_df['return'].to_list()
+        # formatted_yearly_rows = [{"period": date.strftime('%Y'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(yearly_start_dates, yearly_returns)]
+        
+        # agg_returns = {
+        #         "daily": formatted_daily_rows,
+        #         "weekly": formatted_weekly_rows,
+        #         "monthly": formatted_monthly_rows,
+        #         "quarterly": formatted_quarterly_rows,
+        #         "yearly": formatted_yearly_rows
         #     }
 
+        # Best periods
+        best_periods = []
 
-
-
-        yearly_df = period_returns.get('yearly')
-
-        daily_df = period_returns.get('daily')
-        daily_dates = daily_df['day'].to_list()
-        daily_returns = daily_df['return'].to_list()
-
-        # Zip into list of dicts
-        formatted_daily_rows = [{"period": date.strftime('%Y-%m-%d'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(daily_dates, daily_returns)]
-
-        weekly_df = period_returns.get('weekly')
-        weekly_start_dates = weekly_df['week'].to_list()
-        weekly_returns = weekly_df['return'].to_list()
-        
-        # Zip into list of dicts
-        formatted_weekly_rows = [{"period": date.strftime('%Y-%m-%d'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(weekly_start_dates, weekly_returns)]
-        
-        monthly_df = period_returns.get('monthly')
-        monthly_start_dates = monthly_df['month'].to_list()
-        monthly_returns = monthly_df['return'].to_list()
-        
-        # Zip into list of dicts
-        formatted_monthly_rows = [{"period": date.strftime('%Y_%m'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(monthly_start_dates, monthly_returns)]
-        
-        quarterly_df = period_returns.get('quarterly')
-        quarterly_start_dates = quarterly_df['quarter'].to_list()
-        quarterly_returns = quarterly_df['return'].to_list()
-        
-        # Zip into list of dicts
-        formatted_quarterly_rows = [{"period": f"{date.year}-Q{((date.month - 1) // 3) + 1}", "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(quarterly_start_dates, quarterly_returns)]
-        
-        yearly_df = period_returns.get('yearly')
-        yearly_start_dates = yearly_df['year'].to_list()
-        yearly_returns = yearly_df['return'].to_list()
-
-        # Zip into list of dicts
-        formatted_yearly_rows = [{"period": date.strftime('%Y'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(yearly_start_dates, yearly_returns)]
-        
+        for period, df in period_returns.items():
+            best_row = df.filter(pl.col('return') == pl.col('return').max()).row(0)
+            best_periods.append({
+                'aggregation':period,
+                'period_start':best_row[0],
+                'return':best_row[1]
+            })
 
         # Worst periods
+        worst_periods = []
+
+        for period, df in period_returns.items():
+            worst_row = df.filter(pl.col('return') == pl.col('return').min()).row(0)
+            worst_periods.append({
+                'aggregation':period,
+                'period_start':worst_row[0],
+                'return':worst_row[1]
+            })
 
 
         return {
@@ -399,13 +401,7 @@ class BaseAnalyser(ABC):
             "monthly_returns": calc_monthly_returns_dict,
             "drawdown": calc_drawdown_dict,
             "max_drawdown": calc_max_drawdown_dict,
-            "agg_returns":{
-                "daily": formatted_daily_rows,
-                "weekly": formatted_weekly_rows,
-                "monthly": formatted_monthly_rows,
-                "quarterly": formatted_quarterly_rows,
-                "yearly": formatted_yearly_rows
-            }
+            "best_periods":best_periods
 
         }
     
