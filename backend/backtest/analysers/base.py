@@ -329,7 +329,10 @@ class BaseAnalyser(ABC):
         all_drawdown_details = stats.drawdown_details(drawdown)
         formatted_drawdown_details = all_drawdown_details[['start','end','days','max drawdown','valley']].rename(columns={'max drawdown':'max_drawdown','valley':'max_drawdown_date'}) 
         calc_drawdown_dict = formatted_drawdown_details.to_dict(orient='records')
-        calc_max_drawdown = min(drawdown)
+       
+        # calc_max_drawdown = stats.max_drawdown(returns) #quantstat max drawdown used to check accuracy of dict retrieval : results match (although one is float and other is percentage) 
+        calc_max_drawdown_dict = min(calc_drawdown_dict, key=lambda d: d['max_drawdown'], default={})
+
 
         # # Best periods
         # best_day = stats.best(returns,'D')
@@ -351,7 +354,7 @@ class BaseAnalyser(ABC):
             "yearly_returns": calc_yearly_returns_dict,
             "monthly_returns": calc_monthly_returns_dict,
             "drawdown": calc_drawdown_dict,
-            "max_drawdown": calc_max_drawdown
+            "max_drawdown": calc_max_drawdown_dict
         }
     
 
