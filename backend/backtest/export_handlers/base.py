@@ -61,8 +61,7 @@ class BaseResultExportHandler(ABC):
         """
         Generate and export summary reports to CSV files.
 
-        Uses the analyser to generate daily summary and holdings summary reports,
-        then saves them with configuration metadata as comments.
+        Uses the analyser to generate daily summary and holdings summary reports, then saves them with configuration metadata as comments.
         """
         daily_summary_report = ReportGenerator.generate_csv(df=self.analyser.generate_daily_summary(),metadata=self.flat_config_dict,percentify_cols=['net_daily_return'])
         self.exporter.save_report_to_csv(daily_summary_report, 'daily_summary')

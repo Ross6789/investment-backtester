@@ -3,6 +3,8 @@
  pyarrow
  yfinance
  pytest
+ quantstats
+ipython
 
  #  activating virtual environment => source venv/bin/activate
 

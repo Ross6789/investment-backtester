@@ -1,5 +1,7 @@
 from abc import ABC
 import polars as pl
+import pandas as pd
+from quantstats import stats
 from backend.core.models import BacktestResult
 from backend.utils.reporting import generate_suffixed_col_names, build_drop_col_list
 
@@ -34,6 +36,9 @@ class BaseAnalyser(ABC):
         # Cache tickers for use in future methods
         self.tickers = self._get_all_tickers()
 
+        # Perform essential enrichments
+        self._compile_enriched_data()
+
 
     def _get_all_tickers(self) -> list[str]:       
         """
@@ -50,46 +55,106 @@ class BaseAnalyser(ABC):
             .to_series()
             .to_list()
         )
+   
+
+    def _compile_enriched_data(self) -> None:
+        """
+        Compile enriched holdings and portfolio data.
+
+        Enhances holdings with value calculations, computes portfolio totals, and enriches holdings with portfolio weighting, storing results as instance attributes.
+        """
+        self.enriched_cash_lf= self.cash_lf.with_columns(BaseAnalyser.get_cumulative_cashflow_expr())
+
+        holdings_with_values = self.holdings_lf.with_columns(BaseAnalyser.get_values_expr())
+        portfolio_lf = self._compute_portfolio_totals(holdings_with_values,self.enriched_cash_lf)
+
+        self.enriched_holdings_lf = self._enrich_holdings_with_portfolio_weighting(holdings_with_values,portfolio_lf)
+        self.enriched_portfolio_lf = portfolio_lf.with_columns(*BaseAnalyser.get_gain_exprs(), *BaseAnalyser.get_return_exprs())
  
 
-    # --- Enrichment methods --- # 
+    # --- Simple single column enrichments expression --- # 
+
+    # === GENERIC === #
 
     @staticmethod
-    def _enrich_with_year(date_col: str, lf: pl.LazyFrame) -> pl.LazyFrame:
+    def get_year_expr(date_col: str) -> pl.Expr:
         """
-        Adds a 'year' column to the given LazyFrame based on the specified date column.
+        Generate an expression to extract the year from a date column.
+
+        This expression can be used with `.with_columns()` to add a 'year' column
+        derived from the specified date column in a LazyFrame or DataFrame.
 
         Args:
-            date_col (str): Name of the date column to extract the year from.
-            lf (pl.LazyFrame): A Polars LazyFrame containing a 'date' column of type Date.
+            date_col (str): Name of the date column from which to extract the year.
 
         Returns:
-            pl.LazyFrame: A LazyFrame with an additional 'year' column.
+            pl.Expr: Polars expression that extracts the year and labels it as 'year'.
         """
-        return lf.with_columns( pl.col(date_col).dt.year().alias('year'))
+        return pl.col(date_col).dt.year().alias('year')
+    
+
+    # === CASH === #
+
+    @staticmethod
+    def get_cumulative_cashflow_expr() -> pl.Expr:
+        """
+        Add a 'cumulative_cashflow' column to the LazyFrame by computing the cumulative sum of 'cash_inflow' over time.
+
+        Returns:
+            pl.Expr: Polars expression that calculated the 'cumulative_cashflow' column
+
+        """
+        return pl.col("cash_inflow").cum_sum().alias("cumulative_cashflow")
     
 
     @staticmethod
-    def _enrich_cash_with_cumulative_cashflow(cash_lf: pl.LazyFrame) -> pl.LazyFrame:
-        return cash_lf.with_columns(pl.col("cash_inflow").cum_sum().alias("cumulative_cashflow"))
+    def get_gain_exprs() -> list[pl.Expr]:
+        """
+        Generate expressions to calculate net gains, accounting for cash inflows.
 
+        Returns:
+            list[pl.Expr]: 
+                - 'net_daily_gain': The change in total portfolio value from the previous day, minus any cash inflow on the current day.
+                - 'net_cumulative_gain': The total portfolio value minus the cumulative cash invested up to the current day.
+        """
+        return [
+            ((pl.col("total_portfolio_value").diff())-(pl.col("cash_inflow"))).alias("net_daily_gain"),
+            (pl.col("total_portfolio_value") - pl.col("cumulative_cashflow")).alias("net_cumulative_gain")
+        ]
+    
 
     @staticmethod
-    def _enrich_holdings_with_values(holdings_lf: pl.LazyFrame) -> pl.LazyFrame:  
+    def get_return_exprs() -> list[pl.Expr]:
+        """
+        Generate expressions to calculate net returns, accounting for cash inflows.
+
+        Returns:
+            list[pl.Expr]: 
+                - 'net_daily_return': The net daily return as the portfolio value (adjusted for cash inflow) divided by the previous day's value, minus 1.
+                - 'net_cumulative_return': The cumulative return calculated as the portfolio value divided by cumulative cash inflows, minus 1.
+        """
+        return [
+            (((pl.col("total_portfolio_value")-pl.col("cash_inflow"))/ pl.col("total_portfolio_value").shift(1)) - 1).alias("net_daily_return"),
+            ((pl.col("total_portfolio_value") / pl.col("cumulative_cashflow")) - 1).alias("net_cumulative_return"),
+        ]
+    
+
+    # === HOLDINGS === #
+
+    @staticmethod
+    def get_values_expr() -> pl.Expr:  
         """
         Calculate the total value of each holding by multiplying units by base price.
 
-        Args:
-            holdings_lf (pl.LazyFrame): Holdings data including 'units' and 'base_price' columns.
-
         Returns:
-            pl.LazyFrame: Holdings with an added 'value' column representing total holding value.
+            pl.Expr: Polars expression that calculates the 'value' column from 'units' x 'base_price'
+            
         """     
-        return (
-            holdings_lf
-            .with_columns((pl.col("units") * pl.col("base_price")).alias("value"))
-        )
+        return (pl.col("units") * pl.col("base_price")).alias("value")
 
+
+    # --- Multi-stage Enrichment methods --- # 
+    
     @staticmethod
     def _enrich_holdings_with_portfolio_weighting(holdings_lf: pl.LazyFrame, portfolio_lf: pl.LazyFrame) -> pl.LazyFrame:  
         """
@@ -113,8 +178,6 @@ class BaseAnalyser(ABC):
         return holdings_with_weighting
     
 
-    # --- Computation methods--- #    
-
     @staticmethod
     def _compute_portfolio_totals(holdings_lf: pl.LazyFrame, cash_lf: pl.LazyFrame) -> pl.LazyFrame:
         """
@@ -125,7 +188,7 @@ class BaseAnalyser(ABC):
             cash_lf (pl.LazyFrame): Cash balance data per date.
 
         Returns:
-            pl.LazyFrame: DataFrame with columns 'date', 'total_holding_value', and 'total_portfolio_value'.
+            pl.LazyFrame: DataFrame with columsn from cash_lf and 'total_holding_value' and 'total_portfolio_value'
         """
         # Add total holdings value column
         total_holdings_value = (
@@ -141,63 +204,30 @@ class BaseAnalyser(ABC):
             .with_columns(
                 (pl.col('cash_balance')+pl.col('total_holding_value')).alias('total_portfolio_value')
             )
-            .select('date','total_holding_value','total_portfolio_value')
         )
         return total_portfolio_value
-    
+        
 
-    # --- Post-pivot calculation expressions--- #    
-
+    # --- Pivoting--- #
     @staticmethod
-    def _gain_exprs() -> list[pl.Expr]:
-
-        return [
-            ((pl.col("total_portfolio_value").diff())-(pl.col("cash_inflow"))).alias("net_daily_gain"),
-            (pl.col("total_portfolio_value") - pl.col("cumulative_cashflow")).alias("net_cumulative_gain")
-        ]
-    
-
-    @staticmethod
-    def _return_exprs() -> list[pl.Expr]:
-
-        return [
-            (((pl.col("total_portfolio_value")-pl.col("cash_inflow"))/ pl.col("total_portfolio_value").shift(1)) - 1).alias("net_daily_return"),
-            ((pl.col("total_portfolio_value") / pl.col("cumulative_cashflow")) - 1).alias("net_cumulative_return"),
-        ]
-
-
-    # --- LazyFrame compilation --- #   
-
-    def _compile_enriched_data(self) -> None:
+    def _format_wide_holdings_summary(enriched_holdings_lf : pl.LazyFrame, tickers : list[str]) -> pl.LazyFrame:
         """
-        Compile enriched holdings and portfolio data.
+        Pivot enriched holdings data to a wide format with separate columns for each ticker's 'value' and 'portfolio_weighting'.
 
-        Enhances holdings with value calculations, computes portfolio totals, and enriches holdings with portfolio weighting, storing results as instance attributes.
-        """
-        self.enriched_cash_lf = self._enrich_cash_with_cumulative_cashflow(self.cash_lf)
+        Collects and pivots the data so that each ticker has its own set of 'value' and 'portfolio_weighting' columns and ensures columns are ordered consistently.
 
-        holdings_with_values = self._enrich_holdings_with_values(self.holdings_lf)
-
-        self.portfolio_lf = self._compute_portfolio_totals(holdings_with_values,self.cash_lf)
-
-        self.enriched_holdings_lf = self._enrich_holdings_with_portfolio_weighting(holdings_with_values,self.portfolio_lf)
-
-
-    # --- Report formatting --- #
-
-    def _format_wide_holdings_summary(self) -> pl.LazyFrame:
-        """
-        Pivot enriched holdings data to wide format with 'value' and 'portfolio_weighting' per ticker.
-
-        Collects and pivots data on 'date' and 'ticker', then orders columns consistently.
+        Args:
+            enriched_holdings_lf (pl.LazyFrame): LazyFrame containing at least 'date', 'ticker', 'value', and 'portfolio_weighting' columns.
+            tickers (list[str]): List of expected tickers, used to order the resulting pivoted columns.
 
         Returns:
-            pl.LazyFrame: Pivoted holdings data in wide format with ordered columns.
+            pl.LazyFrame: Pivoted LazyFrame in wide format with one row per date and ordered columns per ticker and metric.
+
         """
         PIVOT_VALUES = ["value","portfolio_weighting"] 
 
         wide_holdings_total_value = (
-            self.enriched_holdings_lf
+            enriched_holdings_lf
             .select(["date","ticker", *PIVOT_VALUES])
             .collect()
             .pivot(values=PIVOT_VALUES, 
@@ -207,40 +237,30 @@ class BaseAnalyser(ABC):
         )
 
         # Order columns
-        pivot_cols = generate_suffixed_col_names(PIVOT_VALUES, self.tickers)
+        pivot_cols = generate_suffixed_col_names(PIVOT_VALUES, tickers)
         wide_holdings_total_value_ordered = wide_holdings_total_value.select(['date'] + pivot_cols)
 
         return wide_holdings_total_value_ordered
-    
+
 
     # --- Final report generation --- #
     
     def generate_daily_summary(self) -> pl.DataFrame:
         """
-        Generate a daily summary by joining cash, portfolio, and holdings data.
+        Generate a daily summary by joining portfolio and holdings data.
 
-        Ensures enriched holdings data is compiled, formats holdings in wide format, then joins cash and portfolio data on date.
+       Formats holdings in wide format, then joins enriched portfolio data on date.
 
         Returns:
-            pl.DataFrame: Combined daily summary with cash, portfolio, and holdings info.
+            pl.DataFrame: Combined daily summary with portfolio and holdings info.
         """
-        if not hasattr(self, 'enriched_holdings_lf'):
-            self._compile_enriched_data()
-
-        wide_holdings_summary = self._format_wide_holdings_summary()
+        wide_holdings_summary = self._format_wide_holdings_summary(self.enriched_holdings_lf,self.tickers)
 
         daily_summary = (
-            self.enriched_cash_lf
-            .join(self.portfolio_lf, on='date', how='left')
+            self.enriched_portfolio_lf
             .join(wide_holdings_summary, on='date',how='left')
             .fill_null(0)
         )
-        
-        # Apply post-pivot calculations
-        daily_summary = daily_summary.with_columns([
-            *self._gain_exprs(),
-            *self._return_exprs()
-        ])
 
         return daily_summary.collect()
 
@@ -256,13 +276,10 @@ class BaseAnalyser(ABC):
         """
         PIVOT_VALUES = ['units','native_currency','native_price','exchange_rate','value','portfolio_weighting']
 
-        if not hasattr(self, 'portfolio_lf'): # we know enrichment has not occured if a portolio lf does not exist
-            self._compile_enriched_data()
-
         holdings_fx = (
             self.enriched_holdings_lf
             .join(self.data_lf, on=['date','ticker','base_price'])
-            .join(self.portfolio_lf, on='date')
+            .join(self.enriched_portfolio_lf, on='date')
             .select(['date','ticker', *PIVOT_VALUES])
         )
         
@@ -282,12 +299,57 @@ class BaseAnalyser(ABC):
 
     # --- Calculating overall metrics --- # 
 
-    def calculate_cagr(self):
-        pass
+    def calculate_overall_metrics(self) -> dict:
+        
+        # Remove non trading days from portfolio valuations - this need 
+        trading_days = self.calendar_lf.filter(pl.col('trading_tickers').is_not_null())
+        trading_portfolio = self.enriched_portfolio_lf.join(trading_days, on='date', how='semi')
+        returns_df = trading_portfolio.select(['date','net_daily_return']).collect()
+        returns = pd.Series(returns_df['net_daily_return'],index=pd.DatetimeIndex(returns_df['date']))
+  
+        # CAGR
+        calc_cagr = stats.cagr(returns)
+
+        # # Sharpe
+        calc_sharpe = stats.sharpe(returns)
+
+        # Aggregated returns
+        agg_returns_pd = stats.monthly_returns(returns)
+
+        # Monthly returns
+        monthly_returns_pd = agg_returns_pd.drop(columns=['EOY'])
+        calc_monthly_returns_dict = monthly_returns_pd.T.reset_index().rename(columns={'index': 'month'}).to_dict(orient='records')
+
+        # Annual returns
+        yearly_returns_pd = agg_returns_pd['EOY']
+        calc_yearly_returns_dict = yearly_returns_pd.to_dict()
+
+        # Drawdown
+        
+
+        # # Best periods
+        # best_day = stats.best(returns,'D')
+        # best_week = stats.best(returns,'W')
+        # best_month = stats.best(returns,'M')
+        # best_quarter = stats.best(returns,'Q')
+        # best_year = stats.best(returns,'Y')
+
+        # # # Worst periods
+        # worst_day = stats.worst(returns,'D')
+        # worst_week = stats.worst(returns,'W')
+        # worst_month = stats.worst(returns,'M')
+        # worst_quarter = stats.worst(returns,'Q')
+        # worst_year = stats.worst(returns,'Y')
+
+        return {
+            "cagr": calc_cagr,
+            "sharpe": calc_sharpe,
+            "yearly_returns": calc_yearly_returns_dict,
+            "monthly_returns": calc_monthly_returns_dict
+        }
+    
 
 
-    def calculate_drawdown(self):
-        pass
 
 
     def calculate_best_periods(self):

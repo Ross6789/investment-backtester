@@ -169,7 +169,7 @@ class RealisticAnalyser(BaseAnalyser):
         )
 
         # Add year column
-        alltime_cumulative = self._enrich_with_year('date',alltime_cumulative)
+        alltime_cumulative = self._enrich_year_expr('date',alltime_cumulative)
 
         # Calculate cumulative dividend and yield per year
         yearly_cumulative = (
@@ -307,7 +307,7 @@ class RealisticAnalyser(BaseAnalyser):
         fulfilled_orders_lf = self.enriched_orders_lf.filter(pl.col('status')=='fulfilled')
 
         # Add year column for pivoting
-        fulfilled_orders_with_year_lf = self._enrich_with_year('date_executed',fulfilled_orders_lf)
+        fulfilled_orders_with_year_lf = self._enrich_year_expr('date_executed',fulfilled_orders_lf)
 
         pivot_summary = (
             fulfilled_orders_with_year_lf.collect()
