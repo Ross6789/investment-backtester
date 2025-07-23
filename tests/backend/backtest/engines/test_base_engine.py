@@ -3,7 +3,7 @@ from datetime import date
 import polars as pl
 
 from backend.backtest.engines import BaseEngine
-from backend.core.models import BacktestConfig, BacktestResult, TargetPortfolio
+from backend.core.models import BacktestConfig, BacktestResult, TargetPortfolio, Strategy,RecurringInvestment
 
 
 # --- Dummy subclass to test abstract BaseEngine ---

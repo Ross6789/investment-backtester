@@ -1,11 +1,12 @@
- #  use python3 -m pip freeze > requirements.txt to get final version once completed
- polars 
- pyarrow
- yfinance
- pytest
- quantstats
+#  use python3 -m pip freeze > requirements.txt to get final version once completed
+polars 
+pyarrow
+yfinance
+pytest
+pytest-mock
+quantstats
 ipython
 
- #  activating virtual environment => source venv/bin/activate
+#  activating virtual environment => source venv/bin/activate
 
  
