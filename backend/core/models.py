@@ -1,8 +1,13 @@
 from dataclasses import dataclass, field
-from backend.enums import RebalanceFrequency,ReinvestmentFrequency, BacktestMode, BaseCurrency
-from backend.utils import parse_enum,validate_positive_amount, validate_date_order
-import polars as pl
 from datetime import date
+import polars as pl
+
+from .enums import RebalanceFrequency, ReinvestmentFrequency, BacktestMode, BaseCurrency
+from .validators import validate_positive_amount, validate_date_order
+from .parsers import parse_enum
+from . import constants
+
+#--- Domain models---#
 
 @dataclass
 class TargetPortfolio:
@@ -82,6 +87,8 @@ class Strategy:
             self.rebalance_frequency = parse_enum(RebalanceFrequency, self.rebalance_frequency)
 
 
+#--- Configuration models---#
+
 @dataclass
 class BacktestConfig:
     """
@@ -147,6 +154,28 @@ class BacktestConfig:
 
 
 @dataclass
+class RoundingConfig:
+    """
+    Configuration for controlling rounding precision of float columns 
+    based on their semantic roles in financial DataFrames.
+
+    Attributes:
+        price_precision (int): Decimal places for price-related columns 
+            (e.g. prices, costs, exchange rates).
+        currency_precision (int): Decimal places for currency-related columns 
+            (e.g. values, dividends, gains, returns).
+        general_precision (int): Decimal places for all other float columns 
+            not related to price or currency.
+    """
+    price_precision: int = constants.PRICE_PRECISION
+    currency_precision: int = constants.CURRENCY_PRECISION
+    percentage_precision: int = constants.PERCENTAGE_PRECISION
+    general_precision: int = constants.GENERAL_PRECISION
+
+
+#--- result models---#
+
+@dataclass
 class BacktestResult:
     """
     Container for storing the results of a backtest in basic mode.
@@ -175,6 +204,9 @@ class RealisticBacktestResult(BacktestResult):
     dividends : pl.DataFrame
     orders : pl.DataFrame
 
+
+#--- report models---#
+ 
 @dataclass
 class CSVReport:
     """
@@ -189,3 +221,5 @@ class CSVReport:
     comments: list[str]
     headers: list[str]
     rows: list[tuple]
+
+

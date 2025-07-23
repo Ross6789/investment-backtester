@@ -1,8 +1,8 @@
 import polars as pl
 from typing import List
 from datetime import date
-from backend.config import get_backtest_data_path, get_asset_metadata_path, get_fx_data_path
-from backend.enums import BacktestMode, BaseCurrency
+from backend.core.paths import get_backtest_data_path, get_asset_metadata_path, get_fx_data_path
+from backend.core.enums import BacktestMode, BaseCurrency
 
 def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency , tickers : List[str], start_date: date, end_date: date) -> pl.DataFrame:
     """

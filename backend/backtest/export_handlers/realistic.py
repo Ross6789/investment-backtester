@@ -1,4 +1,4 @@
-from backend.models import RealisticBacktestResult
+from backend.core.models import RealisticBacktestResult
 from backend.backtest.export_handlers import BaseResultExportHandler
 from backend.backtest.exporter import Exporter
 from backend.backtest.analysers import RealisticAnalyser

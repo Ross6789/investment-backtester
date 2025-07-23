@@ -1,5 +1,5 @@
 from datetime import date
-from backend.utils import validate_positive_amount
+from backend.core.validators import validate_positive_amount
 from abc import ABC, abstractmethod
 
 class BasePortfolio(ABC):

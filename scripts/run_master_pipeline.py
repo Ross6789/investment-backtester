@@ -1,4 +1,4 @@
-import backend.config as config
+import backend.core.paths as paths
 import backend.utils as utils
 import warnings
 from datetime import date
@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore", message="unclosed database.*") # suppress warn
 yfinance_batch_size = 100
 start_date = date.fromisoformat("1970-01-01")
 end_date = date.fromisoformat("2025-06-30")
-base_path = config.EXTERNAL_DATA_BASE_PATH
+base_path = paths.EXTERNAL_DATA_BASE_PATH
 
 # Fetch ticker data
 # yfinance_test_tickers = ['AAPL','GOOG','MSFT']

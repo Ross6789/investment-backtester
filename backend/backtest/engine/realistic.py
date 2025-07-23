@@ -1,8 +1,8 @@
 from datetime import date
 import polars as pl
 from dateutil.relativedelta import relativedelta
-from backend.models import TargetPortfolio, BacktestConfig, RealisticBacktestResult
-from backend.enums import OrderSide, RebalanceFrequency
+from backend.core.models import BacktestConfig, RealisticBacktestResult
+from backend.core.enums import OrderSide, RebalanceFrequency
 from backend.backtest.engine import BaseEngine
 from backend.backtest.portfolios import RealisticPortfolio
 
@@ -27,7 +27,7 @@ class RealisticEngine(BaseEngine):
         self.portfolio = RealisticPortfolio(self)
 
         # Instantiate previous rebalance day (set as first day a ticker is trading) and order books
-        self.previous_rebalance_date = self._get_first_trading_date()
+        self.previous_rebalance_date = self._get_first_active_date()
         self.pending_orders = None
         self.executed_orders = None
 
@@ -325,6 +325,7 @@ class RealisticEngine(BaseEngine):
 
             # Reset portfolio for the day
             self.portfolio.daily_reset()
+            place_order = False
 
             # --- HANDLE CASHFLOWS ---
 
@@ -340,8 +341,8 @@ class RealisticEngine(BaseEngine):
 
             # --- CHECK PORTFOLIO ACTIVE ---
 
-            # Skip to next date if no tickers active active/trading yet, but still need to take a cash snapshot 
-            if current_date < self.first_trading_date:
+            # Skip to next date if no tickers active active yet, but still need to take a cash snapshot 
+            if current_date < self.first_active_date:
                 cash_snapshots.append(self.portfolio.get_cash_snapshot(current_date))
                 continue
 
@@ -350,8 +351,7 @@ class RealisticEngine(BaseEngine):
             # Fetch daily prices
             daily_prices = self._get_prices_on_date(current_date)
 
-            # Reset order variables
-            place_order = False
+            # Reset target weights
             normalized_weights = None
 
             # --- DIVIDENDS ---

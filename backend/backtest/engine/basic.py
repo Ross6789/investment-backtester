@@ -1,7 +1,7 @@
 from datetime import date
 import polars as pl
-from backend.models import TargetPortfolio, BacktestConfig, BacktestResult
-from backend.utils import generate_recurring_dates
+from backend.core.models import BacktestConfig, BacktestResult
+from backend.utils.scheduling import generate_recurring_dates
 from backend.backtest.engine import BaseEngine
 from backend.backtest.portfolios import BasicPortfolio
 
@@ -97,8 +97,8 @@ class BasicEngine(BaseEngine):
 
             # --- CHECK PORTFOLIO ACTIVE ---
 
-            # Skip to next date if no tickers active active/trading yet, but still need to take a cash snapshot 
-            if current_date < self.first_trading_date:
+            # Skip to next date if no tickers active active yet, but still need to take a cash snapshot 
+            if current_date < self.first_active_date:
                 cash_snapshots.append(self.portfolio.get_cash_snapshot(current_date))
                 continue
 

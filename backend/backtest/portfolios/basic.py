@@ -1,5 +1,5 @@
 from datetime import date
-from backend.utils import validate_positive_amount
+from backend.core.validators import validate_positive_amount
 from backend.backtest.portfolios import BasePortfolio
 
 class BasicPortfolio(BasePortfolio):
@@ -27,9 +27,13 @@ class BasicPortfolio(BasePortfolio):
 
         # Calculate amount of units which could be bought using allocated funds
         units_bought = allocated_funds / price 
+
+        # Find total cost
+        total_cost = units_bought * price
                     
         # Make investment
         self.holdings[ticker] = self.holdings.get(ticker,0.0) + units_bought
+        self.cash_balance -= total_cost
         return True
 
 
@@ -60,8 +64,12 @@ class BasicPortfolio(BasePortfolio):
         # Calculate how many units are to be sold
         units_sold = min(required_funds / price, units_owned)
 
+        # Find total earning
+        total_earnings = units_sold * price
+
         # Make sale
         self.holdings[ticker] = units_owned - units_sold
+        self.cash_balance += total_earnings
         return True
 
 
