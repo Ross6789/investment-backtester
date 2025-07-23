@@ -3,7 +3,7 @@ import polars as pl
 from dateutil.relativedelta import relativedelta
 from backend.core.models import BacktestConfig, RealisticBacktestResult
 from backend.core.enums import OrderSide, RebalanceFrequency
-from backend.backtest.engine import BaseEngine
+from backend.backtest.engines import BaseEngine
 from backend.backtest.portfolios import RealisticPortfolio
 
 class RealisticEngine(BaseEngine):
