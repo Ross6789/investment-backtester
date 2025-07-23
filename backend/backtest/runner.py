@@ -54,16 +54,16 @@ class BacktestRunner:
 
         # Create analyser based on mode and backtest results
         analyser = BacktestFactory.get_analyser(mode,result)
-        metrics = analyser.calculate_overall_metrics()
-        print(metrics)
+        # metrics = analyser.calculate_overall_metrics()
+        # print(metrics)
 
         # Setup exporter for saving results
         exporter = Exporter(self.base_save_path, self.timestamp)
 
         # Get export handler and export all results/reports
         result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
-        # result_export_handler.export_all()
-        # print("Export finished!")
+        result_export_handler.export_all()
+        print("Export finished!")
         
 
 

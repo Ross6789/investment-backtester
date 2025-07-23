@@ -1,7 +1,7 @@
 from abc import ABC
 import polars as pl
 import pandas as pd
-from quantstats import stats
+# from quantstats import stats
 from backend.core.models import BacktestResult
 from backend.utils.reporting import generate_suffixed_col_names, build_drop_col_list
 
