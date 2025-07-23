@@ -38,14 +38,14 @@ class BasicEngine(BaseEngine):
             prices (dict[str, float]): A mapping of ticker symbols to their current prices.
             normalized_target_weights (dict[str, float]): Target asset weightings normalized to active tickers.
         """
-        # Find total portfolio value
-        value = self.portfolio.get_total_value(prices)
-
-        # Find balanced allocations
-        target_allocations = self._get_ticker_allocations_by_target(normalized_target_weights,value)
-
-        # Reset holdings and re-buy in target amounts
+        # Sell all assets : this is a simplified way of converting all holding value into cash instead of calling sell method for every ticker
+        self.portfolio.cash_balance = self.portfolio.get_total_value(prices)
         self.portfolio.holdings = {}
+        
+        # Find balanced allocations
+        target_allocations = self._get_ticker_allocations_by_target(normalized_target_weights,self.portfolio.cash_balance)
+
+        # Re-buy holdings in target amounts
         for ticker, funds in target_allocations.items():
             self.portfolio.invest(ticker,funds,prices.get(ticker),True)
 
