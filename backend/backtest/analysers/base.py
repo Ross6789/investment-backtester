@@ -401,7 +401,8 @@ class BaseAnalyser(ABC):
             "monthly_returns": calc_monthly_returns_dict,
             "drawdown": calc_drawdown_dict,
             "max_drawdown": calc_max_drawdown_dict,
-            "best_periods":best_periods
+            "best_periods":best_periods,
+            "worst_periods": worst_periods
 
         }
     
