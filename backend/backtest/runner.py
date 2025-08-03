@@ -35,7 +35,7 @@ class BacktestRunner:
             self.base_save_path = base_save_path
             self.timestamp = generate_timestamp()
 
-    def run(self) -> None:
+    def run(self) -> dict:
         """
         Runs the backtest process:
         - Instantiates engine, analyser, exporter, and export handler based on mode.
@@ -54,16 +54,18 @@ class BacktestRunner:
 
         # Create analyser based on mode and backtest results
         analyser = BacktestFactory.get_analyser(mode,result)
-        # metrics = analyser.calculate_overall_metrics()
+        metrics = analyser.calculate_overall_metrics()
         # print(metrics)
 
         # Setup exporter for saving results
-        exporter = Exporter(self.base_save_path, self.timestamp)
+        # exporter = Exporter(self.base_save_path, self.timestamp)
 
-        # Get export handler and export all results/reports
-        result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
-        result_export_handler.export_all()
-        print("Export finished!")
+        # # Get export handler and export all results/reports
+        # result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
+        # result_export_handler.export_all()
+        # print("Export finished!")
+
+        return metrics
         
 
 
