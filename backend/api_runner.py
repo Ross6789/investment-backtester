@@ -10,17 +10,21 @@ from backend.backtest.runner import BacktestRunner
 def run_backtest(input_data: dict) -> dict:
    
     # Parse input
-    mode = parse_enum(BacktestMode,input_data["mode"])
-    base_currency = parse_enum(BaseCurrency,input_data["base_currency"])
+    mode = parse_enum(BacktestMode, input_data["mode"])
+    base_currency = parse_enum(BaseCurrency, input_data["base_currency"])
     start_date = parse_date(input_data["start_date"])
     end_date = parse_date(input_data["end_date"])
     target_weights = input_data["target_weights"]
     initial_investment = input_data["initial_investment"]
-    fractional_shares = input_data["fractional_shares"]
-    reinvest_dividends = input_data["reinvest_dividends"]
-    rebalance_frequency = parse_enum(RebalanceFrequency,input_data["rebalance_frequency"])
-    recurring_investment_amount = input_data["reinvestment_amount"]
-    recurring_investment_frequency = parse_enum(ReinvestmentFrequency, input_data["reinvestment_frequency"])
+
+    strategy_data = input_data["strategy"]
+    fractional_shares=strategy_data["fractional_shares"]
+    reinvest_dividends=strategy_data["reinvest_dividends"]
+    rebalance_frequency=parse_enum(RebalanceFrequency, strategy_data["rebalance_frequency"])
+
+    recurring_data = input_data["recurring_investment"]
+    recurring_investment_amount=recurring_data["amount"]
+    recurring_investment_frequency = parse_enum(ReinvestmentFrequency, recurring_data["frequency"])
 
     # Create config objects
     target_portfolio = TargetPortfolio(target_weights)

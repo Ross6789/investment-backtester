@@ -397,15 +397,14 @@ class BaseAnalyser(ABC):
             "cagr": calc_cagr,
             "sharpe": calc_sharpe,
             "yearly_returns": calc_yearly_returns_dict,
-            "yearly_returns_polars": period_returns.get('yearly').to_dict(),
+            "yearly_returns_polars": period_returns.get('yearly').to_dicts(),
             "monthly_returns": calc_monthly_returns_dict,
+            "monthly_returns_polars": period_returns.get('monthly').to_dicts(),
             "drawdown": calc_drawdown_dict,
             "max_drawdown": calc_max_drawdown_dict,
             "best_periods":best_periods,
             "worst_periods": worst_periods
-
         }
-    
 
 
 
