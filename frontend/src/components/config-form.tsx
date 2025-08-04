@@ -1,9 +1,6 @@
-import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { PortfolioAssets } from "@/components/config-sections/portfolio-asset-section";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 import {
   Card,
@@ -15,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -24,48 +22,114 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-const schema = z.object({
-  target_weights: z.record(z.string(), z.number().min(0).max(100)),
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const formSchema = z.object({
+  mode: z.enum(["basic", "realistic"]),
 });
 
-export function ConfigForm() {
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+export function ProfileForm() {
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      target_weights: {
-        AAPL: 50,
-        GOOG: 50,
-      },
+      mode: "basic",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(data: z.infer<typeof schema>) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(data);
+    console.log(values);
   }
 
   return (
-    <div className="min-h-screen m-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 contents"
-        >
-          <PortfolioAssets control={form.control} register={form.register} />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="min-h-screen m-4 p-4 grid grid-cols-1 lg:grid-cols-2 gap-4 bg-amber-400">
+          {/* LEFT SIDE */}
+          <FormField
+            control={form.control}
+            name="mode"
+            render={({ field }) => (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Backtest Mode</CardTitle>
+                  <CardDescription>
+                    Choose your simulation complexity level
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a backtest mode" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="basic">Basic Mode</SelectItem>
+                        <SelectItem value="realistic">
+                          Realistic Mode
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                </CardContent>
+              </Card>
+            )}
+          />
 
+          {/* RIGHT SIDE */}
           <div className="flex flex-col gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Backtest Mode</CardTitle>
-                <CardDescription>
-                  Choose your simulation complexity level
-                </CardDescription>
-              </CardHeader>
-              <CardContent>Card content</CardContent>
-            </Card>
+            <FormField
+              control={form.control}
+              name="mode"
+              render={({ field }) => (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Backtest Mode</CardTitle>
+                    <CardDescription>
+                      Choose your simulation complexity level
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <FormItem>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a backtest mode" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="basic">Basic Mode</SelectItem>
+                          <SelectItem value="realistic">
+                            Realistic Mode
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  </CardContent>
+                </Card>
+              )}
+            />
             <Card>
               <CardHeader>
                 <CardTitle>Investment Settings</CardTitle>
@@ -84,46 +148,12 @@ export function ConfigForm() {
             </Card>
           </div>
 
-          {/* <div className="h-full rounded-lg bg-gray-400 shadow">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          {/* Full-width row for submit button */}
+          <div className="lg:col-span-2">
             <Button type="submit">Submit</Button>
           </div>
-          <div className="h-full rounded-lg bg-blue-400 shadow">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-          </div> */}
-        </form>
-      </Form>
-    </div>
+        </div>
+      </form>
+    </Form>
   );
 }

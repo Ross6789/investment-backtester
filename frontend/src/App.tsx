@@ -1,9 +1,9 @@
-import { ConfigForm } from "@/components/config-form";
+import { ProfileForm } from "@/components/config-form";
 
 function App() {
   return (
     <div>
-      <ConfigForm />
+      <ProfileForm />
     </div>
   );
 }
