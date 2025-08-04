@@ -1,9 +1,9 @@
-import { SettingsForm } from "@/components/settings-form";
+import { ConfigForm } from "@/components/config-form";
 
 function App() {
   return (
     <div>
-      <SettingsForm />
+      <ConfigForm />
     </div>
   );
 }
