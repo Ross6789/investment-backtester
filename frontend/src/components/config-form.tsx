@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -34,6 +34,18 @@ import {
 
 const formSchema = z.object({
   mode: z.enum(["basic", "realistic"]),
+  strategy: z.object({
+    fractional_shares: z.boolean().default(false).optional(),
+    reinvest_dividends: z.boolean().default(false).optional(),
+    rebalance_frequency: z.enum([
+      "never",
+      "daily",
+      "weekly",
+      "monthly",
+      "quarterly",
+      "yearly",
+    ]),
+  }),
 });
 
 export function ProfileForm() {
@@ -42,6 +54,11 @@ export function ProfileForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       mode: "basic",
+      strategy: {
+        fractional_shares: true,
+        reinvest_dividends: true,
+        rebalance_frequency: "never",
+      },
     },
   });
 
@@ -95,18 +112,18 @@ export function ProfileForm() {
 
           {/* RIGHT SIDE */}
           <div className="flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="mode"
-              render={({ field }) => (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Backtest Mode</CardTitle>
-                    <CardDescription>
-                      Choose your simulation complexity level
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+            <Card>
+              <CardHeader>
+                <CardTitle>Backtest Mode</CardTitle>
+                <CardDescription>
+                  Choose your simulation complexity level
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <FormField
+                  control={form.control}
+                  name="mode"
+                  render={({ field }) => (
                     <FormItem>
                       <Select
                         onValueChange={field.onChange}
@@ -126,10 +143,10 @@ export function ProfileForm() {
                       </Select>
                       <FormMessage />
                     </FormItem>
-                  </CardContent>
-                </Card>
-              )}
-            />
+                  )}
+                />
+              </CardContent>
+            </Card>
             <Card>
               <CardHeader>
                 <CardTitle>Investment Settings</CardTitle>
@@ -140,10 +157,79 @@ export function ProfileForm() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Advanced Settings</CardTitle>
+                <CardTitle>Strategy Settings</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p>Card Content</p>
+              <CardContent className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="strategy.rebalance_frequency"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormLabel>Rebalancing Frequency</FormLabel>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select rebalancing frequency" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="never">Never</SelectItem>
+                          <SelectItem value="daily">Daily</SelectItem>
+                          <SelectItem value="weekly">Weekly</SelectItem>
+                          <SelectItem value="monthly">Monthly</SelectItem>
+                          <SelectItem value="quarterly">Quarterly</SelectItem>
+                          <SelectItem value="yearly">Yearly</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="strategy.reinvest_dividends"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg shadow-s">
+                      <div className="space-y-0.5">
+                        <FormLabel>Reinvest Dividends</FormLabel>
+                        <FormDescription>
+                          Choose whether to use dividends to buy more shares or
+                          take as cash.
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="strategy.fractional_shares"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg shadow-s">
+                      <div className="space-y-0.5">
+                        <FormLabel>Allow Fractional Shares</FormLabel>
+                        <FormDescription>
+                          Whether you can buy partial shares (e.g., 0.5 shares
+                          of a stock)
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
           </div>
@@ -157,3 +243,59 @@ export function ProfileForm() {
     </Form>
   );
 }
+
+//   return (
+//     <Form {...form}>
+//       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+//         <div>
+//           <h3 className="mb-4 text-lg font-medium">Email Notifications</h3>
+//           <div className="space-y-4">
+//             <FormField
+//               control={form.control}
+//               name="marketing_emails"
+//               render={({ field }) => (
+//                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+//                   <div className="space-y-0.5">
+//                     <FormLabel>Marketing emails</FormLabel>
+//                     <FormDescription>
+//                       Receive emails about new products, features, and more.
+//                     </FormDescription>
+//                   </div>
+//                   <FormControl>
+//                     <Switch
+//                       checked={field.value}
+//                       onCheckedChange={field.onChange}
+//                     />
+//                   </FormControl>
+//                 </FormItem>
+//               )}
+//             />
+//             <FormField
+//               control={form.control}
+//               name="security_emails"
+//               render={({ field }) => (
+//                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+//                   <div className="space-y-0.5">
+//                     <FormLabel>Security emails</FormLabel>
+//                     <FormDescription>
+//                       Receive emails about your account security.
+//                     </FormDescription>
+//                   </div>
+//                   <FormControl>
+//                     <Switch
+//                       checked={field.value}
+//                       onCheckedChange={field.onChange}
+//                       disabled
+//                       aria-readonly
+//                     />
+//                   </FormControl>
+//                 </FormItem>
+//               )}
+//             />
+//           </div>
+//         </div>
+//         <Button type="submit">Submit</Button>
+//       </form>
+//     </Form>
+//   )
+// }
