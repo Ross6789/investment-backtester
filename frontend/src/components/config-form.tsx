@@ -32,21 +32,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const formSchema = z.object({
-  mode: z.enum(["basic", "realistic"]),
-  strategy: z.object({
-    fractional_shares: z.boolean().default(false).optional(),
-    reinvest_dividends: z.boolean().default(false).optional(),
-    rebalance_frequency: z.enum([
-      "never",
-      "daily",
-      "weekly",
-      "monthly",
-      "quarterly",
-      "yearly",
-    ]),
-  }),
-});
+const formSchema = z
+  .object({
+    mode: z.enum(["basic", "realistic"]),
+    start_date: z
+      .date()
+      .min(new Date("1970-01-01"), { message: "Date must be after Jan 1 1970" })
+      .max(new Date("2025-06-01"), {
+        message: "Date must be before June 1 2025",
+      }),
+    end_date: z
+      .date()
+      .min(new Date("1970-01-01"), { message: "Date must be after Jan 1 1970" })
+      .max(new Date("2025-06-01"), {
+        message: "Date must be before June 1 2025",
+      }),
+    strategy: z.object({
+      fractional_shares: z.boolean().default(false).optional(),
+      reinvest_dividends: z.boolean().default(false).optional(),
+      rebalance_frequency: z.enum([
+        "never",
+        "daily",
+        "weekly",
+        "monthly",
+        "quarterly",
+        "yearly",
+      ]),
+    }),
+  })
+  .refine((data) => data.start_date < data.end_date, {
+    message: "Start date must be before end date",
+    path: ["end_date"],
+  });
 
 export function ProfileForm() {
   // 1. Define your form.
@@ -54,6 +71,8 @@ export function ProfileForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       mode: "basic",
+      start_date: new Date("2020-01-01"),
+      end_date: new Date("2025-06-01"),
       strategy: {
         fractional_shares: true,
         reinvest_dividends: true,
@@ -152,7 +171,92 @@ export function ProfileForm() {
                 <CardTitle>Investment Settings</CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Card Content</p>
+                <div className="grid grid-cols-2 gap-4 bg-blue-300">
+                  <FormField
+                    control={form.control}
+                    name="strategy.rebalance_frequency"
+                    render={({ field }) => (
+                      <FormItem className="col-span-1">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormLabel>Rebalancing Frequency</FormLabel>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select rebalancing frequency" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="never">Never</SelectItem>
+                            <SelectItem value="daily">Daily</SelectItem>
+                            <SelectItem value="weekly">Weekly</SelectItem>
+                            <SelectItem value="monthly">Monthly</SelectItem>
+                            <SelectItem value="quarterly">Quarterly</SelectItem>
+                            <SelectItem value="yearly">Yearly</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="strategy.rebalance_frequency"
+                    render={({ field }) => (
+                      <FormItem className="col-span-1">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormLabel>Rebalancing Frequency</FormLabel>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select rebalancing frequency" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="never">Never</SelectItem>
+                            <SelectItem value="daily">Daily</SelectItem>
+                            <SelectItem value="weekly">Weekly</SelectItem>
+                            <SelectItem value="monthly">Monthly</SelectItem>
+                            <SelectItem value="quarterly">Quarterly</SelectItem>
+                            <SelectItem value="yearly">Yearly</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="strategy.rebalance_frequency"
+                    render={({ field }) => (
+                      <FormItem className="col-span-2 items-center">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormLabel>Rebalancing Frequency</FormLabel>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select rebalancing frequency" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="never">Never</SelectItem>
+                            <SelectItem value="daily">Daily</SelectItem>
+                            <SelectItem value="weekly">Weekly</SelectItem>
+                            <SelectItem value="monthly">Monthly</SelectItem>
+                            <SelectItem value="quarterly">Quarterly</SelectItem>
+                            <SelectItem value="yearly">Yearly</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </CardContent>
             </Card>
             <Card>
