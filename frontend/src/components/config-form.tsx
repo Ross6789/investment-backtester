@@ -2,6 +2,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+
+import { toast } from "sonner";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import {
   Card,
   CardAction,
@@ -12,7 +27,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -38,13 +52,13 @@ const formSchema = z
     start_date: z
       .date()
       .min(new Date("1970-01-01"), { message: "Date must be after Jan 1 1970" })
-      .max(new Date("2025-06-01"), {
+      .max(new Date("2025-05-31"), {
         message: "Date must be before June 1 2025",
       }),
     end_date: z
       .date()
       .min(new Date("1970-01-01"), { message: "Date must be after Jan 1 1970" })
-      .max(new Date("2025-06-01"), {
+      .max(new Date("2025-05-31"), {
         message: "Date must be before June 1 2025",
       }),
     strategy: z.object({
@@ -72,7 +86,7 @@ export function ProfileForm() {
     defaultValues: {
       mode: "basic",
       start_date: new Date("2020-01-01"),
-      end_date: new Date("2025-06-01"),
+      end_date: new Date("2025-05-31"),
       strategy: {
         fractional_shares: true,
         reinvest_dividends: true,
@@ -174,56 +188,90 @@ export function ProfileForm() {
                 <div className="grid grid-cols-2 gap-4 bg-blue-300">
                   <FormField
                     control={form.control}
-                    name="strategy.rebalance_frequency"
+                    name="start_date"
                     render={({ field }) => (
-                      <FormItem className="col-span-1">
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormLabel>Rebalancing Frequency</FormLabel>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select rebalancing frequency" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="never">Never</SelectItem>
-                            <SelectItem value="daily">Daily</SelectItem>
-                            <SelectItem value="weekly">Weekly</SelectItem>
-                            <SelectItem value="monthly">Monthly</SelectItem>
-                            <SelectItem value="quarterly">Quarterly</SelectItem>
-                            <SelectItem value="yearly">Yearly</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Start Date</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-[240px] pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date >= new Date("2025-06-01") ||
+                                date <= new Date("1969-12-31")
+                              }
+                              captionLayout="dropdown"
+                              defaultMonth={field.value}
+                              startMonth={new Date("1970-01-01")}
+                              endMonth={new Date("2025-05-31")}
+                            />
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={form.control}
-                    name="strategy.rebalance_frequency"
+                    name="end_date"
                     render={({ field }) => (
-                      <FormItem className="col-span-1">
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormLabel>Rebalancing Frequency</FormLabel>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select rebalancing frequency" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="never">Never</SelectItem>
-                            <SelectItem value="daily">Daily</SelectItem>
-                            <SelectItem value="weekly">Weekly</SelectItem>
-                            <SelectItem value="monthly">Monthly</SelectItem>
-                            <SelectItem value="quarterly">Quarterly</SelectItem>
-                            <SelectItem value="yearly">Yearly</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <FormItem className="flex flex-col">
+                        <FormLabel>End Date</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-[240px] pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date >= new Date("2025-06-01") ||
+                                date <= new Date("1969-12-31")
+                              }
+                              captionLayout="dropdown"
+                              defaultMonth={field.value}
+                              startMonth={new Date("1970-01-01")}
+                              endMonth={new Date("2025-05-31")}
+                            />
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -347,59 +395,3 @@ export function ProfileForm() {
     </Form>
   );
 }
-
-//   return (
-//     <Form {...form}>
-//       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-//         <div>
-//           <h3 className="mb-4 text-lg font-medium">Email Notifications</h3>
-//           <div className="space-y-4">
-//             <FormField
-//               control={form.control}
-//               name="marketing_emails"
-//               render={({ field }) => (
-//                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-//                   <div className="space-y-0.5">
-//                     <FormLabel>Marketing emails</FormLabel>
-//                     <FormDescription>
-//                       Receive emails about new products, features, and more.
-//                     </FormDescription>
-//                   </div>
-//                   <FormControl>
-//                     <Switch
-//                       checked={field.value}
-//                       onCheckedChange={field.onChange}
-//                     />
-//                   </FormControl>
-//                 </FormItem>
-//               )}
-//             />
-//             <FormField
-//               control={form.control}
-//               name="security_emails"
-//               render={({ field }) => (
-//                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-//                   <div className="space-y-0.5">
-//                     <FormLabel>Security emails</FormLabel>
-//                     <FormDescription>
-//                       Receive emails about your account security.
-//                     </FormDescription>
-//                   </div>
-//                   <FormControl>
-//                     <Switch
-//                       checked={field.value}
-//                       onCheckedChange={field.onChange}
-//                       disabled
-//                       aria-readonly
-//                     />
-//                   </FormControl>
-//                 </FormItem>
-//               )}
-//             />
-//           </div>
-//         </div>
-//         <Button type="submit">Submit</Button>
-//       </form>
-//     </Form>
-//   )
-// }
