@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { runBacktest } from './api/backtest';
+import { useState } from "react";
+import { runBacktest } from "./api/backtest";
 
 function App() {
   const [result, setResult] = useState(null);
@@ -17,8 +17,8 @@ function App() {
       base_currency: "GBP",
       recurring: {
         amount: 500,
-        frequency: "MONTHLY"
-      }
+        frequency: "MONTHLY",
+      },
     };
 
     const response = await runBacktest(config);
@@ -35,4 +35,3 @@ function App() {
 }
 
 export default App;
-
