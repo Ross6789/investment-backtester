@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { optional, z } from "zod";
 
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -70,7 +70,7 @@ const formSchema = z
         .number({
           error: "Initial investment is required",
         })
-        .min(0.01, { message: "Mnimum is 0.01" })
+        .min(0.01, { message: "Minimum is 0.01" })
         .max(1000000000, { message: "Maximum is 1,000,000,000" })
         .refine(
           (val) => {
@@ -83,6 +83,40 @@ const formSchema = z
           }
         )
     ),
+    recurring_investment: z
+      .object({
+        amount: z.preprocess(
+          (val) => {
+            if (val === "" || val === null || val === undefined)
+              return undefined;
+            return typeof val === "string" ? Number(val) : val;
+          },
+          z
+            .number()
+            .min(0, { message: "Must not be negative" })
+            .max(1000000000, { message: "Maximum is 1,000,000,000" })
+            .refine(
+              (val) => {
+                const str = val.toString();
+                const parts = str.split(".");
+                return parts.length === 1 || parts[1].length <= 2;
+              },
+              {
+                message: "Cannot have more than 2 decimal places",
+              }
+            )
+        ),
+        frequency: z.enum([
+          "never",
+          "daily",
+          "weekly",
+          "monthly",
+          "quarterly",
+          "yearly",
+        ]),
+      })
+      .optional()
+      .nullable(),
     strategy: z.object({
       fractional_shares: z.boolean().default(true).optional(),
       reinvest_dividends: z.boolean().default(true).optional(),
@@ -109,7 +143,11 @@ export function ProfileForm() {
       mode: "basic",
       start_date: new Date("2020-01-01"),
       end_date: new Date("2025-05-31"),
-      initial_investment: null,
+      initial_investment: undefined,
+      recurring_investment: {
+        amount: 0,
+        frequency: "never",
+      },
       strategy: {
         fractional_shares: true,
         reinvest_dividends: true,
@@ -120,8 +158,16 @@ export function ProfileForm() {
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
+    if (
+      !values.recurring_investment ||
+      values.recurring_investment.frequency === "never" ||
+      !values.recurring_investment.amount
+    ) {
+      values.recurring_investment = null;
+    }
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+
     console.log(values);
   }
 
@@ -148,7 +194,7 @@ export function ProfileForm() {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select a backtest mode" />
                         </SelectTrigger>
                       </FormControl>
@@ -186,7 +232,7 @@ export function ProfileForm() {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select a backtest mode" />
                           </SelectTrigger>
                         </FormControl>
@@ -208,12 +254,12 @@ export function ProfileForm() {
                 <CardTitle>Investment Settings</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-4 bg-blue-300">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-blue-300">
                   <FormField
                     control={form.control}
                     name="start_date"
                     render={({ field }) => (
-                      <FormItem className="flex flex-col">
+                      <FormItem>
                         <FormLabel>Start Date</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
@@ -221,7 +267,7 @@ export function ProfileForm() {
                               <Button
                                 variant={"outline"}
                                 className={cn(
-                                  "w-[240px] pl-3 text-left font-normal",
+                                  "w-full pl-3 text-left font-normal",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -258,15 +304,15 @@ export function ProfileForm() {
                     control={form.control}
                     name="end_date"
                     render={({ field }) => (
-                      <FormItem className="flex flex-col">
+                      <FormItem>
                         <FormLabel>End Date</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
-                            <FormControl>
+                            <FormControl className="w-full">
                               <Button
                                 variant={"outline"}
                                 className={cn(
-                                  "w-[240px] pl-3 text-left font-normal",
+                                  "w-full px-3 text-left font-normal",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -299,17 +345,50 @@ export function ProfileForm() {
                       </FormItem>
                     )}
                   />
+                  <div className="sm:col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="initial_investment"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Initial Investment Amount</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="Enter amount"
+                              step="100"
+                              {...field}
+                              value={
+                                field.value === undefined ||
+                                field.value === null
+                                  ? ""
+                                  : Number(field.value)
+                              }
+                              onChange={(e) => {
+                                const raw = e.target.value;
+                                field.onChange(raw === "" ? undefined : raw);
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
                   <FormField
                     control={form.control}
-                    name="initial_investment"
+                    name="recurring_investment.amount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Initial Investment Amount</FormLabel>
+                        <FormLabel>
+                          Recurring Contributions (Optional)
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="number"
                             placeholder="Enter amount"
-                            step="100"
+                            step="10"
                             {...field}
                             value={
                               field.value === undefined || field.value === null
@@ -322,6 +401,36 @@ export function ProfileForm() {
                             }}
                           />
                         </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="recurring_investment.frequency"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormLabel>Frequency</FormLabel>
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select rebalancing frequency" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="never">
+                              No recurring contributions
+                            </SelectItem>
+                            <SelectItem value="daily">Daily</SelectItem>
+                            <SelectItem value="weekly">Weekly</SelectItem>
+                            <SelectItem value="monthly">Monthly</SelectItem>
+                            <SelectItem value="quarterly">Quarterly</SelectItem>
+                            <SelectItem value="yearly">Yearly</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -345,7 +454,7 @@ export function ProfileForm() {
                       >
                         <FormLabel>Rebalancing Frequency</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select rebalancing frequency" />
                           </SelectTrigger>
                         </FormControl>
