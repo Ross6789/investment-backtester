@@ -61,9 +61,31 @@ const formSchema = z
       .max(new Date("2025-05-31"), {
         message: "Date must be before June 1 2025",
       }),
+    initial_investment: z.preprocess(
+      (val) => {
+        if (val === "" || val === null || val === undefined) return undefined;
+        return typeof val === "string" ? Number(val) : val;
+      },
+      z
+        .number({
+          error: "Initial investment is required",
+        })
+        .min(0.01, { message: "Mnimum is 0.01" })
+        .max(1000000000, { message: "Maximum is 1,000,000,000" })
+        .refine(
+          (val) => {
+            const str = val.toString();
+            const parts = str.split(".");
+            return parts.length === 1 || parts[1].length <= 2;
+          },
+          {
+            message: "Cannot have more than 2 decimal places",
+          }
+        )
+    ),
     strategy: z.object({
-      fractional_shares: z.boolean().default(false).optional(),
-      reinvest_dividends: z.boolean().default(false).optional(),
+      fractional_shares: z.boolean().default(true).optional(),
+      reinvest_dividends: z.boolean().default(true).optional(),
       rebalance_frequency: z.enum([
         "never",
         "daily",
@@ -81,12 +103,13 @@ const formSchema = z
 
 export function ProfileForm() {
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       mode: "basic",
       start_date: new Date("2020-01-01"),
       end_date: new Date("2025-05-31"),
+      initial_investment: null,
       strategy: {
         fractional_shares: true,
         reinvest_dividends: true,
@@ -278,28 +301,27 @@ export function ProfileForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="strategy.rebalance_frequency"
+                    name="initial_investment"
                     render={({ field }) => (
-                      <FormItem className="col-span-2 items-center">
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormLabel>Rebalancing Frequency</FormLabel>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select rebalancing frequency" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="never">Never</SelectItem>
-                            <SelectItem value="daily">Daily</SelectItem>
-                            <SelectItem value="weekly">Weekly</SelectItem>
-                            <SelectItem value="monthly">Monthly</SelectItem>
-                            <SelectItem value="quarterly">Quarterly</SelectItem>
-                            <SelectItem value="yearly">Yearly</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <FormItem>
+                        <FormLabel>Initial Investment Amount</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter amount"
+                            step="100"
+                            {...field}
+                            value={
+                              field.value === undefined || field.value === null
+                                ? ""
+                                : Number(field.value)
+                            }
+                            onChange={(e) => {
+                              const raw = e.target.value;
+                              field.onChange(raw === "" ? undefined : raw);
+                            }}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
