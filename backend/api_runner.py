@@ -23,13 +23,16 @@ def run_backtest(input_data: dict) -> dict:
     rebalance_frequency=parse_enum(RebalanceFrequency, strategy_data["rebalance_frequency"])
 
     recurring_data = input_data["recurring_investment"]
-    recurring_investment_amount=recurring_data["amount"]
-    recurring_investment_frequency = parse_enum(ReinvestmentFrequency, recurring_data["frequency"])
-
+    if recurring_data is not None:
+        recurring_investment_amount=recurring_data["amount"]
+        recurring_investment_frequency = parse_enum(ReinvestmentFrequency, recurring_data["frequency"])
+        recurring_investment = RecurringInvestment(recurring_investment_amount,recurring_investment_frequency)
+    else:
+        recurring_investment = None
+        
     # Create config objects
     target_portfolio = TargetPortfolio(target_weights)
     strategy = Strategy(fractional_shares,reinvest_dividends,rebalance_frequency)
-    recurring_investment = RecurringInvestment(recurring_investment_amount,recurring_investment_frequency)
     backtest_config = BacktestConfig(start_date,end_date,target_portfolio,mode,base_currency,strategy,initial_investment,recurring_investment)
 
     # Fetch data for backtest

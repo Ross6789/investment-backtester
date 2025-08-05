@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from api_runner import run_backtest
+from .api_runner import run_backtest
 import traceback
 
 app = Flask(__name__)

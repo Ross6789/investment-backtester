@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
+import { useNavigate } from "react-router-dom";
 
 import { format } from "date-fns";
 import { CalendarIcon, Trash2, Check, ChevronDown, Plus } from "lucide-react";
@@ -175,7 +176,9 @@ const formSchema = z
     return Math.abs(total - 100) < 0.0001; // account for floating point precision
   });
 
-export function ProfileForm() {
+export function SettingsPage() {
+  const navigate = useNavigate();
+
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -212,7 +215,7 @@ export function ProfileForm() {
   const symbol = currencySymbols[selectedCurrency] || "";
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Clean recurring investment
     const recurringInvestment =
       !values.recurring_investment ||
@@ -256,14 +259,27 @@ export function ProfileForm() {
       target_weights: weightsObject,
     };
 
-    console.log(payload);
+    console.log("Input settings:", payload);
 
-    // Optional: send it
-    // await fetch("/api/backtest", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(payload),
-    // });
+    try {
+      const response = await fetch("http://127.0.0.1:5000/run-backtest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Backtest failed");
+      }
+
+      const result = await response.json();
+
+      // Navigate to results page and pass result data
+      navigate("/results", { state: { backtestResult: result } });
+    } catch (error) {
+      console.error(error);
+      alert("Failed to run backtest");
+    }
   }
 
   return (
@@ -593,30 +609,6 @@ export function ProfileForm() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Initial Investment Amount</FormLabel>
-                          {/* <FormControl>
-                            <div className="flex items-center gap-2">
-                              <span className="text-muted-foreground text-sm">
-                                {symbol}
-                              </span>
-                              <Input
-                                type="number"
-                                placeholder="Enter amount"
-                                step="100"
-                                {...field}
-                                value={
-                                  field.value === undefined ||
-                                  field.value === null
-                                    ? ""
-                                    : Number(field.value)
-                                }
-                                onChange={(e) => {
-                                  const raw = e.target.value;
-                                  field.onChange(raw === "" ? null : raw);
-                                }}
-                              />
-                            </div>
-                          </FormControl> */}
-
                           <FormControl>
                             <div className="relative">
                               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
