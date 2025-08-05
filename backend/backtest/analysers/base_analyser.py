@@ -302,16 +302,35 @@ class BaseAnalyser(ABC):
     def calculate_overall_metrics(self) -> dict:
         
         # Remove non trading days from portfolio valuations - this need 
-        trading_days = self.calendar_lf.filter(pl.col('trading_tickers').is_not_null())
+        trading_days = self.calendar_lf.filter(pl.col('trading_tickers').list.len() >0)
         trading_portfolio = self.enriched_portfolio_lf.join(trading_days, on='date', how='semi')
+        
+        # Collect returns as pandas series to use with quantstats
         returns_df = trading_portfolio.select(['date','net_daily_return']).collect()
         returns = pd.Series(returns_df['net_daily_return'],index=pd.DatetimeIndex(returns_df['date']))
   
+        # Collect key metrics from enriched portfolio lf
+        key_metrics_df = (
+            self.enriched_portfolio_lf.select([
+                pl.col("cash_inflow").sum().alias("total_contributions"),
+                pl.col("total_portfolio_value").tail(1).alias("final_value"),
+                pl.col("net_cumulative_gain").tail(1).alias("cumulative_gain"),
+                pl.col("net_cumulative_return").tail(1).alias("cumulative_return"),
+            ])
+            .collect()
+        )
+
+        # Unpack metrics from dict
+        total_contributions, final_value, cumulative_gain, cumulative_return = key_metrics_df.row(0)
+
         # CAGR
         calc_cagr = stats.cagr(returns)
 
         # # Sharpe
         calc_sharpe = stats.sharpe(returns)
+
+        # # Sharpe
+        calc_volatility = stats.volatility(returns)
 
         # Aggregated returns
         agg_returns_pd = stats.monthly_returns(returns)
@@ -347,28 +366,28 @@ class BaseAnalyser(ABC):
         # weekly_returns = weekly_df['return'].to_list()
         # formatted_weekly_rows = [{"period": date.strftime('%Y-%m-%d'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(weekly_start_dates, weekly_returns)]
         
-        # monthly_df = period_returns.get('monthly')
-        # monthly_start_dates = monthly_df['month'].to_list()
-        # monthly_returns = monthly_df['return'].to_list()
-        # formatted_monthly_rows = [{"period": date.strftime('%Y_%m'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(monthly_start_dates, monthly_returns)]
+        monthly_df = period_returns.get('monthly')
+        monthly_start_dates = monthly_df['month'].to_list()
+        monthly_returns = monthly_df['return'].to_list()
+        formatted_monthly_rows = [{"period": date.strftime('%Y_%m'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(monthly_start_dates, monthly_returns)]
         
-        # quarterly_df = period_returns.get('quarterly')
-        # quarterly_start_dates = quarterly_df['quarter'].to_list()
-        # quarterly_returns = quarterly_df['return'].to_list()
-        # formatted_quarterly_rows = [{"period": f"{date.year}-Q{((date.month - 1) // 3) + 1}", "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(quarterly_start_dates, quarterly_returns)]
+        quarterly_df = period_returns.get('quarterly')
+        quarterly_start_dates = quarterly_df['quarter'].to_list()
+        quarterly_returns = quarterly_df['return'].to_list()
+        formatted_quarterly_rows = [{"period": f"{date.year}-Q{((date.month - 1) // 3) + 1}", "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(quarterly_start_dates, quarterly_returns)]
         
-        # yearly_df = period_returns.get('yearly')
-        # yearly_start_dates = yearly_df['year'].to_list()
-        # yearly_returns = yearly_df['return'].to_list()
-        # formatted_yearly_rows = [{"period": date.strftime('%Y'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(yearly_start_dates, yearly_returns)]
+        yearly_df = period_returns.get('yearly')
+        yearly_start_dates = yearly_df['year'].to_list()
+        yearly_returns = yearly_df['return'].to_list()
+        formatted_yearly_rows = [{"period": date.strftime('%Y'), "return": ret, "period_start": date.strftime('%Y-%m-%d')} for date, ret in zip(yearly_start_dates, yearly_returns)]
         
-        # agg_returns = {
-        #         "daily": formatted_daily_rows,
-        #         "weekly": formatted_weekly_rows,
-        #         "monthly": formatted_monthly_rows,
-        #         "quarterly": formatted_quarterly_rows,
-        #         "yearly": formatted_yearly_rows
-        #     }
+        agg_returns = {
+                # "daily": formatted_daily_rows,
+                # "weekly": formatted_weekly_rows,
+                # "monthly": formatted_monthly_rows,
+                # "quarterly": formatted_quarterly_rows,
+                "yearly": formatted_yearly_rows
+            }
 
         # Best periods
         best_periods = []
@@ -394,19 +413,27 @@ class BaseAnalyser(ABC):
 
 
         return {
-            "cagr": calc_cagr,
-            "sharpe": calc_sharpe,
-            "yearly_returns": calc_yearly_returns_dict,
-            "yearly_returns_polars": period_returns.get('yearly').to_dicts(),
-            "monthly_returns": calc_monthly_returns_dict,
-            "monthly_returns_polars": period_returns.get('monthly').to_dicts(),
-            "drawdown": calc_drawdown_dict,
+            "metrics":{
+                "total_contributions": total_contributions,
+                "final_value": final_value,
+                "cumulative_gain": cumulative_gain,
+                "cumulative_return":cumulative_return,
+                "cagr": calc_cagr,
+                "sharpe": calc_sharpe,
+                "volatility": calc_volatility,
+            },
             "max_drawdown": calc_max_drawdown_dict,
-            "best_periods":best_periods,
-            "worst_periods": worst_periods
+            # "period_returns": period_returns,
+            # "agg_returns": agg_returns,
+            # "yearly_returns": calc_yearly_returns_dict,
+            # "yearly_returns_polars": period_returns.get('yearly').to_dicts(),
+            # "monthly_returns": calc_monthly_returns_dict,
+            # "monthly_returns_polars": period_returns.get('monthly').to_dicts(),
+            # "drawdown": calc_drawdown_dict,
+
+            # "best_periods":best_periods,
+            # "worst_periods": worst_periods
         }
-
-
 
 
     def _aggregate_returns_by_periods(self, net_daily_returns_df : pl.DataFrame) -> dict[str, pl.DataFrame]:
@@ -443,11 +470,3 @@ class BaseAnalyser(ABC):
             )
             .sort(period)
         )
-            
-
-
-
-
-
-
-

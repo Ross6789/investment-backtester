@@ -1,11 +1,11 @@
 import { SettingsPage } from "@/pages/settings";
+import { ResultsPage } from "@/pages/results";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
-import { ResultsPage } from "@/pages/results";
 
 // function App() {
 //   return (
