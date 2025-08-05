@@ -3,7 +3,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
 import { format } from "date-fns";
-import { CalendarIcon, Trash2, Check, ChevronDown } from "lucide-react";
+import { CalendarIcon, Trash2, Check, ChevronDown, Plus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -59,18 +59,6 @@ const assetOptions = [
   { label: "BTC-GBP - Bitcoin", value: "BTC-USD" },
   { label: "VUSA.L - Vanguard S&P500", value: "VUSA.L" },
 ];
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
 
 const formSchema = z
   .object({
@@ -253,131 +241,88 @@ export function ProfileForm() {
               <CardContent>
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex items-center gap-4 mb-4">
-                    {/* Ticker input - 1/2 width */}
-                    {/* <FormField
-                      control={form.control}
-                      name={`target_weights.${index}.ticker`}
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormControl>
-                            <Input placeholder="Ticker" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    /> */}
-
-                    {/* <FormField
-                      control={form.control}
-                      name={`target_weights.${index}.ticker`}
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormControl>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  role="combobox"
-                                  className="w-full justify-between"
-                                >
-                                  {field.value
-                                    ? assetOptions.find(
-                                        (asset) => asset.value === field.value
-                                      )?.label
-                                    : "Select asset"}
-                                  <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                </Button>
-                              </PopoverTrigger>
-                              <PopoverContent className="w-full p-0">
-                                <Command>
-                                  <CommandInput placeholder="Search asset..." />
-                                  <CommandEmpty>No asset found.</CommandEmpty>
-                                  <CommandGroup>
-                                    {assetOptions.map((asset) => (
-                                      <CommandItem
-                                        key={asset.value}
-                                        value={asset.value}
-                                        onSelect={(value) => {
-                                          field.onChange(value);
-                                        }}
-                                      >
-                                        {asset.label}
-                                        {field.value === asset.value && (
-                                          <Check className="ml-auto h-4 w-4" />
-                                        )}
-                                      </CommandItem>
-                                    ))}
-                                  </CommandGroup>
-                                </Command>
-                              </PopoverContent>
-                            </Popover>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    /> */}
+                    {/* Ticker input */}
 
                     <FormField
                       control={form.control}
                       name={`target_weights.${index}.ticker`}
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  variant="outline"
-                                  role="combobox"
-                                  className={cn(
-                                    "w-full justify-between",
-                                    !field.value && "text-muted-foreground"
-                                  )}
-                                >
-                                  {field.value
-                                    ? assetOptions.find(
-                                        (asset) => asset.value === field.value
-                                      )?.label
-                                    : "Select asset"}
-                                  <ChevronDown className="opacity-50" />
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-[200px] p-0">
-                              <Command>
-                                <CommandInput
-                                  placeholder="Search assets..."
-                                  className="h-9"
-                                />
-                                <CommandList>
-                                  <CommandEmpty>No asset found.</CommandEmpty>
-                                  <CommandGroup>
-                                    {assetOptions.map((asset) => (
-                                      <CommandItem
-                                        value={asset.label}
-                                        key={asset.value}
-                                        onSelect={() => {
-                                          field.onChange(asset.value);
-                                        }}
-                                      >
-                                        {asset.label}
-                                        <Check
-                                          className={cn(
-                                            "ml-auto",
-                                            asset.value === field.value
-                                              ? "opacity-100"
-                                              : "opacity-0"
-                                          )}
-                                        />
-                                      </CommandItem>
-                                    ))}
-                                  </CommandGroup>
-                                </CommandList>
-                              </Command>
-                            </PopoverContent>
-                          </Popover>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                      render={({ field }) => {
+                        const selectedTickers = form
+                          .watch("target_weights")
+                          ?.map((item) => item.ticker);
+
+                        return (
+                          <FormItem className="flex-1">
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    className={cn(
+                                      "w-full justify-between",
+                                      !field.value && "text-muted-foreground"
+                                    )}
+                                  >
+                                    {field.value
+                                      ? assetOptions.find(
+                                          (asset) => asset.value === field.value
+                                        )?.label
+                                      : "Select asset"}
+                                    <ChevronDown className="opacity-50" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent
+                                className="w-full p-0"
+                                align="start"
+                              >
+                                <Command>
+                                  <CommandInput
+                                    placeholder="Search assets..."
+                                    className="h-9"
+                                  />
+                                  <CommandList>
+                                    <CommandEmpty>No asset found.</CommandEmpty>
+                                    <CommandGroup>
+                                      {assetOptions.map((asset) => {
+                                        const isSelectedInOtherField =
+                                          selectedTickers?.includes(
+                                            asset.value
+                                          ) && asset.value !== field.value;
+
+                                        return (
+                                          <CommandItem
+                                            key={asset.value}
+                                            value={asset.value}
+                                            disabled={isSelectedInOtherField}
+                                            onSelect={() => {
+                                              if (!isSelectedInOtherField) {
+                                                field.onChange(asset.value);
+                                              }
+                                            }}
+                                          >
+                                            {asset.label}
+                                            <Check
+                                              className={cn(
+                                                "ml-auto",
+                                                asset.value === field.value
+                                                  ? "opacity-100"
+                                                  : "opacity-0"
+                                              )}
+                                            />
+                                          </CommandItem>
+                                        );
+                                      })}
+                                    </CommandGroup>
+                                  </CommandList>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
                     />
 
                     {/* Percentage input - 1/4 width */}
@@ -429,6 +374,7 @@ export function ProfileForm() {
                   variant="outline"
                   onClick={() => append({ ticker: "", percentage: 0 })}
                 >
+                  <Plus className="h-4 w-4" />
                   Add Asset
                 </Button>
               </CardContent>
