@@ -3,7 +3,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Trash2, Check, ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
 import {
   Card,
@@ -41,6 +50,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const assetOptions = [
+  { label: "AAPL - Apple inc.", value: "AAPL" },
+  { label: "GOOG - Google inc.", value: "GOOG" },
+  { label: "MSFT - Microsoft inc.", value: "MSFT" },
+  { label: "AMZN - Amazon inc.", value: "AMZN" },
+  { label: "BTC-GBP - Bitcoin", value: "BTC-USD" },
+  { label: "VUSA.L - Vanguard S&P500", value: "VUSA.L" },
+];
+
+const languages = [
+  { label: "English", value: "en" },
+  { label: "French", value: "fr" },
+  { label: "German", value: "de" },
+  { label: "Spanish", value: "es" },
+  { label: "Portuguese", value: "pt" },
+  { label: "Russian", value: "ru" },
+  { label: "Japanese", value: "ja" },
+  { label: "Korean", value: "ko" },
+  { label: "Chinese", value: "zh" },
+] as const;
 
 const formSchema = z
   .object({
@@ -195,7 +225,7 @@ export function ProfileForm() {
       values.target_weights
         .filter(
           (item): item is { ticker: string; percentage: number } =>
-            item.percentage !== undefined
+            item.percentage !== undefined && item.percentage !== 0
         )
         .map(({ ticker, percentage }) => [ticker, percentage / 100])
     );
@@ -213,62 +243,196 @@ export function ProfileForm() {
         <div className="m-4 p-4 flex lg:flex-row flex-col gap-4">
           {/* LEFT SIDE - add items-star to make box shrink */}
           <div className="flex-1">
-            {fields.map((field, index) => (
-              <div key={field.id} className="flex items-center gap-4 mb-2">
-                <FormField
-                  control={form.control}
-                  name={`target_weights.${index}.ticker`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input placeholder="Ticker" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`target_weights.${index}.percentage`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Enter Percentage"
-                          step="1"
-                          {...field}
-                          value={
-                            field.value === undefined || field.value === null
-                              ? ""
-                              : Number(field.value)
-                          }
-                          onChange={(e) => {
-                            const raw = e.target.value;
-                            field.onChange(raw === "" ? null : raw);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <Card>
+              <CardHeader>
+                <CardTitle>Portfolio Assets</CardTitle>
+                <CardDescription>
+                  Select assets and assign weights (must total 100%)
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {fields.map((field, index) => (
+                  <div key={field.id} className="flex items-center gap-4 mb-4">
+                    {/* Ticker input - 1/2 width */}
+                    {/* <FormField
+                      control={form.control}
+                      name={`target_weights.${index}.ticker`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input placeholder="Ticker" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    /> */}
+
+                    {/* <FormField
+                      control={form.control}
+                      name={`target_weights.${index}.ticker`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className="w-full justify-between"
+                                >
+                                  {field.value
+                                    ? assetOptions.find(
+                                        (asset) => asset.value === field.value
+                                      )?.label
+                                    : "Select asset"}
+                                  <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-full p-0">
+                                <Command>
+                                  <CommandInput placeholder="Search asset..." />
+                                  <CommandEmpty>No asset found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {assetOptions.map((asset) => (
+                                      <CommandItem
+                                        key={asset.value}
+                                        value={asset.value}
+                                        onSelect={(value) => {
+                                          field.onChange(value);
+                                        }}
+                                      >
+                                        {asset.label}
+                                        {field.value === asset.value && (
+                                          <Check className="ml-auto h-4 w-4" />
+                                        )}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </Command>
+                              </PopoverContent>
+                            </Popover>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    /> */}
+
+                    <FormField
+                      control={form.control}
+                      name={`target_weights.${index}.ticker`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  className={cn(
+                                    "w-full justify-between",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value
+                                    ? assetOptions.find(
+                                        (asset) => asset.value === field.value
+                                      )?.label
+                                    : "Select asset"}
+                                  <ChevronDown className="opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[200px] p-0">
+                              <Command>
+                                <CommandInput
+                                  placeholder="Search assets..."
+                                  className="h-9"
+                                />
+                                <CommandList>
+                                  <CommandEmpty>No asset found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {assetOptions.map((asset) => (
+                                      <CommandItem
+                                        value={asset.label}
+                                        key={asset.value}
+                                        onSelect={() => {
+                                          field.onChange(asset.value);
+                                        }}
+                                      >
+                                        {asset.label}
+                                        <Check
+                                          className={cn(
+                                            "ml-auto",
+                                            asset.value === field.value
+                                              ? "opacity-100"
+                                              : "opacity-0"
+                                          )}
+                                        />
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Percentage input - 1/4 width */}
+                    <FormField
+                      control={form.control}
+                      name={`target_weights.${index}.percentage`}
+                      render={({ field }) => (
+                        <FormItem className="w-20">
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="%" // optional, can be removed
+                              step="1"
+                              {...field}
+                              value={
+                                field.value === undefined ||
+                                field.value === null
+                                  ? ""
+                                  : Number(field.value)
+                              }
+                              onChange={(e) => {
+                                const raw = e.target.value;
+                                field.onChange(raw === "" ? null : raw);
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* % symbol */}
+                    <span className="text-muted-foreground">%</span>
+
+                    {/* Delete button with trash icon */}
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => remove(index)}
+                    >
+                      <Trash2 className="h-4 w-4  text-red-500" />
+                    </Button>
+                  </div>
+                ))}
+
                 <Button
                   type="button"
-                  variant="destructive"
-                  onClick={() => remove(index)}
+                  variant="outline"
+                  onClick={() => append({ ticker: "", percentage: 0 })}
                 >
-                  Remove
+                  Add Asset
                 </Button>
-              </div>
-            ))}
-
-            <Button
-              type="button"
-              onClick={() => append({ ticker: "", percentage: 0 })}
-            >
-              Add Asset
-            </Button>
+              </CardContent>
+            </Card>
           </div>
 
           {/* RIGHT SIDE */}
