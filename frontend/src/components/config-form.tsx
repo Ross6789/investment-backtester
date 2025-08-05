@@ -115,6 +115,7 @@ const formSchema = z
           "yearly",
         ]),
       })
+      .partial()
       .optional()
       .nullable(),
     strategy: z.object({
@@ -144,10 +145,7 @@ export function ProfileForm() {
       start_date: new Date("2020-01-01"),
       end_date: new Date("2025-05-31"),
       initial_investment: undefined,
-      recurring_investment: {
-        amount: 0,
-        frequency: "never",
-      },
+      recurring_investment: undefined,
       strategy: {
         fractional_shares: true,
         reinvest_dividends: true,
@@ -174,46 +172,48 @@ export function ProfileForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="min-h-screen m-4 p-4 grid grid-cols-1 lg:grid-cols-2 gap-4 bg-amber-400">
-          {/* LEFT SIDE */}
-          <FormField
-            control={form.control}
-            name="mode"
-            render={({ field }) => (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Backtest Mode</CardTitle>
-                  <CardDescription>
-                    Choose your simulation complexity level
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <FormItem>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a backtest mode" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="basic">Basic Mode</SelectItem>
-                        <SelectItem value="realistic">
-                          Realistic Mode
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                </CardContent>
-              </Card>
-            )}
-          />
+        <div className="m-4 p-4 flex lg:flex-row flex-col gap-4">
+          {/* LEFT SIDE - add items-star to make box shrink */}
+          <div className="flex-1">
+            <FormField
+              control={form.control}
+              name="mode"
+              render={({ field }) => (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Backtest Mode</CardTitle>
+                    <CardDescription>
+                      Choose your simulation complexity level
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <FormItem>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a backtest mode" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="basic">Basic Mode</SelectItem>
+                          <SelectItem value="realistic">
+                            Realistic Mode
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  </CardContent>
+                </Card>
+              )}
+            />
+          </div>
 
           {/* RIGHT SIDE */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col flex-1 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle>Backtest Mode</CardTitle>
@@ -254,7 +254,7 @@ export function ProfileForm() {
                 <CardTitle>Investment Settings</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-blue-300">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="start_date"
@@ -516,11 +516,10 @@ export function ProfileForm() {
               </CardContent>
             </Card>
           </div>
-
-          {/* Full-width row for submit button */}
-          <div className="lg:col-span-2">
-            <Button type="submit">Submit</Button>
-          </div>
+        </div>
+        {/* Full-width row for submit button */}
+        <div className="flex justify-center mb-4">
+          <Button type="submit">Run Backtest</Button>
         </div>
       </form>
     </Form>
