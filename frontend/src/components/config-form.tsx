@@ -1,11 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { optional, z } from "zod";
+import { useForm, useFieldArray } from "react-hook-form";
+import { z } from "zod";
 
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-
-import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,10 +17,8 @@ import {
 
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -61,6 +57,16 @@ const formSchema = z
       .max(new Date("2025-05-31"), {
         message: "Date must be before June 1 2025",
       }),
+    target_weights: z.array(
+      z.object({
+        ticker: z.string(),
+        percentage: z.preprocess((val) => {
+          if (val === "" || val === null || val === undefined) return undefined;
+          return typeof val === "string" ? Number(val) : val;
+        }, z.number().min(0, { message: "Minimum is 0" }).max(100, { message: "Maximum is 100" })),
+      })
+    ),
+
     initial_investment: z.preprocess(
       (val) => {
         if (val === "" || val === null || val === undefined) return undefined;
@@ -105,6 +111,7 @@ const formSchema = z
                 message: "Cannot have more than 2 decimal places",
               }
             )
+            .optional()
         ),
         frequency: z.enum([
           "never",
@@ -134,6 +141,13 @@ const formSchema = z
   .refine((data) => data.start_date < data.end_date, {
     message: "Start date must be before end date",
     path: ["end_date"],
+  })
+  .refine((data) => {
+    const total = data.target_weights.reduce(
+      (sum, item) => sum + (item.percentage ?? 0),
+      0
+    );
+    return Math.abs(total - 100) < 0.0001; // account for floating point precision
   });
 
 export function ProfileForm() {
@@ -144,14 +158,27 @@ export function ProfileForm() {
       mode: "basic",
       start_date: new Date("2020-01-01"),
       end_date: new Date("2025-05-31"),
-      initial_investment: undefined,
-      recurring_investment: undefined,
+      target_weights: [
+        { ticker: "AAPL", percentage: 50 },
+        { ticker: "GOOG", percentage: 30 },
+        { ticker: "AMZN", percentage: 20 },
+      ],
+      initial_investment: 1000,
+      recurring_investment: {
+        amount: 0,
+        frequency: "never",
+      },
       strategy: {
         fractional_shares: true,
         reinvest_dividends: true,
         rebalance_frequency: "never",
       },
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "target_weights",
   });
 
   // 2. Define a submit handler.
@@ -163,10 +190,21 @@ export function ProfileForm() {
     ) {
       values.recurring_investment = null;
     }
+
+    const weightsObject = Object.fromEntries(
+      values.target_weights
+        .filter(
+          (item): item is { ticker: string; percentage: number } =>
+            item.percentage !== undefined
+        )
+        .map(({ ticker, percentage }) => [ticker, percentage / 100])
+    );
+
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
     console.log(values);
+    console.log(weightsObject);
   }
 
   return (
@@ -175,41 +213,62 @@ export function ProfileForm() {
         <div className="m-4 p-4 flex lg:flex-row flex-col gap-4">
           {/* LEFT SIDE - add items-star to make box shrink */}
           <div className="flex-1">
-            <FormField
-              control={form.control}
-              name="mode"
-              render={({ field }) => (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Backtest Mode</CardTitle>
-                    <CardDescription>
-                      Choose your simulation complexity level
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex items-center gap-4 mb-2">
+                <FormField
+                  control={form.control}
+                  name={`target_weights.${index}.ticker`}
+                  render={({ field }) => (
                     <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a backtest mode" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="basic">Basic Mode</SelectItem>
-                          <SelectItem value="realistic">
-                            Realistic Mode
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <Input placeholder="Ticker" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
-                  </CardContent>
-                </Card>
-              )}
-            />
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`target_weights.${index}.percentage`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter Percentage"
+                          step="1"
+                          {...field}
+                          value={
+                            field.value === undefined || field.value === null
+                              ? ""
+                              : Number(field.value)
+                          }
+                          onChange={(e) => {
+                            const raw = e.target.value;
+                            field.onChange(raw === "" ? null : raw);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => remove(index)}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+
+            <Button
+              type="button"
+              onClick={() => append({ ticker: "", percentage: 0 })}
+            >
+              Add Asset
+            </Button>
           </div>
 
           {/* RIGHT SIDE */}
@@ -366,7 +425,7 @@ export function ProfileForm() {
                               }
                               onChange={(e) => {
                                 const raw = e.target.value;
-                                field.onChange(raw === "" ? undefined : raw);
+                                field.onChange(raw === "" ? null : raw);
                               }}
                             />
                           </FormControl>
@@ -397,7 +456,7 @@ export function ProfileForm() {
                             }
                             onChange={(e) => {
                               const raw = e.target.value;
-                              field.onChange(raw === "" ? undefined : raw);
+                              field.onChange(raw === "" ? null : raw);
                             }}
                           />
                         </FormControl>
@@ -412,12 +471,12 @@ export function ProfileForm() {
                       <FormItem>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          defaultValue={field.value ?? ""}
                         >
                           <FormLabel>Frequency</FormLabel>
                           <FormControl>
                             <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select rebalancing frequency" />
+                              <SelectValue placeholder="Select frequency" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
