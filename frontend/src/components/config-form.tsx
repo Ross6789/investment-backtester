@@ -60,9 +60,17 @@ const assetOptions = [
   { label: "VUSA.L - Vanguard S&P500", value: "VUSA.L" },
 ];
 
+// Dynamically change currency symbol displayed in amount input boxes
+const currencySymbols: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+};
+
 const formSchema = z
   .object({
     mode: z.enum(["basic", "realistic"]),
+    base_currency: z.enum(["GBP", "USD", "EUR"]),
     start_date: z
       .date()
       .min(new Date("1970-01-01"), { message: "Date must be after Jan 1 1970" })
@@ -84,7 +92,6 @@ const formSchema = z
         }, z.number().min(0, { message: "Minimum is 0" }).max(100, { message: "Maximum is 100" })),
       })
     ),
-
     initial_investment: z.preprocess(
       (val) => {
         if (val === "" || val === null || val === undefined) return undefined;
@@ -174,6 +181,7 @@ export function ProfileForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       mode: "basic",
+      base_currency: "GBP",
       start_date: new Date("2020-01-01"),
       end_date: new Date("2025-05-31"),
       target_weights: [
@@ -199,16 +207,24 @@ export function ProfileForm() {
     name: "target_weights",
   });
 
+  // Determine which currnecy symbol matches the selected dropdown
+  const selectedCurrency = form.watch("base_currency");
+  const symbol = currencySymbols[selectedCurrency] || "";
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (
+    // Clean recurring investment
+    const recurringInvestment =
       !values.recurring_investment ||
       values.recurring_investment.frequency === "never" ||
       !values.recurring_investment.amount
-    ) {
-      values.recurring_investment = null;
-    }
+        ? null
+        : {
+            amount: Number(values.recurring_investment.amount),
+            frequency: values.recurring_investment.frequency,
+          };
 
+    // Convert target weights array to object
     const weightsObject = Object.fromEntries(
       values.target_weights
         .filter(
@@ -218,11 +234,36 @@ export function ProfileForm() {
         .map(({ ticker, percentage }) => [ticker, percentage / 100])
     );
 
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    // Format dates
+    const formatDate = (d: Date) =>
+      d instanceof Date && !isNaN(d.getTime())
+        ? d.toISOString().split("T")[0]
+        : null;
 
-    console.log(values);
-    console.log(weightsObject);
+    // Final cleaned payload
+    const payload = {
+      mode: values.mode,
+      base_currency: values.base_currency,
+      start_date: formatDate(values.start_date),
+      end_date: formatDate(values.end_date),
+      initial_investment: Number(values.initial_investment),
+      strategy: {
+        fractional_shares: values.strategy.fractional_shares,
+        reinvest_dividends: values.strategy.reinvest_dividends,
+        rebalance_frequency: values.strategy.rebalance_frequency,
+      },
+      recurring_investment: recurringInvestment,
+      target_weights: weightsObject,
+    };
+
+    console.log(payload);
+
+    // Optional: send it
+    // await fetch("/api/backtest", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(payload),
+    // });
   }
 
   return (
@@ -424,6 +465,37 @@ export function ProfileForm() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="sm:col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="base_currency"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Currency</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select a currency" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="GBP">
+                                £ GBP - British Pound
+                              </SelectItem>
+                              <SelectItem value="EUR">€ EUR - Euro</SelectItem>
+                              <SelectItem value="USD">
+                                $ USD - US Dollar
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <FormField
                     control={form.control}
                     name="start_date"
@@ -521,23 +593,53 @@ export function ProfileForm() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Initial Investment Amount</FormLabel>
+                          {/* <FormControl>
+                            <div className="flex items-center gap-2">
+                              <span className="text-muted-foreground text-sm">
+                                {symbol}
+                              </span>
+                              <Input
+                                type="number"
+                                placeholder="Enter amount"
+                                step="100"
+                                {...field}
+                                value={
+                                  field.value === undefined ||
+                                  field.value === null
+                                    ? ""
+                                    : Number(field.value)
+                                }
+                                onChange={(e) => {
+                                  const raw = e.target.value;
+                                  field.onChange(raw === "" ? null : raw);
+                                }}
+                              />
+                            </div>
+                          </FormControl> */}
+
                           <FormControl>
-                            <Input
-                              type="number"
-                              placeholder="Enter amount"
-                              step="100"
-                              {...field}
-                              value={
-                                field.value === undefined ||
-                                field.value === null
-                                  ? ""
-                                  : Number(field.value)
-                              }
-                              onChange={(e) => {
-                                const raw = e.target.value;
-                                field.onChange(raw === "" ? null : raw);
-                              }}
-                            />
+                            <div className="relative">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
+                                {symbol}
+                              </span>
+                              <Input
+                                type="number"
+                                placeholder="Enter amount"
+                                step="100"
+                                {...field}
+                                className="pl-8"
+                                value={
+                                  field.value === undefined ||
+                                  field.value === null
+                                    ? ""
+                                    : Number(field.value)
+                                }
+                                onChange={(e) => {
+                                  const raw = e.target.value;
+                                  field.onChange(raw === "" ? null : raw);
+                                }}
+                              />
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -554,21 +656,28 @@ export function ProfileForm() {
                           Recurring Contributions (Optional)
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Enter amount"
-                            step="10"
-                            {...field}
-                            value={
-                              field.value === undefined || field.value === null
-                                ? ""
-                                : Number(field.value)
-                            }
-                            onChange={(e) => {
-                              const raw = e.target.value;
-                              field.onChange(raw === "" ? null : raw);
-                            }}
-                          />
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
+                              {symbol}
+                            </span>
+                            <Input
+                              type="number"
+                              placeholder="Enter amount"
+                              step="10"
+                              {...field}
+                              className="pl-8"
+                              value={
+                                field.value === undefined ||
+                                field.value === null
+                                  ? ""
+                                  : Number(field.value)
+                              }
+                              onChange={(e) => {
+                                const raw = e.target.value;
+                                field.onChange(raw === "" ? null : raw);
+                              }}
+                            />
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
