@@ -6,13 +6,12 @@ import traceback
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/run-backtest', methods=['POST'])
 def backtest_api():
     try:
         data = request.get_json()
         results = run_backtest(data)
-
-        
         return jsonify({"success": True, "results":results})
     except Exception as e:
         print(traceback.format_exc())  # prints full traceback in terminal

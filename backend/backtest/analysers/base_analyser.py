@@ -412,6 +412,10 @@ class BaseAnalyser(ABC):
             })
 
 
+        # Monthly return analysis
+        monthly_return_summary = BaseAnalyser._calculate_monthly_win_rate(period_returns.get("monthly"))
+        monthly_return_buckets = BaseAnalyser._categorize_monthly_return_buckets(period_returns.get("monthly"))
+
         return {
             "metrics":{
                 "total_contributions": total_contributions,
@@ -423,6 +427,12 @@ class BaseAnalyser(ABC):
                 "volatility": calc_volatility,
             },
             "max_drawdown": calc_max_drawdown_dict,
+            "monthly_return_analysis": {
+                "summary": monthly_return_summary,
+                "buckets": monthly_return_buckets
+            },
+            "best_periods":best_periods,
+            "worst_periods": worst_periods
             # "period_returns": period_returns,
             # "agg_returns": agg_returns,
             # "yearly_returns": calc_yearly_returns_dict,
@@ -431,8 +441,6 @@ class BaseAnalyser(ABC):
             # "monthly_returns_polars": period_returns.get('monthly').to_dicts(),
             # "drawdown": calc_drawdown_dict,
 
-            # "best_periods":best_periods,
-            # "worst_periods": worst_periods
         }
 
 
@@ -470,3 +478,135 @@ class BaseAnalyser(ABC):
             )
             .sort(period)
         )
+    
+    # @staticmethod
+    # def _bucket_monthly_returns(monthly_returns: pl.DataFrame) -> dict:
+        
+    #     bucket_order = ["< -10%", "-10% to -5%", "-5% to 0%", "0% to 5%", "5% to 10%", "10%+"]
+
+    #     bucketed_returns = monthly_returns.with_columns(
+    #         pl.when(pl.col("return") < -0.10).then(pl.lit("< -10%"))
+    #         .when(pl.col("return") < -0.05).then(pl.lit("-10% to -5%"))
+    #         .when(pl.col("return") < 0).then(pl.lit("-5% to 0%"))
+    #         .when(pl.col("return") < 0.05).then(pl.lit("0% to 5%"))
+    #         .when(pl.col("return") < 0.10).then(pl.lit("5% to 10%"))
+    #         .otherwise(pl.lit("10%+"))
+    #         .alias("performance_bucket")
+    #     )
+
+    #     counts = (
+    #         bucketed_returns
+    #         .group_by("performance_bucket")
+    #         .agg(pl.len().alias("count"))
+    #     )
+        
+    #     unordered_counts = dict(zip(counts["performance_bucket"], counts["count"]))
+        
+    #     ordered_counts = {}
+    #     for bucket in bucket_order:
+    #         ordered_counts[bucket]=unordered_counts[bucket]
+
+    #     return ordered_counts
+    
+    # @staticmethod
+    # def _bucket_monthly_returns_summary(monthly_returns: pl.DataFrame) -> dict:
+        
+    #     bucketed_returns = monthly_returns.with_columns(
+    #         pl.when(pl.col("return") < 0).then(pl.lit("loss"))
+    #         .otherwise(pl.lit("win"))
+    #         .alias("performance")
+    #     )
+
+    #     counts = (
+    #         bucketed_returns
+    #         .group_by("performance")
+    #         .agg(pl.len().alias("count"))
+    #     )
+        
+    #     counts = dict(zip(counts["performance_bucket"], counts["count"]))
+
+    #     win = counts["win"]
+    #     loss = counts["loss"]
+    #     total = win + loss
+    #     rate = win / total 
+
+    #     return {
+    #         "win":win,
+    #         "loss":loss,
+    #         "rate": rate
+    #     }
+
+    @staticmethod
+    def _categorize_monthly_return_buckets(monthly_returns: pl.DataFrame) -> dict:
+        """
+        Categorize monthly returns into fixed percentage buckets.
+
+        Args:
+            monthly_returns (pl.DataFrame): DataFrame with a "return" column of monthly returns as decimals.
+
+        Returns:
+            dict: Mapping of performance buckets to counts. Missing buckets default to 0.
+        """
+        bucket_order = ["< -10%", "-10% to -5%", "-5% to 0%", "0% to 5%", "5% to 10%", "10%+"]
+
+        # Tag each return with a bucket label
+        bucketed = monthly_returns.with_columns(
+            pl.when(pl.col("return") < -0.10).then(pl.lit("< -10%"))
+            .when(pl.col("return") < -0.05).then(pl.lit("-10% to -5%"))
+            .when(pl.col("return") < 0).then(pl.lit("-5% to 0%"))
+            .when(pl.col("return") < 0.05).then(pl.lit("0% to 5%"))
+            .when(pl.col("return") < 0.10).then(pl.lit("5% to 10%"))
+            .otherwise(pl.lit("10%+"))
+            .alias("performance_bucket")
+        )
+
+        # Get counts per bucket
+        counts = (
+            bucketed
+            .group_by("performance_bucket")
+            .agg(pl.len().alias("count"))
+        )
+
+        counts_dict = {row["performance_bucket"]: row["count"] for row in counts.iter_rows(named=True)}
+
+        # Ensure all buckets are included (even if zero) and in correct order
+        return {bucket: counts_dict.get(bucket, 0) for bucket in bucket_order}
+
+
+    @staticmethod
+    def _calculate_monthly_win_rate(monthly_returns: pl.DataFrame) -> dict:
+        """
+        Calculate win/loss counts and win rate from monthly returns.
+
+        Args:
+            monthly_returns (pl.DataFrame): DataFrame with a "return" column.
+
+        Returns:
+            dict: Contains "win", "loss", and "rate" (win percentage as a float).
+        """
+        # Label each return as 'win' or 'loss'
+        labeled = monthly_returns.with_columns(
+            pl.when(pl.col("return") < 0).then(pl.lit("loss"))
+            .otherwise(pl.lit("win"))
+            .alias("performance")
+        )
+        
+        # Get counts win / loss
+        counts_dict = (
+            labeled
+            .group_by("performance")
+            .agg(pl.len().alias("count"))
+        )
+
+        
+        counts_dict = {row["performance"]: row["count"] for row in counts_dict.iter_rows(named=True)}
+        
+        win = counts_dict.get("win", 0)
+        loss = counts_dict.get("loss", 0)
+        total = win + loss
+        
+        return {
+            "win": win,
+            "loss": loss,
+            "rate": win / total if total > 0 else 0
+        }
