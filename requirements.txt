@@ -6,6 +6,8 @@ pytest
 pytest-mock
 quantstats
 ipython
+flask
+flask-cors
 
 #  activating virtual environment => source venv/bin/activate
 

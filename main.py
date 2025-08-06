@@ -8,7 +8,7 @@ from backend.backtest.runner import BacktestRunner
 # User choices
 mode = BacktestMode.BASIC
 base_currency = BaseCurrency.GBP
-start_date = date.fromisoformat("1980-01-01")
+start_date = date.fromisoformat("2020-01-01")
 end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
 initial_investment = 10000
