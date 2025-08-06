@@ -41,5 +41,8 @@ def run_backtest(input_data: dict) -> dict:
     backtest = BacktestRunner(backtest_config, backtest_data,paths.get_backtest_run_base_path())
     results = backtest.run()
 
-    return results
+    return {
+        "settings":input_data,
+        "results":results
+    }
 

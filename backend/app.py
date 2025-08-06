@@ -10,17 +10,11 @@ CORS(app)
 def backtest_api():
     try:
         data = request.get_json()
-        results = run_backtest(data)
-        return jsonify({"success": True, "results":results})
+        payload = run_backtest(data)
+        return jsonify({"success": True,**payload})
     except Exception as e:
         print(traceback.format_exc())  # prints full traceback in terminal
         return jsonify({"success": False, "error": str(e)}), 400
-
-
-# @app.route('/api/run-backtest-test', methods=['GET'])
-# def api_run():
-#     return jsonify({"success": True, "results":"my test"})
-
 
 if __name__ == '__main__':
     app.run(port=5002,debug=True)
