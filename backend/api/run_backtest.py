@@ -1,5 +1,4 @@
 import backend.core.paths as paths
-from datetime import date
 from backend.backtest.data_loader import get_backtest_data
 from backend.core.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
 from backend.core.enums import BacktestMode, BaseCurrency, RebalanceFrequency, ReinvestmentFrequency

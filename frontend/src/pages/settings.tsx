@@ -262,7 +262,7 @@ export function SettingsPage() {
     console.log("Input settings:", payload);
 
     try {
-      const response = await fetch("http://localhost:5000/run-backtest", {
+      const response = await fetch("http://localhost:5002/api/run-backtest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
