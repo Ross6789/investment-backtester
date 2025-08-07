@@ -39,7 +39,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface PortfolioGrowthChartProps {
-  chartData: { date: string; value: number }[];
+  chartData: {
+    date: string;
+    contributions: number;
+    gain: number;
+    value: number;
+  }[];
 }
 
 export function PortfolioGrowthChart({ chartData }: PortfolioGrowthChartProps) {

@@ -267,7 +267,9 @@ export function ResultsPage() {
             <CardDescription>Description</CardDescription>
           </CardHeader>
           <CardContent>
-            <PortfolioGrowthChart chartData={chartData}></PortfolioGrowthChart>
+            <PortfolioGrowthChart
+              chartData={backtestResult.results.chart_data.portfolio_growth}
+            ></PortfolioGrowthChart>
           </CardContent>
         </Card>
       </div>
