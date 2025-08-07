@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/card";
 import {
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -45,9 +43,13 @@ interface PortfolioGrowthChartProps {
     gain: number;
     value: number;
   }[];
+  currency_code: string;
 }
 
-export function PortfolioGrowthChart({ chartData }: PortfolioGrowthChartProps) {
+export function PortfolioGrowthChart({
+  chartData,
+  currency_code,
+}: PortfolioGrowthChartProps) {
   const [timeRange, setTimeRange] = React.useState("daily");
 
   // Dynamically filter the available periods based on backtest length
@@ -161,7 +163,7 @@ export function PortfolioGrowthChart({ chartData }: PortfolioGrowthChartProps) {
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
                   stopColor="var(--color-value)"
@@ -183,10 +185,38 @@ export function PortfolioGrowthChart({ chartData }: PortfolioGrowthChartProps) {
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
+
+                switch (
+                  timeRange // filter could be "day", "week", "month", "quarter", "year"
+                ) {
+                  case "daily":
+                    return date.toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "2-digit",
+                    }); // e.g. 7 Aug '25
+                  case "weekly":
+                    return date.toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "2-digit",
+                    }); // e.g. 7 Aug '25
+                  case "monthly":
+                    return date.toLocaleDateString("en-GB", {
+                      month: "short",
+                      year: "2-digit",
+                    }); // e.g. Aug '25
+                  case "quarterly":
+                    const quarter = Math.floor(date.getMonth() / 3) + 1;
+                    return `Q${quarter} '${date
+                      .getFullYear()
+                      .toString()
+                      .slice(-2)}`; // e.g. Q3 '25
+                  case "yearly":
+                    return date.getFullYear().toString(); // e.g. 2025
+                  default:
+                    return date.toLocaleDateString("en-GB");
+                }
               }}
             />
             <YAxis
@@ -194,30 +224,59 @@ export function PortfolioGrowthChart({ chartData }: PortfolioGrowthChartProps) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
+              minTickGap={24}
               tickFormatter={(value) => {
-                return formatCurrency(value, "GBP", "compact");
+                return formatCurrency(value, currency_code, "compact");
               }}
             />
 
-            <ChartTooltip
-              cursor={false}
+            {/* <ChartTooltip
+              cursor={true}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(value).toLocaleDateString("en-GB", {
                       month: "short",
                       day: "numeric",
+                      year: "numeric",
                     });
+                  }}
+                  formatter={(value) => {
+                    return `${formatCurrency(Number(value), currency_code)}`;
                   }}
                   indicator="dot"
                 />
               }
+            /> */}
+
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) => {
+                    return new Date(value).toLocaleDateString("en-GB", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    });
+                  }}
+                  formatter={(value, name) => (
+                    <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                      {chartConfig[name as keyof typeof chartConfig]?.label ||
+                        name}
+                      <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                        {formatCurrency(Number(value), currency_code)}
+                      </div>
+                    </div>
+                  )}
+                />
+              }
+              cursor={true}
             />
+
             <Area
               dataKey="value"
               type="natural"
-              fill="url(#fillDesktop)"
+              fill="url(#fillValue)"
               stroke="var(--color-value)"
               stackId="a"
             />
