@@ -22,6 +22,7 @@ import {
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { PortfolioGrowthChart } from "@/components/charts/portfolio-growth";
 
 export function ResultsPage() {
   const location = useLocation();
@@ -171,7 +172,9 @@ export function ResultsPage() {
             <CardTitle>Card 6</CardTitle>
             <CardDescription>Description</CardDescription>
           </CardHeader>
-          <CardContent>content</CardContent>
+          <CardContent>
+            <PortfolioGrowthChart></PortfolioGrowthChart>
+          </CardContent>
         </Card>
       </div>
 
