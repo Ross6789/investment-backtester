@@ -117,9 +117,9 @@ export function PortfolioGrowthChart({
     <Card className="pt-0">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
-          <CardTitle>Area Chart - Interactive</CardTitle>
+          <CardTitle>Portfolio Growth Chart</CardTitle>
           <CardDescription>
-            Showing total visitors for the last 3 months
+            Track your investment journey from start to finish
           </CardDescription>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
@@ -229,25 +229,6 @@ export function PortfolioGrowthChart({
                 return formatCurrency(value, currency_code, "compact");
               }}
             />
-
-            {/* <ChartTooltip
-              cursor={true}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-GB", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    });
-                  }}
-                  formatter={(value) => {
-                    return `${formatCurrency(Number(value), currency_code)}`;
-                  }}
-                  indicator="dot"
-                />
-              }
-            /> */}
 
             <ChartTooltip
               content={

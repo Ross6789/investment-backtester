@@ -145,18 +145,10 @@ export function ResultsPage() {
       </div>
 
       <div className="col-span-12">
-        <Card>
-          <CardHeader>
-            <CardTitle>Card 6</CardTitle>
-            <CardDescription>Description</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <PortfolioGrowthChart
-              chartData={backtestResult.results.chart_data.portfolio_growth}
-              currency_code={backtestResult.settings.base_currency}
-            ></PortfolioGrowthChart>
-          </CardContent>
-        </Card>
+        <PortfolioGrowthChart
+          chartData={backtestResult.results.chart_data.portfolio_growth}
+          currency_code={backtestResult.settings.base_currency}
+        ></PortfolioGrowthChart>
       </div>
 
       <div className="col-span-12">
