@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { differenceInDays } from "date-fns";
 import {
@@ -19,6 +19,8 @@ import {
 
 import type { ChartConfig } from "@/components/ui/chart";
 
+import { formatCurrency } from "@/lib/utils";
+
 import {
   Select,
   SelectContent,
@@ -30,10 +32,10 @@ import {
 export const description = "An interactive area chart";
 
 const chartData = [
-  { date: "2024-04-01", value: 222, mobile: 150 },
-  { date: "2024-04-02", value: 97, mobile: 180 },
-  { date: "2024-04-03", value: 167, mobile: 120 },
-  { date: "2024-04-04", value: 242, mobile: 260 },
+  { date: "2024-04-01", value: 2220, mobile: 150 },
+  { date: "2024-04-02", value: 97000, mobile: 180 },
+  { date: "2024-04-03", value: 167000, mobile: 120 },
+  { date: "2024-04-04", value: 2420000, mobile: 260 },
   { date: "2024-04-05", value: 373, mobile: 290 },
   { date: "2024-04-06", value: 301, mobile: 340 },
   { date: "2024-04-07", value: 245, mobile: 180 },
@@ -272,6 +274,17 @@ export function PortfolioGrowthChart() {
                 });
               }}
             />
+            <YAxis
+              dataKey="value"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={(value) => {
+                return formatCurrency(value, "GBP", "compact");
+              }}
+            />
+
             <ChartTooltip
               cursor={false}
               content={

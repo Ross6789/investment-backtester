@@ -7,21 +7,35 @@ export function cn(...inputs: ClassValue[]) {
 
 // Format utility functions
 
-export function formatCurrency(value: number, currencyCode: string): string {
+export function formatCurrency(value: number, currencyCode: string,notation: "standard" | "compact" = "standard", decimals: number=2 ): string {
   return new Intl.NumberFormat('en-GB', {
     style: 'currency',
     currency: currencyCode,
+    notation: notation,
+    maximumFractionDigits: decimals
   }).format(value);
 }
+
+// export function formatPercentage(
+//   value: number,
+//   decimals: number = 1,
+//   showSign: boolean = true
+// ): string {
+//   const sign = showSign ? (value > 0 ? "+" : value < 0 ? "−" : "") : "";
+//   const percentage = (value * 100).toFixed(decimals);
+//   return `${sign}${percentage}%`;
+// }
 
 export function formatPercentage(
   value: number,
   decimals: number = 1,
   showSign: boolean = true
 ): string {
-  const sign = showSign ? (value > 0 ? "+" : value < 0 ? "−" : "") : "";
-  const percentage = (value * 100).toFixed(decimals);
-  return `${sign}${percentage}%`;
+  return new Intl.NumberFormat("en-US", {
+    style: "percent",
+    maximumFractionDigits: decimals,
+    signDisplay: showSign ? "exceptZero" : "never",
+  }).format(value);
 }
 
 
