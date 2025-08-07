@@ -411,6 +411,9 @@ class BaseAnalyser(ABC):
         monthly_return_summary = self._calculate_monthly_win_rate(period_returns_df.get("monthly"))
         monthly_return_buckets = self._categorize_monthly_return_buckets(period_returns_df.get("monthly"))
 
+        # Valuation data
+        print(self.enriched_portfolio_lf.collect())
+
         return {
             "metrics":{
                 "total_contributions": total_contributions,
@@ -427,7 +430,8 @@ class BaseAnalyser(ABC):
                 "buckets": monthly_return_buckets
             },
             "best_periods":best_periods,
-            "worst_periods": worst_periods
+            "worst_periods": worst_periods,
+            # "valuation_chart_data":
             # "agg_returns": agg_returns,
             # "yearly_returns": calc_yearly_returns_dict,
             # "yearly_returns_polars": period_returns.get('yearly').to_dicts(),

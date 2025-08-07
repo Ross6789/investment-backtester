@@ -132,7 +132,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PortfolioGrowthChart() {
+interface PortfolioGrowthChartProps {
+  chartData: { date: string; value: number }[];
+}
+
+export function PortfolioGrowthChart({ chartData }: PortfolioGrowthChartProps) {
   const [timeRange, setTimeRange] = React.useState("daily");
 
   // Dynamically filter the available periods based on backtest length
