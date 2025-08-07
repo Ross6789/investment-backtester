@@ -13,7 +13,12 @@ import {
   SecondaryText,
   MutedText,
 } from "@/components/ui/typography";
-import { formatCurrency, formatPercentage } from "@/lib/utils";
+import {
+  formatCurrency,
+  formatPercentage,
+  getRiskRating,
+  getSharpeRating,
+} from "@/lib/utils";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -22,6 +27,8 @@ export function ResultsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const backtestResult = location.state?.backtestResult;
+  const riskRating = getRiskRating(backtestResult.results.metrics.volatility);
+  const sharpeRating = getSharpeRating(backtestResult.results.metrics.sharpe);
 
   useEffect(() => {
     // If no result data (e.g. direct access to /results), redirect to settings
@@ -33,7 +40,7 @@ export function ResultsPage() {
   if (!backtestResult) return null;
 
   return (
-    <div className="grid grid-cols-12 gap-4 p-4 m-4">
+    <div className="grid grid-cols-12 gap-8 p-6">
       <div className="col-span-12">
         <Card>
           <CardContent>
@@ -78,91 +85,85 @@ export function ResultsPage() {
               </section>
             </div>
           </CardContent>
-
-          {/* <CardContent>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:space-x-4 space-y-8 sm:space-y-0">
-              <div className="flex flex-col flex-1 items-center sm:items-start gap-y-1">
-                <MutedText>Your Portfolio Ended At</MutedText>
-                <StrongText>
-                  {formatCurrency(
-                    backtestResult.results.metrics.final_value,
-                    backtestResult.settings.base_currency
-                  )}
-                </StrongText>
-                <Badge>
-                  {formatPercentage(
-                    backtestResult.results.metrics.cumulative_return
-                  )}{" "}
-                  Total Return
-                </Badge>
-              </div>
-              <div className="flex flex-col flex-1 items-center sm:items-center gap-y-1">
-                <MutedText>You Invested</MutedText>
-                <StrongText>
-                  {formatCurrency(
-                    backtestResult.results.metrics.total_contributions,
-                    backtestResult.settings.base_currency
-                  )}
-                </StrongText>
-                <MutedText>Initial + Contributions</MutedText>
-              </div>
-              <div className="flex flex-col flex-1 items-center sm:items-end gap-y-1">
-                <MutedText>Your Profit</MutedText>
-                <StrongText>
-                  {formatCurrency(
-                    backtestResult.results.metrics.cumulative_gain,
-                    backtestResult.settings.base_currency
-                  )}
-                </StrongText>
-                <MutedText>
-                  {formatPercentage(backtestResult.results.metrics.cagr)} per
-                  year
-                </MutedText>
-              </div>
-            </div>
-          </CardContent> */}
         </Card>
       </div>
 
       <div className="col-span-12 sm:col-span-6 lg:col-span-3">
         <Card>
           <CardHeader>
-            <CardTitle>Card 2</CardTitle>
-            <CardDescription>Description</CardDescription>
+            <CardTitle>Annual Growth</CardTitle>
           </CardHeader>
-          <CardContent>content</CardContent>
+          <CardContent>
+            <StrongText>
+              {formatPercentage(backtestResult.results.metrics.cagr)}
+            </StrongText>
+            <CardDescription>Average yearly return</CardDescription>
+          </CardContent>
         </Card>
       </div>
 
       <div className="col-span-12 sm:col-span-6 lg:col-span-3">
         <Card>
           <CardHeader>
-            <CardTitle>Card 3</CardTitle>
-            <CardDescription>Description</CardDescription>
+            <CardTitle>Risk Level</CardTitle>
           </CardHeader>
-          <CardContent>content</CardContent>
+          <CardContent>
+            <StrongText className={riskRating.colorClass}>
+              {riskRating.label}
+            </StrongText>
+            <CardDescription>
+              {formatPercentage(backtestResult.results.metrics.volatility)}{" "}
+              volatility
+            </CardDescription>
+          </CardContent>
         </Card>
       </div>
 
       <div className="col-span-12 sm:col-span-6 lg:col-span-3">
         <Card>
           <CardHeader>
-            <CardTitle>Card 4</CardTitle>
-            <CardDescription>Description</CardDescription>
+            <CardTitle>Biggest Drop</CardTitle>
           </CardHeader>
-          <CardContent>content</CardContent>
+          <CardContent>
+            <StrongText>
+              {backtestResult.results.max_drawdown.max_drawdown.toFixed(1)}%
+            </StrongText>
+            <CardDescription>Maximum decline from peak</CardDescription>
+          </CardContent>
         </Card>
       </div>
 
       <div className="col-span-12 sm:col-span-6 lg:col-span-3">
         <Card>
           <CardHeader>
-            <CardTitle>Card 5</CardTitle>
-            <CardDescription>Description</CardDescription>
+            <CardTitle>Risk-Adjusted Score</CardTitle>
           </CardHeader>
-          <CardContent>content</CardContent>
+          <CardContent>
+            <StrongText className={sharpeRating.colorClass}>
+              {backtestResult.results.metrics.sharpe.toFixed(2)}
+            </StrongText>
+            <CardDescription>{sharpeRating.label}</CardDescription>
+          </CardContent>
         </Card>
       </div>
+
+      {/* <div className="col-span-12 sm:col-span-6 lg:col-span-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>Success Rate</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <StrongText>
+              {formatPercentage(
+                backtestResult.results.monthly_return_analysis.summary.rate,
+                0,
+                false
+              )}
+            </StrongText>
+            <CardDescription>Months with positive returns</CardDescription>
+          </CardContent>
+        </Card>
+      </div> */}
 
       <div className="col-span-12">
         <Card>
