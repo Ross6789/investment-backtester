@@ -39,6 +39,21 @@ export function formatPercentage(
 }
 
 
+export function formatDate(dateString: string) {
+  if (!dateString) return "";
+
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+export function capitalizeFirst(str: string) {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 // Metric rating utility functions
 
 type MetricRating = {

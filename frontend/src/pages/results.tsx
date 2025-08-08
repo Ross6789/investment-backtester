@@ -8,10 +8,16 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 
-import { StrongText, MutedText } from "@/components/ui/typography";
+import {
+  StrongText,
+  SecondaryText,
+  MutedText,
+} from "@/components/ui/typography";
 import {
   formatCurrency,
   formatPercentage,
+  formatDate,
+  capitalizeFirst,
   getRiskRating,
   getSharpeRating,
 } from "@/lib/utils";
@@ -26,6 +32,12 @@ export function ResultsPage() {
   const backtestResult = location.state?.backtestResult;
   const riskRating = getRiskRating(backtestResult.results.metrics.volatility);
   const sharpeRating = getSharpeRating(backtestResult.results.metrics.sharpe);
+
+  type TargetWeights = {
+    [ticker: string]: number;
+  };
+
+  const targetWeights: TargetWeights = backtestResult.settings.target_weights;
 
   useEffect(() => {
     // If no result data (e.g. direct access to /results), redirect to settings
@@ -154,52 +166,117 @@ export function ResultsPage() {
       <div className="col-span-12">
         <Card>
           <CardHeader>
-            <CardTitle>Card 7</CardTitle>
-            <CardDescription>Description</CardDescription>
+            <CardTitle>Investment Settings</CardTitle>
+            <CardDescription>
+              The configuration used for this backtest
+            </CardDescription>
           </CardHeader>
-          <CardContent>content</CardContent>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-sm">
+              <section className="flex flex-col gap-y-2">
+                <SecondaryText>Investment Details</SecondaryText>
+
+                {[
+                  {
+                    label: "Start Date",
+                    value: formatDate(backtestResult.settings.start_date),
+                  },
+                  {
+                    label: "End Date",
+                    value: formatDate(backtestResult.settings.end_date),
+                  },
+                  {
+                    label: "Currency",
+                    value: backtestResult.settings.base_currency,
+                  },
+                  {
+                    label: "Starting Amount",
+                    value: formatCurrency(
+                      backtestResult.settings.initial_investment,
+                      backtestResult.settings.base_currency
+                    ),
+                  },
+                  {
+                    label: "Recurring Amount",
+                    value: backtestResult.settings.recurring_investment
+                      ? formatCurrency(
+                          backtestResult.settings.recurring_investment.amount,
+                          backtestResult.settings.base_currency
+                        )
+                      : "N/A",
+                  },
+                  // Recurring Frequency is only pushed if recurring investment exists ...[] does not insert element
+                  ...(backtestResult.settings.recurring_investment
+                    ? [
+                        {
+                          label: "Recurring Frequency",
+                          value: capitalizeFirst(
+                            backtestResult.settings.recurring_investment
+                              .frequency
+                          ),
+                        },
+                      ]
+                    : []),
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <MutedText>{item.label}</MutedText>
+                    <p>{item.value}</p>
+                  </div>
+                ))}
+              </section>
+              <section className="flex flex-col gap-y-2">
+                <SecondaryText>Strategy settings</SecondaryText>
+
+                {[
+                  {
+                    label: "Simulation Mode",
+                    value: capitalizeFirst(backtestResult.settings.mode),
+                  },
+                  {
+                    label: "Rebalancing",
+                    value: capitalizeFirst(
+                      backtestResult.settings.strategy.rebalance_frequency
+                    ),
+                  },
+                  {
+                    label: "Dividends",
+                    value: capitalizeFirst(
+                      backtestResult.settings.strategy.reinvest_dividends
+                        ? "reinvest"
+                        : "income"
+                    ),
+                  },
+                  {
+                    label: "Fractional Shares",
+                    value: capitalizeFirst(
+                      backtestResult.settings.strategy.allow_fractional_shares
+                        ? "allowed"
+                        : "disallowed"
+                    ),
+                  },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <MutedText>{item.label}</MutedText>
+                    <p>{item.value}</p>
+                  </div>
+                ))}
+              </section>
+              <section className="flex flex-col gap-y-1">
+                <SecondaryText>Asset Allocation</SecondaryText>
+                {Object.entries(targetWeights).map(([ticker, weight]) => (
+                  <div
+                    key={ticker}
+                    className="flex items-center justify-between"
+                  >
+                    <MutedText>{ticker}</MutedText>
+                    <p>{formatPercentage(weight, 1, false)}</p>
+                  </div>
+                ))}
+              </section>
+            </div>
+          </CardContent>
         </Card>
       </div>
     </div>
-
-    // <div className="m-4 p-4 flex lg:flex-row flex-col gap-4">
-    //   {/* LEFT SIDE - add items-star to make box shrink */}
-    //   <div className="flex-1">
-    // <Card>
-    //   <CardHeader>
-    //     <CardTitle>Result</CardTitle>
-    //     <CardDescription>JSON results</CardDescription>
-    //   </CardHeader>
-    //   <CardContent>
-    //     <pre>{JSON.stringify(backtestResult, null, 2)}</pre>
-    //   </CardContent>
-    // </Card>
-    //   </div>
-
-    //   {/* RIGHT SIDE */}
-    //   <div className="flex flex-col flex-1 gap-4">
-    //     <Card>
-    //       <CardHeader>
-    //         <CardTitle>Backtest Mode</CardTitle>
-    //         <CardDescription>
-    //           Choose your simulation complexity level
-    //         </CardDescription>
-    //       </CardHeader>
-    //       <CardContent></CardContent>
-    //     </Card>
-    //     <Card>
-    //       <CardHeader>
-    //         <CardTitle>Investment Settings</CardTitle>
-    //       </CardHeader>
-    //       <CardContent></CardContent>
-    //     </Card>
-    //     <Card>
-    //       <CardHeader>
-    //         <CardTitle>Strategy Settings</CardTitle>
-    //       </CardHeader>
-    //       <CardContent className="space-y-4"></CardContent>
-    //     </Card>
-    //   </div>
-    // </div>
   );
 }

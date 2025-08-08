@@ -67,12 +67,7 @@ export function SecondaryText({
   children: React.ReactNode;
 }) {
   return (
-    <p
-      className={cn(
-        "text-lg font-semibold leading-none tracking-tight",
-        className
-      )}
-    >
+    <p className={cn("text-md font-semibold leading-none", className)}>
       {children}
     </p>
   );
