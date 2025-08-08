@@ -33,11 +33,24 @@ export function ResultsPage() {
   const riskRating = getRiskRating(backtestResult.results.metrics.volatility);
   const sharpeRating = getSharpeRating(backtestResult.results.metrics.sharpe);
 
+  // Define types
   type TargetWeights = {
     [ticker: string]: number;
   };
 
+  interface BestOrWorstPeriod {
+    period: string;
+    period_start: string;
+    return: number;
+  }
+
+  type BestOrWorstPeriods = {
+    [key: string]: BestOrWorstPeriod;
+  };
+
   const targetWeights: TargetWeights = backtestResult.settings.target_weights;
+  const bestPeriods: BestOrWorstPeriods = backtestResult.results.best_periods;
+  const worstPeriods: BestOrWorstPeriods = backtestResult.results.worst_periods;
 
   useEffect(() => {
     // If no result data (e.g. direct access to /results), redirect to settings
@@ -152,6 +165,74 @@ export function ResultsPage() {
               {backtestResult.results.metrics.sharpe.toFixed(2)}
             </StrongText>
             <CardDescription>{sharpeRating.label}</CardDescription>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="col-span-12 lg:col-span-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Best & Worst Periods</CardTitle>
+            <CardDescription>
+              Your highest and lowest performing periods
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-12 text-sm">
+              <section className="flex flex-col gap-y-4">
+                <SecondaryText className=" text-green-600">
+                  Best Periods
+                </SecondaryText>
+                {["day", "week", "month", "quarter", "year"].map(
+                  (periodType) => {
+                    const data = bestPeriods[periodType];
+                    if (!data) return null; // skip if missing
+
+                    return (
+                      <div
+                        key={periodType}
+                        className="flex items-center justify-between"
+                      >
+                        <MutedText>{capitalizeFirst(periodType)}</MutedText>
+                        <div className="text-right">
+                          <p>{data.period}</p>
+                          <p className=" text-green-600">
+                            {formatPercentage(data.return, 1)}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </section>
+              <section className="flex flex-col gap-y-4">
+                <SecondaryText className=" text-red-600">
+                  Worst Periods
+                </SecondaryText>
+
+                {["day", "week", "month", "quarter", "year"].map(
+                  (periodType) => {
+                    const data = worstPeriods[periodType];
+                    if (!data) return null; // skip if missing
+
+                    return (
+                      <div
+                        key={periodType}
+                        className="flex items-center justify-between"
+                      >
+                        <MutedText>{capitalizeFirst(periodType)}</MutedText>
+                        <div className="text-right">
+                          <p>{data.period}</p>
+                          <p className=" text-red-600">
+                            {formatPercentage(data.return, 1)}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </section>
+            </div>
           </CardContent>
         </Card>
       </div>
