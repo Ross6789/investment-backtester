@@ -406,9 +406,8 @@ class BaseAnalyser(ABC):
             for period in periods
         }
 
-        # Monthly return analysis
-        monthly_return_summary = self._calculate_monthly_win_rate(period_returns_df.get("monthly"))
-        monthly_return_buckets = self._categorize_monthly_return_buckets(period_returns_df.get("monthly"))
+        # Monthly win lose analysis
+        monthly_win_lose_summary = self._calculate_monthly_win_rate(period_returns_df.get("monthly"))
 
         # Compile portfolio growth data for charts
         valuation_df = self.enriched_portfolio_lf.select(['date','cumulative_cashflow','net_cumulative_gain','total_portfolio_value']).collect()
@@ -421,6 +420,7 @@ class BaseAnalyser(ABC):
         # )
         # monthly_returns_chart_data = monthly_returns_df.to_dicts()
 
+        # Compile return chart data for all periods
         returns_chart_data = {
             period: self._format_periods(
                 period_returns_df[period],
@@ -429,6 +429,9 @@ class BaseAnalyser(ABC):
             )
             for period in periods
         }
+
+        # Compile monhtly return histogram chart data
+        monthly_return_histogram_chart_data  = self._generate_monthly_return_histogram_data(period_returns_df.get("monthly"))
 
         return {
             "metrics":{
@@ -441,15 +444,13 @@ class BaseAnalyser(ABC):
                 "volatility": calc_volatility,
             },
             "max_drawdown": calc_max_drawdown_dict,
-            "monthly_return_analysis": {
-                "summary": monthly_return_summary,
-                "buckets": monthly_return_buckets
-            },
+            "monthly_win_lose_analysis": monthly_win_lose_summary,
             "best_periods":best_periods,
             "worst_periods": worst_periods,
             "chart_data": {
                 "portfolio_growth":portfolio_growth_chart_data,
-                "returns":returns_chart_data
+                "returns":returns_chart_data,
+                "monthly_returns_histogram":monthly_return_histogram_chart_data 
             }
             # "agg_returns": agg_returns,
             # "yearly_returns": calc_yearly_returns_dict,
@@ -553,15 +554,18 @@ class BaseAnalyser(ABC):
 
 
     @staticmethod
-    def _categorize_monthly_return_buckets(monthly_returns: pl.DataFrame) -> dict:
+    def _generate_monthly_return_histogram_data(monthly_returns: pl.DataFrame) -> list[dict[str, int]]:
         """
-        Categorize monthly returns into fixed percentage buckets.
+        Generate histogram data of monthly returns categorized into fixed percentage buckets.
 
         Args:
-            monthly_returns (pl.DataFrame): DataFrame with a "return" column of monthly returns as decimals.
+            monthly_returns (pl.DataFrame): DataFrame with a "return" column containing monthly returns as decimals.
 
         Returns:
-            dict: Mapping of performance buckets to counts. Missing buckets default to 0.
+            List[Dict[str, int]]: Ordered list of dictionaries with keys:
+                - "bucket": str, the return range label (e.g., "< -10%", "-5% to 0%").
+                - "count": int, the number of months whose returns fall within that bucket.
+            The list is ordered from lowest to highest return buckets.
         """
         bucket_order = ["< -10%", "-10% to -5%", "-5% to 0%", "0% to 5%", "5% to 10%", "10%+"]
 
@@ -586,5 +590,5 @@ class BaseAnalyser(ABC):
         counts_dict = {row["performance_bucket"]: row["count"] for row in counts.iter_rows(named=True)}
 
         # Ensure all buckets are included (even if zero) and in correct order
-        return {bucket: counts_dict.get(bucket, 0) for bucket in bucket_order}
+        return [{"bucket": bucket, "count": counts_dict.get(bucket, 0)} for bucket in bucket_order]
 
