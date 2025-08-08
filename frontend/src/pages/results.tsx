@@ -25,6 +25,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { PortfolioGrowthChart } from "@/components/charts/portfolio-growth";
+import { ReturnBarChart } from "@/components/charts/returns";
 
 export function ResultsPage() {
   const location = useLocation();
@@ -235,6 +236,12 @@ export function ResultsPage() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      <div className="col-span-12 lg:col-span-6">
+        <ReturnBarChart
+          chartData={backtestResult.results.chart_data.returns}
+        ></ReturnBarChart>
       </div>
 
       <div className="col-span-12">

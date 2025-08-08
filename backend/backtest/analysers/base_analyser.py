@@ -376,15 +376,15 @@ class BaseAnalyser(ABC):
             "yearly": "year"
         }
 
-        # Formatt all period returns
-        period_returns_formatted_dict = {
-            period: self._format_periods(
-                period_returns_df[period],
-                period_col_map[period],
-                formatters[period]
-            )
-            for period in periods
-        }
+        # # Format all period returns
+        # formatted_period_returns_dict = {
+        #     period: self._format_periods(
+        #         period_returns_df[period],
+        #         period_col_map[period],
+        #         formatters[period]
+        #     )
+        #     for period in periods
+        # }
 
         # Best period
         best_periods = {
@@ -406,7 +406,6 @@ class BaseAnalyser(ABC):
             for period in periods
         }
 
-
         # Monthly return analysis
         monthly_return_summary = self._calculate_monthly_win_rate(period_returns_df.get("monthly"))
         monthly_return_buckets = self._categorize_monthly_return_buckets(period_returns_df.get("monthly"))
@@ -416,6 +415,20 @@ class BaseAnalyser(ABC):
         valuation_df.columns = ['date','contributions','gain','value']
         portfolio_growth_chart_data = valuation_df.to_dicts()
 
+        # # Compile monthly return datra for chart
+        # monthly_returns_df = period_returns_df["monthly"].with_columns(
+        #     pl.col('month').dt.strftime('%b %Y').alias("month")
+        # )
+        # monthly_returns_chart_data = monthly_returns_df.to_dicts()
+
+        returns_chart_data = {
+            period: self._format_periods(
+                period_returns_df[period],
+                period_col_map[period],
+                formatters[period]
+            )
+            for period in periods
+        }
 
         return {
             "metrics":{
@@ -435,7 +448,8 @@ class BaseAnalyser(ABC):
             "best_periods":best_periods,
             "worst_periods": worst_periods,
             "chart_data": {
-                "portfolio_growth":portfolio_growth_chart_data
+                "portfolio_growth":portfolio_growth_chart_data,
+                "returns":returns_chart_data
             }
             # "agg_returns": agg_returns,
             # "yearly_returns": calc_yearly_returns_dict,
