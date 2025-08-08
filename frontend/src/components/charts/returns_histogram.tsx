@@ -85,9 +85,6 @@ export function ReturnHistogramChart({ chartData }: ReturnHistogramChartProps) {
               content={
                 <ChartTooltipContent
                   hideIndicator
-                  // labelFormatter={(value) =>
-                  //   `${chartConfig.bucket.label}: ${value}`
-                  // }
                   labelFormatter={(value) => (
                     <div className="text-muted-foreground flex gap-2 items-center text-xs">
                       {chartConfig.bucket.label}
