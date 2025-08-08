@@ -17,7 +17,7 @@ import {
 
 const chartConfig = {
   bucket: {
-    label: "Return range",
+    label: "Return",
   },
   count: {
     label: "Number of months",
@@ -45,29 +45,66 @@ export function ReturnHistogramChart({ chartData }: ReturnHistogramChartProps) {
 
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart accessibilityLayer data={chartData} margin={{ bottom: 40 }}>
             <CartesianGrid vertical={false} />
-            <XAxis dataKey="bucket" />
+            <XAxis
+              dataKey="bucket"
+              type="category"
+              axisLine={false}
+              tick={{ angle: -30, textAnchor: "end" } as any}
+              interval={0} // ensure all ticks show
+              label={{
+                value: "Return range (%)",
+                position: "insideBottom",
+                offset: -35, // move up/down
+                style: {
+                  fontSize: 14, // larger text
+                  fontWeight: 400, // bolder
+                  fill: "#000", // text color
+                },
+              }}
+            />
             <YAxis
               dataKey="count"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               minTickGap={24}
+              label={{
+                value: "Months",
+                position: "insideLeft",
+                angle: -90,
+                style: {
+                  fontSize: 14, // larger text
+                  fontWeight: 400, // bolder
+                  fill: "#000", // text color
+                },
+              }}
             />
             <ChartTooltip
               content={
                 <ChartTooltipContent
-                // hideIndicator
-                // formatter={(value, name) => (
-                //   <div className="text-muted-foreground flex gap-2 items-center text-xs">
-                //     {chartConfig[name as keyof typeof chartConfig]?.label ||
-                //       name}
-                //     <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
-                //       {formatPercentage(Number(value), 2)}
-                //     </div>
-                //   </div>
-                // )}
+                  hideIndicator
+                  // labelFormatter={(value) =>
+                  //   `${chartConfig.bucket.label}: ${value}`
+                  // }
+                  labelFormatter={(value) => (
+                    <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                      {chartConfig.bucket.label}
+                      <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                        {value}
+                      </div>
+                    </div>
+                  )}
+                  formatter={(value, name) => (
+                    <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                      {chartConfig[name as keyof typeof chartConfig]?.label ||
+                        name}
+                      <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                        {value}
+                      </div>
+                    </div>
+                  )}
                 />
               }
             />

@@ -116,7 +116,7 @@ export function ReturnBarChart({ chartData }: ReturnChartProps) {
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={filteredData}>
             <CartesianGrid vertical={false} />
-            <XAxis className="hidden" dataKey="period" />
+            <XAxis hide dataKey="period" />
             <YAxis
               dataKey="return"
               tickLine={false}
