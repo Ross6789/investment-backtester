@@ -1,11 +1,10 @@
 import * as React from "react";
-import { Bar, BarChart, CartesianGrid, Cell, LabelList } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { differenceInDays } from "date-fns";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,6 +24,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { formatPercentage } from "@/lib/utils";
 
 const chartConfig = {
   return: {
@@ -116,19 +116,34 @@ export function ReturnBarChart({ chartData }: ReturnChartProps) {
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={filteredData}>
             <CartesianGrid vertical={false} />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel hideIndicator />}
+            <XAxis className="hidden" dataKey="period" />
+            <YAxis
+              dataKey="return"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={24}
+              tickFormatter={(value) => {
+                return formatPercentage(value);
+              }}
             />
-            {/* <Bar dataKey="visitors">
-              <LabelList position="top" dataKey="month" fillOpacity={1} />
-              {chartData.map((item) => (
-                <Cell
-                  key={item.month}
-                  fill={item.visitors > 0 ? "var(--chart-1)" : "var(--chart-2)"}
+            <ChartTooltip
+              // cursor={false}
+              content={
+                <ChartTooltipContent
+                  hideIndicator
+                  formatter={(value, name) => (
+                    <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                      {chartConfig[name as keyof typeof chartConfig]?.label ||
+                        name}
+                      <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                        {formatPercentage(Number(value), 2)}
+                      </div>
+                    </div>
+                  )}
                 />
-              ))}
-            </Bar> */}
+              }
+            />
 
             <Bar dataKey="return">
               {/* <LabelList position="top" dataKey="period" fillOpacity={1} /> */}

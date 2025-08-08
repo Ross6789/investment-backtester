@@ -249,7 +249,7 @@ export function PortfolioGrowthChart({
                   )}
                 />
               }
-              cursor={true}
+              // cursor={false}
             />
 
             <Area
