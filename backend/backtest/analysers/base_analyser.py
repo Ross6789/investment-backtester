@@ -436,6 +436,12 @@ class BaseAnalyser(ABC):
         # Compile monhtly return histogram chart data
         monthly_return_histogram_chart_data  = self._generate_monthly_return_histogram_data(period_returns_df.get("monthly"))
 
+        # Compile portfolio balance chart data
+        print(self.enriched_holdings_lf.collect())
+        filtered_holding_df = self.enriched_holdings_lf.select(["date","ticker","units","value","portfolio_weighting"]).collect()
+        portfolio_balance_chart_data = self._generate_portfolio_balance_data(filtered_holding_df)
+
+
         return {
             "metrics":{
                 "total_contributions": total_contributions,
@@ -454,7 +460,8 @@ class BaseAnalyser(ABC):
             "chart_data": {
                 "portfolio_growth":portfolio_growth_chart_data,
                 "returns":returns_chart_data,
-                "monthly_returns_histogram":monthly_return_histogram_chart_data 
+                "monthly_returns_histogram":monthly_return_histogram_chart_data,
+                "portfolio_balance":portfolio_balance_chart_data
             }
             # "agg_returns": agg_returns,
             # "yearly_returns": calc_yearly_returns_dict,
@@ -595,4 +602,50 @@ class BaseAnalyser(ABC):
 
         # Ensure all buckets are included (even if zero) and in correct order
         return [{"bucket": bucket, "count": counts_dict.get(bucket, 0)} for bucket in bucket_order]
+    
+    @staticmethod
+    def _generate_portfolio_balance_data(holding_df: pl.DataFrame):
+        # Group by date, then aggregate holdings as dicts
+        grouped = (
+            holding_df
+            .group_by("date")
+            .agg(
+                pl.struct(
+                    [
+                        pl.col("ticker"),
+                        # pl.col("units"),
+                        pl.col("value"),
+                        pl.col("portfolio_weighting")
+                    ]
+                ).alias("holdings_struct")
+            )
+        )
 
+        # # Convert holdings_list to dict keyed by ticker
+        # def holdings_list_to_dict(holdings):
+        #     return {
+        #         h["ticker"]: {
+        #             # "units": round(h["units"], 2),
+        #             "value": round(h["value"], 2),
+        #             "weight": round(h["portfolio_weighting"], 6)
+        #         }
+        #         for h in holdings
+        #         if h["value"] > 0  # optional: skip zero-value holdings
+        #     }
+
+        # Convert to list of dicts with formatted output
+        result = []
+        for row in grouped.iter_rows(named=True):
+            holdings = [
+                {
+                    "ticker": h["ticker"],
+                    "value": h["value"],
+                    "weight": h["portfolio_weighting"]
+                }
+                for h in row["holdings_struct"]
+            ]
+            result.append({
+                "date": row["date"].strftime("%Y-%m-%d"),
+                "holdings": holdings
+            })
+        return result

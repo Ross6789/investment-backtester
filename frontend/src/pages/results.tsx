@@ -29,6 +29,7 @@ import { PortfolioGrowthChart } from "@/components/charts/portfolio-growth";
 import { PortfolioBreakdownStackedChart } from "@/components/charts/portfolio-breakdown";
 import { ReturnBarChart } from "@/components/charts/returns";
 import { ReturnHistogramChart } from "@/components/charts/returns_histogram";
+import { PortfolioBalanceStackedChart } from "@/components/charts/portfolio-balance";
 
 export function ResultsPage() {
   const location = useLocation();
@@ -194,6 +195,13 @@ export function ResultsPage() {
                 chartData={backtestResult.results.chart_data.portfolio_growth}
                 currency_code={backtestResult.settings.base_currency}
               ></PortfolioBreakdownStackedChart>
+            </div>
+
+            <div className="col-span-12">
+              <PortfolioBalanceStackedChart
+                chartData={backtestResult.results.chart_data.portfolio_balance}
+                currency_code={backtestResult.settings.base_currency}
+              ></PortfolioBalanceStackedChart>
             </div>
           </TabsContent>
 
