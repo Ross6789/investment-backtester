@@ -217,20 +217,36 @@ export function PortfolioGrowthChart({
             <ChartTooltip
               content={
                 <ChartTooltipContent
+                  // labelFormatter={(value) => {
+                  //   return new Date(value).toLocaleDateString("en-GB", {
+                  //     month: "short",
+                  //     day: "numeric",
+                  //     year: "numeric",
+                  //   });
+                  // }}
+                  // formatter={(value, name) => (
+                  //   <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                  //     {chartConfig[name as keyof typeof chartConfig]?.label ||
+                  //       name}
+                  //     <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                  //       {formatCurrency(Number(value), currency_code)}
+                  //     </div>
+                  //   </div>
+                  // )}
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-GB", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    });
-                  }}
-                  formatter={(value, name) => (
-                    <div className="text-muted-foreground flex gap-2 items-center text-xs">
-                      {chartConfig[name as keyof typeof chartConfig]?.label ||
-                        name}
-                      <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
-                        {formatCurrency(Number(value), currency_code)}
+                    return (
+                      <div className="text-muted-foreground">
+                        {new Date(value).toLocaleDateString("en-GB", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
                       </div>
+                    );
+                  }}
+                  formatter={(value) => (
+                    <div className="text-foreground font-mono font-medium tabular-nums">
+                      {formatCurrency(Number(value), currency_code)}
                     </div>
                   )}
                 />
