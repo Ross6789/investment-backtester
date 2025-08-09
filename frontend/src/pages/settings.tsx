@@ -57,7 +57,7 @@ const assetOptions = [
   { label: "GOOG - Google inc.", value: "GOOG" },
   { label: "MSFT - Microsoft inc.", value: "MSFT" },
   { label: "AMZN - Amazon inc.", value: "AMZN" },
-  { label: "BTC-GBP - Bitcoin", value: "BTC-USD" },
+  { label: "BTC-GBP - Bitcoin", value: "BTC-GBP" },
   { label: "VUSA.L - Vanguard S&P500", value: "VUSA.L" },
 ];
 

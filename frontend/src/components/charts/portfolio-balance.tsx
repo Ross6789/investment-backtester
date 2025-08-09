@@ -46,7 +46,7 @@ function generateChartConfig(tickers: string[]): ChartConfig {
       color: colors[idx % colors.length],
     };
   });
-
+  console.log(config);
   return config;
 }
 
@@ -86,32 +86,79 @@ export function PortfolioBalanceStackedChart({
   chartData,
   currency_code,
 }: PortfolioBalanceChartProps) {
-  // Create set containing all tickers
-  const allTickers = Array.from(
-    new Set(chartData.flatMap(({ holdings }) => holdings.map((h) => h.ticker)))
-  );
-
-  // Generate chart config dynamically
-  const chartConfig = generateChartConfig(allTickers);
-
-  // Set default view
-  const [activeChart, setActiveChart] = React.useState<"value" | "weight">(
-    "weight"
-  );
-
-  // Dynamically filter the axis ticks based on range of data
+  // Dynamically filter the available periods based on backtest length
   const startDate = new Date(chartData[0]?.date);
   const endDate = new Date(chartData[chartData.length - 1]?.date);
   const daysDiff = differenceInDays(endDate, startDate);
 
+  // only show option if approx 4 data points can be formulated
   const availableOptions = ["daily"];
   if (daysDiff >= 30) availableOptions.push("weekly");
   if (daysDiff >= 120) availableOptions.push("monthly");
   if (daysDiff >= 365) availableOptions.push("quarterly");
   if (daysDiff >= 1461) availableOptions.push("yearly");
 
-  // Generate flattened data array with chosen field (value vs percentage)
-  const transformedData = transformData(chartData, activeChart, allTickers);
+  // set default to the smallest aggretion possible without exceeding approx 100 datapoints
+  let defaultTimeRange = "daily";
+  if (daysDiff >= 100) defaultTimeRange = "weekly";
+  if (daysDiff >= 700) defaultTimeRange = "monthly";
+  if (daysDiff >= 3000) defaultTimeRange = "quarterly";
+  if (daysDiff >= 9100) defaultTimeRange = "yearly";
+
+  // Set default time aggregation
+  const [timeRange, setTimeRange] = React.useState(defaultTimeRange);
+
+  const aggregatedData = React.useMemo(() => {
+    if (timeRange === "daily") return chartData;
+
+    const result = [];
+    const seen = new Set();
+
+    for (const item of chartData) {
+      const date = new Date(item.date);
+      let key = "";
+
+      if (timeRange === "weekly") {
+        // Use ISO week number (year + week)
+        const monday = new Date(date);
+        monday.setDate(date.getDate() - date.getDay() + 1); // Monday of the week
+        key = monday.toISOString().split("T")[0];
+      } else if (timeRange === "monthly") {
+        key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+          2,
+          "0"
+        )}`;
+      } else if (timeRange === "quarterly") {
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        key = `${date.getFullYear()}-Q${quarter}`;
+      } else if (timeRange === "yearly") {
+        key = `${date.getFullYear()}`;
+      }
+
+      if (!seen.has(key)) {
+        result.push(item);
+        seen.add(key);
+      }
+    }
+
+    return result;
+  }, [chartData, timeRange]);
+
+  // Set default view
+  const [activeView, setActiveView] = React.useState<"value" | "weight">(
+    "weight"
+  );
+
+  // Create set containing all tickers
+  const allTickers = Array.from(
+    new Set(chartData.flatMap(({ holdings }) => holdings.map((h) => h.ticker)))
+  );
+
+  // Generate flattened data array with chosen field (value vs percentage) and time aggregation performed
+  const transformedData = transformData(aggregatedData, activeView, allTickers);
+
+  // Generate chart config dynamically
+  const chartConfig = generateChartConfig(allTickers);
 
   return (
     <Card className="pt-0">
@@ -123,8 +170,8 @@ export function PortfolioBalanceStackedChart({
           </CardDescription>
         </div>
         <Select
-          value={activeChart}
-          onValueChange={(val) => setActiveChart(val as "value" | "weight")}
+          value={activeView}
+          onValueChange={(val) => setActiveView(val as "value" | "weight")}
         >
           <SelectTrigger
             className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
@@ -139,6 +186,39 @@ export function PortfolioBalanceStackedChart({
             <SelectItem value="weight" className="rounded-lg">
               Weight
             </SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={timeRange} onValueChange={setTimeRange}>
+          <SelectTrigger
+            className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
+            aria-label="Select a value"
+          >
+            <SelectValue placeholder="Choose period" />
+          </SelectTrigger>
+          <SelectContent className="rounded-xl">
+            <SelectItem value="daily" className="rounded-lg">
+              Daily
+            </SelectItem>
+            {availableOptions.includes("weekly") && (
+              <SelectItem value="weekly" className="rounded-lg">
+                Weekly
+              </SelectItem>
+            )}
+            {availableOptions.includes("monthly") && (
+              <SelectItem value="monthly" className="rounded-lg">
+                Monthly
+              </SelectItem>
+            )}
+            {availableOptions.includes("quarterly") && (
+              <SelectItem value="quarterly" className="rounded-lg">
+                Quarterly
+              </SelectItem>
+            )}
+            {availableOptions.includes("yearly") && (
+              <SelectItem value="yearly" className="rounded-lg">
+                Yearly
+              </SelectItem>
+            )}
           </SelectContent>
         </Select>
       </CardHeader>
@@ -191,19 +271,15 @@ export function PortfolioBalanceStackedChart({
                     return (
                       <div className="text-muted-foreground flex gap-3 items-center text-xs">
                         <div
-                          className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"
-                          style={
-                            {
-                              "--color-bg": `var(--color-${name})`,
-                            } as React.CSSProperties
-                          }
+                          className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                          style={{ backgroundColor: chartConfig[name].color }}
                         />
 
                         {chartConfig[name as keyof typeof chartConfig]?.label ||
                           name}
 
                         <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
-                          {activeChart === "value"
+                          {activeView === "value"
                             ? formatCurrency(Number(value), currency_code)
                             : formatPercentage(Number(value), 1, false, true)}
                         </div>
@@ -214,17 +290,19 @@ export function PortfolioBalanceStackedChart({
               }
             />
 
-            {Object.entries(chartConfig).map(([key, config]) => (
-              <Area
-                key={key}
-                dataKey={key}
-                type="natural"
-                fill={config.color}
-                fillOpacity={0.3}
-                stroke={config.color}
-                stackId="a"
-              />
-            ))}
+            {Object.entries(chartConfig)
+              .reverse()
+              .map(([key, config]) => (
+                <Area
+                  key={key}
+                  dataKey={key}
+                  type="natural"
+                  fill={config.color}
+                  fillOpacity={0.3}
+                  stroke={config.color}
+                  stackId="a"
+                />
+              ))}
           </AreaChart>
         </ChartContainer>
       </CardContent>
