@@ -117,10 +117,9 @@ export function PortfolioBalanceStackedChart({
     <Card className="pt-0">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
-          <CardTitle>Portfolio Contributions vs Growth</CardTitle>
+          <CardTitle>Portfolio Balance</CardTitle>
           <CardDescription>
-            Understand the balance between what you've put in and what your
-            investments have earned.
+            Shows how each asset's share of your portfolio changes over time.
           </CardDescription>
         </div>
         <Select
@@ -143,10 +142,10 @@ export function PortfolioBalanceStackedChart({
           </SelectContent>
         </Select>
       </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      <CardContent className="px-2 sm:px-6 ">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[400px] w-full"
+          className="aspect-auto h-[250px] w-full"
         >
           <AreaChart
             accessibilityLayer
@@ -154,7 +153,6 @@ export function PortfolioBalanceStackedChart({
             margin={{
               left: 12,
               right: 12,
-              top: 12,
             }}
             stackOffset="expand"
           >
@@ -164,6 +162,7 @@ export function PortfolioBalanceStackedChart({
               tickLine={false}
               axisLine={false}
               tickMargin={8}
+              minTickGap={32}
               tickFormatter={(value) =>
                 new Date(value).toLocaleDateString("en-GB", {
                   day: "numeric",
@@ -178,6 +177,7 @@ export function PortfolioBalanceStackedChart({
             /> */}
 
             <ChartTooltip
+              cursor={false}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
@@ -189,7 +189,7 @@ export function PortfolioBalanceStackedChart({
                   }}
                   formatter={(value, name) => {
                     return (
-                      <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                      <div className="text-muted-foreground flex gap-3 items-center text-xs">
                         <div
                           className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"
                           style={
@@ -212,7 +212,6 @@ export function PortfolioBalanceStackedChart({
                   }}
                 />
               }
-              // cursor={false}
             />
 
             {Object.entries(chartConfig).map(([key, config]) => (
@@ -221,7 +220,7 @@ export function PortfolioBalanceStackedChart({
                 dataKey={key}
                 type="natural"
                 fill={config.color}
-                fillOpacity={0.1}
+                fillOpacity={0.3}
                 stroke={config.color}
                 stackId="a"
               />

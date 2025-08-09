@@ -52,18 +52,26 @@ export function PortfolioBreakdownStackedChart({
   chartData,
   currency_code,
 }: PortfolioBreakdownChartProps) {
-  const [timeRange, setTimeRange] = React.useState("daily");
-
   // Dynamically filter the available periods based on backtest length
   const startDate = new Date(chartData[0]?.date);
   const endDate = new Date(chartData[chartData.length - 1]?.date);
   const daysDiff = differenceInDays(endDate, startDate);
 
+  // only show option if approx 4 data points can be formulated
   const availableOptions = ["daily"];
   if (daysDiff >= 30) availableOptions.push("weekly");
   if (daysDiff >= 120) availableOptions.push("monthly");
   if (daysDiff >= 365) availableOptions.push("quarterly");
   if (daysDiff >= 1461) availableOptions.push("yearly");
+
+  // set default to the smallest aggretion possible without exceeding approx 100 datapoints
+  let defaultTimeRange = "daily";
+  if (daysDiff >= 100) defaultTimeRange = "weekly";
+  if (daysDiff >= 700) defaultTimeRange = "monthly";
+  if (daysDiff >= 3000) defaultTimeRange = "quarterly";
+  if (daysDiff >= 9100) defaultTimeRange = "yearly";
+
+  const [timeRange, setTimeRange] = React.useState(defaultTimeRange);
 
   const filteredData = React.useMemo(() => {
     if (timeRange === "daily") return chartData;
@@ -238,6 +246,7 @@ export function PortfolioBreakdownStackedChart({
             />
 
             <ChartTooltip
+              cursor={false}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
@@ -259,7 +268,7 @@ export function PortfolioBreakdownStackedChart({
 
                   formatter={(value, name) => {
                     return (
-                      <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                      <div className="text-muted-foreground flex gap-3 items-center text-xs">
                         <div
                           className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"
                           style={

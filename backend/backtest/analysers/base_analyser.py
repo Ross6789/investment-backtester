@@ -618,7 +618,7 @@ class BaseAnalyser(ABC):
                         pl.col("portfolio_weighting")
                     ]
                 ).alias("holdings_struct")
-            )
+            ).sort("date")
         )
 
         # # Convert holdings_list to dict keyed by ticker
