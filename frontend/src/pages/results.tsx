@@ -240,12 +240,6 @@ export function ResultsPage() {
       </div>
 
       <div className="col-span-12 lg:col-span-6">
-        <ReturnBarChart
-          chartData={backtestResult.results.chart_data.returns}
-        ></ReturnBarChart>
-      </div>
-
-      <div className="col-span-12 lg:col-span-6">
         <ReturnHistogramChart
           chartData={
             backtestResult.results.chart_data.monthly_returns_histogram
@@ -254,10 +248,81 @@ export function ResultsPage() {
       </div>
 
       <div className="col-span-12">
+        <ReturnBarChart
+          chartData={backtestResult.results.chart_data.returns}
+        ></ReturnBarChart>
+      </div>
+
+      <div className="col-span-12">
         <PortfolioGrowthChart
           chartData={backtestResult.results.chart_data.portfolio_growth}
           currency_code={backtestResult.settings.base_currency}
         ></PortfolioGrowthChart>
+      </div>
+
+      <div className="col-span-12">
+        <Card>
+          <CardHeader>
+            <CardTitle>Performance Summary</CardTitle>
+            <CardDescription>
+              Key statistics about your investment performance
+            </CardDescription>
+          </CardHeader>
+
+          {/* <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              {[
+                { value: 31, label: "Winning months" },
+                { value: 12, label: "Losing months" },
+                // { value: "15%", label: "Annual return" },
+                // { value: "5%", label: "Max drawdown" },
+              ].map((stat, idx) => (
+                <div key={idx} className="flex flex-col gap-y-2">
+                  <StrongText>{stat.value}</StrongText>
+                  <MutedText>{stat.label}</MutedText>
+                </div>
+              ))}
+            </div>
+          </CardContent> */}
+
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <section className="flex flex-col gap-y-2 ">
+                <StrongText className="text-green-600">
+                  {backtestResult.results.monthly_win_lose_analysis.win}
+                </StrongText>
+                <MutedText>Winning months</MutedText>
+              </section>
+              <section className="flex flex-col gap-y-2">
+                <StrongText className="text-red-600">
+                  {backtestResult.results.monthly_win_lose_analysis.loss}
+                </StrongText>
+                <MutedText>Losing months</MutedText>
+              </section>
+              <section className="flex flex-col gap-y-2">
+                <StrongText>
+                  {formatPercentage(
+                    backtestResult.results.monthly_win_lose_analysis.rate,
+                    0,
+                    false
+                  )}
+                </StrongText>
+                <MutedText>Win rate</MutedText>
+              </section>
+              <section className="flex flex-col gap-y-2">
+                <StrongText>
+                  {formatPercentage(
+                    backtestResult.results.metrics.cmgr,
+                    1,
+                    true,
+                    true
+                  )}
+                </StrongText>
+                <MutedText>Average Monthly Return</MutedText>
+              </section>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="col-span-12">

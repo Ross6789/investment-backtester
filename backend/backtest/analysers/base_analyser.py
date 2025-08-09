@@ -327,6 +327,9 @@ class BaseAnalyser(ABC):
         # CAGR
         calc_cagr = stats.cagr(returns)
 
+        # CMGR - Monthyl rate derived from CAGR
+        calc_cmgr = (1 + calc_cagr) ** (1/12) - 1
+
         # # Sharpe
         calc_sharpe = stats.sharpe(returns)
 
@@ -440,6 +443,7 @@ class BaseAnalyser(ABC):
                 "cumulative_gain": cumulative_gain,
                 "cumulative_return":cumulative_return,
                 "cagr": calc_cagr,
+                "cmgr": calc_cmgr,
                 "sharpe": calc_sharpe,
                 "volatility": calc_volatility,
             },

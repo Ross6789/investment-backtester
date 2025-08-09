@@ -29,11 +29,13 @@ export function formatCurrency(value: number, currencyCode: string,notation: "st
 export function formatPercentage(
   value: number,
   decimals: number = 1,
-  showSign: boolean = true
+  showSign: boolean = true,
+  showTrailingZeros: boolean = false
 ): string {
   return new Intl.NumberFormat("en-US", {
     style: "percent",
     maximumFractionDigits: decimals,
+    minimumFractionDigits: showTrailingZeros ? decimals : 0,
     signDisplay: showSign ? "exceptZero" : "never",
   }).format(value);
 }

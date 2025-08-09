@@ -137,7 +137,7 @@ export function ReturnBarChart({ chartData }: ReturnChartProps) {
                       {chartConfig[name as keyof typeof chartConfig]?.label ||
                         name}
                       <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
-                        {formatPercentage(Number(value), 2)}
+                        {formatPercentage(Number(value), 1)}
                       </div>
                     </div>
                   )}
