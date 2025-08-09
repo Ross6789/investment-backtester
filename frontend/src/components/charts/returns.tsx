@@ -72,7 +72,7 @@ export function ReturnBarChart({ chartData }: ReturnChartProps) {
 
   return (
     <Card>
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle>Returns History</CardTitle>
           <CardDescription>Track your returns for each period</CardDescription>

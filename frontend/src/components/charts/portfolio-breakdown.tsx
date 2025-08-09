@@ -258,14 +258,23 @@ export function PortfolioBreakdownStackedChart({
                   // )}
 
                   formatter={(value, name) => {
-                    const color =
-                      chartConfig[name as keyof typeof chartConfig]?.color ||
-                      "gray";
+                    // const color =
+                    //   chartConfig[name as keyof typeof chartConfig]?.color ||
+                    //   "gray";
                     return (
                       <div className="text-muted-foreground flex gap-2 items-center text-xs">
-                        <span
+                        {/* <span
                           style={{ backgroundColor: color }}
                           className="w-3 h-3 rounded-full inline-block"
+                        /> */}
+
+                        <div
+                          className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"
+                          style={
+                            {
+                              "--color-bg": `var(--color-${name})`,
+                            } as React.CSSProperties
+                          }
                         />
 
                         {chartConfig[name as keyof typeof chartConfig]?.label ||

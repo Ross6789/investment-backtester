@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 
 import {
@@ -65,7 +66,7 @@ export function ResultsPage() {
   if (!backtestResult) return null;
 
   return (
-    <div className="grid grid-cols-12 gap-8 p-6">
+    <div className="grid grid-cols-12 gap-8 p-8">
       <div className="col-span-12">
         <Card>
           <CardContent>
@@ -171,166 +172,178 @@ export function ResultsPage() {
           </CardContent>
         </Card>
       </div>
+      <div className="col-span-12">
+        <Tabs defaultValue="overview">
+          <TabsList className="mb-4 w-full">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="portfolio">Portfolio Breakdown</TabsTrigger>
+            <TabsTrigger value="performance">Performance & Risk</TabsTrigger>
+            <TabsTrigger value="returns">Returns</TabsTrigger>
+          </TabsList>
 
-      <div className="col-span-12 lg:col-span-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Best & Worst Periods</CardTitle>
-            <CardDescription>
-              Your highest and lowest performing periods
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-12 text-sm">
-              <section className="flex flex-col gap-y-4">
-                <SecondaryText className=" text-green-600">
-                  Best Periods
-                </SecondaryText>
-                {["day", "week", "month", "quarter", "year"].map(
-                  (periodType) => {
-                    const data = bestPeriods[periodType];
-                    if (!data) return null; // skip if missing
+          <TabsContent value="overview">
+            <PortfolioGrowthChart
+              chartData={backtestResult.results.chart_data.portfolio_growth}
+              currency_code={backtestResult.settings.base_currency}
+            ></PortfolioGrowthChart>
+          </TabsContent>
 
-                    return (
-                      <div
-                        key={periodType}
-                        className="flex items-center justify-between"
-                      >
-                        <MutedText>{capitalizeFirst(periodType)}</MutedText>
-                        <div className="text-right">
-                          <p>{data.period}</p>
-                          <p className=" text-green-600">
-                            {formatPercentage(data.return, 1)}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  }
-                )}
-              </section>
-              <section className="flex flex-col gap-y-4">
-                <SecondaryText className=" text-red-600">
-                  Worst Periods
-                </SecondaryText>
-
-                {["day", "week", "month", "quarter", "year"].map(
-                  (periodType) => {
-                    const data = worstPeriods[periodType];
-                    if (!data) return null; // skip if missing
-
-                    return (
-                      <div
-                        key={periodType}
-                        className="flex items-center justify-between"
-                      >
-                        <MutedText>{capitalizeFirst(periodType)}</MutedText>
-                        <div className="text-right">
-                          <p>{data.period}</p>
-                          <p className=" text-red-600">
-                            {formatPercentage(data.return, 1)}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  }
-                )}
-              </section>
+          <TabsContent value="portfolio" className="grid grid-cols-12 gap-8">
+            <div className="col-span-12">
+              <PortfolioBreakdownStackedChart
+                chartData={backtestResult.results.chart_data.portfolio_growth}
+                currency_code={backtestResult.settings.base_currency}
+              ></PortfolioBreakdownStackedChart>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </TabsContent>
 
-      <div className="col-span-12 lg:col-span-6">
-        <ReturnHistogramChart
-          chartData={
-            backtestResult.results.chart_data.monthly_returns_histogram
-          }
-        ></ReturnHistogramChart>
-      </div>
+          <TabsContent value="performance" className="grid grid-cols-12 gap-8">
+            <div className="col-span-12 lg:col-span-6">
+              <Card>
+                {/* <CardHeader>
+                  <CardTitle>Best & Worst Periods</CardTitle>
+                  <CardDescription>
+                    Your highest and lowest performing periods
+                  </CardDescription>
+                </CardHeader> */}
 
-      <div className="col-span-12">
-        <ReturnBarChart
-          chartData={backtestResult.results.chart_data.returns}
-        ></ReturnBarChart>
-      </div>
+                <CardHeader className="flex items-center gap-2 space-y-0 border-b sm:flex-row">
+                  <div className="grid flex-1 gap-1">
+                    <CardTitle>Best & Worst Periods</CardTitle>
+                    <CardDescription>
+                      Your highest and lowest performing periods.
+                    </CardDescription>
+                  </div>
+                </CardHeader>
 
-      <div className="col-span-12">
-        <PortfolioGrowthChart
-          chartData={backtestResult.results.chart_data.portfolio_growth}
-          currency_code={backtestResult.settings.base_currency}
-        ></PortfolioGrowthChart>
-      </div>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-12 text-sm">
+                    <section className="flex flex-col gap-y-4">
+                      <SecondaryText className=" text-green-600">
+                        Best Periods
+                      </SecondaryText>
+                      {["day", "week", "month", "quarter", "year"].map(
+                        (periodType) => {
+                          const data = bestPeriods[periodType];
+                          if (!data) return null; // skip if missing
 
-      <div className="col-span-12">
-        <PortfolioBreakdownStackedChart
-          chartData={backtestResult.results.chart_data.portfolio_growth}
-          currency_code={backtestResult.settings.base_currency}
-        ></PortfolioBreakdownStackedChart>
-      </div>
+                          return (
+                            <div
+                              key={periodType}
+                              className="flex items-center justify-between"
+                            >
+                              <MutedText>
+                                {capitalizeFirst(periodType)}
+                              </MutedText>
+                              <div className="text-right">
+                                <p>{data.period}</p>
+                                <p className=" text-green-600">
+                                  {formatPercentage(data.return, 1)}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        }
+                      )}
+                    </section>
+                    <section className="flex flex-col gap-y-4">
+                      <SecondaryText className=" text-red-600">
+                        Worst Periods
+                      </SecondaryText>
 
-      <div className="col-span-12">
-        <Card>
-          <CardHeader>
-            <CardTitle>Performance Summary</CardTitle>
-            <CardDescription>
-              Key statistics about your investment performance
-            </CardDescription>
-          </CardHeader>
+                      {["day", "week", "month", "quarter", "year"].map(
+                        (periodType) => {
+                          const data = worstPeriods[periodType];
+                          if (!data) return null; // skip if missing
 
-          {/* <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              {[
-                { value: 31, label: "Winning months" },
-                { value: 12, label: "Losing months" },
-                // { value: "15%", label: "Annual return" },
-                // { value: "5%", label: "Max drawdown" },
-              ].map((stat, idx) => (
-                <div key={idx} className="flex flex-col gap-y-2">
-                  <StrongText>{stat.value}</StrongText>
-                  <MutedText>{stat.label}</MutedText>
-                </div>
-              ))}
+                          return (
+                            <div
+                              key={periodType}
+                              className="flex items-center justify-between"
+                            >
+                              <MutedText>
+                                {capitalizeFirst(periodType)}
+                              </MutedText>
+                              <div className="text-right">
+                                <p>{data.period}</p>
+                                <p className=" text-red-600">
+                                  {formatPercentage(data.return, 1)}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        }
+                      )}
+                    </section>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          </CardContent> */}
 
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <section className="flex flex-col gap-y-2 ">
-                <StrongText className="text-green-600">
-                  {backtestResult.results.monthly_win_lose_analysis.win}
-                </StrongText>
-                <MutedText>Winning months</MutedText>
-              </section>
-              <section className="flex flex-col gap-y-2">
-                <StrongText className="text-red-600">
-                  {backtestResult.results.monthly_win_lose_analysis.loss}
-                </StrongText>
-                <MutedText>Losing months</MutedText>
-              </section>
-              <section className="flex flex-col gap-y-2">
-                <StrongText>
-                  {formatPercentage(
-                    backtestResult.results.monthly_win_lose_analysis.rate,
-                    0,
-                    false
-                  )}
-                </StrongText>
-                <MutedText>Win rate</MutedText>
-              </section>
-              <section className="flex flex-col gap-y-2">
-                <StrongText>
-                  {formatPercentage(
-                    backtestResult.results.metrics.cmgr,
-                    1,
-                    true,
-                    true
-                  )}
-                </StrongText>
-                <MutedText>Average Monthly Return</MutedText>
-              </section>
+            <div className="col-span-12 lg:col-span-6">
+              <ReturnHistogramChart
+                chartData={
+                  backtestResult.results.chart_data.monthly_returns_histogram
+                }
+              ></ReturnHistogramChart>
             </div>
-          </CardContent>
-        </Card>
+
+            <div className="col-span-12">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Performance Summary</CardTitle>
+                  <CardDescription>
+                    Key statistics about your investment performance
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <section className="flex flex-col gap-y-2 ">
+                      <StrongText className="text-green-600">
+                        {backtestResult.results.monthly_win_lose_analysis.win}
+                      </StrongText>
+                      <MutedText>Winning months</MutedText>
+                    </section>
+                    <section className="flex flex-col gap-y-2">
+                      <StrongText className="text-red-600">
+                        {backtestResult.results.monthly_win_lose_analysis.loss}
+                      </StrongText>
+                      <MutedText>Losing months</MutedText>
+                    </section>
+                    <section className="flex flex-col gap-y-2">
+                      <StrongText>
+                        {formatPercentage(
+                          backtestResult.results.monthly_win_lose_analysis.rate,
+                          0,
+                          false
+                        )}
+                      </StrongText>
+                      <MutedText>Win rate</MutedText>
+                    </section>
+                    <section className="flex flex-col gap-y-2">
+                      <StrongText>
+                        {formatPercentage(
+                          backtestResult.results.metrics.cmgr,
+                          1,
+                          true,
+                          true
+                        )}
+                      </StrongText>
+                      <MutedText>Average Monthly Return</MutedText>
+                    </section>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="returns">
+            <ReturnBarChart
+              chartData={backtestResult.results.chart_data.returns}
+            ></ReturnBarChart>
+          </TabsContent>
+        </Tabs>
       </div>
 
       <div className="col-span-12">
