@@ -1,7 +1,9 @@
 import * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { differenceInDays } from "date-fns";
+import { Percent, Boxes } from "lucide-react";
+import { getCurrencyIcon } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -160,6 +162,8 @@ export function PortfolioBalanceStackedChart({
   // Generate chart config dynamically
   const chartConfig = generateChartConfig(allTickers);
 
+  const currencyIcon = getCurrencyIcon(currency_code);
+
   return (
     <Card className="pt-0">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
@@ -169,25 +173,23 @@ export function PortfolioBalanceStackedChart({
             Shows how each asset's share of your portfolio changes over time.
           </CardDescription>
         </div>
-        <Select
+
+        <ToggleGroup
+          variant="outline"
+          type="single"
           value={activeView}
-          onValueChange={(val) => setActiveView(val as "value" | "weight")}
+          onValueChange={(val) => {
+            if (val === "value" || val === "weight") setActiveView(val);
+          }}
         >
-          <SelectTrigger
-            className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
-            aria-label="Select a value"
-          >
-            <SelectValue placeholder="Choose chart" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            <SelectItem value="value" className="rounded-lg">
-              Value
-            </SelectItem>
-            <SelectItem value="weight" className="rounded-lg">
-              Weight
-            </SelectItem>
-          </SelectContent>
-        </Select>
+          <ToggleGroupItem value="weight">
+            <Percent className="h-4 w-4"></Percent>
+          </ToggleGroupItem>
+          <ToggleGroupItem value="value">
+            {React.createElement(currencyIcon, { className: "h-4 w-4" })}
+          </ToggleGroupItem>
+        </ToggleGroup>
+
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
             className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"

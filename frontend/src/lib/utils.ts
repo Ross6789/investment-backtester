@@ -1,9 +1,34 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import {DollarSign, Euro, PoundSterling, CreditCard} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+// Fetch symbol / icon
+
+const currencyIcons: Record<string, LucideIcon> = {
+  USD: DollarSign,
+  EUR: Euro,
+  GBP: PoundSterling,
+};
+
+const currencySymbols: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+};
+
+export function getCurrencyIcon(currencyCode: string): LucideIcon {
+  return currencyIcons[currencyCode.toUpperCase()] || CreditCard;
+}
+
+export function getCurrencySymbol(currencyCode: string): string {
+  return currencySymbols[currencyCode.toUpperCase()] || "";
+}
+
 
 // Format utility functions
 
@@ -15,16 +40,6 @@ export function formatCurrency(value: number, currencyCode: string,notation: "st
     maximumFractionDigits: decimals
   }).format(value);
 }
-
-// export function formatPercentage(
-//   value: number,
-//   decimals: number = 1,
-//   showSign: boolean = true
-// ): string {
-//   const sign = showSign ? (value > 0 ? "+" : value < 0 ? "−" : "") : "";
-//   const percentage = (value * 100).toFixed(decimals);
-//   return `${sign}${percentage}%`;
-// }
 
 export function formatPercentage(
   value: number,

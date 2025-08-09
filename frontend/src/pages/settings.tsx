@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { format } from "date-fns";
 import { CalendarIcon, Trash2, Check, ChevronDown, Plus } from "lucide-react";
-
+import { getCurrencySymbol } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -60,13 +60,6 @@ const assetOptions = [
   { label: "BTC-GBP - Bitcoin", value: "BTC-GBP" },
   { label: "VUSA.L - Vanguard S&P500", value: "VUSA.L" },
 ];
-
-// Dynamically change currency symbol displayed in amount input boxes
-const currencySymbols: Record<string, string> = {
-  USD: "$",
-  EUR: "€",
-  GBP: "£",
-};
 
 const formSchema = z
   .object({
@@ -212,7 +205,7 @@ export function SettingsPage() {
 
   // Determine which currnecy symbol matches the selected dropdown
   const selectedCurrency = form.watch("base_currency");
-  const symbol = currencySymbols[selectedCurrency] || "";
+  const symbol = getCurrencySymbol(selectedCurrency) || "";
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
