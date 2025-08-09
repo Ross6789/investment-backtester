@@ -25,6 +25,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { PortfolioGrowthChart } from "@/components/charts/portfolio-growth";
+import { PortfolioBreakdownStackedChart } from "@/components/charts/portfolio-breakdown";
 import { ReturnBarChart } from "@/components/charts/returns";
 import { ReturnHistogramChart } from "@/components/charts/returns_histogram";
 
@@ -258,6 +259,13 @@ export function ResultsPage() {
           chartData={backtestResult.results.chart_data.portfolio_growth}
           currency_code={backtestResult.settings.base_currency}
         ></PortfolioGrowthChart>
+      </div>
+
+      <div className="col-span-12">
+        <PortfolioBreakdownStackedChart
+          chartData={backtestResult.results.chart_data.portfolio_growth}
+          currency_code={backtestResult.settings.base_currency}
+        ></PortfolioBreakdownStackedChart>
       </div>
 
       <div className="col-span-12">

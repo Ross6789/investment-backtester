@@ -28,13 +28,17 @@ import {
 } from "@/components/ui/select";
 
 const chartConfig = {
-  value: {
-    label: "Value",
+  contributions: {
+    label: "Contributions",
     color: "var(--chart-1)",
+  },
+  gain: {
+    label: "Growth",
+    color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
 
-interface PortfolioGrowthChartProps {
+interface PortfolioBreakdownChartProps {
   chartData: {
     date: string;
     contributions: number;
@@ -44,10 +48,10 @@ interface PortfolioGrowthChartProps {
   currency_code: string;
 }
 
-export function PortfolioGrowthChart({
+export function PortfolioBreakdownStackedChart({
   chartData,
   currency_code,
-}: PortfolioGrowthChartProps) {
+}: PortfolioBreakdownChartProps) {
   const [timeRange, setTimeRange] = React.useState("daily");
 
   // Dynamically filter the available periods based on backtest length
@@ -101,9 +105,10 @@ export function PortfolioGrowthChart({
     <Card className="pt-0">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
-          <CardTitle>Portfolio Value History</CardTitle>
+          <CardTitle>Portfolio Contributions vs Growth</CardTitle>
           <CardDescription>
-            Track how the total value of your portfolio changes over time.
+            Understand the balance between what you've put in and what your
+            investments have earned.
           </CardDescription>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
@@ -147,15 +152,33 @@ export function PortfolioGrowthChart({
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient
+                id="fillContributions"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
                 <stop
                   offset="5%"
-                  stopColor="var(--color-value)"
+                  stopColor="var(--color-contributions)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-value)"
+                  stopColor="var(--color-contributions)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
+              <linearGradient id="fillGain" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-gain)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-gain)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -224,25 +247,53 @@ export function PortfolioGrowthChart({
                       year: "numeric",
                     });
                   }}
-                  formatter={(value, name) => (
-                    <div className="text-muted-foreground flex gap-2 items-center text-xs">
-                      {chartConfig[name as keyof typeof chartConfig]?.label ||
-                        name}
-                      <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
-                        {formatCurrency(Number(value), currency_code)}
+                  // formatter={(value, name) => (
+                  //   <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                  //     {chartConfig[name as keyof typeof chartConfig]?.label ||
+                  //       name}
+                  //     <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                  //       {formatCurrency(Number(value), currency_code)}
+                  //     </div>
+                  //   </div>
+                  // )}
+
+                  formatter={(value, name) => {
+                    const color =
+                      chartConfig[name as keyof typeof chartConfig]?.color ||
+                      "gray";
+                    return (
+                      <div className="text-muted-foreground flex gap-2 items-center text-xs">
+                        <span
+                          style={{ backgroundColor: color }}
+                          className="w-3 h-3 rounded-full inline-block"
+                        />
+
+                        {chartConfig[name as keyof typeof chartConfig]?.label ||
+                          name}
+
+                        <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                          {formatCurrency(Number(value), currency_code)}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    );
+                  }}
                 />
               }
               // cursor={false}
             />
 
             <Area
-              dataKey="value"
+              dataKey="contributions"
               type="natural"
-              fill="url(#fillValue)"
-              stroke="var(--color-value)"
+              fill="url(#fillContributions)"
+              stroke="var(--color-contributions)"
+              stackId="a"
+            />
+            <Area
+              dataKey="gain"
+              type="natural"
+              fill="url(#fillGain)"
+              stroke="var(--color-gain)"
               stackId="a"
             />
           </AreaChart>
