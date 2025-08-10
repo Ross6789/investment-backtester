@@ -10,6 +10,7 @@ import { getCurrencySymbol } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { AssetClassFilterDropdown } from "@/components/asset_filter_dropdown";
 
 import {
   Popover,
@@ -53,14 +54,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const assetOptions = [
-  { label: "AAPL - Apple inc.", value: "AAPL" },
-  { label: "GOOG - Google inc.", value: "GOOG" },
-  { label: "MSFT - Microsoft inc.", value: "MSFT" },
-  { label: "AMZN - Amazon inc.", value: "AMZN" },
-  { label: "BTC-GBP - Bitcoin", value: "BTC-GBP" },
-  { label: "VUSA.L - Vanguard S&P500", value: "VUSA.L" },
-];
+const assetClassLabels: Record<string, string> = {
+  "us stock": "US Stock",
+  "uk stock": "UK Stock",
+  etf: "ETF",
+  "mutual fund": "Mutual Fund",
+  cryptocurrency: "Cryptocurrency",
+  commodity: "Commodity",
+};
 
 const formSchema = z
   .object({
@@ -182,22 +183,32 @@ type Asset = {
 export function SettingsPage() {
   const navigate = useNavigate();
 
-  const [assets, setAssets] = useState<Asset[]>([]);
+  const [allAssets, setAllAssets] = useState<Asset[]>([]);
 
   // Fetch asset data once when page loads
   useEffect(() => {
     fetch("http://localhost:5002/api/assets")
       .then((res) => res.json())
       .then((data: Asset[]) => {
-        setAssets(data);
+        setAllAssets(data);
       })
       .catch(console.error);
   }, []);
 
-  // Configure labels for asset dropdown
-  const assetOptions = assets.map((asset) => ({
-    label: `${asset.ticker} - ${asset.name}`,
-    value: asset.ticker,
+  // Allow filtering of the assets in combo box - set default to us stock
+  const [enabledAssetClasses, setEnabledAssetClasses] = useState<string[]>([
+    "us stock",
+  ]);
+
+  // Filter assets based on selected asset classes:
+  const filteredAssets = allAssets.filter((a) =>
+    enabledAssetClasses.includes(a.asset_type)
+  );
+
+  // Configure combo box options from filtered asset list
+  const assetOptions = filteredAssets.map(({ ticker, name }) => ({
+    label: `${ticker} - ${name}`,
+    value: ticker,
   }));
 
   // 1. Define your form.
@@ -303,6 +314,11 @@ export function SettingsPage() {
     }
   }
 
+  // Handler to update enabled classes from dropdown:
+  const handleAssetClassChange = (newEnabledClasses: string[]) => {
+    setEnabledAssetClasses(newEnabledClasses);
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -310,12 +326,31 @@ export function SettingsPage() {
           {/* LEFT SIDE - add items-star to make box shrink */}
           <div className="flex-1">
             <Card>
-              <CardHeader>
+              <CardHeader className="flex items-center gap-2 space-y-0 border-b sm:flex-row">
+                <div className="grid flex-1 gap-1">
+                  <CardTitle>Portfolio Assets</CardTitle>
+                  <CardDescription>
+                    Select assets and assign weights (must total 100%)
+                  </CardDescription>
+                </div>
+                <AssetClassFilterDropdown
+                  enabledClasses={enabledAssetClasses}
+                  onChange={handleAssetClassChange}
+                  classLabels={assetClassLabels}
+                />
+              </CardHeader>
+
+              {/* <CardHeader>
                 <CardTitle>Portfolio Assets</CardTitle>
                 <CardDescription>
                   Select assets and assign weights (must total 100%)
                 </CardDescription>
-              </CardHeader>
+                <AssetClassFilterDropdown
+                  enabledClasses={enabledAssetClasses}
+                  onChange={handleAssetClassChange}
+                  classLabels={assetClassLabels}
+                />
+              </CardHeader> */}
               <CardContent>
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex items-center gap-4 mb-4">
