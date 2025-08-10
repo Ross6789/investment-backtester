@@ -1,8 +1,8 @@
 import csv, json
-from backend.core.paths import get_asset_metadata_csv_path,get_asset_metadata_json_path
+from backend.core.paths import get_asset_data_csv_path,get_asset_data_json_path
 
-asset_csv_path = get_asset_metadata_csv_path()
-asset_json_path = get_asset_metadata_json_path()
+asset_csv_path = get_asset_data_csv_path()
+asset_json_path = get_asset_data_json_path()
 
 active_assets = []
 skipped_assets = 0

@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import { format } from "date-fns";
 import { CalendarIcon, Trash2, Check, ChevronDown, Plus } from "lucide-react";
@@ -169,8 +170,35 @@ const formSchema = z
     return Math.abs(total - 100) < 0.0001; // account for floating point precision
   });
 
+type Asset = {
+  ticker: string;
+  name: string;
+  asset_type: string;
+  start_date: string;
+  end_date: string;
+  currency: string;
+};
+
 export function SettingsPage() {
   const navigate = useNavigate();
+
+  const [assets, setAssets] = useState<Asset[]>([]);
+
+  // Fetch asset data once when page loads
+  useEffect(() => {
+    fetch("http://localhost:5002/api/assets")
+      .then((res) => res.json())
+      .then((data: Asset[]) => {
+        setAssets(data);
+      })
+      .catch(console.error);
+  }, []);
+
+  // Configure labels for asset dropdown
+  const assetOptions = assets.map((asset) => ({
+    label: `${asset.ticker} - ${asset.name}`,
+    value: asset.ticker,
+  }));
 
   // 1. Define your form.
   const form = useForm({
@@ -203,7 +231,7 @@ export function SettingsPage() {
     name: "target_weights",
   });
 
-  // Determine which currnecy symbol matches the selected dropdown
+  // Determine which currency symbol matches the selected dropdown
   const selectedCurrency = form.watch("base_currency");
   const symbol = getCurrencySymbol(selectedCurrency) || "";
 

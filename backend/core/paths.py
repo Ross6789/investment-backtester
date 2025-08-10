@@ -1,22 +1,22 @@
 from pathlib import Path
 
-BACKEND_ROOT_PATH =  Path(__file__).parent.parent
+PROJECT_ROOT_PATH =  Path(__file__).parent.parent.parent
 EXTERNAL_DATA_BASE_PATH = Path("/Volumes/T7/investment_backtester_data")  
-ASSET_METADATA_CSV_PATH = Path("data/asset_metadata.csv")
+ASSET_METADATA_CSV_PATH = Path("data/assets.csv")
 ASSET_METADATA_JSON_PATH = Path("data/assets.json")
-FX_METADATA_PATH = Path("data/fx_metadata.csv")
+FX_METADATA_PATH = Path("data/fx.csv")
 PARQUET_BACKTEST_DATA_PATH = Path("compiled/parquet/data")
 PARQUET_FX_DATA_PATH = Path("processed/parquet/fx.parquet")
 BACKTEST_RUN_BASE_PATH = Path("backtest_runs")
 
-def get_asset_metadata_csv_path() -> Path:
-    return BACKEND_ROOT_PATH / ASSET_METADATA_CSV_PATH
+def get_asset_data_csv_path() -> Path:
+    return PROJECT_ROOT_PATH / ASSET_METADATA_CSV_PATH
 
-def get_asset_metadata_json_path() -> Path:
-    return BACKEND_ROOT_PATH / ASSET_METADATA_JSON_PATH
+def get_asset_data_json_path() -> Path:
+    return PROJECT_ROOT_PATH / ASSET_METADATA_JSON_PATH
 
-def get_fx_metadata_path() -> Path:
-    return BACKEND_ROOT_PATH / FX_METADATA_PATH
+def get_fx_data_path() -> Path:
+    return PROJECT_ROOT_PATH / FX_METADATA_PATH
 
 def get_backtest_data_path() -> Path:
     return EXTERNAL_DATA_BASE_PATH / PARQUET_BACKTEST_DATA_PATH

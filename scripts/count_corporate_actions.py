@@ -2,7 +2,7 @@ import backend.core.paths as paths
 import polars as pl
 
 # Configuration
-asset_metadata_path = paths.get_asset_metadata_csv_path()
+asset_metadata_path = paths.get_asset_data_csv_path()
 parquet_corporate_actions_path = paths.get_parquet_corporate_action_base_path()
 csv_has_corporate_actions_path = paths.get_csv_has_corporate_action_path()
 

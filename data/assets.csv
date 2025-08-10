@@ -1,0 +1,1416 @@
+﻿ticker,name,asset_type,has_dividends,has_stock_splits,currency,isin,source,source_file_path,active,start_date,end_date,notes
+0P00009WXM.L,Vanguard U.K. Investment Grade Bond Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000FXJW.L,Vanguard U.K. Investment Grade Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM1W.L,Vanguard Japan Stock Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM1Y.L,Vanguard Japan Stock Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM1Z.L,Vanguard Pacific ex-Japan Stock Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM20.L,Vanguard Pacific ex-Japan Stock Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM21.L,Vanguard Emerging Markets Stock Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM22.L,Vanguard Emerging Markets Stock Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM23.L,Vanguard Global Bond Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM24.L,Vanguard Global Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM25.L,Vanguard U.K. Government Bond Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KM26.L,Vanguard U.K. Government Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KSP4.L,Vanguard FTSE U.K. Equity Income Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KSP5.L,Vanguard FTSE U.K. Equity Income Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KSP6.L,Vanguard FTSE Developed World ex-U.K. Equity Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KSP7.L,Vanguard FTSE Developed World ex-U.K. Equity Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KSP8.L,Vanguard FTSE Developed Europe ex-U.K. Equity Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KSP9.L,Vanguard FTSE Developed Europe ex-U.K. Equity Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KSPA.L, Vanguard U.S. Equity Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000KSPB.L,Vanguard U.S. Equity Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000N47O.L,Vanguard Global Small-Cap Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000N47P.L,Vanguard Global Small-Cap Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000SAVS.L,Vanguard FTSE U.K. All Share Index Unit Trust Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000SHY5.L,Vanguard U.K. Inflation-Linked Gilt Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000SHY6.L,Vanguard U.K. Inflation-Linked Gilt Index Fund Dist,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000SHY7.L,Vanguard U.K. Long Duration Gilt Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000SHY8.L,Vanguard U.K. Long Duration Gilt Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZG.L,Vanguard Lifestrategy 20% Equity Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZH.L,Vanguard Lifestrategy 20% Equity Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZI.L,Vanguard Lifestrategy 40% Equity Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZJ.L,Vanguard Lifestrategy 40% Equity Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZK.L,Vanguard Lifestrategy 60% Equity Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZL.L,Vanguard Lifestrategy 60% Equity Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZM.L,Vanguard Lifestrategy 80% Equity Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZN.L,Vanguard Lifestrategy 80% Equity Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZO.L,Vanguard Lifestrategy 100% Equity Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000TKZP.L,Vanguard Lifestrategy 100% Equity Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2019,27/06/2025,Vanguard mutual fund
+0P0000UGLE.L,Vanguard ESG Developed Europe Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000UGLF.L,Vanguard ESG Developed Europe Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000UGLG.L,Vanguard ESG Developed World All Cap Equity Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000UGLH.L,Vanguard ESG Developed World All Cap Equity Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000YX0K.L,Vanguard U.K. Short-Term Investment Grade Bond Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P0000YX0L.L,Vanguard U.K. Short-Term Investment Grade Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/01/2014,27/06/2025,Vanguard mutual fund
+0P00011WU9.L,Vanguard Global Short-Term Bond Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,31/01/2014,27/06/2025,Vanguard mutual fund
+0P00011WUA.L,Vanguard Global Short-Term Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,31/01/2014,27/06/2025,Vanguard mutual fund
+0P00011WUC.L,Vanguard U.S. Investment Grade Credit Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,31/01/2014,27/06/2025,Vanguard mutual fund
+0P00011WUD.L,Vanguard U.S. Government Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,31/01/2014,27/06/2025,Vanguard mutual fund
+0P00011WUE.L,Vanguard Japan Government Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,31/01/2014,27/06/2025,Vanguard mutual fund
+0P00011WUF.L,Vanguard Euro Investment Grade Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,31/01/2014,27/06/2025,Vanguard mutual fund
+0P00011WUG.L,Vanguard Euro Government Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,31/01/2014,27/06/2025,Vanguard mutual fund
+0P000147Q3.L,Vanguard FTSE U.K. All Share Index Unit Trust Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,02/09/2014,27/06/2025,Vanguard mutual fund
+0P00017UWM.L,Vanguard Target Retirement 2015 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P00017UWO.L,Vanguard Target Retirement 2020 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P00017UWP.L,Vanguard Target Retirement 2025 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P00017UWQ.L,Vanguard Target Retirement 2030 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P00017UWR.L,Vanguard Target Retirement 2035 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P00017UWS.L,Vanguard Target Retirement 2040 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P00017UWT.L,Vanguard Target Retirement 2045 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P00017UWU.L,Vanguard Target Retirement 2050 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P00017UWV.L,Vanguard Target Retirement 2055 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,17/12/2015,27/06/2025,Vanguard mutual fund
+0P000185SZ.L,Vanguard Global Equity Income Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,25/05/2016,27/06/2025,Vanguard mutual fund
+0P000185T0.L,Vanguard Global Equity Income Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,25/05/2016,27/06/2025,Vanguard mutual fund
+0P000185T1.L,Vanguard Global Emerging Markets Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,25/05/2016,27/06/2025,Vanguard mutual fund
+0P000185T2.L,Vanguard Global Emerging Markets Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,25/05/2016,27/06/2025,Vanguard mutual fund
+0P000185T3.L,Vanguard Global Equity Fund Acc,mutual fund,Y,N,GBP,,yfinance,-,Y,25/05/2016,27/06/2025,Vanguard mutual fund
+0P000185T4.L,Vanguard Global Equity Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,25/05/2016,27/06/2025,Vanguard mutual fund
+0P000185T5.L,Vanguard ActLife Clmt Awr 60-70% Eq Acc,mutual fund,N,N,GBP,,yfinance,-,Y,25/05/2016,27/06/2025,Vanguard mutual fund
+0P000185T6.L,Vanguard ActLife Clmt Awr 60-70% Eq Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,25/05/2016,27/06/2025,Vanguard mutual fund
+0P00018XAO.L,Vanguard FTSE Global All Cap Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,08/11/2016,27/06/2025,Vanguard mutual fund
+0P00018XAP.L,Vanguard FTSE 100 Index Unit Trust Acc,mutual fund,N,N,GBP,,yfinance,-,Y,08/11/2016,27/06/2025,Vanguard mutual fund
+0P00018XAQ.L,Vanguard FTSE 100 Index Unit Trust Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,08/11/2016,27/06/2025,Vanguard mutual fund
+0P00018XAR.L,Vanguard FTSE Global All Cap Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,08/11/2016,27/06/2025,Vanguard mutual fund
+0P0001BLQI.L,Vanguard Global Credit Bond Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,14/09/2017,27/06/2025,Vanguard mutual fund
+0P0001C5T4.L,Vanguard Global Short-Term Corporate Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/11/2017,27/06/2025,Vanguard mutual fund
+0P0001C5T6.L,Vanguard Global Corporate Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,02/11/2017,27/06/2025,Vanguard mutual fund
+0P0001CE2G.L,Vanguard Target Retirement 2065 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,05/12/2017,27/06/2025,Vanguard mutual fund
+0P0001CE2H.L,Vanguard Target Retirement 2060 Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,05/12/2017,27/06/2025,Vanguard mutual fund
+0P0001CXIX.L,Vanguard U.S. Government Bond Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,08/03/2018,27/06/2025,Vanguard mutual fund
+0P0001I2A0.L,Vanguard Sterling Short-Term Money Market Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,17/07/2019,27/06/2025,Vanguard mutual fund
+0P0001IL90.L,Vanguard Active UK Equity Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,15/10/2019,27/06/2025,Vanguard mutual fund
+0P0001IL91.L,Vanguard Active UK Equity Acc,mutual fund,N,N,GBP,,yfinance,-,Y,15/10/2019,27/06/2025,Vanguard mutual fund
+0P0001IU24.L,Vanguard Emerging Markets Bond Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,03/12/2019,27/06/2025,Vanguard mutual fund
+0P0001K1DP.L,Vanguard ESG Screened Developed World All Cap Equity Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,09/06/2020,27/06/2025,Vanguard mutual fund
+0P0001K1DQ.L,Vanguard ESG Screened Developed World All Cap Equity Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,09/06/2020,27/06/2025,Vanguard mutual fund
+0P0001K1DR.L,Vanguard ESG Emerging Markets All Cap Equity Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,09/06/2020,27/06/2025,Vanguard mutual fund
+0P0001K1DS.L,Vanguard ESG Emerging Markets All Cap Equity Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,09/06/2020,27/06/2025,Vanguard mutual fund
+0P0001LJIX.L,Vanguard Global Corporate Bond Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,21/01/2021,27/06/2025,Vanguard mutual fund
+0P0001O2BN.L,Vanguard Global Capital Stewards Equity Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,08/12/2021,27/06/2025,Vanguard mutual fund
+0P0001O2BO.L,Vanguard Global Capital Stewards Equity Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,08/12/2021,27/06/2025,Vanguard mutual fund
+0P0001O2BP.L,Vanguard ActLife Clmt Awr 40-50% Eq Acc,mutual fund,N,N,GBP,,yfinance,-,Y,08/12/2021,27/06/2025,Vanguard mutual fund
+0P0001O2BQ.L,Vanguard ActLife Clmt Arw 40-50% Eq Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,08/12/2021,27/06/2025,Vanguard mutual fund
+0P0001O2BR.L,Vanguard ActLife Clmt Awr 80-90% Eq Acc,mutual fund,N,N,GBP,,yfinance,-,Y,08/12/2021,27/06/2025,Vanguard mutual fund
+0P0001O2BS.L,Vanguard ActLife Clmt Awr 80-90% Eq Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,08/12/2021,27/06/2025,Vanguard mutual fund
+0P0001PXCT.L,Vanguard ESG Global Corporate Bond Index Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,25/10/2022,27/06/2025,Vanguard mutual fund
+0P0001PXCY.L,Vanguard ESG Global Corporate Bond Index Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,25/10/2022,27/06/2025,Vanguard mutual fund
+0P0001SB8P.L,Vanguard Sterling Short-Term Money Market Fund Acc,mutual fund,N,N,GBP,,yfinance,-,Y,06/02/2024,27/06/2025,Vanguard mutual fund
+0P0001T4ZA.L,Vanguard Emerging Markets Bond Fund Dist,mutual fund,Y,N,GBP,,yfinance,-,Y,11/06/2024,27/06/2025,Vanguard mutual fund
+3IN.L,3I INFRASTRUCTURE PLC ORD NPV,uk stock,Y,Y,GBX,,yfinance,-,Y,08/03/2007,27/06/2025,LSE : FTSE All-Share
+A,Agilent Technologies,us stock,Y,Y,USD,,yfinance,-,Y,18/11/1999,27/06/2025,S&P500 constituents
+AAF.L,AIRTEL AFRICA PLC ORD USD0.50,uk stock,Y,N,GBX,,yfinance,-,Y,28/06/2019,27/06/2025,LSE : FTSE All-Share
+AAIF.L,ABERDEEN ASIAN INCOME FUND LIMITED ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,20/12/2005,27/06/2025,LSE : FTSE All-Share
+AAL.L,ANGLO AMERICAN PLC ORD USD0.623855311355311,uk stock,N,Y,GBX,,yfinance,-,Y,24/05/1999,27/06/2025,LSE : FTSE All-Share
+AAPL,Apple Inc.,us stock,Y,Y,USD,,yfinance,-,Y,12/12/1980,27/06/2025,S&P500 constituents
+AAS.L,ABRDN ASIA FOCUS PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,18/10/1995,27/06/2025,LSE : FTSE All-Share
+AAVE-GBP,Aave,cryptocurrency,N,N,GBP,,yfinance,-,Y,02/10/2020,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+ABBV,AbbVie Inc.,us stock,Y,N,USD,,yfinance,-,Y,02/01/2013,27/06/2025,S&P500 constituents
+ABDN.L,ABERDEEN GROUP PLC ORD 13 61/63P,uk stock,Y,Y,GBX,,yfinance,-,Y,10/07/2006,27/06/2025,LSE : FTSE All-Share
+ABF.L,ASSOCIATED BRITISH FOODS PLC ORD 5 15/22P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+ABNB,Airbnb,us stock,N,N,USD,,yfinance,-,Y,10/12/2020,27/06/2025,S&P500 constituents
+ABT,Abbott Laboratories,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+ACGL,Arch Capital Group,us stock,Y,Y,USD,,yfinance,-,Y,14/09/1995,27/06/2025,S&P500 constituents
+ACN,Accenture,us stock,Y,N,USD,,yfinance,-,Y,19/07/2001,27/06/2025,S&P500 constituents
+ADA-GBP,Cardano,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+ADBE,Adobe Inc.,us stock,Y,Y,USD,,yfinance,-,Y,13/08/1986,27/06/2025,S&P500 constituents
+ADI,Analog Devices,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+ADIG.L,ABRDN DIVERSIFIED INCOME AND GROWTH ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+ADM,Archer Daniels Midland,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+ADM.L,ADMIRAL GROUP PLC ORD 0.1P,uk stock,Y,N,GBX,,yfinance,-,Y,23/09/2004,27/06/2025,LSE : FTSE All-Share
+ADP,Automatic Data Processing,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+ADSK,Autodesk,us stock,Y,Y,USD,,yfinance,-,Y,28/06/1985,27/06/2025,S&P500 constituents
+AEE,Ameren,us stock,Y,N,USD,,yfinance,-,Y,02/01/1998,27/06/2025,S&P500 constituents
+AEI.L,ABRDN EQUITY INCOME TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,14/11/1991,27/06/2025,LSE : FTSE All-Share
+AEP,American Electric Power,us stock,Y,N,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+AEP.L,ANGLO-EASTERN PLANTATIONS PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+AES,AES Corporation,us stock,Y,Y,USD,,yfinance,-,Y,26/06/1991,27/06/2025,S&P500 constituents
+AEWU.L,AEW UK REIT PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,12/05/2015,27/06/2025,LSE : FTSE All-Share
+AFL,Aflac,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+AFL.L,ARTEMIS UK FUTURE LEADERS PLC ORD 20P,uk stock,Y,Y,GBX,,yfinance,-,Y,07/03/1988,27/06/2025,LSE : FTSE All-Share
+AGBP.L,ISHARES III PLC ISH GLOBAL AGG BOND ETF GBP HEDGED DIST,etf,Y,N,GBP,,yfinance,-,Y,21/11/2017,27/06/2025,250 ETFs on LSE with highest market cap
+AGED.L,ISHARES IV PLC ISHS AGEING POPULATON UCITS ETF USD(ACC),etf,N,N,USD,,yfinance,-,Y,08/09/2016,27/06/2025,250 ETFs on LSE with highest market cap
+AGGU.L,ISHARES III PLC ISH GLOBAL AGG BOND ETF USD HEDGED ACC,etf,N,N,USD,,yfinance,-,Y,21/11/2017,27/06/2025,250 ETFs on LSE with highest market cap
+AGR.L,ASSURA PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,21/11/2003,27/06/2025,LSE : FTSE All-Share
+AGT.L,AVI GLOBAL TRUST PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,31/03/1978,27/06/2025,LSE : FTSE All-Share
+AGVI.L,ABERFORTH GEARED VALUE & INCOME TRU ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/2024,27/06/2025,LSE : FTSE All-Share
+AHT.L,ASHTEAD GROUP PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+AIAG.L,LEGAL & GENERAL UCITS ETF PLC LG ARTIFICIAL INTELLIGENCE ETF,etf,N,N,GBX,,yfinance,-,Y,26/06/2019,27/06/2025,250 ETFs on LSE with highest market cap
+AIE.L,ASHOKA INDIA EQUITY INVESTMENT TRUS ORD 1P,uk stock,N,N,GBX,,yfinance,-,Y,06/07/2018,27/06/2025,LSE : FTSE All-Share
+AIG,American International Group,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1973,27/06/2025,S&P500 constituents
+AIZ,Assurant,us stock,Y,N,USD,,yfinance,-,Y,05/02/2004,27/06/2025,S&P500 constituents
+AJB.L,AJ BELL PLC ORD GBP0.000125,uk stock,Y,N,GBX,,yfinance,-,Y,07/12/2018,27/06/2025,LSE : FTSE All-Share
+AJG,Arthur J. Gallagher & Co.,us stock,Y,Y,USD,,yfinance,-,Y,20/06/1984,27/06/2025,S&P500 constituents
+AJOT.L,AVI JAPAN OPPORTUNITY TRUST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,23/10/2018,27/06/2025,LSE : FTSE All-Share
+AKAM,Akamai Technologies,us stock,N,N,USD,,yfinance,-,Y,29/10/1999,27/06/2025,S&P500 constituents
+ALB,Albemarle Corporation,us stock,Y,Y,USD,,yfinance,-,Y,22/02/1994,27/06/2025,S&P500 constituents
+ALFA.L,ALFA FINANCIAL SOFTWARE HOLDINGS PL ORD 0.1P,uk stock,Y,N,GBX,,yfinance,-,Y,26/05/2017,27/06/2025,LSE : FTSE All-Share
+ALGN,Align Technology,us stock,N,N,USD,,yfinance,-,Y,30/01/2001,27/06/2025,S&P500 constituents
+ALL,Allstate,us stock,Y,Y,USD,,yfinance,-,Y,03/06/1993,27/06/2025,S&P500 constituents
+ALLE,Allegion,us stock,Y,N,USD,,yfinance,-,Y,18/11/2013,27/06/2025,S&P500 constituents
+ALPH.L,ALPHA GROUP INTERNATIONAL PLC ORD 0.2P,uk stock,Y,N,GBX,,yfinance,-,Y,07/04/2017,27/06/2025,LSE : FTSE All-Share
+ALW.L,ALLIANCE WITAN PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+AMAT,Applied Materials,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+AMCR,Amcor,us stock,Y,N,USD,,yfinance,-,Y,15/05/2012,27/06/2025,S&P500 constituents
+AMD,Advanced Micro Devices,us stock,N,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+AME,Ametek,us stock,Y,Y,USD,,yfinance,-,Y,19/07/1984,27/06/2025,S&P500 constituents
+AMGN,Amgen,us stock,Y,Y,USD,,yfinance,-,Y,17/06/1983,27/06/2025,S&P500 constituents
+AML.L,ASTON MARTIN LAGONDA GLOBAL HOLDING ORD GBP0.10,uk stock,N,Y,GBX,,yfinance,-,Y,03/10/2018,27/06/2025,LSE : FTSE All-Share
+AMP,Ameriprise Financial,us stock,Y,N,USD,,yfinance,-,Y,15/09/2005,27/06/2025,S&P500 constituents
+AMT,American Tower,us stock,Y,N,USD,,yfinance,-,Y,27/02/1998,27/06/2025,S&P500 constituents
+AMZN,Amazon,us stock,N,Y,USD,,yfinance,-,Y,15/05/1997,27/06/2025,S&P500 constituents
+ANET,Arista Networks,us stock,N,Y,USD,,yfinance,-,Y,06/06/2014,27/06/2025,S&P500 constituents
+ANII.L,ABRDN NEW INDIA INVESTMENT TRUST PL ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,28/10/2002,27/06/2025,LSE : FTSE All-Share
+ANSS,Ansys,us stock,N,Y,USD,,yfinance,-,Y,20/06/1996,27/06/2025,S&P500 constituents
+ANTO.L,ANTOFAGASTA PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+AO.L,AO WORLD PLC ORD 0.25P,uk stock,N,N,GBX,,yfinance,-,Y,07/05/2014,27/06/2025,LSE : FTSE All-Share
+AON,Aon plc,us stock,Y,Y,USD,,yfinance,-,Y,02/06/1980,27/06/2025,S&P500 constituents
+AOS,A. O. Smith,us stock,Y,Y,USD,,yfinance,-,Y,30/09/1983,27/06/2025,S&P500 constituents
+APA,APA Corporation,us stock,Y,Y,USD,,yfinance,-,Y,15/05/1979,27/06/2025,S&P500 constituents
+APAX.L,APAX GLOBAL ALPHA LIMITED ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,15/06/2015,27/06/2025,LSE : FTSE All-Share
+APD,Air Products,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+APH,Amphenol,us stock,Y,Y,USD,,yfinance,-,Y,08/11/1991,27/06/2025,S&P500 constituents
+API.L,ABRDN PROPERTY INCOME TRUST LIMITED ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,18/12/2003,27/06/2025,LSE : FTSE All-Share
+APN.L,APPLIED NUTRITION PLC ORD GBP0.0002,uk stock,N,N,GBX,,yfinance,-,Y,24/10/2024,27/06/2025,LSE : FTSE All-Share
+APO,Apollo Global Management,us stock,Y,N,USD,,yfinance,-,Y,30/03/2011,27/06/2025,S&P500 constituents
+APTD.L,APTITUDE SOFTWARE GROUP PLC ORD 7 1/3P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+APTV,Aptiv,us stock,Y,Y,USD,,yfinance,-,Y,17/11/2011,27/06/2025,S&P500 constituents
+ARE,Alexandria Real Estate Equities,us stock,Y,N,USD,,yfinance,-,Y,28/05/1997,27/06/2025,S&P500 constituents
+ARR.L,AURORA UK ALPHA PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,30/10/1981,27/06/2025,LSE : FTSE All-Share
+ASC.L,ASOS PLC ORD 3.5P,uk stock,N,N,GBX,,yfinance,-,Y,03/10/2001,27/06/2025,LSE : FTSE All-Share
+ASHM.L,ASHMORE GROUP PLC ORD 0.01P,uk stock,Y,N,GBX,,yfinance,-,Y,12/10/2006,27/06/2025,LSE : FTSE All-Share
+ASL.L,ABERFORTH SMALLER COMPANIES TST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,07/12/1990,27/06/2025,LSE : FTSE All-Share
+ASLI.L,ABRDN EUROPEAN LOGISTICS INCOME PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,15/12/2017,27/06/2025,LSE : FTSE All-Share
+ATG.L,AUCTION TECHNOLOGY GROUP PLC ORD 0.01P,uk stock,N,N,GBX,,yfinance,-,Y,23/02/2021,27/06/2025,LSE : FTSE All-Share
+ATO,Atmos Energy,us stock,Y,Y,USD,,yfinance,-,Y,28/12/1983,27/06/2025,S&P500 constituents
+ATR.L,SCHRODER ASIAN TOTAL RETURN INV CO ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,30/11/1987,27/06/2025,LSE : FTSE All-Share
+ATT.L,ALLIANZ TECHNOLOGY TRUST PLC ORD 2.5P,uk stock,N,Y,GBX,,yfinance,-,Y,01/12/1995,27/06/2025,LSE : FTSE All-Share
+ATYM.L,"ATALAYA MINING COPPER, S.A. ORD EUR0.09 (CDI)",uk stock,Y,Y,GBX,,yfinance,-,Y,09/05/2005,27/06/2025,LSE : FTSE All-Share
+AUGM.L,AUGMENTUM FINTECH PLC ORD GBP0.01,uk stock,N,N,GBX,,yfinance,-,Y,12/03/2018,27/06/2025,LSE : FTSE All-Share
+AUSC.L,ABRDN UK SMALL.CO'S GROWTH TST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,19/08/1993,27/06/2025,LSE : FTSE All-Share
+AUTO.L,AUTO TRADER GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,19/03/2015,27/06/2025,LSE : FTSE All-Share
+AV.L,AVIVA PLC ORD 32 17/19P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+AVAX-GBP,Avalanche,cryptocurrency,N,N,GBP,,yfinance,-,Y,13/07/2020,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+AVB,AvalonBay Communities,us stock,Y,N,USD,,yfinance,-,Y,11/03/1994,27/06/2025,S&P500 constituents
+AVGO,Broadcom,us stock,Y,Y,USD,,yfinance,-,Y,06/08/2009,27/06/2025,S&P500 constituents
+AVON.L,AVON TECHNOLOGIES PLC ORD #1,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+AVY,Avery Dennison,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+AWK,American Water Works,us stock,Y,N,USD,,yfinance,-,Y,23/04/2008,27/06/2025,S&P500 constituents
+AXON,Axon Enterprise,us stock,N,Y,USD,,yfinance,-,Y,19/06/2001,27/06/2025,S&P500 constituents
+AXP,American Express,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+AZN.L,ASTRAZENECA PLC ORD SHS $0.25,uk stock,Y,N,GBX,,yfinance,-,Y,21/05/1993,27/06/2025,LSE : FTSE All-Share
+AZO,AutoZone,us stock,N,Y,USD,,yfinance,-,Y,02/04/1991,27/06/2025,S&P500 constituents
+BA,Boeing,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+BA.L,BAE SYSTEMS PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BAB.L,BABCOCK INTERNATIONAL GROUP PLC ORD 60P,uk stock,Y,Y,GBX,,yfinance,-,Y,11/08/1989,27/06/2025,LSE : FTSE All-Share
+BAC,Bank of America,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+BAG.L,BARR(A.G.) PLC ORD 4 1/6P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BAKK.L,BAKKAVOR GROUP PLC ORD 2P,uk stock,Y,N,GBX,,yfinance,-,Y,16/11/2017,27/06/2025,LSE : FTSE All-Share
+BALL,Ball Corporation,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+BARC.L,BARCLAYS PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BASC.L,BROWN ADVISORY US SMALLER CO'S PLC ORD 25P,uk stock,N,N,GBX,,yfinance,-,Y,10/03/1993,27/06/2025,LSE : FTSE All-Share
+BATS.L,BRITISH AMERICAN TOBACCO PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,03/01/1995,27/06/2025,LSE : FTSE All-Share
+BAX,Baxter International,us stock,Y,Y,USD,,yfinance,-,Y,27/10/1981,27/06/2025,S&P500 constituents
+BBH.L,BELLEVUE HEALTHCARE TRUST PLC RED ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,02/12/2016,27/06/2025,LSE : FTSE All-Share
+BBOX.L,TRITAX BIG BOX REIT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,09/12/2013,27/06/2025,LSE : FTSE All-Share
+BBY,Best Buy,us stock,Y,Y,USD,,yfinance,-,Y,18/04/1985,27/06/2025,S&P500 constituents
+BBY.L,BALFOUR BEATTY PLC ORD 50P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BCG.L,BALTIC CLASSIFIEDS GROUP PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,30/06/2021,27/06/2025,LSE : FTSE All-Share
+BCH-GBP,Bitcoin Cash,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+BCHS.L,INVESCO MARKETS II PLC IVZ COINSHARES BLOCKCHAIN UCITS ETF GBX,etf,N,N,GBX,,yfinance,-,Y,08/03/2019,27/06/2025,250 ETFs on LSE with highest market cap
+BDX,Becton Dickinson,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+BEN,Franklin Resources,us stock,Y,Y,USD,,yfinance,-,Y,23/09/1983,27/06/2025,S&P500 constituents
+BERI.L,BLACKROCK ENERGY & RES. INC.TST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,08/12/2005,27/06/2025,LSE : FTSE All-Share
+BEZ.L,BEAZLEY PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,12/11/2002,27/06/2025,LSE : FTSE All-Share
+BF-B,Brown Forman,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+BG,Bunge Global,us stock,Y,N,USD,,yfinance,-,Y,02/08/2001,27/06/2025,S&P500 constituents
+BGCG.L,BAILLIE GIFFORD CHINA GRWTH TST PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+BGEO.L,LION FINANCE GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,24/11/2006,27/06/2025,LSE : FTSE All-Share
+BGEU.L,BAILLIE GIFFORD EUROPEAN GROWTH TRU ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1973,27/06/2025,LSE : FTSE All-Share
+BGFD.L,BAILLIE GIFFORD JAPAN TRUST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,31/12/1981,27/06/2025,LSE : FTSE All-Share
+BGS.L,BAILLIE GIFFORD SHIN NIPPON PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,30/08/1985,27/06/2025,LSE : FTSE All-Share
+BGUK.L,BAILLIE GIFFORD UK GROWTH TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,10/03/1994,27/06/2025,LSE : FTSE All-Share
+BHMG.L,BH MACRO LD ORD NPV (GBP),uk stock,N,Y,GBX,,yfinance,-,Y,09/03/2007,27/06/2025,LSE : FTSE All-Share
+BIIB,Biogen,us stock,N,Y,USD,,yfinance,-,Y,17/09/1991,27/06/2025,S&P500 constituents
+BIOG.L,BIOTECH GROWTH TRUST (THE) PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,23/06/1997,27/06/2025,LSE : FTSE All-Share
+BIPS.L,INVESCO BOND INCOME PLUS LIMITED ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,24/05/1991,27/06/2025,LSE : FTSE All-Share
+BK,BNY Mellon,us stock,Y,Y,USD,,yfinance,-,Y,03/05/1973,27/06/2025,S&P500 constituents
+BKG.L,BERKELEY GROUP HOLDINGS (THE) PLC ORD 5.6110477936P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BKNG,Booking Holdings,us stock,Y,Y,USD,,yfinance,-,Y,31/03/1999,27/06/2025,S&P500 constituents
+BKR,Baker Hughes,us stock,Y,N,USD,,yfinance,-,Y,06/04/1987,27/06/2025,S&P500 constituents
+BLDR,Builders FirstSource,us stock,N,N,USD,,yfinance,-,Y,28/06/2005,27/06/2025,S&P500 constituents
+BLK,BlackRock,us stock,Y,N,USD,,yfinance,-,Y,01/10/1999,27/06/2025,S&P500 constituents
+BLND.L,BRITISH LAND CO PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BME.L,B&M EUROPEAN VALUE RETAIL S.A. ORD 10P (DI),uk stock,Y,N,GBX,,yfinance,-,Y,12/06/2014,27/06/2025,LSE : FTSE All-Share
+BMY,Bristol Myers Squibb,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+BMY.L,BLOOMSBURY PUBLISHING PLC ORD 1.25P,uk stock,Y,Y,GBX,,yfinance,-,Y,27/06/1994,27/06/2025,LSE : FTSE All-Share
+BNB-GBP,BNB,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+BNKR.L,BANKERS INV TST PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+BNZL.L,BUNZL PLC ORD 32 1/7P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BOOT.L,BOOT (HENRY) PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BOWL.L,HOLLYWOOD BOWL GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,21/09/2016,27/06/2025,LSE : FTSE All-Share
+BOY.L,BODYCOTE PLC ORD 17 3/11P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BP.L,BP PLC $0.25,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BPT.L,BRIDGEPOINT GROUP PLC ORD GBP0.00005,uk stock,Y,N,GBX,,yfinance,-,Y,21/07/2021,27/06/2025,LSE : FTSE All-Share
+BR,Broadridge Financial Solutions,us stock,Y,N,USD,,yfinance,-,Y,22/03/2007,27/06/2025,S&P500 constituents
+BRAI.L,BLACKROCK AMERICAN INCOME TRUST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,24/10/2012,27/06/2025,LSE : FTSE All-Share
+BRBY.L,BURBERRY GROUP PLC ORD 0.05P,uk stock,Y,N,GBX,,yfinance,-,Y,12/07/2002,27/06/2025,LSE : FTSE All-Share
+BREE.L,BREEDON GROUP PLC ORD GBP0.01,uk stock,Y,Y,GBX,,yfinance,-,Y,12/06/2008,27/06/2025,LSE : FTSE All-Share
+BRFI.L,BLACKROCK FR ORD USD0.01,uk stock,Y,N,GBX,,yfinance,-,Y,17/12/2010,27/06/2025,LSE : FTSE All-Share
+BRGE.L,BLACKROCK GREATER EURO INV TST PLC ORD 0.1P,uk stock,Y,N,GBX,,yfinance,-,Y,20/09/2004,27/06/2025,LSE : FTSE All-Share
+BRK-B,Berkshire Hathaway,us stock,N,Y,USD,,yfinance,-,Y,09/05/1996,27/06/2025,S&P500 constituents
+BRLA.L,BLACKROCK LATIN AMERICAN INV TSTPLC ORD US$0.10,uk stock,Y,N,GBX,,yfinance,-,Y,13/07/1990,27/06/2025,LSE : FTSE All-Share
+BRO,Brown & Brown,us stock,Y,Y,USD,,yfinance,-,Y,11/02/1981,27/06/2025,S&P500 constituents
+BRSC.L,BLACKROCK SMALLER COMPANIES TST PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,23/03/1973,27/06/2025,LSE : FTSE All-Share
+BRWM.L,BLACKROCK WORLD MINING TRUST PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,15/12/1993,27/06/2025,LSE : FTSE All-Share
+BSIF.L,BLUEFIELD SOLAR INCOME FUND LIMITED ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,12/07/2013,27/06/2025,LSE : FTSE All-Share
+BSX,Boston Scientific,us stock,N,Y,USD,,yfinance,-,Y,19/05/1992,27/06/2025,S&P500 constituents
+BT-A.L,BT GROUP PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BTC-GBP,Bitcoin,cryptocurrency,N,N,GBP,,yfinance,-,Y,17/09/2014,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+BTRW.L,BARRATT REDROW PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BUT.L,BRUNNER INV TST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+BWY.L,BELLWAY PLC ORD 12.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+BX,Blackstone Inc.,us stock,Y,N,USD,,yfinance,-,Y,22/06/2007,27/06/2025,S&P500 constituents
+BXP,"BXP, Inc.",us stock,Y,N,USD,,yfinance,-,Y,18/06/1997,27/06/2025,S&P500 constituents
+BYG.L,BIG YELLOW GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,08/05/2000,27/06/2025,LSE : FTSE All-Share
+BYIT.L,BYTES TECHNOLOGY GROUP PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,11/12/2020,27/06/2025,LSE : FTSE All-Share
+C,Citigroup,us stock,Y,Y,USD,,yfinance,-,Y,03/01/1977,27/06/2025,S&P500 constituents
+CABP.L,CAB PAYMENTS HOLDINGS PLC ORD 0.033 1/3P,uk stock,N,N,GBX,,yfinance,-,Y,06/07/2023,27/06/2025,LSE : FTSE All-Share
+CAG,Conagra Brands,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+CAH,Cardinal Health,us stock,Y,Y,USD,,yfinance,-,Y,04/08/1983,27/06/2025,S&P500 constituents
+CAPD.L,CAPITAL LD COMM SHS USD0.0001 (DI),uk stock,Y,N,GBX,,yfinance,-,Y,12/01/2010,27/06/2025,LSE : FTSE All-Share
+CARD.L,CARD FACTORY PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,15/05/2014,27/06/2025,LSE : FTSE All-Share
+CARR,Carrier Global,us stock,Y,N,USD,,yfinance,-,Y,19/03/2020,27/06/2025,S&P500 constituents
+CARR.L,CARR'S GROUP PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+CAT,Caterpillar Inc.,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+CB,Chubb Limited,us stock,Y,Y,USD,,yfinance,-,Y,25/03/1993,27/06/2025,S&P500 constituents
+CBG.L,CLOSE BROS GROUP PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+CBOE,Cboe Global Markets,us stock,Y,N,USD,,yfinance,-,Y,15/06/2010,27/06/2025,S&P500 constituents
+CBRE,CBRE Group,us stock,N,Y,USD,,yfinance,-,Y,10/06/2004,27/06/2025,S&P500 constituents
+CBU0.L,ISHARES VII PLC ISHRS $ TRSRY BOND 7-10YR ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,08/03/2011,27/06/2025,250 ETFs on LSE with highest market cap
+CBU3.L,ISHARES VII PLC ISHRS USD TRSY BOND 1-3YR ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,18/10/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CBU7.L,ISHARES VII PLC ISHRS USD TRSRY BOND 3-7YR ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,05/11/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CCC.L,COMPUTACENTER PLC ORD 7 5/9P,uk stock,Y,Y,GBX,,yfinance,-,Y,21/05/1998,27/06/2025,LSE : FTSE All-Share
+CCEP.L,COCA-COLA EUROPACIFIC PARTNERS PLC ORD EUR0.01 (DI),uk stock,Y,N,GBX,,yfinance,-,Y,28/03/2019,27/06/2025,LSE : FTSE All-Share
+CCH.L,COCA-COLA HBC AG ORD CHF6.70 (CDI),uk stock,Y,N,GBX,,yfinance,-,Y,29/04/2013,27/06/2025,LSE : FTSE All-Share
+CCI,Crown Castle,us stock,Y,N,USD,,yfinance,-,Y,18/08/1998,27/06/2025,S&P500 constituents
+CCJI.L,CC JAPAN INCOME & GROWTH TRUST PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,15/12/2015,27/06/2025,LSE : FTSE All-Share
+CCL,Carnival,us stock,Y,Y,USD,,yfinance,-,Y,24/07/1987,27/06/2025,S&P500 constituents
+CCL.L,CARNIVAL PLC ORD USD 1.66,uk stock,Y,Y,GBX,,yfinance,-,Y,23/10/2000,27/06/2025,LSE : FTSE All-Share
+CCR.L,C&C GROUP PLC ORD EUR0.01 (CDI),uk stock,Y,N,GBX,,yfinance,-,Y,17/05/2004,27/06/2025,LSE : FTSE All-Share
+CDNS,Cadence Design Systems,us stock,N,Y,USD,,yfinance,-,Y,10/06/1987,27/06/2025,S&P500 constituents
+CDW,CDW Corporation,us stock,Y,N,USD,,yfinance,-,Y,27/06/2013,27/06/2025,S&P500 constituents
+CEG,Constellation Energy,us stock,Y,N,USD,,yfinance,-,Y,19/01/2022,27/06/2025,S&P500 constituents
+CEMA.L,ISHARES VII PLC ISHRS MSCI EM ASIA UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,24/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CF,CF Industries,us stock,Y,Y,USD,,yfinance,-,Y,11/08/2005,27/06/2025,S&P500 constituents
+CFG,Citizens Financial Group,us stock,Y,N,USD,,yfinance,-,Y,24/09/2014,27/06/2025,S&P500 constituents
+CG1.L,AMUNDI ETF AMUNDI ETF DAX UCITS ETF DR,etf,N,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+CGT.L,CAPITAL GEARING TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,28/02/1973,27/06/2025,LSE : FTSE All-Share
+CHD,Church & Dwight,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+CHG.L,CHEMRING GROUP PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+CHI.L,CT UK HIGH INCOME TRUST PLC ORD 0.1P,uk stock,Y,N,GBX,,yfinance,-,Y,01/03/2007,27/06/2025,LSE : FTSE All-Share
+CHRW,C.H. Robinson,us stock,Y,Y,USD,,yfinance,-,Y,16/10/1997,27/06/2025,S&P500 constituents
+CHRY.L,CHRYSALIS INVESTMENTS LIMITED ORD NPV,uk stock,N,N,GBX,,yfinance,-,Y,06/11/2018,27/06/2025,LSE : FTSE All-Share
+CHTR,Charter Communications,us stock,N,N,USD,,yfinance,-,Y,05/01/2010,27/06/2025,S&P500 constituents
+CI,Cigna,us stock,Y,Y,USD,,yfinance,-,Y,31/03/1982,27/06/2025,S&P500 constituents
+CIND.L,ISHARES VII PLC ISHRS DOW JONES IND AVRG ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,15/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CINF,Cincinnati Financial,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+CKN.L,CLARKSON PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+CL,Colgate-Palmolive,us stock,Y,Y,USD,,yfinance,-,Y,02/05/1973,27/06/2025,S&P500 constituents
+CLDN.L,CALEDONIA INVESTMENTS PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,29/09/1972,27/06/2025,LSE : FTSE All-Share
+CLI.L,CLS HOLDINGS PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/06/1994,27/06/2025,LSE : FTSE All-Share
+CLIG.L,CITY OF LONDON INVESTMENT GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,13/12/2006,27/06/2025,LSE : FTSE All-Share
+CLX,Clorox,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+CMCSA,Comcast,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+CMCX.L,CMC MARKETS PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,05/02/2016,27/06/2025,LSE : FTSE All-Share
+CME,CME Group,us stock,Y,Y,USD,,yfinance,-,Y,06/12/2002,27/06/2025,S&P500 constituents
+CMFP.L,LEGAL & GENERAL UCITS ETF PLC L&G LONGER DATED ALL COMMODITIES,etf,N,N,GBX,,yfinance,-,Y,15/03/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CMG,Chipotle Mexican Grill,us stock,N,Y,USD,,yfinance,-,Y,26/01/2006,27/06/2025,S&P500 constituents
+CMI,Cummins,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+CMOD.L,INVESCO MARKETS PLC INVESCO BLOOMBERG COMMODITY UCITS ETF,etf,N,N,USD,,yfinance,-,Y,09/01/2017,27/06/2025,250 ETFs on LSE with highest market cap
+CMS,CMS Energy,us stock,Y,N,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+CNA.L,CENTRICA PLC ORD 6 14/81P,uk stock,Y,Y,GBX,,yfinance,-,Y,17/02/1997,27/06/2025,LSE : FTSE All-Share
+CNC,Centene Corporation,us stock,N,Y,USD,,yfinance,-,Y,13/12/2001,27/06/2025,S&P500 constituents
+CNDX.L,ISHARES VII PLC ISHRS NASDAQ 100 UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,15/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CNE.L,CAPRICORN ENERGY PLC ORD 799/122P,uk stock,N,Y,GBX,,yfinance,-,Y,21/12/1988,27/06/2025,LSE : FTSE All-Share
+CNP,CenterPoint Energy,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+CNYA.L,ISHARES IV PLC ISHS MSCI CHINA A UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,08/04/2015,27/06/2025,250 ETFs on LSE with highest market cap
+COA.L,COATS GROUP PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+COF,Capital One,us stock,Y,Y,USD,,yfinance,-,Y,16/11/1994,27/06/2025,S&P500 constituents
+COIN,Coinbase,us stock,N,N,USD,,yfinance,-,Y,14/04/2021,27/06/2025,S&P500 constituents
+COMF.L,LEGAL & GENERAL UCITS ETF PLC L&G LONGER DATED ALL COMMODITIES,etf,N,N,USD,,yfinance,-,Y,15/03/2010,27/06/2025,250 ETFs on LSE with highest market cap
+COMM.L,ISHARES VI PLC ISHARES DIVERSIFIED COMM SWP UCITS ETF,etf,N,N,GBX,,yfinance,-,Y,18/07/2017,27/06/2025,250 ETFs on LSE with highest market cap
+COO,Cooper Companies (The),us stock,Y,Y,USD,,yfinance,-,Y,21/01/1983,27/06/2025,S&P500 constituents
+COP,ConocoPhillips,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+COPA.L,WISDOMTREE COMMODITY SECURITIES LTD WISDOMTREE COPPER,etf,N,N,USD,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+COR,Cencora,us stock,Y,Y,USD,,yfinance,-,Y,04/04/1995,27/06/2025,S&P500 constituents
+CORP.L,ISHARES PLC ISHARES GLBL CORP BND UCITS ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,24/09/2012,27/06/2025,250 ETFs on LSE with highest market cap
+COST,Costco,us stock,Y,Y,USD,,yfinance,-,Y,09/07/1986,27/06/2025,S&P500 constituents
+COST.L,COSTAIN GROUP PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+CPAY,Corpay,us stock,N,N,USD,,yfinance,-,Y,15/12/2010,27/06/2025,S&P500 constituents
+CPB,Campbell's Company (The),us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+CPG.L,COMPASS GROUP PLC ORD 11 1/20P,uk stock,Y,Y,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+CPI.L,CAPITA PLC ORD 31P,uk stock,N,Y,GBX,,yfinance,-,Y,24/04/1989,27/06/2025,LSE : FTSE All-Share
+CPRT,Copart,us stock,N,Y,USD,,yfinance,-,Y,17/03/1994,27/06/2025,S&P500 constituents
+CPT,Camden Property Trust,us stock,Y,N,USD,,yfinance,-,Y,22/07/1993,27/06/2025,S&P500 constituents
+CPXJ.L,ISHARES VII PLC ISHRS CORE MSCI PACFC EX-JPN ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,28/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CRDA.L,CRODA INTERNATIONAL PLC ORD 10.609756P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+CREI.L,CUSTODIAN PROPERTY INCOME REIT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,26/03/2014,27/06/2025,LSE : FTSE All-Share
+CRHG.L,ISHARES PLC ISH GLOBAL CORP BOND ETF GBP-H D,etf,Y,N,GBP,,yfinance,-,Y,21/03/2018,27/06/2025,250 ETFs on LSE with highest market cap
+CRL,Charles River Laboratories,us stock,N,N,USD,,yfinance,-,Y,23/06/2000,27/06/2025,S&P500 constituents
+CRM,Salesforce,us stock,Y,Y,USD,,yfinance,-,Y,23/06/2004,27/06/2025,S&P500 constituents
+CRO-GBP,Cronos,cryptocurrency,N,N,GBP,,yfinance,-,Y,14/12/2018,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+CRPU.L,ISHARES PLC IS GLOBAL CRP BND ETF USD HEDGED (ACC),etf,N,N,USD,,yfinance,-,Y,09/08/2017,27/06/2025,250 ETFs on LSE with highest market cap
+CRST.L,CREST NICHOLSON HOLDINGS PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,14/02/2013,27/06/2025,LSE : FTSE All-Share
+CRUD.L,WISDOMTREE COMMODITY SECURITIES LTD WISDOMTREE WTI CRUDE OIL,etf,N,N,USD,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+CRWD,CrowdStrike,us stock,N,N,USD,,yfinance,-,Y,12/06/2019,27/06/2025,S&P500 constituents
+CSCA.L,ISHARES VII PLC ISHRS MSCI CANADA UCITS ETF USD (ACC),etf,N,N,GBX,,yfinance,-,Y,13/01/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CSCO,Cisco,us stock,Y,Y,USD,,yfinance,-,Y,16/02/1990,27/06/2025,S&P500 constituents
+CSGP,CoStar Group,us stock,N,Y,USD,,yfinance,-,Y,01/07/1998,27/06/2025,S&P500 constituents
+CSH2.L,MULTI UNITS LUXEMBOURG AMUNDI SMART OVERNIGHT RETURN GBP HEDGED,etf,N,N,GBX,,yfinance,-,Y,17/03/2025,27/06/2025,250 ETFs on LSE with highest market cap
+CSJP.L,ISHARES VII PLC ISHRS MSCI JAPAN UCITS ETF USD (ACC),etf,N,N,GBX,,yfinance,-,Y,11/01/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CSN.L,CHESNARA PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,20/05/2004,27/06/2025,LSE : FTSE All-Share
+CSPX.L,ISHARES VII PLC ISHRS CORE S&P 500 UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,15/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CSUS.L,ISHARES VII PLC ISHRS MSCI USA UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,15/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CSX,CSX Corporation,us stock,Y,Y,USD,,yfinance,-,Y,03/11/1980,27/06/2025,S&P500 constituents
+CTAS,Cintas,us stock,Y,Y,USD,,yfinance,-,Y,19/08/1983,27/06/2025,S&P500 constituents
+CTEC.L,CONVATEC GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,26/10/2016,27/06/2025,LSE : FTSE All-Share
+CTPE.L,CT PRIVATE EQUITY TRUST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,31/08/2001,27/06/2025,LSE : FTSE All-Share
+CTRA,Coterra,us stock,Y,Y,USD,,yfinance,-,Y,08/02/1990,27/06/2025,S&P500 constituents
+CTSH,Cognizant,us stock,Y,Y,USD,,yfinance,-,Y,19/06/1998,27/06/2025,S&P500 constituents
+CTUK.L,CT UK CAP AND INC INV TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,29/10/1992,27/06/2025,LSE : FTSE All-Share
+CTVA,Corteva,us stock,Y,N,USD,,yfinance,-,Y,24/05/2019,27/06/2025,S&P500 constituents
+CUKX.L,ISHARES VII PLC ISHRS FTSE 100 UCITS ETF GBP (ACC),etf,N,N,GBX,,yfinance,-,Y,16/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CURY.L,CURRYS PLC ORD 0.1P,uk stock,Y,N,GBX,,yfinance,-,Y,01/10/2009,27/06/2025,LSE : FTSE All-Share
+CUSS.L,ISHARES VII PLC ISHRS MSCI USA SMALL CAP CTB $ (ACC),etf,N,N,USD,,yfinance,-,Y,15/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+CVCG.L,CVC INCOME & GROWTH LIMITED ORD NPV GBP,uk stock,Y,N,GBX,,yfinance,-,Y,25/06/2013,27/06/2025,LSE : FTSE All-Share
+CVS,CVS Health,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+CVX,Chevron Corporation,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+CWK.L,CRANSWICK PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+CWR.L,CERES POWER HOLDINGS PLC ORD 10P,uk stock,N,Y,GBX,,yfinance,-,Y,25/11/2004,27/06/2025,LSE : FTSE All-Share
+CYN.L,CQS NATURAL RES GROWTH & INCOME PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,25/11/1994,27/06/2025,LSE : FTSE All-Share
+CZR,Caesars Entertainment,us stock,N,N,USD,,yfinance,-,Y,22/09/2014,27/06/2025,S&P500 constituents
+D,Dominion Energy,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+DAI-GBP,Dai,cryptocurrency,N,N,GBP,,yfinance,-,Y,22/11/2019,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+DAL,Delta Air Lines,us stock,Y,N,USD,,yfinance,-,Y,03/05/2007,27/06/2025,S&P500 constituents
+DASH,DoorDash,us stock,N,N,USD,,yfinance,-,Y,09/12/2020,27/06/2025,S&P500 constituents
+DAY,Dayforce,us stock,N,N,USD,,yfinance,-,Y,26/04/2018,27/06/2025,S&P500 constituents
+DCC.L,DCC PLC ORD EUR0.25 (CDI),uk stock,Y,N,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+DD,DuPont,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+DE,Deere & Company,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+DEC.L,DIVERSIFIED ENERGY COMPANY PLC ORD 20P,uk stock,Y,Y,GBX,,yfinance,-,Y,03/02/2017,27/06/2025,LSE : FTSE All-Share
+DECK,Deckers Brands,us stock,N,Y,USD,,yfinance,-,Y,15/10/1993,27/06/2025,S&P500 constituents
+DELL,Dell Technologies,us stock,Y,Y,USD,,yfinance,-,Y,17/08/2016,27/06/2025,S&P500 constituents
+DFS.L,DFS FURNITURE PLC ORD GBP0.10,uk stock,Y,Y,GBX,,yfinance,-,Y,06/03/2015,27/06/2025,LSE : FTSE All-Share
+DG,Dollar General,us stock,Y,N,USD,,yfinance,-,Y,13/11/2009,27/06/2025,S&P500 constituents
+DGE.L,DIAGEO PLC ORD 28 101/108P,uk stock,Y,Y,GBX,,yfinance,-,Y,03/05/1988,27/06/2025,LSE : FTSE All-Share
+DGI9.L,DIGITAL 9 INFRASTRUCTURE PLC ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,31/03/2021,27/06/2025,LSE : FTSE All-Share
+DGTL.L,ISHARES IV PLC ISHS DIGITALISATION UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,08/09/2016,27/06/2025,250 ETFs on LSE with highest market cap
+DGX,Quest Diagnostics,us stock,Y,Y,USD,,yfinance,-,Y,17/12/1996,27/06/2025,S&P500 constituents
+DHI,D. R. Horton,us stock,Y,Y,USD,,yfinance,-,Y,05/06/1992,27/06/2025,S&P500 constituents
+DHR,Danaher Corporation,us stock,Y,Y,USD,,yfinance,-,Y,29/12/1978,27/06/2025,S&P500 constituents
+DIG.L,DUNEDIN INCOME GROWTH INV TST PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+DIS,Walt Disney Company (The),us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+DIVI.L,DIVERSE INCOME TRUST (THE) PLC ORD 0.1P,uk stock,Y,N,GBX,,yfinance,-,Y,27/04/2011,27/06/2025,LSE : FTSE All-Share
+DJMC.L,ISHARES PLC ISHARES EUR STOXX MID UCITS ETF EUR DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+DLAR.L,DE LA RUE PLC ORD 44 152/175P,uk stock,N,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+DLG.L,DIRECT LINE INSURANCE GROUP PLC ORD 10 10/11P,uk stock,Y,Y,GBX,,yfinance,-,Y,11/10/2012,27/06/2025,LSE : FTSE All-Share
+DLN.L,DERWENT LONDON PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+DLR,Digital Realty,us stock,Y,N,USD,,yfinance,-,Y,29/10/2004,27/06/2025,S&P500 constituents
+DLTR,Dollar Tree,us stock,N,Y,USD,,yfinance,-,Y,07/03/1995,27/06/2025,S&P500 constituents
+DNLM.L,DUNELM GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,19/10/2006,27/06/2025,LSE : FTSE All-Share
+DOC,Healthpeak Properties,us stock,Y,Y,USD,,yfinance,-,Y,23/05/1985,27/06/2025,S&P500 constituents
+DOCS.L,DR. MARTENS PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,29/01/2021,27/06/2025,LSE : FTSE All-Share
+DOGE-GBP,Dogecoin,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+DOM.L,DOMINO'S PIZZA GROUP PLC ORD 25/48P,uk stock,Y,Y,GBX,,yfinance,-,Y,24/11/1999,27/06/2025,LSE : FTSE All-Share
+DORE.L,DOWNING RENEWABLES & INFRASTRUCTURE ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,10/12/2020,27/06/2025,LSE : FTSE All-Share
+DOT-GBP,Polkadot,cryptocurrency,N,N,GBP,,yfinance,-,Y,20/08/2020,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+DOV,Dover Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+DOW,Dow Inc.,us stock,Y,N,USD,,yfinance,-,Y,20/03/2019,27/06/2025,S&P500 constituents
+DPLM.L,DIPLOMA PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+DPZ,Domino's,us stock,Y,N,USD,,yfinance,-,Y,13/07/2004,27/06/2025,S&P500 constituents
+DRI,Darden Restaurants,us stock,Y,Y,USD,,yfinance,-,Y,09/05/1995,27/06/2025,S&P500 constituents
+DRX.L,DRAX GROUP PLC ORD 11 16/29P,uk stock,Y,Y,GBX,,yfinance,-,Y,15/12/2005,27/06/2025,LSE : FTSE All-Share
+DTE,DTE Energy,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+DUK,Duke Energy,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+DVA,DaVita,us stock,N,Y,USD,,yfinance,-,Y,31/10/1995,27/06/2025,S&P500 constituents
+DVN,Devon Energy,us stock,Y,Y,USD,,yfinance,-,Y,22/07/1985,27/06/2025,S&P500 constituents
+DWL.L,DOWLAIS GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,20/04/2023,27/06/2025,LSE : FTSE All-Share
+DXCM,Dexcom,us stock,N,Y,USD,,yfinance,-,Y,14/04/2005,27/06/2025,S&P500 constituents
+EA,Electronic Arts,us stock,Y,Y,USD,,yfinance,-,Y,20/09/1989,27/06/2025,S&P500 constituents
+EAT.L,EUROPEAN ASSETS TRUST PLC ORD GBP0.10,uk stock,Y,Y,GBX,,yfinance,-,Y,30/12/1983,27/06/2025,LSE : FTSE All-Share
+EBAY,eBay Inc.,us stock,Y,Y,USD,,yfinance,-,Y,24/09/1998,27/06/2025,S&P500 constituents
+ECEL.L,EUROCELL PLC ORD GBP0.001,uk stock,Y,N,GBX,,yfinance,-,Y,04/03/2015,27/06/2025,LSE : FTSE All-Share
+ECL,Ecolab,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+ECOR.L,ECORA RESOURCES PLC ORD 2P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+ED,Consolidated Edison,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+EDIN.L,EDINBURGH INV TST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+EDV.L,ENDEAVOUR MINING PLC ORD USD0.01,uk stock,Y,N,GBX,,yfinance,-,Y,30/01/2018,27/06/2025,LSE : FTSE All-Share
+EEDS.L,ISHARES IV PLC ISHRS MSCI USA ESG ENH CTB USD ETF DIST,etf,Y,N,USD,,yfinance,-,Y,08/03/2019,27/06/2025,250 ETFs on LSE with highest market cap
+EEUD.L,ISHARES IV PLC ISH MSCI EUROPE ESG ENH CTB EUR D,etf,Y,N,GBP,,yfinance,-,Y,08/03/2019,27/06/2025,250 ETFs on LSE with highest market cap
+EEWD.L,ISHARES IV PLC ISH MSCI WRLD ESG ENH CTB USD D,etf,Y,N,USD,,yfinance,-,Y,08/03/2019,27/06/2025,250 ETFs on LSE with highest market cap
+EEXF.L,ISHARES III PLC ISHRS EUR CRP BND EX-FIN ETF EUR (DIST),etf,Y,N,GBP,,yfinance,-,Y,25/09/2009,27/06/2025,250 ETFs on LSE with highest market cap
+EFX,Equifax,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+EG,Everest Group,us stock,Y,N,USD,,yfinance,-,Y,03/10/1995,27/06/2025,S&P500 constituents
+EGL.L,ECOFIN GLBL UTIL & INF TST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,26/09/2016,27/06/2025,LSE : FTSE All-Share
+EIX,Edison International,us stock,Y,Y,USD,,yfinance,-,Y,03/05/1973,27/06/2025,S&P500 constituents
+EL,Estee Lauder Companies ,us stock,Y,Y,USD,,yfinance,-,Y,17/11/1995,27/06/2025,S&P500 constituents
+ELM.L,ELEMENTIS PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+ELV,Elevance Health,us stock,Y,Y,USD,,yfinance,-,Y,30/10/2001,27/06/2025,S&P500 constituents
+EMCR.L,ISHARES V PLC ISHRS $ EM CORP BOND UCITS ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,17/04/2012,27/06/2025,250 ETFs on LSE with highest market cap
+EMG.L,MAN GROUP PLC ORD USD0.0342857142,uk stock,Y,Y,GBX,,yfinance,-,Y,13/10/1994,27/06/2025,LSE : FTSE All-Share
+EMIM.L,ISHARES PLC ISHARES CORE EM IMI UCITS ETF USD (ACC),etf,N,N,GBX,,yfinance,-,Y,09/06/2014,27/06/2025,250 ETFs on LSE with highest market cap
+EMN,Eastman Chemical Company,us stock,Y,Y,USD,,yfinance,-,Y,14/12/1993,27/06/2025,S&P500 constituents
+EMR,Emerson Electric,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+EMSA.L,ISHARES II PLC ISH JPM ADV $EM BOND ETF-A,etf,N,N,USD,,yfinance,-,Y,24/09/2018,27/06/2025,250 ETFs on LSE with highest market cap
+EMUD.L,ISHARES IV PLC ISH MSCI EMU ESG ENH CTB EUR D,etf,Y,N,GBP,,yfinance,-,Y,08/03/2019,27/06/2025,250 ETFs on LSE with highest market cap
+ENOG.L,ENERGEAN PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,16/03/2018,27/06/2025,LSE : FTSE All-Share
+ENPH,Enphase Energy,us stock,N,N,USD,,yfinance,-,Y,30/03/2012,27/06/2025,S&P500 constituents
+ENQ.L,ENQUEST PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,06/04/2010,27/06/2025,LSE : FTSE All-Share
+ENRG.L,VH GLOBAL ENERGY INFRASTRUCTURE PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,02/02/2021,27/06/2025,LSE : FTSE All-Share
+ENT.L,ENTAIN PLC ORD EUR0.01,uk stock,Y,N,GBX,,yfinance,-,Y,21/12/2004,27/06/2025,LSE : FTSE All-Share
+EOG,EOG Resources,us stock,Y,Y,USD,,yfinance,-,Y,04/10/1989,27/06/2025,S&P500 constituents
+EPAM,EPAM Systems,us stock,N,N,USD,,yfinance,-,Y,08/02/2012,27/06/2025,S&P500 constituents
+EQDS.L,ISHARES II PLC ISHRS EUROPE QUALITY ADV DIV EUR (DIST),etf,Y,N,GBX,,yfinance,-,Y,12/06/2017,27/06/2025,250 ETFs on LSE with highest market cap
+EQIX,Equinix,us stock,Y,Y,USD,,yfinance,-,Y,11/08/2000,27/06/2025,S&P500 constituents
+EQQQ.L,INVESCO MARKETS III PLC INVESCO EQQQ NASDAQ 100 UCITS ETF,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+EQR,Equity Residential,us stock,Y,Y,USD,,yfinance,-,Y,12/08/1993,27/06/2025,S&P500 constituents
+EQT,EQT Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+ERIE,Erie Indemnity,us stock,Y,Y,USD,,yfinance,-,Y,02/10/1995,27/06/2025,S&P500 constituents
+ERNA.L,ISHARES IV PLC ISH $ ULTRASRT BND ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,29/06/2018,27/06/2025,250 ETFs on LSE with highest market cap
+ERND.L,ISHARES IV PLC ISHS $ ULTRASHORT BD UCITS ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,15/10/2013,27/06/2025,250 ETFs on LSE with highest market cap
+ERNS.L,ISHARES IV PLC ISHS £ ULTRASHORT BD UCITS ETFGBP DIST,etf,Y,N,GBP,,yfinance,-,Y,16/10/2013,27/06/2025,250 ETFs on LSE with highest market cap
+ES,Eversource Energy,us stock,Y,N,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+ESCT.L,THE EUROPEAN SMALLER CO'S TST PLC ORD 1.5625P,uk stock,Y,Y,GBX,,yfinance,-,Y,03/09/1990,27/06/2025,LSE : FTSE All-Share
+ESNT.L,ESSENTRA PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,06/06/2005,27/06/2025,LSE : FTSE All-Share
+ESP.L,EMPIRIC STUDENT PROPERTY PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,30/06/2014,27/06/2025,LSE : FTSE All-Share
+ESS,Essex Property Trust,us stock,Y,N,USD,,yfinance,-,Y,07/06/1994,27/06/2025,S&P500 constituents
+ETC-GBP,Ethereum Classic,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+ETH-GBP,Ethereum,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+ETN,Eaton Corporation,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+ETR,Entergy,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+EUE.L,ISHARES II PLC ISHRS EURO STOXX 50 UCITS ETF EUR (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+EUN.L,ISHARES II PLC ISHRS STOXX EUROPE 50 UCITS ETF EUR DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+EVOK.L,EVOKE PLC ORD 0.5P (DI),uk stock,Y,N,GBX,,yfinance,-,Y,29/09/2005,27/06/2025,LSE : FTSE All-Share
+EVRG,Evergy,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+EW,Edwards Lifesciences,us stock,N,Y,USD,,yfinance,-,Y,27/03/2000,27/06/2025,S&P500 constituents
+EWI.L,EDINBURGH WORLDWIDE INV TRUST PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/09/1972,27/06/2025,LSE : FTSE All-Share
+EXC,Exelon,us stock,Y,Y,USD,,yfinance,-,Y,02/05/1973,27/06/2025,S&P500 constituents
+EXE,Expand Energy,us stock,Y,N,USD,,yfinance,-,Y,10/02/2021,27/06/2025,S&P500 constituents
+EXPD,Expeditors International,us stock,Y,Y,USD,,yfinance,-,Y,26/09/1984,27/06/2025,S&P500 constituents
+EXPE,Expedia Group,us stock,Y,Y,USD,,yfinance,-,Y,21/07/2005,27/06/2025,S&P500 constituents
+EXPN.L,EXPERIAN PLC ORD USD0.10,uk stock,Y,N,GBX,,yfinance,-,Y,09/10/2006,27/06/2025,LSE : FTSE All-Share
+EXR,Extra Space Storage,us stock,Y,N,USD,,yfinance,-,Y,16/08/2004,27/06/2025,S&P500 constituents
+EZJ.L,EASYJET PLC ORD 27 2/7P,uk stock,Y,Y,GBX,,yfinance,-,Y,15/11/2000,27/06/2025,LSE : FTSE All-Share
+F,Ford Motor Company,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+FAN.L,VOLUTION GROUP PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,18/06/2014,27/06/2025,LSE : FTSE All-Share
+FANG,Diamondback Energy,us stock,Y,N,USD,,yfinance,-,Y,12/10/2012,27/06/2025,S&P500 constituents
+FAS.L,FIDELITY ASIAN VALUES PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,13/06/1996,27/06/2025,LSE : FTSE All-Share
+FAST,Fastenal,us stock,Y,Y,USD,,yfinance,-,Y,20/08/1987,27/06/2025,S&P500 constituents
+FCH.L,FUNDING CIRCLE HOLDINGS PLC ORD 0.1P,uk stock,N,N,GBX,,yfinance,-,Y,02/10/2018,27/06/2025,LSE : FTSE All-Share
+FCIT.L,F&C INVESTMENT TRUST PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+FCSS.L,FIDELITY CHINA SPEC. SITUATION PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,19/04/2010,27/06/2025,LSE : FTSE All-Share
+FCX,Freeport-McMoRan,us stock,Y,Y,USD,,yfinance,-,Y,10/07/1995,27/06/2025,S&P500 constituents
+FDM.L,FDM GROUP (HOLDINGS) PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,20/06/2014,27/06/2025,LSE : FTSE All-Share
+FDS,FactSet,us stock,Y,Y,USD,,yfinance,-,Y,28/06/1996,27/06/2025,S&P500 constituents
+FDX,FedEx,us stock,Y,Y,USD,,yfinance,-,Y,12/04/1978,27/06/2025,S&P500 constituents
+FE,FirstEnergy,us stock,Y,N,USD,,yfinance,-,Y,10/11/1997,27/06/2025,S&P500 constituents
+FEML.L,FIDELITY EMERGING MARKETS LIMITED PTG NPV,uk stock,Y,Y,GBX,,yfinance,-,Y,06/07/1989,27/06/2025,LSE : FTSE All-Share
+FEV.L,FIDELITY EUROPEAN TRUST PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/11/1991,27/06/2025,LSE : FTSE All-Share
+FFIV,"F5, Inc.",us stock,N,Y,USD,,yfinance,-,Y,04/06/1999,27/06/2025,S&P500 constituents
+FGEN.L,FORESIGHT ENVIRONMENTAL INFRASTRUCT ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,31/03/2014,27/06/2025,LSE : FTSE All-Share
+FGP.L,FIRSTGROUP PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,19/06/1995,27/06/2025,LSE : FTSE All-Share
+FI,Fiserv,us stock,N,Y,USD,,yfinance,-,Y,25/09/1986,27/06/2025,S&P500 constituents
+FICO,Fair Isaac,us stock,Y,Y,USD,,yfinance,-,Y,22/07/1987,27/06/2025,S&P500 constituents
+FINW.L,MULTI UNITS LUXEMBOURG AMUNDI MSCI WORLD FINANCIALS ETFUSD ACC,etf,N,N,USD,,yfinance,-,Y,23/08/2010,27/06/2025,250 ETFs on LSE with highest market cap
+FIS,Fidelity National Information Services,us stock,Y,N,USD,,yfinance,-,Y,20/06/2001,27/06/2025,S&P500 constituents
+FITB,Fifth Third Bancorp,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+FJV.L,FIDELITY JAPAN TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,15/03/1994,27/06/2025,LSE : FTSE All-Share
+FLOA.L,ISHARES II PLC ISH $ FLOAT BOND UCITS ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,21/03/2018,27/06/2025,250 ETFs on LSE with highest market cap
+FORT.L,FORTERRA PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,21/04/2016,27/06/2025,LSE : FTSE All-Share
+FOUR.L,4IMPRINT GROUP PLC ORD 38 6/13P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+FOX,Fox Corporation (Class B),us stock,Y,N,USD,,yfinance,-,Y,13/03/2019,27/06/2025,S&P500 constituents
+FOXA,Fox Corporation (Class A),us stock,Y,N,USD,,yfinance,-,Y,12/03/2019,27/06/2025,S&P500 constituents
+FOXT.L,FOXTONS GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,20/09/2013,27/06/2025,LSE : FTSE All-Share
+FRAS.L,FRASERS GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,31/07/2002,27/06/2025,LSE : FTSE All-Share
+FRES.L,FRESNILLO PLC ORD USD0.50,uk stock,Y,N,GBX,,yfinance,-,Y,09/05/2008,27/06/2025,LSE : FTSE All-Share
+FRGT.L,FRANKLIN GLOBAL TRUST PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+FRT,Federal Realty Investment Trust,us stock,Y,Y,USD,,yfinance,-,Y,03/05/1973,27/06/2025,S&P500 constituents
+FSFL.L,FORESIGHT SOLAR FUND LD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,29/10/2013,27/06/2025,LSE : FTSE All-Share
+FSG.L,FORESIGHT GROUP HOLDINGS LIMITED ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,04/02/2021,27/06/2025,LSE : FTSE All-Share
+FSJ.L,FISHER(JAMES)& SONS PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+FSLR,First Solar,us stock,N,N,USD,,yfinance,-,Y,17/11/2006,27/06/2025,S&P500 constituents
+FSTA.L,"FULLER,SMITH & TURNER PLC 'A' ORD 40P",uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+FSV.L,FIDELITY SPECIAL VALUES PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,17/11/1994,27/06/2025,LSE : FTSE All-Share
+FTNT,Fortinet,us stock,N,Y,USD,,yfinance,-,Y,18/11/2009,27/06/2025,S&P500 constituents
+FTV,Fortive,us stock,Y,Y,USD,,yfinance,-,Y,05/07/2016,27/06/2025,S&P500 constituents
+FUTR.L,FUTURE PLC ORD 15P,uk stock,Y,Y,GBX,,yfinance,-,Y,18/06/1999,27/06/2025,LSE : FTSE All-Share
+FXC.L,ISHARES PLC ISHARES CHINA LGE CAP UCITS ETF USD DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+FXPO.L,FERREXPO PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,15/06/2007,27/06/2025,LSE : FTSE All-Share
+GABI.L,GCP ASSET BACKED INCOME FUND LTD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,23/10/2015,27/06/2025,LSE : FTSE All-Share
+GAW.L,GAMES WORKSHOP GROUP PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,30/09/1994,27/06/2025,LSE : FTSE All-Share
+GBS.L,GOLD BULLION SECURITIES LD GOLD BULLION SECURITIES,etf,N,N,USD,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+GBSP.L,WISDOMTREE HEDGED METAL SECURITIES WISDOMTREE PHYSICAL GOLD - GBP DAILY HED,etf,N,N,GBX,,yfinance,-,Y,18/03/2013,27/06/2025,250 ETFs on LSE with highest market cap
+GCP.L,GCP INFRASTRUCTURE INVESTMENTS LD ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,22/07/2010,27/06/2025,LSE : FTSE All-Share
+GD,General Dynamics,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+GDDY,GoDaddy,us stock,N,N,USD,,yfinance,-,Y,31/03/2015,27/06/2025,S&P500 constituents
+GDWN.L,GOODWIN PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+GE,GE Aerospace,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+GEHC,GE HealthCare,us stock,Y,N,USD,,yfinance,-,Y,15/12/2022,27/06/2025,S&P500 constituents
+GEN,Gen Digital,us stock,Y,Y,USD,,yfinance,-,Y,23/06/1989,27/06/2025,S&P500 constituents
+GEN.L,GENUIT GROUP PLC ORD GBP0.001,uk stock,Y,N,GBX,,yfinance,-,Y,11/04/2014,27/06/2025,LSE : FTSE All-Share
+GEV,GE Vernova,us stock,Y,N,USD,,yfinance,-,Y,01/04/2024,27/06/2025,S&P500 constituents
+GFRD.L,GALLIFORD TRY HOLDINGS PLC ORD 50P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+GFTU.L,GRAFTON GROUP PLC UT (1 ORD) (CDI),uk stock,Y,N,GBX,,yfinance,-,Y,30/07/2002,27/06/2025,LSE : FTSE All-Share
+GGRA.L,WISDOMTREE ISSUER ICAV WT GLBL QUAL DIV GROWTH UCITS ETF - USD,etf,N,N,USD,,yfinance,-,Y,03/06/2016,27/06/2025,250 ETFs on LSE with highest market cap
+GIL5.L,MULTI UNITS LUXEMBOURG AMUNDI UK GOVERNMENT BOND 0-5Y DIST,etf,Y,N,GBP,,yfinance,-,Y,01/08/2016,27/06/2025,250 ETFs on LSE with highest market cap
+GILD,Gilead Sciences,us stock,Y,Y,USD,,yfinance,-,Y,22/01/1992,27/06/2025,S&P500 constituents
+GIS,General Mills,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+GL,Globe Life,us stock,Y,Y,USD,,yfinance,-,Y,01/10/1980,27/06/2025,S&P500 constituents
+GLE.L,MJ GLEESON PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+GLEN.L,GLENCORE PLC ORD USD0.01,uk stock,Y,N,GBX,,yfinance,-,Y,19/05/2011,27/06/2025,LSE : FTSE All-Share
+GLGG.L,LEGAL & GENERAL UCITS ETF PLC LG CLEAN WATER ETF,etf,N,N,GBX,,yfinance,-,Y,26/06/2019,27/06/2025,250 ETFs on LSE with highest market cap
+GLW,Corning Inc.,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+GM,General Motors,us stock,Y,N,USD,,yfinance,-,Y,18/11/2010,27/06/2025,S&P500 constituents
+GMS.L,GULF MARINE SERVICES PLC ORD 2P,uk stock,N,N,GBX,,yfinance,-,Y,14/03/2014,27/06/2025,LSE : FTSE All-Share
+GNC.L,GREENCORE GROUP PLC ORD 1P (CDI),uk stock,Y,N,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+GNRC,Generac,us stock,Y,N,USD,,yfinance,-,Y,11/02/2010,27/06/2025,S&P500 constituents
+GNS.L,GENUS PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,06/07/2000,27/06/2025,LSE : FTSE All-Share
+GOOG,Alphabet Inc. (Class C),us stock,Y,Y,USD,,yfinance,-,Y,19/08/2004,27/06/2025,S&P500 constituents
+GOOGL,Alphabet Inc. (Class A),us stock,Y,Y,USD,,yfinance,-,Y,19/08/2004,27/06/2025,S&P500 constituents
+GOT.L,GLOBAL OPPORTUNITIES TRUST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,15/12/2003,27/06/2025,LSE : FTSE All-Share
+GPC,Genuine Parts Company,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+GPE.L,GREAT PORTLAND ESTATES PLC ORD 15 5/19P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+GPN,Global Payments,us stock,Y,Y,USD,,yfinance,-,Y,16/01/2001,27/06/2025,S&P500 constituents
+GRG.L,GREGGS PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+GRI.L,GRAINGER PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+GRMN,Garmin,us stock,Y,Y,USD,,yfinance,-,Y,08/12/2000,27/06/2025,S&P500 constituents
+GROW.L,MOLTEN VENTURES PLC ORD GBP0.01,uk stock,N,N,GBX,,yfinance,-,Y,15/06/2016,27/06/2025,LSE : FTSE All-Share
+GS,Goldman Sachs,us stock,Y,N,USD,,yfinance,-,Y,04/05/1999,27/06/2025,S&P500 constituents
+GSCT.L,THE GLOBAL SMALLER CO'S TRUST PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+GSF.L,GORE STREET ENERGY STORAGE FUND PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,25/05/2018,27/06/2025,LSE : FTSE All-Share
+GSK.L,GSK PLC ORD 31 1/4P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+GWW,W. W. Grainger,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+GYM.L,THE GYM GROUP PLC ORD 0.01P,uk stock,Y,N,GBX,,yfinance,-,Y,09/11/2015,27/06/2025,LSE : FTSE All-Share
+H50E.L,HSBC ETFS PLC HSBC EURO STOXX 50 UCITS ETF,etf,Y,N,GBX,,yfinance,-,Y,06/10/2009,27/06/2025,250 ETFs on LSE with highest market cap
+HAL,Halliburton,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+HAS,Hasbro,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+HAS.L,HAYS PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,25/10/1989,27/06/2025,LSE : FTSE All-Share
+HBAN,Huntington Bancshares,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+HBAR-GBP,Hedera,cryptocurrency,N,N,GBP,,yfinance,-,Y,17/09/2019,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+HBR.L,HARBOUR ENERGY PLC ORD 0.002P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/04/2021,27/06/2025,LSE : FTSE All-Share
+HCA,HCA Healthcare,us stock,Y,N,USD,,yfinance,-,Y,10/03/2011,27/06/2025,S&P500 constituents
+HD,Home Depot (The),us stock,Y,Y,USD,,yfinance,-,Y,22/09/1981,27/06/2025,S&P500 constituents
+HDIQ.L,ISHARES II PLC ISHS MSCI USA QLTY DIV ADV UCITS ETF £ D,etf,Y,N,GBX,,yfinance,-,Y,06/06/2014,27/06/2025,250 ETFs on LSE with highest market cap
+HEAD.L,HEADLAM GROUP PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+HEAL.L,ISHARES IV PLC ISHS HEALTHCARE INNVTION UCITS ETF ACC,etf,N,N,USD,,yfinance,-,Y,08/09/2016,27/06/2025,250 ETFs on LSE with highest market cap
+HES,Hess Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+HET.L,HENDERSON EUROPEAN TRUST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/09/1972,27/06/2025,LSE : FTSE All-Share
+HFD.L,HALFORDS GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,03/06/2004,27/06/2025,LSE : FTSE All-Share
+HFEL.L,HENDERSON FAR EAST INCOME LD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,31/01/1980,27/06/2025,LSE : FTSE All-Share
+HFG.L,HILTON FOOD GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,11/01/2007,27/06/2025,LSE : FTSE All-Share
+HGT.L,HG CAPITAL TRUST PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/12/1989,27/06/2025,LSE : FTSE All-Share
+HHI.L,HENDERSON HIGH INCOME TRUST PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,17/08/2000,27/06/2025,LSE : FTSE All-Share
+HICL.L,HICL INFRASTRUCTURE PLC ORD 0.01P,uk stock,Y,N,GBX,,yfinance,-,Y,28/03/2006,27/06/2025,LSE : FTSE All-Share
+HIG,Hartford (The),us stock,Y,Y,USD,,yfinance,-,Y,15/12/1995,27/06/2025,S&P500 constituents
+HII,Huntington Ingalls Industries,us stock,Y,N,USD,,yfinance,-,Y,22/03/2011,27/06/2025,S&P500 constituents
+HIK.L,HIKMA PHARMACEUTICALS PLC ORD SHS 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/11/2005,27/06/2025,LSE : FTSE All-Share
+HILS.L,HILL & SMITH PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+HLCL.L,HELICAL PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+HLMA.L,HALMA PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+HLN.L,HALEON PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,18/07/2022,27/06/2025,LSE : FTSE All-Share
+HLT,Hilton Worldwide,us stock,Y,Y,USD,,yfinance,-,Y,12/12/2013,27/06/2025,S&P500 constituents
+HMC,Honda Motor Co.,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,household name bluechip stock outside of S&P500
+HMCH.L,HSBC ETFS PLC HSBC MSCI CHINA UCITS ETF $,etf,Y,N,GBX,,yfinance,-,Y,28/01/2011,27/06/2025,250 ETFs on LSE with highest market cap
+HMEF.L,HSBC ETFS PLC HSBC MSCI EMERGING MARKETS UCITS ETF,etf,Y,N,GBX,,yfinance,-,Y,07/09/2011,27/06/2025,250 ETFs on LSE with highest market cap
+HMEM.L,HSBC ETFS PLC HSBC MSCI EMERGING MARKETS UCITS ETF $,etf,Y,N,USD,,yfinance,-,Y,07/09/2011,27/06/2025,250 ETFs on LSE with highest market cap
+HMSO.L,HAMMERSON PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+HMWD.L,HSBC ETFS PLC HSBC MSCI WORLD UCITS ETF $,etf,Y,N,USD,,yfinance,-,Y,09/12/2010,27/06/2025,250 ETFs on LSE with highest market cap
+HMWO.L,HSBC ETFS PLC HSBC MSCI WORLD UCITS ETF,etf,Y,N,GBX,,yfinance,-,Y,09/12/2010,27/06/2025,250 ETFs on LSE with highest market cap
+HMXJ.L,HSBC ETFS PLC HSBC MSCI PACIFIC EX JAPAN UCITS ETF $,etf,Y,N,GBX,,yfinance,-,Y,07/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+HOC.L,HOCHSCHILD MINING PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,03/11/2006,27/06/2025,LSE : FTSE All-Share
+HOLX,Hologic,us stock,N,Y,USD,,yfinance,-,Y,01/03/1990,27/06/2025,S&P500 constituents
+HON,Honeywell,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+HPE,Hewlett Packard Enterprise,us stock,Y,Y,USD,,yfinance,-,Y,19/10/2015,27/06/2025,S&P500 constituents
+HPQ,HP Inc.,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+HPRD.L,HSBC ETFS PLC HSBC FTSE EPRA/NAREIT DEV. UCITS ETF $,etf,Y,N,USD,,yfinance,-,Y,21/06/2011,27/06/2025,250 ETFs on LSE with highest market cap
+HPRO.L,HSBC ETFS PLC HSBC FTSE EPRA/NAREIT DEV. UCITS ETF,etf,Y,N,GBX,,yfinance,-,Y,23/06/2011,27/06/2025,250 ETFs on LSE with highest market cap
+HRI.L,HERALD INV TST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,31/01/1994,27/06/2025,LSE : FTSE All-Share
+HRL,Hormel Foods,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+HSBA.L,HSBC HLDGS PLC ORD $0.50 (UK REG),uk stock,Y,Y,GBX,,yfinance,-,Y,05/07/1988,27/06/2025,LSE : FTSE All-Share
+HSIC,Henry Schein,us stock,N,Y,USD,,yfinance,-,Y,03/11/1995,27/06/2025,S&P500 constituents
+HSL.L,HENDERSON SMALLER COS INV TST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+HSPX.L,HSBC ETFS PLC HSBC S&P 500 UCITS ETF,etf,Y,N,GBX,,yfinance,-,Y,14/05/2010,27/06/2025,250 ETFs on LSE with highest market cap
+HST,Host Hotels & Resorts,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+HSW.L,HOSTELWORLD GROUP PLC ORD EUR0.01,uk stock,N,Y,GBX,,yfinance,-,Y,28/10/2015,27/06/2025,LSE : FTSE All-Share
+HSX.L,HISCOX LD ORD 6.5P (DI),uk stock,Y,Y,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+HSY,Hershey Company (The),us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+HTG.L,HUNTING PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+HTWS.L,HELIOS TOWERS PLC ORD 1P,uk stock,N,N,GBX,,yfinance,-,Y,15/10/2019,27/06/2025,LSE : FTSE All-Share
+HUBB,Hubbell Incorporated,us stock,Y,Y,USD,,yfinance,-,Y,05/06/1972,27/06/2025,S&P500 constituents
+HUKX.L,HSBC ETFS PLC HSBC FTSE 100 UCITS ETF,etf,Y,N,GBX,,yfinance,-,Y,24/08/2009,27/06/2025,250 ETFs on LSE with highest market cap
+HUM,Humana,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+HVPE.L,HARBOURVEST GLOBAL PRIVATE EQUITY L ORD NPV,uk stock,N,Y,GBX,,yfinance,-,Y,29/06/2010,27/06/2025,LSE : FTSE All-Share
+HWDN.L,HOWDEN JOINERY GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,16/07/1992,27/06/2025,LSE : FTSE All-Share
+HWG.L,HARWORTH GROUP PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,25/05/1993,27/06/2025,LSE : FTSE All-Share
+HWM,Howmet Aerospace,us stock,Y,N,USD,,yfinance,-,Y,01/11/2016,27/06/2025,S&P500 constituents
+HWWA.L,HSBC ETFS PLC HSBC MULTI FACTOR WORLDWIDE EQ UCITS £,etf,Y,N,GBP,,yfinance,-,Y,08/07/2014,27/06/2025,250 ETFs on LSE with highest market cap
+HYGU.L,ISHARES PLC ISH EUR HY CRP BOND UCITS ETF USD-H ACC,etf,N,N,USD,,yfinance,-,Y,16/11/2017,27/06/2025,250 ETFs on LSE with highest market cap
+HYLD.L,ISHARES PLC ISHARES GLBL HY CP BD UCITS ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,13/11/2012,27/06/2025,250 ETFs on LSE with highest market cap
+IAD.L,INVESCO ASIA DRAGON TRUST PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,11/07/1995,27/06/2025,LSE : FTSE All-Share
+IAEX.L,ISHARES PLC ISHARES AEX UCITS ETF EUR (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IAG.L,INTL CONSOLIDATED AIRLINES GROUP SA ORD EUR0.10 (CDI),uk stock,Y,N,GBX,,yfinance,-,Y,02/01/2003,27/06/2025,LSE : FTSE All-Share
+IAUP.L,ISHARES V PLC ISHRS GOLD PRODUCERS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,16/09/2011,27/06/2025,250 ETFs on LSE with highest market cap
+IB01.L,ISHARES PLC ISH $ TR BND 0-1YR U-A,etf,N,N,USD,,yfinance,-,Y,20/02/2019,27/06/2025,250 ETFs on LSE with highest market cap
+IBCI.L,ISHARES PLC ISHARES EUR I.L GOV BD UCITS ETF EUR ACC,etf,N,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IBGE.L,ISHARES III PLC ISHRS EUR GOVT BOND 0-1YR ETF EUR (DIST),etf,Y,N,GBP,,yfinance,-,Y,06/03/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IBGL.L,ISHARES II PLC ISHRS EUR GOVT BOND 15-30YR ETF EUR DIST,etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IBGM.L,ISHARES II PLC ISHRS E GOVT BOND 7-10YR ETF EUR (DIST),etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IBGS.L,ISHARES PLC ISHARES EUR GV BD 1-3 UCITS ETF EUR DIST,etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IBGX.L,ISHARES II PLC ISHRS EUR GOVT BOND 3-5YR ETF EUR (DIST),etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IBM,IBM,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+IBST.L,IBSTOCK PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,22/10/2015,27/06/2025,LSE : FTSE All-Share
+IBT.L,INTERNATIONAL BIOTECHNOLOGY TST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,31/03/1994,27/06/2025,LSE : FTSE All-Share
+IBTA.L,ISHARES PLC ISHS $ TR BND 1-3YR UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,13/04/2017,27/06/2025,250 ETFs on LSE with highest market cap
+IBTM.L,ISHARES II PLC ISHRS $ TREAS BOND 7-10YR ETF USD (DIST),etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IBTS.L,ISHARES PLC ISHARES $TRES.BD1-3YR UCITS ETF USD DIST,etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+ICE,Intercontinental Exchange,us stock,Y,Y,USD,,yfinance,-,Y,16/11/2005,27/06/2025,S&P500 constituents
+ICG.L,INTERMEDIATE CAPITAL GROUP PLC ORD 26 1/4P,uk stock,Y,Y,GBX,,yfinance,-,Y,25/05/1994,27/06/2025,LSE : FTSE All-Share
+ICGT.L,ICG ENTERPRISE TRUST PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,30/09/1981,27/06/2025,LSE : FTSE All-Share
+ICP-GBP,Internet Computer,cryptocurrency,N,N,GBP,,yfinance,-,Y,10/05/2021,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+IDFX.L,ISHARES PLC ISHARES CHINA LGE CAP UCITS ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IDTL.L,ISHARES IV PLC ISHS $ TRSRY BD 20+YR UCITS ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,21/01/2015,27/06/2025,250 ETFs on LSE with highest market cap
+IDVY.L,ISHARES PLC ISHARES EURO DIVIDEND UCITS ETF EUR DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IDXX,Idexx Laboratories,us stock,N,Y,USD,,yfinance,-,Y,21/06/1991,27/06/2025,S&P500 constituents
+IEBC.L,ISHARES III PLC ISHRS CORE EUR CORP BOND ETF EUR (DIST),etf,Y,N,GBP,,yfinance,-,Y,06/03/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IEDY.L,ISHARES V PLC ISHRS EM DIVIDEND UCITS ETF USD (DIST),etf,Y,N,USD,,yfinance,-,Y,25/11/2011,27/06/2025,250 ETFs on LSE with highest market cap
+IEEM.L,ISHARES PLC ISHARES MSCI EM UCITS ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IEM.L,IMPAX ENVIRONMENTAL MARKETS PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,22/02/2002,27/06/2025,LSE : FTSE All-Share
+IEMB.L,ISHARES II PLC ISHRS J.P. MORGAN $ EM BOND ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,15/02/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IEML.L,ISHARES III PLC ISHRS EM LOCAL GOVT BOND ETF USD (DIST),etf,Y,N,USD,,yfinance,-,Y,20/06/2011,27/06/2025,250 ETFs on LSE with highest market cap
+IEUX.L,ISHARES PLC ISHS MSCI EURO EX-UK UCITS ETF EUR DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IEX,IDEX Corporation,us stock,Y,Y,USD,,yfinance,-,Y,02/06/1989,27/06/2025,S&P500 constituents
+IFF,International Flavors & Fragrances,us stock,Y,Y,USD,,yfinance,-,Y,17/12/1974,27/06/2025,S&P500 constituents
+IFFF.L,ISHARES PLC ISHARES MSCI AC FE X-JP UCITS ETF $ DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IFSW.L,ISHARES IV PLC ISHS EDGE MSCI WRLD MULTIFAC ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,04/09/2015,27/06/2025,250 ETFs on LSE with highest market cap
+IGC.L,INDIA CAPITAL GROWTH FUND LD ORD 1P,uk stock,N,N,GBX,,yfinance,-,Y,22/12/2005,27/06/2025,LSE : FTSE All-Share
+IGET.L,INVESCO GLBL EQUITY INC TRUST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,23/11/2006,27/06/2025,LSE : FTSE All-Share
+IGG.L,IG GROUP HOLDINGS PLC ORD 0.005P,uk stock,Y,N,GBX,,yfinance,-,Y,28/04/2005,27/06/2025,LSE : FTSE All-Share
+IGHY.L,ISHARES PLC ISHARES GLBL HY CP BD UCITS ETF USD DIST,etf,Y,N,GBP,,yfinance,-,Y,13/11/2012,27/06/2025,250 ETFs on LSE with highest market cap
+IGLH.L,ISHARES III PLC ISH GLOB GOVT BOND ETF GBP-H D,etf,Y,N,GBP,,yfinance,-,Y,21/03/2018,27/06/2025,250 ETFs on LSE with highest market cap
+IGLN.L,ISHARES PHYSICAL METALS PLC ISHARES PHYSICAL GOLD ETC,etf,N,N,USD,,yfinance,-,Y,08/04/2011,27/06/2025,250 ETFs on LSE with highest market cap
+IGLO.L,ISHARES III PLC ISHRS GLOBAL GOVT BOND ETF USD (DIST),etf,Y,N,USD,,yfinance,-,Y,06/03/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IGLS.L,ISHARES III PLC ISHRS UK GILTS 0-5YR ETF GBP (DIST),etf,Y,N,GBP,,yfinance,-,Y,17/04/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IGLT.L,ISHARES II PLC ISHRS CORE UK GILTS UCITS ETF GBP (DIST),etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IGSU.L,ISHARES II PLC ISHRS DW JNES GLB SCREENED ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,25/02/2011,27/06/2025,250 ETFs on LSE with highest market cap
+IGTM.L,ISHARES II PLC ISH $ TBILLS 7-10YR GBP HEDGED DIS,etf,Y,N,GBP,,yfinance,-,Y,27/02/2019,27/06/2025,250 ETFs on LSE with highest market cap
+IGUS.L,ISHARES V PLC ISHRS S&P 500 GBP HEDGED ETF (ACC),etf,N,N,GBX,,yfinance,-,Y,30/09/2010,27/06/2025,250 ETFs on LSE with highest market cap
+IH2O.L,ISHARES II PLC ISHRS GLOBAL WATER UCITS ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IHG.L,INTERCONTINENTAL HOTELS GROUP PLC ORD 20 340/399P,uk stock,Y,Y,GBX,,yfinance,-,Y,31/03/2003,27/06/2025,LSE : FTSE All-Share
+IHP.L,INTEGRAFIN HOLDINGS PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,27/02/2018,27/06/2025,LSE : FTSE All-Share
+IHYA.L,ISHARES II PLC IS $ HY CORPORATE BND UCITS ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,13/04/2017,27/06/2025,250 ETFs on LSE with highest market cap
+IHYU.L,ISHARES II PLC ISHRS $ HIGH YIELD CRP BND ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,13/09/2011,27/06/2025,250 ETFs on LSE with highest market cap
+III.L,3I GROUP PLC ORD 73 19/22P,uk stock,Y,Y,GBX,,yfinance,-,Y,18/07/1994,27/06/2025,LSE : FTSE All-Share
+IJPN.L,ISHARES PLC ISHARES MSCI JAPAN UCITS ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IMB.L,IMPERIAL BRANDS PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/10/1996,27/06/2025,LSE : FTSE All-Share
+IMBA.L,ISHARES IV PLC IS US MORT BACK SEC UCITS ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,13/04/2017,27/06/2025,250 ETFs on LSE with highest market cap
+IMBS.L,ISHARES IV PLC ISHS US MTGE BKD SEC UCITS EFT USD DIST,etf,Y,N,USD,,yfinance,-,Y,23/05/2016,27/06/2025,250 ETFs on LSE with highest market cap
+IMEU.L,ISHARES II PLC ISHARES MSCI EUROPE UCITS ETF EUR (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IMI.L,IMI PLC ORD 28 4/7P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+IMV.L,ISHARES VI PLC ISHRS EDGE MSCI EURP MIN VOL ETF EUR ACC,etf,N,N,GBX,,yfinance,-,Y,30/11/2012,27/06/2025,250 ETFs on LSE with highest market cap
+INAA.L,ISHARES PLC ISHS MSCI N.AMERICA UCITS ETF USD DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+INCH.L,INCHCAPE PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+INCY,Incyte,us stock,N,Y,USD,,yfinance,-,Y,04/11/1993,27/06/2025,S&P500 constituents
+INF.L,INFORMA PLC ORD 0.1P,uk stock,Y,N,GBX,,yfinance,-,Y,22/12/1998,27/06/2025,LSE : FTSE All-Share
+INFR.L,ISHARES II PLC ISHRS GLOBAL INFRA UCITS ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+INOV.L,SCHRODERS CAPITAL GLOBAL INNOVATION ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,21/04/2015,27/06/2025,LSE : FTSE All-Share
+INPP.L,INTERNATIONAL PUBLIC PARTNERSHIP LD ORD 0.01P,uk stock,Y,N,GBX,,yfinance,-,Y,08/11/2006,27/06/2025,LSE : FTSE All-Share
+INRG.L,ISHARES II PLC ISHRS GLOBAL C ENERGY TRA ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+INTC,Intel,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+INTL.L,WISDOMTREE ISSUER ICAV WT ART INTELLIGENCE UCITS ETF USD ACC,etf,N,N,GBX,,yfinance,-,Y,30/11/2018,27/06/2025,250 ETFs on LSE with highest market cap
+INTU,Intuit,us stock,Y,Y,USD,,yfinance,-,Y,12/03/1993,27/06/2025,S&P500 constituents
+INVH,Invitation Homes,us stock,Y,N,USD,,yfinance,-,Y,01/02/2017,27/06/2025,S&P500 constituents
+INVP.L,INVESTEC PLC ORD GBP0.0002,uk stock,Y,Y,GBX,,yfinance,-,Y,22/07/2002,27/06/2025,LSE : FTSE All-Share
+INXG.L,ISHARES II PLC ISHRS £ INDX-LINKED GILTS ETF GBP (DIST),etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+IP,International Paper,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+IPF.L,INTERNATIONAL PERSONAL FINANCE PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,16/07/2007,27/06/2025,LSE : FTSE All-Share
+IPG,Interpublic Group of Companies (The),us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+IPO.L,IP GROUP PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,15/10/2003,27/06/2025,LSE : FTSE All-Share
+IPRP.L,ISHARES PLC ISHARES EURO PTY YLD UCITS ETF EUR DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IPRV.L,ISHARES II PLC ISHRS LISTED PRIVATE EQUITY ETF USD DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IQV,IQVIA,us stock,N,N,USD,,yfinance,-,Y,09/05/2013,27/06/2025,S&P500 constituents
+IR,Ingersoll Rand,us stock,Y,N,USD,,yfinance,-,Y,12/05/2017,27/06/2025,S&P500 constituents
+IRM,Iron Mountain,us stock,Y,Y,USD,,yfinance,-,Y,01/02/1996,27/06/2025,S&P500 constituents
+IS15.L,ISHARES PLC ISHARES £ CORP BD 0-5 UCITS ETF GBP DIST,etf,Y,N,GBP,,yfinance,-,Y,30/03/2011,27/06/2025,250 ETFs on LSE with highest market cap
+ISAC.L,ISHARES V PLC ISHRS MSCI ACWI UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,21/10/2011,27/06/2025,250 ETFs on LSE with highest market cap
+ISF.L,ISHARES PLC ISHARES CORE FTSE100 UCITS ETF GBP(DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+ISLN.L,ISHARES PHYSICAL METALS PLC ISHARES PHYSICAL SILVER ETC,etf,N,N,USD,,yfinance,-,Y,08/04/2011,27/06/2025,250 ETFs on LSE with highest market cap
+ISP6.L,ISHARES III PLC ISHRS S&P SMLL CAP 600 ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+ISRG,Intuitive Surgical,us stock,N,Y,USD,,yfinance,-,Y,16/06/2000,27/06/2025,S&P500 constituents
+ISWD.L,ISHARES II PLC ISHRS MSCI WRLD ISLMIC ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IT,Gartner,us stock,Y,Y,USD,,yfinance,-,Y,05/10/1993,27/06/2025,S&P500 constituents
+ITH.L,ITHACA ENERGY PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,09/11/2022,27/06/2025,LSE : FTSE All-Share
+ITPG.L,ISHARES II PLC ISH $ TIPS ETF GBP HDG ACC,etf,Y,N,GBP,,yfinance,-,Y,05/03/2018,27/06/2025,250 ETFs on LSE with highest market cap
+ITPS.L,ISHARES II PLC ISHARES USD TIPS UCITS ETF USD (ACC),etf,N,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+ITRK.L,INTERTEK GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,24/05/2002,27/06/2025,LSE : FTSE All-Share
+ITV.L,ITV PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+ITW,Illinois Tool Works,us stock,Y,Y,USD,,yfinance,-,Y,13/03/1973,27/06/2025,S&P500 constituents
+IUAA.L,ISHARES II PLC ISHARES US AGG BOND UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,13/04/2017,27/06/2025,250 ETFs on LSE with highest market cap
+IUAG.L,ISHARES II PLC ISHRS US AGG BOND UCITS ETF USD (DIST),etf,Y,N,USD,,yfinance,-,Y,14/09/2011,27/06/2025,250 ETFs on LSE with highest market cap
+IUCD.L,ISHARES V PLC ISHRS S&P 500 CON DISC SECT ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,20/11/2015,27/06/2025,250 ETFs on LSE with highest market cap
+IUCM.L,ISHARES V PLC ISH SP500 COMMS UCITS ETF,etf,N,N,USD,,yfinance,-,Y,17/09/2018,27/06/2025,250 ETFs on LSE with highest market cap
+IUES.L,ISHARES V PLC ISHRS S&P 500 ENERGY SECT ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,20/11/2015,27/06/2025,250 ETFs on LSE with highest market cap
+IUFS.L,ISHARES V PLC ISHRS S&P 500 FIN SECT ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,20/11/2015,27/06/2025,250 ETFs on LSE with highest market cap
+IUHC.L,ISHARES V PLC ISHRS S&P 500 HEALTH CR SECT ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,20/11/2015,27/06/2025,250 ETFs on LSE with highest market cap
+IUIT.L,ISHARES V PLC ISHRS S&P 500 INF TECH SECT ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,20/11/2015,27/06/2025,250 ETFs on LSE with highest market cap
+IUKD.L,ISHARES PLC ISHARES UK DIVIDEND UCITS ETF GBP (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IUKP.L,ISHARES II PLC ISHARES UK PROPERTY UCITS ETF GBP (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IUMF.L,ISHARES IV PLC ISHARES EDGE MSCI USA MOMENTUM FACTOR,etf,N,N,GBX,,yfinance,-,Y,13/10/2016,27/06/2025,250 ETFs on LSE with highest market cap
+IUQD.L,ISHARES IV PLC ISH USA QUALITY ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,22/02/2018,27/06/2025,250 ETFs on LSE with highest market cap
+IUQF.L,ISHARES IV PLC ISHARES EDGE MSCI USA QUALITY FACTOR,etf,N,N,GBX,,yfinance,-,Y,13/10/2016,27/06/2025,250 ETFs on LSE with highest market cap
+IUSA.L,ISHARES PLC ISHARES S&P 500 UCITS ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IUSP.L,ISHARES II PLC ISHRS US PROP YIELD UCITS ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IUVF.L,ISHARES IV PLC ISHARES EDGE MSCI USA VALUE FACTOR,etf,N,N,GBX,,yfinance,-,Y,17/10/2016,27/06/2025,250 ETFs on LSE with highest market cap
+IVZ,Invesco,us stock,Y,Y,USD,,yfinance,-,Y,25/08/1995,27/06/2025,S&P500 constituents
+IWDG.L,ISHARES III PLC ISHARES MSCI WORLD ETF GBP HDGD (DIST),etf,Y,N,GBX,,yfinance,-,Y,22/05/2017,27/06/2025,250 ETFs on LSE with highest market cap
+IWDP.L,ISHARES II PLC ISHRS DEV MRKTS PROP YIELD ETF USD DIST,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IWG.L,INTERNATIONAL WORKPLACE GROUP PLC ORD USD0.0124,uk stock,Y,N,GBX,,yfinance,-,Y,06/08/2001,27/06/2025,LSE : FTSE All-Share
+IWMO.L,ISHARES IV PLC ISHS EDGE MSCI WLD MMNT FACT ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,06/10/2014,27/06/2025,250 ETFs on LSE with highest market cap
+IWQU.L,ISHARES IV PLC ISHS EDGE MSCI WRLD QLTY FAC ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,06/10/2014,27/06/2025,250 ETFs on LSE with highest market cap
+IWRD.L,ISHARES PLC ISHARES MSCI WORLD UCITS ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+IWVL.L,ISHARES IV PLC ISHS EDGE MSCI WRL VAL FCT UCITS ETF ACC,etf,N,N,USD,,yfinance,-,Y,06/10/2014,27/06/2025,250 ETFs on LSE with highest market cap
+J,Jacobs Solutions,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+JAGI.L,JPMORGAN ASIA GROWTH & INCOME PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,12/09/1997,27/06/2025,LSE : FTSE All-Share
+JAM.L,JPMORGAN AMERICAN IT PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+JARA.L,JPMORGAN GLOBAL CORE REAL ASSETS LI ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,24/09/2019,27/06/2025,LSE : FTSE All-Share
+JBHT,J.B. Hunt,us stock,Y,Y,USD,,yfinance,-,Y,22/11/1983,27/06/2025,S&P500 constituents
+JBL,Jabil,us stock,Y,Y,USD,,yfinance,-,Y,03/05/1993,27/06/2025,S&P500 constituents
+JCGI.L,JPMORGAN CHINA GROWTH & INCOME PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,19/10/1993,27/06/2025,LSE : FTSE All-Share
+JCH.L,JPMORGAN CLAVERHOUSE IT PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+JCI,Johnson Controls,us stock,Y,Y,USD,,yfinance,-,Y,28/09/1987,27/06/2025,S&P500 constituents
+JD.L,JD SPORTS FASHION PLC ORD 0.05P,uk stock,Y,Y,GBX,,yfinance,-,Y,22/10/1996,27/06/2025,LSE : FTSE All-Share
+JDW.L,WETHERSPOON(J.D.) PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/10/1992,27/06/2025,LSE : FTSE All-Share
+JEDT.L,JPMORGAN EURO DISCOVERY TRUST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,18/04/1990,27/06/2025,LSE : FTSE All-Share
+JEGI.L,JPMORGAN EUROPEAN GROWTH & INCOME ORD 0.5P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+JEMA.L,JPMORGAN EMERGING EMEA SECS PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,09/01/1997,27/06/2025,LSE : FTSE All-Share
+JEMI.L,JPMORGAN GLOBAL EMERG. MKTS. IT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,29/07/2010,27/06/2025,LSE : FTSE All-Share
+JFJ.L,JPMORGAN JAPANESE INV. TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+JGGI.L,JPMORGAN GLOBAL GWTH & INC PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+JII.L,JPMORGAN INDIAN INV TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,26/05/1994,27/06/2025,LSE : FTSE All-Share
+JKHY,Jack Henry & Associates,us stock,Y,Y,USD,,yfinance,-,Y,20/11/1985,27/06/2025,S&P500 constituents
+JMAT.L,JOHNSON MATTHEY PLC ORD 110 49/53P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+JMG.L,JPMORGAN EMERGING MKTS INV TRST PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1991,27/06/2025,LSE : FTSE All-Share
+JNJ,Johnson & Johnson,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+JNPR,Juniper Networks,us stock,Y,Y,USD,,yfinance,-,Y,25/06/1999,27/06/2025,S&P500 constituents
+JPM,JPMorgan Chase,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+JTC.L,JTC PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,14/03/2018,27/06/2025,LSE : FTSE All-Share
+JUGI.L,JPMORGAN UK SMALL CAP GROWTH & INC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,30/07/1990,27/06/2025,LSE : FTSE All-Share
+JUP.L,JUPITER FUND MANAGEMENT PLC ORD 2P,uk stock,Y,N,GBX,,yfinance,-,Y,16/06/2010,27/06/2025,LSE : FTSE All-Share
+JUSC.L,JPMORGAN US SMALLER CO. INV TST PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,31/03/1998,27/06/2025,LSE : FTSE All-Share
+JUST.L,JUST GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,12/11/2013,27/06/2025,LSE : FTSE All-Share
+K,Kellanova,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+KDP,Keurig Dr Pepper,us stock,Y,N,USD,,yfinance,-,Y,07/05/2008,27/06/2025,S&P500 constituents
+KEY,KeyCorp,us stock,Y,Y,USD,,yfinance,-,Y,05/11/1987,27/06/2025,S&P500 constituents
+KEYS,Keysight Technologies,us stock,N,N,USD,,yfinance,-,Y,20/10/2014,27/06/2025,S&P500 constituents
+KGF.L,KINGFISHER PLC ORD 15 5/7P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+KHC,Kraft Heinz,us stock,Y,N,USD,,yfinance,-,Y,06/07/2015,27/06/2025,S&P500 constituents
+KIE.L,KIER GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,12/12/1996,27/06/2025,LSE : FTSE All-Share
+KIM,Kimco Realty,us stock,Y,Y,USD,,yfinance,-,Y,22/11/1991,27/06/2025,S&P500 constituents
+KKR,KKR & Co.,us stock,Y,N,USD,,yfinance,-,Y,15/07/2010,27/06/2025,S&P500 constituents
+KLAC,KLA Corporation,us stock,Y,Y,USD,,yfinance,-,Y,08/10/1980,27/06/2025,S&P500 constituents
+KLR.L,KELLER GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,25/04/1994,27/06/2025,LSE : FTSE All-Share
+KMB,Kimberly-Clark,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+KMI,Kinder Morgan,us stock,Y,N,USD,,yfinance,-,Y,11/02/2011,27/06/2025,S&P500 constituents
+KMR.L,KENMARE RESOURCES PLC ORD EUR0.001 (CDI),uk stock,Y,Y,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+KMX,CarMax,us stock,N,Y,USD,,yfinance,-,Y,04/02/1997,27/06/2025,S&P500 constituents
+KO,Coca-Cola Company (The),us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+KODK,Eastman Kodak,us stock,N,N,USD,,yfinance,-,Y,23/09/2013,27/06/2025,household name bluechip stock outside of S&P500
+KR,Kroger,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+KVUE,Kenvue,us stock,Y,N,USD,,yfinance,-,Y,04/05/2023,27/06/2025,S&P500 constituents
+L,Loews Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+LABS.L,LIFE SCIENCE REIT PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,19/11/2021,27/06/2025,LSE : FTSE All-Share
+LAND.L,LAND SECURITIES GROUP PLC ORD 10 2/3P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+LDOS,Leidos,us stock,Y,Y,USD,,yfinance,-,Y,17/10/2006,27/06/2025,S&P500 constituents
+LEN,Lennar,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+LGAG.L,LEGAL & GENERAL UCITS ETF PLC L&G ASIA PACIFIC EX JAPAN EQ UCITS ETF,etf,N,N,GBX,,yfinance,-,Y,09/11/2018,27/06/2025,250 ETFs on LSE with highest market cap
+LGGG.L,LEGAL & GENERAL UCITS ETF PLC L&G GLOBAL EQUITY UCITS ETF,etf,N,N,GBX,,yfinance,-,Y,09/11/2018,27/06/2025,250 ETFs on LSE with highest market cap
+LGJG.L,LEGAL & GENERAL UCITS ETF PLC L&G JAPAN EQUITY UCITS ETF,etf,N,N,GBX,,yfinance,-,Y,09/11/2018,27/06/2025,250 ETFs on LSE with highest market cap
+LGUG.L,LEGAL & GENERAL UCITS ETF PLC L&G US EQUITY UCITS ETF,etf,N,N,GBX,,yfinance,-,Y,09/11/2018,12/06/2025,250 ETFs on LSE with highest market cap
+LH,Labcorp,us stock,Y,Y,USD,,yfinance,-,Y,29/03/1990,27/06/2025,S&P500 constituents
+LHX,L3Harris,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+LII,Lennox International,us stock,Y,N,USD,,yfinance,-,Y,29/07/1999,27/06/2025,S&P500 constituents
+LIN,Linde plc,us stock,Y,Y,USD,,yfinance,-,Y,17/06/1992,27/06/2025,S&P500 constituents
+LINK-GBP,Chainlink,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+LIO.L,LIONTRUST ASSET MANAGEMENT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,21/07/1999,27/06/2025,LSE : FTSE All-Share
+LKQ,LKQ Corporation,us stock,Y,Y,USD,,yfinance,-,Y,06/10/2003,27/06/2025,S&P500 constituents
+LLOY.L,LLOYDS BANKING GROUP PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,28/12/1995,27/06/2025,LSE : FTSE All-Share
+LLY,Lilly (Eli),us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+LMP.L,LONDONMETRIC PROPERTY PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,07/11/2007,27/06/2025,LSE : FTSE All-Share
+LMT,Lockheed Martin,us stock,Y,Y,USD,,yfinance,-,Y,03/01/1977,27/06/2025,S&P500 constituents
+LNT,Alliant Energy,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+LOCK.L,ISHARES IV PLC ISH DGTL SEC UCITS ETF,etf,N,N,USD,,yfinance,-,Y,07/09/2018,27/06/2025,250 ETFs on LSE with highest market cap
+LOW,Lowe's,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+LQDA.L,ISHARES PLC ISHARES $ CORP BOND UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,13/04/2017,27/06/2025,250 ETFs on LSE with highest market cap
+LQDE.L,ISHARES PLC ISHARES $ CORP.BOND UCITS ETF USD (DIST),etf,Y,N,USD,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+LRCX,Lam Research,us stock,Y,Y,USD,,yfinance,-,Y,04/05/1984,27/06/2025,S&P500 constituents
+LRE.L,LANCASHIRE HOLDINGS LD COM SHS USD0.50,uk stock,Y,N,GBX,,yfinance,-,Y,13/12/2005,27/06/2025,LSE : FTSE All-Share
+LSEG.L,LONDON STOCK EXCHANGE GROUP PLC ORD SHS 6 79/86P,uk stock,Y,Y,GBX,,yfinance,-,Y,20/07/2001,27/06/2025,LSE : FTSE All-Share
+LSL.L,LSL PROPERTY SERVICES PLC ORD 0.2P,uk stock,Y,N,GBX,,yfinance,-,Y,16/11/2006,27/06/2025,LSE : FTSE All-Share
+LSPU.L,MULTI UNITS LUXEMBOURG AMUNDI S&P 500 II UCITS ETF USD DIST,etf,Y,N,USD,,yfinance,-,Y,26/03/2010,27/06/2025,250 ETFs on LSE with highest market cap
+LSPX.L,MULTI UNITS LUXEMBOURG AMUNDI S&P 500 II UCITS ETF USD DIST,etf,Y,N,GBX,,yfinance,-,Y,26/03/2010,27/06/2025,250 ETFs on LSE with highest market cap
+LTAM.L,ISHARES II PLC ISHRS MSCI EM LATIN AM ETF USD (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+LTC-GBP,Litecoin,cryptocurrency,N,N,GBP,,yfinance,-,Y,17/09/2014,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+LTI.L,LINDSELL TRAIN INVESTMENT TRUST PLC ORD 75P,uk stock,Y,Y,GBP,,yfinance,-,Y,22/01/2001,27/06/2025,LSE : FTSE All-Share
+LUCE.L,LUCECO PLC ORD GBP0.0005,uk stock,Y,N,GBX,,yfinance,-,Y,17/10/2016,27/06/2025,LSE : FTSE All-Share
+LULU,Lululemon Athletica,us stock,N,Y,USD,,yfinance,-,Y,27/07/2007,27/06/2025,S&P500 constituents
+LUV,Southwest Airlines,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1980,27/06/2025,S&P500 constituents
+LVS,Las Vegas Sands,us stock,Y,N,USD,,yfinance,-,Y,15/12/2004,27/06/2025,S&P500 constituents
+LW,Lamb Weston,us stock,Y,N,USD,,yfinance,-,Y,10/11/2016,27/06/2025,S&P500 constituents
+LWDB.L,LAW DEBENTURE CORPORATION PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/09/1972,27/06/2025,LSE : FTSE All-Share
+LWI.L,LOWLAND INV CO PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+LYB,LyondellBasell,us stock,Y,N,USD,,yfinance,-,Y,28/04/2010,27/06/2025,S&P500 constituents
+LYV,Live Nation Entertainment,us stock,N,N,USD,,yfinance,-,Y,21/12/2005,27/06/2025,S&P500 constituents
+MA,Mastercard,us stock,Y,Y,USD,,yfinance,-,Y,25/05/2006,27/06/2025,S&P500 constituents
+MAA,Mid-America Apartment Communities,us stock,Y,N,USD,,yfinance,-,Y,28/01/1994,27/06/2025,S&P500 constituents
+MAB.L,MITCHELLS & BUTLERS PLC ORD 8 13/24P,uk stock,N,Y,GBX,,yfinance,-,Y,31/03/2003,27/06/2025,LSE : FTSE All-Share
+MACF.L,MACFARLANE GROUP PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+MAJE.L,MAJEDIE INV PLC 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,30/09/1985,27/06/2025,LSE : FTSE All-Share
+MAR,Marriott International,us stock,Y,Y,USD,,yfinance,-,Y,23/03/1998,27/06/2025,S&P500 constituents
+MARS.L,MARSTON'S PLC ORD 7.375P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+MAS,Masco,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+MCB.L,MCBRIDE PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,10/07/1995,27/06/2025,LSE : FTSE All-Share
+MCD,McDonald's,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+MCG.L,MOBICO GROUP PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,09/12/1992,27/06/2025,LSE : FTSE All-Share
+MCHP,Microchip Technology,us stock,Y,Y,USD,,yfinance,-,Y,19/03/1993,27/06/2025,S&P500 constituents
+MCK,McKesson Corporation,us stock,Y,Y,USD,,yfinance,-,Y,10/11/1994,27/06/2025,S&P500 constituents
+MCO,Moody's Corporation,us stock,Y,Y,USD,,yfinance,-,Y,31/10/1994,27/06/2025,S&P500 constituents
+MCT.L,MIDDLEFIELD CANADIAN INC PCC RED PART PREF SHS NPV,uk stock,Y,N,GBX,,yfinance,-,Y,15/09/2017,27/06/2025,LSE : FTSE All-Share
+MDLZ,Mondelez International,us stock,Y,N,USD,,yfinance,-,Y,13/06/2001,27/06/2025,S&P500 constituents
+MDT,Medtronic,us stock,Y,Y,USD,,yfinance,-,Y,02/05/1973,27/06/2025,S&P500 constituents
+MEGP.L,ME GROUP INTERNATIONAL PLC ORD 0.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+MER.L,MEARS GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,04/10/1996,27/06/2025,LSE : FTSE All-Share
+MET,MetLife,us stock,Y,Y,USD,,yfinance,-,Y,05/04/2000,27/06/2025,S&P500 constituents
+META,Meta Platforms,us stock,Y,N,USD,,yfinance,-,Y,18/05/2012,27/06/2025,S&P500 constituents
+MGAM.L,MORGAN ADVANCED MATERIALS PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+MGCI.L,M&G CREDIT INCOME INVESTMENT TRUST ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,14/11/2018,27/06/2025,LSE : FTSE All-Share
+MGM,MGM Resorts,us stock,Y,Y,USD,,yfinance,-,Y,02/05/1988,27/06/2025,S&P500 constituents
+MGNS.L,MORGAN SINDALL GROUP PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+MHK,Mohawk Industries,us stock,N,Y,USD,,yfinance,-,Y,01/04/1992,27/06/2025,S&P500 constituents
+MIDD.L,ISHARES PLC ISHARES FTSE 250 UCITS ETF GBP (DIST),etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+MINT.L,PIMCO ETFS PUBLIC LIMITED COMPANY PIMCO US SHORT MATURITY UCITS USD IN,etf,Y,N,USD,,yfinance,-,Y,22/02/2011,27/06/2025,250 ETFs on LSE with highest market cap
+MKC,McCormick & Company,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+MKS.L,MARKS & SPENCER GROUP PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+MKTX,MarketAxess,us stock,Y,N,USD,,yfinance,-,Y,05/11/2004,27/06/2025,S&P500 constituents
+MLM,Martin Marietta Materials,us stock,Y,N,USD,,yfinance,-,Y,17/02/1994,27/06/2025,S&P500 constituents
+MMC,Marsh McLennan,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+MMIT.L,MOBIUS INVESTMENT TRUST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,01/10/2018,27/06/2025,LSE : FTSE All-Share
+MMM,3M,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+MNDI.L,MONDI PLC ORD EUR 0.22,uk stock,Y,Y,GBX,,yfinance,-,Y,29/06/2007,27/06/2025,LSE : FTSE All-Share
+MNG.L,M&G PLC ORD ÔøΩ0.05,uk stock,Y,N,GBX,,yfinance,-,Y,21/10/2019,27/06/2025,LSE : FTSE All-Share
+MNKS.L,MONKS INV TST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+MNL.L,MANCHESTER & LONDON INV TST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,08/12/1997,27/06/2025,LSE : FTSE All-Share
+MNST,Monster Beverage,us stock,Y,Y,USD,,yfinance,-,Y,09/12/1985,27/06/2025,S&P500 constituents
+MO,Altria,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+MOH,Molina Healthcare,us stock,N,Y,USD,,yfinance,-,Y,02/07/2003,27/06/2025,S&P500 constituents
+MONY.L,MONY GROUP PLC ORD 0.02P,uk stock,Y,N,GBX,,yfinance,-,Y,26/07/2007,27/06/2025,LSE : FTSE All-Share
+MOON.L,MOONPIG GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,02/02/2021,27/06/2025,LSE : FTSE All-Share
+MOS,Mosaic Company (The),us stock,Y,Y,USD,,yfinance,-,Y,26/01/1988,27/06/2025,S&P500 constituents
+MOTR.L,MOTORPOINT GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,16/05/2016,27/06/2025,LSE : FTSE All-Share
+MPC,Marathon Petroleum,us stock,Y,Y,USD,,yfinance,-,Y,24/06/2011,27/06/2025,S&P500 constituents
+MPWR,Monolithic Power Systems,us stock,Y,N,USD,,yfinance,-,Y,19/11/2004,27/06/2025,S&P500 constituents
+MRC.L,MERCANTILE INVESTMENT TST (THE) PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/09/1972,27/06/2025,LSE : FTSE All-Share
+MRCH.L,MERCHANTS TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+MRK,Merck & Co.,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+MRNA,Moderna,us stock,N,N,USD,,yfinance,-,Y,07/12/2018,27/06/2025,S&P500 constituents
+MRO.L,MELROSE INDUSTRIES PLC ORD GBP0.001,uk stock,Y,Y,GBX,,yfinance,-,Y,28/10/2003,27/06/2025,LSE : FTSE All-Share
+MS,Morgan Stanley,us stock,Y,Y,USD,,yfinance,-,Y,23/02/1993,27/06/2025,S&P500 constituents
+MSCI,MSCI Inc.,us stock,Y,N,USD,,yfinance,-,Y,15/11/2007,27/06/2025,S&P500 constituents
+MSFT,Microsoft,us stock,Y,Y,USD,,yfinance,-,Y,13/03/1986,27/06/2025,S&P500 constituents
+MSI,Motorola Solutions,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+MSLH.L,MARSHALLS PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+MTB,M&T Bank,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+MTCH,Match Group,us stock,Y,Y,USD,,yfinance,-,Y,19/01/1993,27/06/2025,S&P500 constituents
+MTD,Mettler Toledo,us stock,N,N,USD,,yfinance,-,Y,14/11/1997,27/06/2025,S&P500 constituents
+MTE.L,MONTANARO EUROPEAN SMALLER C.TSTPLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,31/01/1992,27/06/2025,LSE : FTSE All-Share
+MTO.L,MITIE GROUP PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+MTRO.L,METRO BANK HOLDINGS PLC ORD 0.0001P,uk stock,N,N,GBX,,yfinance,-,Y,07/03/2016,27/06/2025,LSE : FTSE All-Share
+MTU.L,MONTANARO UK SMLR COS INV TST PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,16/03/1995,27/06/2025,LSE : FTSE All-Share
+MU,Micron Technology,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1984,27/06/2025,S&P500 constituents
+MUT.L,MURRAY INCOME TRUST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,31/12/1970,27/06/2025,LSE : FTSE All-Share
+MVOL.L,ISHARES VI PLC ISHRS EDGE MSCI WRLD MINVOL ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,30/11/2012,27/06/2025,250 ETFs on LSE with highest market cap
+MWY.L,MID WYND INTL INV TST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,30/11/1981,27/06/2025,LSE : FTSE All-Share
+MXUS.L,INVESCO MARKETS PLC INVESCO MSCI USA UCITS ETF,etf,N,N,USD,,yfinance,-,Y,31/03/2009,27/06/2025,250 ETFs on LSE with highest market cap
+MXWO.L,INVESCO MARKETS PLC INVESCO MSCI WORLD UCITS ETF,etf,N,N,USD,,yfinance,-,Y,02/04/2009,27/06/2025,250 ETFs on LSE with highest market cap
+MYI.L,MURRAY INTERNATIONAL TRUST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+N91.L,NINETY ONE PLC ORD ÔøΩ0.0001,uk stock,Y,N,GBX,,yfinance,-,Y,16/03/2020,27/06/2025,LSE : FTSE All-Share
+NAIT.L,NORTH AMERICAN INCOME TST (THE) PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,04/09/1972,27/06/2025,LSE : FTSE All-Share
+NAS.L,NORTH ATLANTIC SMALL CO INV TST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,30/04/1973,27/06/2025,LSE : FTSE All-Share
+NAVF.L,NIPPON ACTIVE VALUE FUND PLC ORD ÔøΩ0.01,uk stock,Y,N,GBX,,yfinance,-,Y,21/02/2020,27/06/2025,LSE : FTSE All-Share
+NBPE.L,NB PRIVATE EQUITY PARTNERS LD ORD USD0.01,uk stock,Y,N,GBX,,yfinance,-,Y,30/06/2009,27/06/2025,LSE : FTSE All-Share
+NCC.L,NCC GROUP PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,09/07/2004,27/06/2025,LSE : FTSE All-Share
+NCLH,Norwegian Cruise Line Holdings,us stock,N,N,USD,,yfinance,-,Y,18/01/2013,27/06/2025,S&P500 constituents
+NCYF.L,CQS NEW CITY HIGH YIELD FUND LD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,09/12/2004,27/06/2025,LSE : FTSE All-Share
+NDAQ,"Nasdaq, Inc.",us stock,Y,Y,USD,,yfinance,-,Y,01/07/2002,27/06/2025,S&P500 constituents
+NDSN,Nordson Corporation,us stock,Y,Y,USD,,yfinance,-,Y,18/03/1980,27/06/2025,S&P500 constituents
+NEE,NextEra Energy,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+NEM,Newmont,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+NFLX,Netflix,us stock,N,Y,USD,,yfinance,-,Y,23/05/2002,27/06/2025,S&P500 constituents
+NG.L,NATIONAL GRID PLC ORD 12 204/473P,uk stock,Y,Y,GBX,,yfinance,-,Y,11/12/1995,27/06/2025,LSE : FTSE All-Share
+NI,NiSource,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+NKE,"Nike, Inc.",us stock,Y,Y,USD,,yfinance,-,Y,02/12/1980,27/06/2025,S&P500 constituents
+NOC,Northrop Grumman,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+NOW,ServiceNow,us stock,N,N,USD,,yfinance,-,Y,29/06/2012,27/06/2025,S&P500 constituents
+NRG,NRG Energy,us stock,Y,Y,USD,,yfinance,-,Y,02/12/2003,27/06/2025,S&P500 constituents
+NRR.L,NEWRIVER REIT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,02/09/2009,27/06/2025,LSE : FTSE All-Share
+NSC,Norfolk Southern,us stock,Y,Y,USD,,yfinance,-,Y,02/06/1982,27/06/2025,S&P500 constituents
+NTAP,NetApp,us stock,Y,Y,USD,,yfinance,-,Y,21/11/1995,27/06/2025,S&P500 constituents
+NTRS,Northern Trust,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+NUE,Nucor,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+NVDA,Nvidia,us stock,Y,Y,USD,,yfinance,-,Y,22/01/1999,27/06/2025,S&P500 constituents
+NVR,"NVR, Inc.",us stock,Y,N,USD,,yfinance,-,Y,22/07/1985,27/06/2025,S&P500 constituents
+NWG.L,NATWEST GROUP PLC ORD 107.69P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+NWS,News Corp (Class B),us stock,Y,N,USD,,yfinance,-,Y,19/06/2013,27/06/2025,S&P500 constituents
+NWSA,News Corp (Class A),us stock,Y,N,USD,,yfinance,-,Y,19/06/2013,27/06/2025,S&P500 constituents
+NXPI,NXP Semiconductors,us stock,Y,N,USD,,yfinance,-,Y,06/08/2010,27/06/2025,S&P500 constituents
+NXR.L,NORCROS PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,10/01/2007,27/06/2025,LSE : FTSE All-Share
+NXT.L,NEXT PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+O,Realty Income,us stock,Y,Y,USD,,yfinance,-,Y,18/10/1994,27/06/2025,S&P500 constituents
+OCDO.L,OCADO GROUP PLC ORD 2P,uk stock,N,N,GBX,,yfinance,-,Y,21/07/2010,27/06/2025,LSE : FTSE All-Share
+OCN.L,OCEAN WILSONS HOLDINGS LD ORD 20P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+ODFL,Old Dominion,us stock,Y,Y,USD,,yfinance,-,Y,24/10/1991,27/06/2025,S&P500 constituents
+OIG.L,ORYX INTERNATIONAL GROWTH FUND LD ORD 50P,uk stock,N,N,GBX,,yfinance,-,Y,01/03/1995,27/06/2025,LSE : FTSE All-Share
+OIT.L,ODYSSEAN INVESTMENT TRUST PLC ORD 1P,uk stock,N,N,GBX,,yfinance,-,Y,01/05/2018,27/06/2025,LSE : FTSE All-Share
+OKE,Oneok,us stock,Y,Y,USD,,yfinance,-,Y,01/10/1980,27/06/2025,S&P500 constituents
+OMC,Omnicom Group,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+ON,ON Semiconductor,us stock,N,N,USD,,yfinance,-,Y,02/05/2000,27/06/2025,S&P500 constituents
+ONT.L,OXFORD NANOPORE TECHNOLOGIES PLC ORD GBP0.0001,uk stock,N,N,GBX,,yfinance,-,Y,30/09/2021,27/06/2025,LSE : FTSE All-Share
+ORCL,Oracle Corporation,us stock,Y,Y,USD,,yfinance,-,Y,12/03/1986,27/06/2025,S&P500 constituents
+ORIT.L,OCTOPUS RENEWABLES INFRASTRUCTURE T ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,10/12/2019,27/06/2025,LSE : FTSE All-Share
+ORLY,O'Reilly Automotive,us stock,N,Y,USD,,yfinance,-,Y,23/04/1993,27/06/2025,S&P500 constituents
+OTB.L,ON THE BEACH GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,23/09/2015,27/06/2025,LSE : FTSE All-Share
+OTIS,Otis Worldwide,us stock,Y,N,USD,,yfinance,-,Y,19/03/2020,27/06/2025,S&P500 constituents
+OXB.L,OXFORD BIOMEDICA PLC ORD 50P,uk stock,N,Y,GBX,,yfinance,-,Y,13/12/1996,27/06/2025,LSE : FTSE All-Share
+OXIG.L,OXFORD INSTRUMENTS PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+OXY,Occidental Petroleum,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+PAC.L,PACIFIC ASSETS TRUST PLC ORD 12.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,28/02/1985,27/06/2025,LSE : FTSE All-Share
+PAG.L,PARAGON BANKING GROUP PLC ORD 100P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+PAGE.L,PAGEGROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,28/03/2001,27/06/2025,LSE : FTSE All-Share
+PANW,Palo Alto Networks,us stock,N,Y,USD,,yfinance,-,Y,20/07/2012,27/06/2025,S&P500 constituents
+PARA,Paramount Global,us stock,Y,N,USD,,yfinance,-,Y,05/12/2005,27/06/2025,S&P500 constituents
+PAY.L,PAYPOINT PLC ORD 1/3P,uk stock,Y,N,GBX,,yfinance,-,Y,18/06/2004,27/06/2025,LSE : FTSE All-Share
+PAYC,Paycom,us stock,Y,N,USD,,yfinance,-,Y,15/04/2014,27/06/2025,S&P500 constituents
+PAYX,Paychex,us stock,Y,Y,USD,,yfinance,-,Y,26/08/1983,27/06/2025,S&P500 constituents
+PBEE.L,PENSIONBEE GROUP PLC ORD GBP0.001,uk stock,N,N,GBX,,yfinance,-,Y,21/04/2021,27/06/2025,LSE : FTSE All-Share
+PCA.L,PALACE CAPITAL PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,30/03/2005,27/06/2025,LSE : FTSE All-Share
+PCAR,Paccar,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+PCFT.L,POLAR CAPITAL GLOBAL FIN. TST PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/2013,27/06/2025,LSE : FTSE All-Share
+PCG,PG&E Corporation,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+PCGH.L,POLAR CAPITAL GLOBAL HEALTH.TST PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,15/06/2010,27/06/2025,LSE : FTSE All-Share
+PCT.L,POLAR CAPITAL TECHNOLOGY TRUST PLC ORD 2.5P,uk stock,N,Y,GBX,,yfinance,-,Y,16/12/1996,27/06/2025,LSE : FTSE All-Share
+PCTN.L,PICTON PROPERTY INCOME LD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,24/10/2005,27/06/2025,LSE : FTSE All-Share
+PDL.L,PETRA DIAMONDS LD ORD GBP0.0005 (DI),uk stock,N,Y,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+PEG,Public Service Enterprise Group,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1980,27/06/2025,S&P500 constituents
+PEP,PepsiCo,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+PETS.L,PETS AT HOME GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,12/03/2014,27/06/2025,LSE : FTSE All-Share
+PFC.L,PETROFAC LD ORD USD0.02,uk stock,Y,N,GBX,,yfinance,-,Y,04/10/2005,27/06/2025,LSE : FTSE All-Share
+PFD.L,PREMIER FOODS PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,20/07/2004,27/06/2025,LSE : FTSE All-Share
+PFE,Pfizer,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+PFG,Principal Financial Group,us stock,Y,N,USD,,yfinance,-,Y,23/10/2001,27/06/2025,S&P500 constituents
+PG,Procter & Gamble,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+PGR,Progressive Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+PH,Parker Hannifin,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+PHAG.L,WISDOMTREE METAL SECURITIES WISDOMTREE PHYSICAL SILVER,etf,N,N,USD,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+PHAR.L,PHAROS ENERGY PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/05/1997,27/06/2025,LSE : FTSE All-Share
+PHAU.L,WISDOMTREE METAL SECURITIES WISDOMTREE PHYSICAL GOLD,etf,N,N,USD,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+PHI.L,PACIFIC HORIZON INV TST PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,22/09/1989,27/06/2025,LSE : FTSE All-Share
+PHLL.L,PETERSHILL PARTNERS PLC ORD USD0.01,uk stock,Y,N,GBX,,yfinance,-,Y,28/09/2021,27/06/2025,LSE : FTSE All-Share
+PHM,PulteGroup,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+PHNX.L,PHOENIX GROUP HOLDINGS PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,17/11/2009,27/06/2025,LSE : FTSE All-Share
+PHP.L,PRIMARY HEALTH PROPERTIES PLC ORD 12.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,19/03/1996,27/06/2025,LSE : FTSE All-Share
+PHPT.L,WISDOMTREE METAL SECURITIES WISDOMTREE PHYSICAL PLATINUM,etf,N,N,USD,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+PINE.L,PINEWOOD TECHNOLOGIES GROUP PLC ORD GBP1.00,uk stock,Y,Y,GBX,,yfinance,-,Y,10/11/1989,27/06/2025,LSE : FTSE All-Share
+PINT.L,PANTHEON INFRASTRUCTURE PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,16/11/2021,27/06/2025,LSE : FTSE All-Share
+PKG,Packaging Corporation of America,us stock,Y,N,USD,,yfinance,-,Y,28/01/2000,27/06/2025,S&P500 constituents
+PLD,Prologis,us stock,Y,N,USD,,yfinance,-,Y,21/11/1997,27/06/2025,S&P500 constituents
+PLTR,Palantir Technologies,us stock,N,N,USD,,yfinance,-,Y,30/09/2020,27/06/2025,S&P500 constituents
+PLUS.L,PLUS500 LTD ORD ILS0.01 (DI),uk stock,Y,N,GBX,,yfinance,-,Y,24/07/2013,27/06/2025,LSE : FTSE All-Share
+PM,Philip Morris International,us stock,Y,N,USD,,yfinance,-,Y,17/03/2008,27/06/2025,S&P500 constituents
+PNC,PNC Financial Services,us stock,Y,Y,USD,,yfinance,-,Y,17/11/1975,27/06/2025,S&P500 constituents
+PNL.L,PERSONAL ASSETS TRUST PLC ORD GBP0.125,uk stock,Y,Y,GBX,,yfinance,-,Y,29/07/1983,27/06/2025,LSE : FTSE All-Share
+PNN.L,PENNON GROUP PLC ORD 61 1/20P,uk stock,N,Y,GBX,,yfinance,-,Y,11/12/1989,27/06/2025,LSE : FTSE All-Share
+PNR,Pentair,us stock,Y,Y,USD,,yfinance,-,Y,03/05/1973,27/06/2025,S&P500 constituents
+PNW,Pinnacle West Capital,us stock,Y,N,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+PODD,Insulet Corporation,us stock,N,N,USD,,yfinance,-,Y,15/05/2007,27/06/2025,S&P500 constituents
+POLN.L,POLLEN STREET GROUP LIMITED ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,23/12/2015,27/06/2025,LSE : FTSE All-Share
+POOL,Pool Corporation,us stock,Y,Y,USD,,yfinance,-,Y,13/10/1995,27/06/2025,S&P500 constituents
+PPET.L,PATRIA PRIVATE EQUITY TRUST PLC ORD 0.2P,uk stock,Y,N,GBX,,yfinance,-,Y,29/05/2001,27/06/2025,LSE : FTSE All-Share
+PPG,PPG Industries,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+PPH.L,PPHE HOTEL GROUP LD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,23/06/2003,27/06/2025,LSE : FTSE All-Share
+PPL,PPL Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+PRSR.L,PRS REIT (THE) PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,31/05/2017,27/06/2025,LSE : FTSE All-Share
+PRTC.L,PURETECH HEALTH PLC ORD 1P,uk stock,N,N,GBX,,yfinance,-,Y,19/06/2015,27/06/2025,LSE : FTSE All-Share
+PRU,Prudential Financial,us stock,Y,N,USD,,yfinance,-,Y,13/12/2001,27/06/2025,S&P500 constituents
+PRU.L,PRUDENTIAL PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+PRV.L,PORVAIR PLC ORD 2P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+PSA,Public Storage,us stock,Y,N,USD,,yfinance,-,Y,18/11/1980,27/06/2025,S&P500 constituents
+PSDL.L,PHOENIX SPREE DEUTSCHLAND LIMITED SHS NPV,uk stock,Y,N,GBX,,yfinance,-,Y,15/06/2015,27/06/2025,LSE : FTSE All-Share
+PSH.L,PERSHING SQUARE HOLDINGS LTD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,10/03/2017,27/06/2025,LSE : FTSE All-Share
+PSN.L,PERSIMMON PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+PSON.L,PEARSON PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+PSX,Phillips 66,us stock,Y,N,USD,,yfinance,-,Y,12/04/2012,27/06/2025,S&P500 constituents
+PTC,PTC Inc.,us stock,N,Y,USD,,yfinance,-,Y,08/12/1989,27/06/2025,S&P500 constituents
+PTEC.L,PLAYTECH PLC ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,28/03/2006,27/06/2025,LSE : FTSE All-Share
+PWR,Quanta Services,us stock,Y,Y,USD,,yfinance,-,Y,12/02/1998,27/06/2025,S&P500 constituents
+PYPL,PayPal,us stock,N,N,USD,,yfinance,-,Y,06/07/2015,27/06/2025,S&P500 constituents
+PZC.L,PZ CUSSONS PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+QCOM,Qualcomm,us stock,Y,Y,USD,,yfinance,-,Y,13/12/1991,27/06/2025,S&P500 constituents
+QQ.L,QINETIQ GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,10/02/2006,27/06/2025,LSE : FTSE All-Share
+QSR,Burger King (Restaurant Brands Intl),us stock,Y,N,USD,,yfinance,-,Y,11/12/2014,27/06/2025,household name bluechip stock outside of S&P500
+RAT.L,RATHBONES GROUP PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RBOT.L,ISHARES IV PLC ISHS AUTO & ROBOTICS UCITS ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,08/09/2016,27/06/2025,250 ETFs on LSE with highest market cap
+RCDO.L,RICARDO PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RCH.L,REACH PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RCL,Royal Caribbean Group,us stock,Y,Y,USD,,yfinance,-,Y,28/04/1993,27/06/2025,S&P500 constituents
+RCP.L,RIT CAPITAL PARTNERS PLC ORD ÔøΩ1,uk stock,Y,N,GBX,,yfinance,-,Y,20/06/1988,27/06/2025,LSE : FTSE All-Share
+REC.L,RECORD PLC ORD 0.025P,uk stock,Y,N,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+RECI.L,REAL ESTATE CREDIT INV. LD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,15/04/1993,27/06/2025,LSE : FTSE All-Share
+REG,Regency Centers,us stock,Y,N,USD,,yfinance,-,Y,29/10/1993,27/06/2025,S&P500 constituents
+REGN,Regeneron Pharmaceuticals,us stock,Y,N,USD,,yfinance,-,Y,02/04/1991,27/06/2025,S&P500 constituents
+REL.L,RELX PLC ORD 14 51/116P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RESI.L,RESIDENTIAL SECURE INCOME PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,12/07/2017,27/06/2025,LSE : FTSE All-Share
+RF,Regions Financial Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+RGL.L,REGIONAL REIT LD ORD NPV,uk stock,Y,Y,GBX,,yfinance,-,Y,06/11/2015,27/06/2025,LSE : FTSE All-Share
+RHIM.L,RHI MAGNESITA N.V. ORD EUR1.00 (DI),uk stock,Y,N,GBX,,yfinance,-,Y,27/10/2017,27/06/2025,LSE : FTSE All-Share
+RICA.L,RUFFER INVESTMENT COMPANY LD RED PTG PREF SHS 0.01P,uk stock,Y,N,GBX,,yfinance,-,Y,08/07/2004,27/06/2025,LSE : FTSE All-Share
+RIEG.L,LEGAL & GENERAL UCITS ETF PLC LG MSCI EUROPE CLIMATE PATHWAY UCITS ETF,etf,N,N,GBX,,yfinance,-,Y,30/08/2019,27/06/2025,250 ETFs on LSE with highest market cap
+RIII.L,RIGHTS & ISSUES INV TST PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1979,27/06/2025,LSE : FTSE All-Share
+RIO.L,RIO TINTO PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RJF,Raymond James Financial,us stock,Y,Y,USD,,yfinance,-,Y,01/07/1983,27/06/2025,S&P500 constituents
+RKT.L,RECKITT BENCKISER GROUP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RL,Ralph Lauren Corporation,us stock,Y,N,USD,,yfinance,-,Y,12/06/1997,27/06/2025,S&P500 constituents
+RMD,ResMed,us stock,Y,Y,USD,,yfinance,-,Y,02/06/1995,27/06/2025,S&P500 constituents
+RMII.L,RM INFRASTRUCTURE INCOME PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,15/12/2016,27/06/2025,LSE : FTSE All-Share
+RMV.L,RIGHTMOVE PLC ORD 0.1P,uk stock,Y,Y,GBX,,yfinance,-,Y,10/03/2006,27/06/2025,LSE : FTSE All-Share
+RNK.L,RANK GROUP PLC ORD 13 8/9P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+ROBO.L,LEGAL & GENERAL UCITS ETF PLC ROBO GLOBAL ROB&AUTO GO UCITS ETF (USD),etf,N,N,USD,,yfinance,-,Y,23/10/2014,27/06/2025,250 ETFs on LSE with highest market cap
+ROK,Rockwell Automation,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+ROL,"Rollins, Inc.",us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+ROO.L,DELIVEROO PLC ORD 0.5P,uk stock,N,N,GBX,,yfinance,-,Y,31/03/2021,27/06/2025,LSE : FTSE All-Share
+ROP,Roper Technologies,us stock,Y,Y,USD,,yfinance,-,Y,13/02/1992,27/06/2025,S&P500 constituents
+ROR.L,ROTORK PLC ORD 0.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+ROST,Ross Stores,us stock,Y,Y,USD,,yfinance,-,Y,08/08/1985,27/06/2025,S&P500 constituents
+RPI.L,RASPBERRY PI HOLDINGS PLC ORD 0.25P,uk stock,N,N,GBX,,yfinance,-,Y,11/06/2024,27/06/2025,LSE : FTSE All-Share
+RR.L,ROLLS-ROYCE HOLDINGS PLC ORD SHS 20P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RS1.L,RS GROUP PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RSE.L,RIVERSTONE ENERGY LIMITED ORD NPV,uk stock,N,N,GBX,,yfinance,-,Y,24/10/2013,27/06/2025,LSE : FTSE All-Share
+RSG,Republic Services,us stock,Y,Y,USD,,yfinance,-,Y,01/07/1998,27/06/2025,S&P500 constituents
+RSW.L,RENISHAW PLC ORD 20P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RTO.L,RENTOKIL INITIAL PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+RTX,RTX Corporation,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+RVTY,Revvity,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+RWA.L,ROBERT WALTERS PLC ORD 20P,uk stock,Y,N,GBX,,yfinance,-,Y,06/07/2000,27/06/2025,LSE : FTSE All-Share
+SAEM.L,ISHARES IV PLC ISH MSCI EM IMI USD-A,etf,N,N,USD,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SAEU.L,ISHARES IV PLC ISH MSCI EU GBP-A,etf,N,N,GBP,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SAFE.L,SAFESTORE HOLDINGS PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,09/03/2007,27/06/2025,LSE : FTSE All-Share
+SAGA.L,SAGA PLC ORD 15P,uk stock,N,Y,GBX,,yfinance,-,Y,23/05/2014,27/06/2025,LSE : FTSE All-Share
+SAIN.L,SCOTTISH AMERICAN INV CO PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+SASU.L,ISHARES IV PLC ISH MSCI USA USD-A,etf,N,N,USD,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SAUM.L,ISHARES IV PLC ISH MSCI EMU GBP-A,etf,N,N,GBP,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SAWD.L,ISHARES IV PLC ISH MSCI WORLD USD-A,etf,N,N,USD,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SBAC,SBA Communications,us stock,Y,N,USD,,yfinance,-,Y,16/06/1999,27/06/2025,S&P500 constituents
+SBRE.L,SABRE INSURANCE GROUP PLC ORD GBP0.001P,uk stock,Y,N,GBX,,yfinance,-,Y,06/12/2017,27/06/2025,LSE : FTSE All-Share
+SBRY.L,SAINSBURY(J) PLC ORD 28 4/7P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SBUX,Starbucks,us stock,Y,Y,USD,,yfinance,-,Y,26/06/1992,27/06/2025,S&P500 constituents
+SCF.L,SCHRODER INCOME GROWTH FUND PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,08/03/1995,27/06/2025,LSE : FTSE All-Share
+SCHW,Charles Schwab Corporation,us stock,Y,Y,USD,,yfinance,-,Y,22/09/1987,27/06/2025,S&P500 constituents
+SCP.L,SCHRODER UK MID CAP FD PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,31/12/1993,27/06/2025,LSE : FTSE All-Share
+SCT.L,SOFTCAT PLC ORD ÔøΩ0.0005,uk stock,Y,N,GBX,,yfinance,-,Y,13/11/2015,27/06/2025,LSE : FTSE All-Share
+SDHA.L,ISHARES IV PLC ISH $ ST DUR HY CRP BND ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,02/07/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SDHY.L,ISHARES IV PLC ISHS $ SHRT DUR HY CRP BD ETF USD (DIST),etf,Y,N,USD,,yfinance,-,Y,15/10/2013,27/06/2025,250 ETFs on LSE with highest market cap
+SDIA.L,ISHARES IV PLC IS $ SHRT DUR CORP BND UCITS ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,13/04/2017,27/06/2025,250 ETFs on LSE with highest market cap
+SDIG.L,ISHARES IV PLC ISHS $ SHORT DUR CORP BOND ETF USD(DIST),etf,Y,N,USD,,yfinance,-,Y,16/10/2013,27/06/2025,250 ETFs on LSE with highest market cap
+SDP.L,SCHRODER ASIA PACIFIC FUND ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,14/11/1995,27/06/2025,LSE : FTSE All-Share
+SDR.L,SCHRODERS PLC ORD 20P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SDUS.L,ISHARES IV PLC ISH MSCI USA USD-D,etf,Y,N,USD,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SDWD.L,ISHARES IV PLC ISH MSCI WORLD USD-D,etf,Y,N,USD,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SDY.L,SPEEDY HIRE PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,21/06/1989,27/06/2025,LSE : FTSE All-Share
+SE15.L,ISHARES III PLC ISHARES EUR CORP BOND 1-5YR ETF EUR DIST,etf,Y,N,GBP,,yfinance,-,Y,25/09/2009,27/06/2025,250 ETFs on LSE with highest market cap
+SEAG.L,ISHARES III PLC ISHRES EUR AGG BOND UCITS ETF EUR (DIST),etf,Y,N,GBP,,yfinance,-,Y,06/03/2009,27/06/2025,250 ETFs on LSE with highest market cap
+SEC.L,STRATEGIC EQUITY CAPITAL PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,19/07/2005,27/06/2025,LSE : FTSE All-Share
+SEDM.L,ISHARES IV PLC ISH MSCI EM IMI USD-D,etf,Y,N,USD,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SEIT.L,SDCL EFFICIENCY INCOME TRUST PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,11/12/2018,27/06/2025,LSE : FTSE All-Share
+SEML.L,ISHARES III PLC ISHRS EM LOCAL GOVT BOND ETF USD (DIST),etf,Y,N,GBP,,yfinance,-,Y,20/06/2011,27/06/2025,250 ETFs on LSE with highest market cap
+SEQI.L,SEQUOIA ECONOMIC INFRASTRUCTURE INC ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,03/03/2015,27/06/2025,LSE : FTSE All-Share
+SERE.L,SCHRODER EUROPEAN REIT PLC ORD GBP0.10,uk stock,Y,N,GBX,,yfinance,-,Y,09/12/2015,27/06/2025,LSE : FTSE All-Share
+SFR.L,SEVERFIELD PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SGBS.L,WISDOMTREE METAL SECURITIES WISDOMTREE PHYSICAL SWISS GOLD,etf,N,N,USD,,yfinance,-,Y,16/12/2009,27/06/2025,250 ETFs on LSE with highest market cap
+SGE.L,THE SAGE GROUP PLC ORD 1 4/77P,uk stock,Y,Y,GBX,,yfinance,-,Y,13/12/1989,27/06/2025,LSE : FTSE All-Share
+SGLO.L,ISHARES III PLC ISHRS GLOBAL GOVT BOND ETF USD (DIST),etf,Y,N,GBP,,yfinance,-,Y,06/03/2009,27/06/2025,250 ETFs on LSE with highest market cap
+SGRO.L,SEGRO PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SHC.L,SHAFTESBURY CAPITAL PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/11/2007,27/06/2025,LSE : FTSE All-Share
+SHED.L,URBAN LOGISTICS REIT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,31/12/1997,24/06/2025,LSE : FTSE All-Share
+SHEL.L,SHELL PLC ORD EUR0.07,uk stock,Y,Y,GBX,,yfinance,-,Y,29/08/1996,27/06/2025,LSE : FTSE All-Share
+SHI.L,SIG PLC ORD 10P,uk stock,N,N,GBX,,yfinance,-,Y,17/05/1989,27/06/2025,LSE : FTSE All-Share
+SHIB-GBP,Shiba Inu,cryptocurrency,N,N,GBP,,yfinance,-,Y,01/08/2020,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+SHRS.L,SHIRES INCOME PLC ORD 50P,uk stock,Y,N,GBX,,yfinance,-,Y,31/01/1973,27/06/2025,LSE : FTSE All-Share
+SHW,Sherwin-Williams,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+SJG.L,SCHRODER JAPAN TRUST PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,11/07/1994,27/06/2025,LSE : FTSE All-Share
+SJM,J.M. Smucker Company (The),us stock,Y,N,USD,,yfinance,-,Y,31/10/1994,27/06/2025,S&P500 constituents
+SJPA.L,ISHARES III PLC ISHRS CORE MSCI JAPAN IMI ETF USD (ACC),etf,N,N,GBX,,yfinance,-,Y,25/09/2009,27/06/2025,250 ETFs on LSE with highest market cap
+SKY-GBP,Skycoin,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+SLB,Schlumberger,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+SLXX.L,ISHARES PLC ISHARES CRE £ CORP BD UCITS ETF GBP DIST,etf,Y,N,GBP,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+SMCI,Supermicro,us stock,N,Y,USD,,yfinance,-,Y,29/03/2007,27/06/2025,S&P500 constituents
+SMEA.L,ISHARES III PLC ISHARES MSCI EUROPE UCITS ETF EUR (ACC),etf,N,N,GBX,,yfinance,-,Y,25/09/2009,27/06/2025,250 ETFs on LSE with highest market cap
+SMIF.L,TWENTYFOUR SELECT MONTHLY INCOME FD ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,10/03/2014,27/06/2025,LSE : FTSE All-Share
+SMIN.L,SMITHS GROUP PLC ORD 37.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SMTC.L,MULTI UNITS LUXEMBOURG AMUNDI SMART OVERNIGHT RETURN USD HEDGED,etf,N,N,USD,,yfinance,-,Y,17/03/2025,27/06/2025,250 ETFs on LSE with highest market cap
+SMUD.L,ISHARES IV PLC ISH MSCI EMU GBP-D,etf,Y,N,GBP,,yfinance,-,Y,19/10/2018,27/06/2025,250 ETFs on LSE with highest market cap
+SMWH.L,WH SMITH PLC ORD 22 6/67P,uk stock,Y,Y,GBX,,yfinance,-,Y,18/06/2004,27/06/2025,LSE : FTSE All-Share
+SN.L,SMITH & NEPHEW PLC ORD USD0.20,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SNA,Snap-on,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+SNPS,Synopsys,us stock,N,Y,USD,,yfinance,-,Y,26/02/1992,27/06/2025,S&P500 constituents
+SNR.L,SENIOR PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SNWS.L,SMITHS NEWS PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SO,Southern Company,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+SOHO.L,SOCIAL HOUSING REIT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,08/08/2017,27/06/2025,LSE : FTSE All-Share
+SOI.L,SCHRODER ORIENTAL INCOME FUND LD ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,28/07/2005,27/06/2025,LSE : FTSE All-Share
+SOL-GBP,Solana,cryptocurrency,N,N,GBP,,yfinance,-,Y,10/04/2020,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+SOLV,Solventum,us stock,N,N,USD,,yfinance,-,Y,01/04/2024,27/06/2025,S&P500 constituents
+SP5G.L,MULTI UNITS LUXEMBOURG AMUNDI SP 500 II GBP HEDGED DIST,etf,Y,N,GBP,,yfinance,-,Y,15/02/2019,27/06/2025,250 ETFs on LSE with highest market cap
+SPG,Simon Property Group,us stock,Y,Y,USD,,yfinance,-,Y,14/12/1993,27/06/2025,S&P500 constituents
+SPGI,S&P Global,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+SPI.L,SPIRE HEALTHCARE GROUP PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,18/07/2014,27/06/2025,LSE : FTSE All-Share
+SPMV.L,ISHARES VI PLC ISHRS EDGE S&P 500 MIN VOL ETF USD (ACC),etf,N,N,USD,,yfinance,-,Y,30/11/2012,27/06/2025,250 ETFs on LSE with highest market cap
+SPT.L,SPIRENT COMMUNICATIONS PLC ORD 3 1/3P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SPX.L,SPIRAX GROUP PLC ORD 26 12/13P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SPXS.L,INVESCO MARKETS PLC INVESCO S&P 500 UCITS ETF,etf,N,N,USD,,yfinance,-,Y,20/05/2010,27/06/2025,250 ETFs on LSE with highest market cap
+SRE,Sempra,us stock,Y,Y,USD,,yfinance,-,Y,29/06/1998,27/06/2025,S&P500 constituents
+SRE.L,SIRIUS REAL ESTATE LD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,11/12/2003,27/06/2025,LSE : FTSE All-Share
+SREI.L,SCHRODER REAL ESTATE INV. TST. LD ORD SHS NPV,uk stock,Y,N,GBX,,yfinance,-,Y,15/07/2004,27/06/2025,LSE : FTSE All-Share
+SRP.L,SERCO GROUP PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SSE.L,SSE PLC ORD 50P,uk stock,Y,N,GBX,,yfinance,-,Y,17/06/1991,27/06/2025,LSE : FTSE All-Share
+SSIT.L,SERAPHIM SPACE INVESTMENT TRUST PLC ORD GBP0.01,uk stock,N,N,GBX,,yfinance,-,Y,14/07/2021,27/06/2025,LSE : FTSE All-Share
+SSON.L,SMITHSON INVESTMENT TRUST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,19/10/2018,27/06/2025,LSE : FTSE All-Share
+SSPG.L,SSP GROUP PLC ORD 1 17/200P,uk stock,Y,Y,GBX,,yfinance,-,Y,10/07/2014,27/06/2025,LSE : FTSE All-Share
+SST.L,SCOTTISH ORIENTAL SMLR CO TST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,28/02/1995,27/06/2025,LSE : FTSE All-Share
+STAN.L,STANDARD CHARTERED PLC ORD USD0.50,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+STB.L,SECURE TRUST BANK PLC ORD 40P,uk stock,Y,N,GBX,,yfinance,-,Y,02/11/2011,27/06/2025,LSE : FTSE All-Share
+STE,Steris,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1992,27/06/2025,S&P500 constituents
+STEM.L,STHREE PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,11/11/2005,27/06/2025,LSE : FTSE All-Share
+STJ.L,ST.JAMES'S PLACE PLC ORD 15P,uk stock,Y,N,GBX,,yfinance,-,Y,28/08/1990,27/06/2025,LSE : FTSE All-Share
+STLD,Steel Dynamics,us stock,Y,Y,USD,,yfinance,-,Y,22/11/1996,27/06/2025,S&P500 constituents
+STS.L,STS GLOBAL INCOME & GROWTH TST PLC RED ORDS 1P,uk stock,Y,N,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+STT,State Street Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+STVG.L,STV GROUP PLC ORD 50P,uk stock,Y,Y,GBX,,yfinance,-,Y,04/01/2000,27/06/2025,LSE : FTSE All-Share
+STX,Seagate Technology,us stock,Y,N,USD,,yfinance,-,Y,11/12/2002,27/06/2025,S&P500 constituents
+STZ,Constellation Brands,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1992,27/06/2025,S&P500 constituents
+SUAS.L,ISHARES IV PLC ISHS MSCI USA SRI UCITS ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,11/07/2016,27/06/2025,250 ETFs on LSE with highest market cap
+SUES.L,ISHARES IV PLC ISHS MSCI EM SRI UCITS ETF USD ACC,etf,N,N,GBX,,yfinance,-,Y,11/07/2016,27/06/2025,250 ETFs on LSE with highest market cap
+SUPR.L,SUPERMARKET INCOME REIT PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,20/06/2017,27/06/2025,LSE : FTSE All-Share
+SUS.L,S & U PLC ORD 12 1/2P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SUSM.L,ISHARES IV PLC ISHS MSCI EM SRI UCITS ETF USD ACC,etf,N,N,USD,,yfinance,-,Y,11/07/2016,27/06/2025,250 ETFs on LSE with highest market cap
+SUWS.L,ISHARES IV PLC ISHARES MSCI WLD SRI UCITS USD (ACC),etf,Y,N,USD,,yfinance,-,Y,12/10/2017,27/06/2025,250 ETFs on LSE with highest market cap
+SVS.L,SAVILLS PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,20/07/1988,27/06/2025,LSE : FTSE All-Share
+SVT.L,SEVERN TRENT PLC ORD 97 17/19P,uk stock,Y,Y,GBX,,yfinance,-,Y,11/12/1989,27/06/2025,LSE : FTSE All-Share
+SW,Smurfit Westrock,us stock,Y,N,USD,,yfinance,-,Y,08/07/2024,27/06/2025,S&P500 constituents
+SWEF.L,STARWOOD EUROPEAN REAL EST FIN LD ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,17/12/2012,27/06/2025,LSE : FTSE All-Share
+SWK,Stanley Black & Decker,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+SWKS,Skyworks Solutions,us stock,Y,Y,USD,,yfinance,-,Y,07/09/1984,27/06/2025,S&P500 constituents
+SXS.L,SPECTRIS PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,28/11/1988,27/06/2025,LSE : FTSE All-Share
+SYF,Synchrony Financial,us stock,Y,N,USD,,yfinance,-,Y,31/07/2014,27/06/2025,S&P500 constituents
+SYK,Stryker Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+SYNC.L,SYNCONA LIMITED ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,26/10/2012,27/06/2025,LSE : FTSE All-Share
+SYNT.L,SYNTHOMER PLC ORD 1P,uk stock,N,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+SYY,Sysco,us stock,Y,Y,USD,,yfinance,-,Y,08/05/1973,27/06/2025,S&P500 constituents
+T,AT&T,us stock,Y,Y,USD,,yfinance,-,Y,21/11/1983,27/06/2025,S&P500 constituents
+TAP,Molson Coors Beverage Company,us stock,Y,Y,USD,,yfinance,-,Y,12/06/1975,27/06/2025,S&P500 constituents
+TATE.L,TATE & LYLE PLC ORD 29 1/6P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+TBCG.L,TBC BANK GROUP PLC ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,10/08/2016,27/06/2025,LSE : FTSE All-Share
+TCAP.L,TP ICAP GROUP PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,24/10/2000,27/06/2025,LSE : FTSE All-Share
+TDG,TransDigm Group,us stock,Y,N,USD,,yfinance,-,Y,15/03/2006,27/06/2025,S&P500 constituents
+TDY,Teledyne Technologies,us stock,N,N,USD,,yfinance,-,Y,23/11/1999,27/06/2025,S&P500 constituents
+TECH,Bio-Techne,us stock,Y,Y,USD,,yfinance,-,Y,09/02/1989,27/06/2025,S&P500 constituents
+TEL,TE Connectivity,us stock,Y,N,USD,,yfinance,-,Y,14/06/2007,27/06/2025,S&P500 constituents
+TEM.L,TEMPLETON EMERGING MARKETS IT PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,13/06/1989,27/06/2025,LSE : FTSE All-Share
+TEP.L,TELECOM PLUS PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,26/07/2000,27/06/2025,LSE : FTSE All-Share
+TER,Teradyne,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+TET.L,TREATT PLC ORD 2P,uk stock,Y,Y,GBX,,yfinance,-,Y,21/06/1989,27/06/2025,LSE : FTSE All-Share
+TFC,Truist Financial,us stock,Y,Y,USD,,yfinance,-,Y,18/03/1980,27/06/2025,S&P500 constituents
+TFIF.L,TWENTYFOUR INCOME FUND LIMITED ORD RED 1P,uk stock,Y,N,GBX,,yfinance,-,Y,06/03/2013,27/06/2025,LSE : FTSE All-Share
+TGT,Target Corporation,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+THG.L,THG PLC ORD GBP0.005,uk stock,N,N,GBX,,yfinance,-,Y,16/09/2020,27/06/2025,LSE : FTSE All-Share
+THRG.L,BLACKROCK THROGMORTON TRUST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+THRL.L,TARGET HEALTHCARE REIT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,07/03/2013,27/06/2025,LSE : FTSE All-Share
+TI5G.L,ISHARES II PLC ISH $ TIPS 0-5 ETF GBP HDG DIST,etf,Y,N,GBP,,yfinance,-,Y,05/03/2018,27/06/2025,250 ETFs on LSE with highest market cap
+TJX,TJX Companies,us stock,Y,Y,USD,,yfinance,-,Y,26/06/1987,27/06/2025,S&P500 constituents
+TKO,TKO Group Holdings,us stock,Y,N,USD,,yfinance,-,Y,19/10/1999,27/06/2025,S&P500 constituents
+TLW.L,TULLOW OIL PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/03/1989,27/06/2025,LSE : FTSE All-Share
+TMIP.L,TAYLOR MARITIME LIMITED ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,27/05/2021,27/06/2025,LSE : FTSE All-Share
+TMO,Thermo Fisher Scientific,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+TMPL.L,TEMPLE BAR INV TST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+TMUS,T-Mobile US,us stock,Y,Y,USD,,yfinance,-,Y,19/04/2007,27/06/2025,S&P500 constituents
+TPK.L,TRAVIS PERKINS PLC ORD ÔøΩ0.11205105,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+TPL,Texas Pacific Land Corporation,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+TPR,"Tapestry, Inc.",us stock,Y,Y,USD,,yfinance,-,Y,06/10/2000,27/06/2025,S&P500 constituents
+TPT.L,TOPPS TILES PLC ORD 3 1/3P,uk stock,Y,Y,GBX,,yfinance,-,Y,02/06/1997,27/06/2025,LSE : FTSE All-Share
+TRGP,Targa Resources,us stock,Y,N,USD,,yfinance,-,Y,07/12/2010,27/06/2025,S&P500 constituents
+TRI.L,TRIFAST PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,15/02/1994,27/06/2025,LSE : FTSE All-Share
+TRIG.L,THE RENEWABLES INFRASTRUCTURE GROUP ORD NPV,uk stock,Y,N,GBX,,yfinance,-,Y,29/07/2013,27/06/2025,LSE : FTSE All-Share
+TRMB,Trimble Inc.,us stock,N,Y,USD,,yfinance,-,Y,20/07/1990,27/06/2025,S&P500 constituents
+TRN.L,TRAINLINE PLC ORD 1P,uk stock,N,N,GBX,,yfinance,-,Y,21/06/2019,27/06/2025,LSE : FTSE All-Share
+TROW,T. Rowe Price,us stock,Y,Y,USD,,yfinance,-,Y,02/04/1986,27/06/2025,S&P500 constituents
+TRST.L,TRUSTPILOT GROUP PLC ORD GBP0.01,uk stock,N,N,GBX,,yfinance,-,Y,23/03/2021,27/06/2025,LSE : FTSE All-Share
+TRV,Travelers Companies (The),us stock,Y,Y,USD,,yfinance,-,Y,17/11/1975,27/06/2025,S&P500 constituents
+TRX-GBP,Tron,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+TRY.L,TR PROPERTY INV TST PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/01/1970,27/06/2025,LSE : FTSE All-Share
+TSCO,Tractor Supply,us stock,Y,Y,USD,,yfinance,-,Y,17/02/1994,27/06/2025,S&P500 constituents
+TSCO.L,TESCO PLC ORD 6 1/3P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+TSLA,"Tesla, Inc.",us stock,N,Y,USD,,yfinance,-,Y,29/06/2010,27/06/2025,S&P500 constituents
+TSN,Tyson Foods,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+TT,Trane Technologies,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+TTG.L,TT ELECTRONICS PLC ORD 25P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+TTWO,Take-Two Interactive,us stock,Y,Y,USD,,yfinance,-,Y,15/04/1997,27/06/2025,S&P500 constituents
+TW.L,TAYLOR WIMPEY PLC ORD 1P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+TXN,Texas Instruments,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+TXT,Textron,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+TYL,Tyler Technologies,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+UAL,United Airlines Holdings,us stock,Y,N,USD,,yfinance,-,Y,06/02/2006,27/06/2025,S&P500 constituents
+UB01.L,UBS (LUX) FUND SOLUTIONS UBS EURO STOXX 50 ETF EUR DIS,etf,Y,N,GBX,,yfinance,-,Y,28/06/2012,27/06/2025,250 ETFs on LSE with highest market cap
+UB02.L,UBS (LUX) FUND SOLUTIONS UBS CORE MSCI JAPAN ETF JPY DIS,etf,Y,N,GBX,,yfinance,-,Y,28/06/2012,27/06/2025,250 ETFs on LSE with highest market cap
+UB06.L,UBS (LUX) FUND SOLUTIONS UBS CORE MSCI EMU ETF EUR DIS,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+UB12.L,UBS (LUX) FUND SOLUTIONS UBS CORE MSCI EUROPE ETF EUR DIS,etf,Y,N,GBX,,yfinance,-,Y,08/02/2024,27/06/2025,250 ETFs on LSE with highest market cap
+UB23.L,UBS (LUX) FUND SOLUTIONS UBS MSCI CANADA ETF CAD DIS,etf,Y,N,GBX,,yfinance,-,Y,30/09/2009,27/06/2025,250 ETFs on LSE with highest market cap
+UB32.L,UBS (LUX) FUND SOLUTIONS UBS CORE MSCI EM ETF USD DIS,etf,Y,N,GBX,,yfinance,-,Y,12/11/2010,27/06/2025,250 ETFs on LSE with highest market cap
+UB39.L,UBS (LUX) FUND SOLUTIONS UBS MSCI EMU SRI ETF EUR DIS,etf,Y,N,GBX,,yfinance,-,Y,18/08/2011,27/06/2025,250 ETFs on LSE with highest market cap
+UB45.L,UBS (LUX) FUND SOLUTIONS UBS MSCI PACIFIC SRI ETF USD DIS,etf,Y,N,GBX,,yfinance,-,Y,22/08/2011,27/06/2025,250 ETFs on LSE with highest market cap
+UBER,Uber,us stock,N,N,USD,,yfinance,-,Y,10/05/2019,27/06/2025,S&P500 constituents
+UC44.L,UBS (LUX) FUND SOLUTIONS UBS MSCI WORLD SRI ETF USD DIS,etf,Y,N,GBX,,yfinance,-,Y,19/08/2011,27/06/2025,250 ETFs on LSE with highest market cap
+UC46.L,UBS (LUX) FUND SOLUTIONS UBS MSCI USA SRI ETF USD DIS,etf,Y,N,GBX,,yfinance,-,Y,18/08/2011,27/06/2025,250 ETFs on LSE with highest market cap
+UDR,"UDR, Inc.",us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+UEM.L,UTILICO EMERGING MARKETS TRUST PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,20/07/2005,27/06/2025,LSE : FTSE All-Share
+UHS,Universal Health Services,us stock,Y,Y,USD,,yfinance,-,Y,09/07/1981,27/06/2025,S&P500 constituents
+UKW.L,GREENCOAT UK WIND PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,14/02/2013,27/06/2025,LSE : FTSE All-Share
+ULTA,Ulta Beauty,us stock,Y,N,USD,,yfinance,-,Y,25/10/2007,27/06/2025,S&P500 constituents
+ULTP.L,ULTIMATE PRODUCTS PLC ORDS 0.25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/03/2017,27/06/2025,LSE : FTSE All-Share
+ULVR.L,UNILEVER PLC ORD 3 1/9P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+UNH,UnitedHealth Group,us stock,Y,Y,USD,,yfinance,-,Y,17/10/1984,27/06/2025,S&P500 constituents
+UNP,Union Pacific Corporation,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1980,27/06/2025,S&P500 constituents
+UPS,United Parcel Service,us stock,Y,N,USD,,yfinance,-,Y,10/11/1999,27/06/2025,S&P500 constituents
+URI,United Rentals,us stock,Y,N,USD,,yfinance,-,Y,18/12/1997,27/06/2025,S&P500 constituents
+USA.L,BAILLIE GIFFORD US GROWTH TRUST PLC ORD GBP0.01,uk stock,N,N,GBX,,yfinance,-,Y,23/03/2018,27/06/2025,LSE : FTSE All-Share
+USB,U.S. Bancorp,us stock,Y,Y,USD,,yfinance,-,Y,03/05/1973,27/06/2025,S&P500 constituents
+USDC-GBP,USDC,cryptocurrency,N,N,GBP,,yfinance,-,Y,08/10/2018,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+USDT-GBP,Tether,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+USPY.L,LEGAL & GENERAL UCITS ETF PLC L&G ISE CYBER SECURITY GO UCITS ETF,etf,N,N,USD,,yfinance,-,Y,23/09/2015,27/06/2025,250 ETFs on LSE with highest market cap
+UTG.L,UNITE GROUP PLC ORD 25P,uk stock,Y,N,GBX,,yfinance,-,Y,01/06/1999,27/06/2025,LSE : FTSE All-Share
+UU.L,UNITED UTILITIES GROUP PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,11/12/1989,27/06/2025,LSE : FTSE All-Share
+V,Visa Inc.,us stock,Y,Y,USD,,yfinance,-,Y,19/03/2008,27/06/2025,S&P500 constituents
+VAGS.L,VANGUARD FUNDS PLC VANGUARD GLOBAL AGGREGATE BD UCITS ETF,etf,Y,N,GBP,,yfinance,-,Y,18/06/2019,27/06/2025,250 ETFs on LSE with highest market cap
+VAGU.L,VANGUARD FUNDS PLC VANGUARD GLOBAL AGGREGATE BD UCITS ETF,etf,N,N,USD,,yfinance,-,Y,18/06/2019,27/06/2025,250 ETFs on LSE with highest market cap
+VANQ.L,VANQUIS BANKING GROUP PLC ORD 20 8/11P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+VCT.L,VICTREX PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,21/12/1995,27/06/2025,LSE : FTSE All-Share
+VDEM.L,VANGUARD FUNDS PLC VANGUARD FTSE EMERGING MARKETS UCITS ETF,etf,Y,N,USD,,yfinance,-,Y,22/05/2012,27/06/2025,250 ETFs on LSE with highest market cap
+VDEV.L,VANGUARD FUNDS PLC VANGUARD FTSE DEVELOPED WORLD UCITS ETF,etf,Y,N,USD,,yfinance,-,Y,30/09/2014,27/06/2025,250 ETFs on LSE with highest market cap
+VDJP.L,VANGUARD FUNDS PLC VANGUARD FTSE JAPAN UCITS ETF,etf,Y,N,USD,,yfinance,-,Y,21/05/2013,27/06/2025,250 ETFs on LSE with highest market cap
+VDNR.L,VANGUARD FUNDS PLC VANGUARD FTSE NORTH AMERICA UCITS ETF,etf,Y,N,USD,,yfinance,-,Y,30/09/2014,27/06/2025,250 ETFs on LSE with highest market cap
+VDPX.L,VANGUARD FUNDS PLC VANGUARD FTSE DEV ASIAPAC XJPN UCITS ETF,etf,Y,N,USD,,yfinance,-,Y,21/05/2013,27/06/2025,250 ETFs on LSE with highest market cap
+VECP.L,VANGUARD FUNDS PLC VANGUARD EUR CORPORATE BOND UCITS ETF,etf,Y,N,GBP,,yfinance,-,Y,24/02/2016,27/06/2025,250 ETFs on LSE with highest market cap
+VEIL.L,VIETNAM ENTERPRISE INVESTMENTS LIMI ORD USD0.01 (DI),uk stock,N,N,GBX,,yfinance,-,Y,05/07/2016,27/06/2025,LSE : FTSE All-Share
+VEMT.L,VANGUARD FUNDS PLC VANGUARD USD EM GOV'T BOND UCITS ETF,etf,Y,N,GBP,,yfinance,-,Y,06/12/2016,27/06/2025,250 ETFs on LSE with highest market cap
+VETY.L,VANGUARD FUNDS PLC VANGUARD EUR EUROZONE GOV BOND UCITS ETF,etf,Y,N,GBP,,yfinance,-,Y,24/02/2016,27/06/2025,250 ETFs on LSE with highest market cap
+VFEG.L,VANGUARD FUNDS PLC VANGUARD FTSE EMERGING MARKETS UCITS ETF,etf,N,N,GBP,,yfinance,-,Y,24/09/2019,27/06/2025,250 ETFs on LSE with highest market cap
+VHVG.L,VANGUARD FUNDS PLC VANGUARD FTSE DEVELOPED WORLD UCITS ETF,etf,N,N,GBP,,yfinance,-,Y,24/09/2019,27/06/2025,250 ETFs on LSE with highest market cap
+VHYD.L,VANGUARD FUNDS PLC VANGUARD FTSE WRLD HI DIV YLD UCITS ETF,etf,Y,N,USD,,yfinance,-,Y,21/05/2013,27/06/2025,250 ETFs on LSE with highest market cap
+VHYG.L,VANGUARD FUNDS PLC VANGUARD FTSE ALLWRLD HIDIVYLD UCITS ETF,etf,N,N,GBP,,yfinance,-,Y,24/09/2019,27/06/2025,250 ETFs on LSE with highest market cap
+VICI,Vici Properties,us stock,Y,N,USD,,yfinance,-,Y,02/01/2018,27/06/2025,S&P500 constituents
+VID.L,VIDENDUM PLC ORD 20P,uk stock,Y,N,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+VIP.L,VALUE AND INDEXED PROP INC TRUST ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,31/07/1981,27/06/2025,LSE : FTSE All-Share
+VJPB.L,VANGUARD FUNDS PLC VANGUARD FTSE JAPAN UCITS ETF,etf,N,N,GBP,,yfinance,-,Y,24/09/2019,27/06/2025,250 ETFs on LSE with highest market cap
+VLO,Valero Energy,us stock,Y,Y,USD,,yfinance,-,Y,04/01/1982,27/06/2025,S&P500 constituents
+VLTO,Veralto,us stock,Y,N,USD,,yfinance,-,Y,04/10/2023,27/06/2025,S&P500 constituents
+VMC,Vulcan Materials Company,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+VNH.L,VIETNAM HOLDING LD ORD USD1,uk stock,N,N,GBX,,yfinance,-,Y,14/06/2006,27/06/2025,LSE : FTSE All-Share
+VOD.L,VODAFONE GROUP PLC ORD USD0.20 20/21,uk stock,Y,Y,GBX,,yfinance,-,Y,25/10/1988,27/06/2025,LSE : FTSE All-Share
+VOF.L,VINACAPITAL VIETNAM OPP. FUND LD ORD $0.01,uk stock,Y,N,GBX,,yfinance,-,Y,30/09/2003,27/06/2025,LSE : FTSE All-Share
+VP.L,VP PLC ORD 5P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+VRSK,Verisk Analytics,us stock,Y,N,USD,,yfinance,-,Y,07/10/2009,27/06/2025,S&P500 constituents
+VRSN,Verisign,us stock,Y,Y,USD,,yfinance,-,Y,30/01/1998,27/06/2025,S&P500 constituents
+VRTX,Vertex Pharmaceuticals,us stock,N,Y,USD,,yfinance,-,Y,24/07/1991,27/06/2025,S&P500 constituents
+VSCA.L,VANGUARD FUNDS PLC VANGUARD USD CORP 1-3 YEAR BD UCITS ETF,etf,N,N,GBP,,yfinance,-,Y,19/02/2019,27/06/2025,250 ETFs on LSE with highest market cap
+VSL.L,VPC SPECIALTY LENDING INVESTMENTS ORD GBP0.01,uk stock,Y,N,GBX,,yfinance,-,Y,17/03/2015,27/06/2025,LSE : FTSE All-Share
+VST,Vistra Corp.,us stock,Y,N,USD,,yfinance,-,Y,05/10/2016,27/06/2025,S&P500 constituents
+VSVS.L,VESUVIUS PLC ORD 10P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+VTR,Ventas,us stock,Y,Y,USD,,yfinance,-,Y,05/05/1997,27/06/2025,S&P500 constituents
+VTRS,Viatris,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+VTY.L,VISTRY GROUP PLC ORD 50P,uk stock,Y,Y,GBX,,yfinance,-,Y,09/12/1997,27/06/2025,LSE : FTSE All-Share
+VUCP.L,VANGUARD FUNDS PLC VANGUARD USD CORPORATE BOND UCITS ETF,etf,Y,N,GBP,,yfinance,-,Y,24/02/2016,27/06/2025,250 ETFs on LSE with highest market cap
+VUSA.L,VANGUARD FUNDS PLC VANGUARD S&P 500 UCITS ETF,etf,Y,N,GBP,,yfinance,-,Y,22/05/2012,27/06/2025,250 ETFs on LSE with highest market cap
+VUTY.L,VANGUARD FUNDS PLC VANGUARD USD TREASURY BOND UCITS ETF,etf,Y,N,GBP,,yfinance,-,Y,24/02/2016,27/06/2025,250 ETFs on LSE with highest market cap
+VWRD.L,VANGUARD FUNDS PLC VANGUARD FTSE ALL-WORLD UCITS ETF,etf,Y,N,USD,,yfinance,-,Y,22/05/2012,27/06/2025,250 ETFs on LSE with highest market cap
+VWRL.L,VANGUARD FUNDS PLC VANGUARD FTSE ALL-WORLD UCITS ETF,etf,Y,N,GBP,,yfinance,-,Y,22/05/2012,27/06/2025,250 ETFs on LSE with highest market cap
+VZ,Verizon,us stock,Y,Y,USD,,yfinance,-,Y,21/11/1983,27/06/2025,S&P500 constituents
+WAB,Wabtec,us stock,Y,Y,USD,,yfinance,-,Y,16/06/1995,27/06/2025,S&P500 constituents
+WAT,Waters Corporation,us stock,N,Y,USD,,yfinance,-,Y,17/11/1995,27/06/2025,S&P500 constituents
+WBA,Walgreens Boots Alliance,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+WBD,Warner Bros. Discovery,us stock,N,Y,USD,,yfinance,-,Y,08/07/2005,27/06/2025,S&P500 constituents
+WDAY,"Workday, Inc.",us stock,N,N,USD,,yfinance,-,Y,12/10/2012,27/06/2025,S&P500 constituents
+WDC,Western Digital,us stock,Y,Y,USD,,yfinance,-,Y,31/10/1978,27/06/2025,S&P500 constituents
+WEC,WEC Energy Group,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+WELL,Welltower,us stock,Y,Y,USD,,yfinance,-,Y,19/03/1980,27/06/2025,S&P500 constituents
+WFC,Wells Fargo,us stock,Y,Y,USD,,yfinance,-,Y,01/06/1972,27/06/2025,S&P500 constituents
+WG.L,WOOD GROUP (JOHN) PLC ORD 4 2/7P,uk stock,Y,Y,GBX,,yfinance,-,Y,29/05/2002,27/06/2025,LSE : FTSE All-Share
+WHR.L,WAREHOUSE REIT PLC ORD 1P,uk stock,Y,N,GBX,,yfinance,-,Y,20/09/2017,27/06/2025,LSE : FTSE All-Share
+WIX.L,WICKES GROUP PLC ORD GBP0.10,uk stock,Y,N,GBX,,yfinance,-,Y,28/04/2021,27/06/2025,LSE : FTSE All-Share
+WIZZ.L,WIZZ AIR HOLDINGS PLC. ORD GBP0.0001,uk stock,N,N,GBX,,yfinance,-,Y,25/02/2015,27/06/2025,LSE : FTSE All-Share
+WKP.L,WORKSPACE GROUP PLC ORD GBP1,uk stock,Y,Y,GBX,,yfinance,-,Y,13/12/1993,27/06/2025,LSE : FTSE All-Share
+WM,Waste Management,us stock,Y,N,USD,,yfinance,-,Y,22/06/1988,27/06/2025,S&P500 constituents
+WMB,Williams Companies,us stock,Y,Y,USD,,yfinance,-,Y,31/12/1981,27/06/2025,S&P500 constituents
+WMT,Walmart,us stock,Y,Y,USD,,yfinance,-,Y,25/08/1972,27/06/2025,S&P500 constituents
+WPP.L,WPP PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,24/03/1995,27/06/2025,LSE : FTSE All-Share
+WPS.L,W.A.G PAYMENT SOLUTIONS PLC ORD 1P,uk stock,N,N,GBX,,yfinance,-,Y,08/10/2021,27/06/2025,LSE : FTSE All-Share
+WQDS.L,ISHARES II PLC ISHRS WORLD QUALITY DIV USD ADV (DIST),etf,Y,N,GBX,,yfinance,-,Y,12/06/2017,27/06/2025,250 ETFs on LSE with highest market cap
+WRB,W. R. Berkley Corporation,us stock,Y,Y,USD,,yfinance,-,Y,23/10/1973,27/06/2025,S&P500 constituents
+WSM,"Williams-Sonoma, Inc.",us stock,Y,Y,USD,,yfinance,-,Y,07/07/1983,27/06/2025,S&P500 constituents
+WSML.L,ISHARES III PLC ISH MSCI WLD SMALL CAP UCITS ETF ACC USD,etf,N,N,USD,,yfinance,-,Y,27/03/2018,27/06/2025,250 ETFs on LSE with highest market cap
+WST,West Pharmaceutical Services,us stock,Y,Y,USD,,yfinance,-,Y,17/03/1980,27/06/2025,S&P500 constituents
+WTB.L,WHITBREAD PLC ORD 76 122/153P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+WTW,Willis Towers Watson,us stock,Y,Y,USD,,yfinance,-,Y,12/06/2001,27/06/2025,S&P500 constituents
+WWH.L,WORLDWIDE HEALTHCARE TRUST PLC ORD 2.5P,uk stock,Y,Y,GBX,,yfinance,-,Y,28/04/1995,27/06/2025,LSE : FTSE All-Share
+WY,Weyerhaeuser,us stock,Y,Y,USD,,yfinance,-,Y,03/05/1973,27/06/2025,S&P500 constituents
+WYNN,Wynn Resorts,us stock,Y,N,USD,,yfinance,-,Y,25/10/2002,27/06/2025,S&P500 constituents
+X,United States Steel,us stock,Y,N,USD,,yfinance,-,Y,12/04/1991,18/06/2025,household name bluechip stock outside of S&P500
+XAG,PHYSICAL SILVER,commodity,N,N,USD,,local_csv,raw/csv/commodities/XAG.csv,Y,04/02/1970,30/06/2025,No api available : yahoo had limited data
+XAR.L,XAAR PLC ORD 10P,uk stock,Y,N,GBX,,yfinance,-,Y,17/10/1997,27/06/2025,LSE : FTSE All-Share
+XASX.L,XTRACKERS X MSCI UK ESG,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XAU,PHYSICAL GOLD,commodity,N,N,USD,,local_csv,raw/csv/commodities/XAU.csv,Y,03/01/1975,30/06/2025,No api available : yahoo had limited data
+XCX5.L,XTRACKERS X MSCI INDIA SWAP,etf,N,N,GBX,,yfinance,-,Y,24/06/2010,27/06/2025,250 ETFs on LSE with highest market cap
+XCX6.L,XTRACKERS X MSCI CHINA 1C,etf,N,N,GBX,,yfinance,-,Y,24/06/2010,27/06/2025,250 ETFs on LSE with highest market cap
+XDER.L,XTRACKERS X FTSE EUROPE REAL ESTATE,etf,N,N,GBX,,yfinance,-,Y,25/03/2010,27/06/2025,250 ETFs on LSE with highest market cap
+XEL,Xcel Energy,us stock,Y,Y,USD,,yfinance,-,Y,21/02/1973,27/06/2025,S&P500 constituents
+XESC.L,XTRACKERS X EURO STOXX 50 1C,etf,N,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XESX.L,XTRACKERS X EURO STOXX 50 1D,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XGSD.L,XTRACKERS X GLOBAL SELECT DIV 100 SWAP,etf,Y,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XGSG.L,XTRACKERS II X GLOBAL GOV BOND GBP,etf,Y,N,GBX,,yfinance,-,Y,24/08/2011,27/06/2025,250 ETFs on LSE with highest market cap
+XLKS.L,INVESCO MARKETS PLC INVESCO TECHNOLOG S&P US SECTOR UCIT ETF,etf,N,N,USD,,yfinance,-,Y,16/12/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XLM-GBP,Stellar,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+XMEM.L,XTRACKERS X MSCI EMERGING MARKETS SWAP,etf,N,N,GBX,,yfinance,-,Y,02/01/2008,27/06/2025,250 ETFs on LSE with highest market cap
+XMEU.L,XTRACKERS X MSCI EUROPE 1C,etf,N,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XMJP.L,XTRACKERS X MSCI JAPAN,etf,N,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XMR-GBP,Monero,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+XMUS.L,XTRACKERS X MSCI USA SWAP,etf,N,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XOM,ExxonMobil,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,S&P500 constituents
+XPP.L,XP POWER LD ORD 1P (DI),uk stock,Y,N,GBX,,yfinance,-,Y,05/07/2000,27/06/2025,LSE : FTSE All-Share
+XPS.L,XPS PENSIONS GROUP PLC ORD GBP0.0005,uk stock,Y,N,GBX,,yfinance,-,Y,16/02/2017,27/06/2025,LSE : FTSE All-Share
+XPXJ.L,XTRACKERS XTRACKERS MSCI PACIFIC EX JP ESG SCREEN,etf,N,N,GBX,,yfinance,-,Y,20/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XRP-GBP,XRP,cryptocurrency,N,N,GBP,,yfinance,-,Y,11/11/2017,29/06/2025,25 most popular crypto currency available on yfinance : Market Cap > $2B
+XRX,Xerox,us stock,Y,Y,USD,,yfinance,-,Y,02/01/1970,27/06/2025,household name bluechip stock outside of S&P500
+XSPX.L,XTRACKERS X S&P500 SWAP,etf,N,N,GBX,,yfinance,-,Y,26/03/2010,27/06/2025,250 ETFs on LSE with highest market cap
+XSX6.L,XTRACKERS X STOXX EUROPE 600,etf,N,N,GBX,,yfinance,-,Y,20/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XXSC.L,XTRACKERS X MSCI EUROPE SMALL CAP,etf,N,N,GBX,,yfinance,-,Y,02/01/2009,27/06/2025,250 ETFs on LSE with highest market cap
+XYL,Xylem Inc.,us stock,Y,N,USD,,yfinance,-,Y,13/10/2011,27/06/2025,S&P500 constituents
+YUM,Yum! Brands,us stock,Y,Y,USD,,yfinance,-,Y,17/09/1997,27/06/2025,S&P500 constituents
+ZBH,Zimmer Biomet,us stock,Y,Y,USD,,yfinance,-,Y,25/07/2001,27/06/2025,S&P500 constituents
+ZBRA,Zebra Technologies,us stock,N,Y,USD,,yfinance,-,Y,15/08/1991,27/06/2025,S&P500 constituents
+ZIG.L,ZIGUP PLC ORD 50P,uk stock,Y,Y,GBX,,yfinance,-,Y,01/07/1988,27/06/2025,LSE : FTSE All-Share
+ZTF.L,ZOTEFOAMS PLC ORD 5P,uk stock,Y,N,GBX,,yfinance,-,Y,28/02/1995,27/06/2025,LSE : FTSE All-Share
+ZTS,Zoetis,us stock,Y,N,USD,,yfinance,-,Y,01/02/2013,27/06/2025,S&P500 constituents
