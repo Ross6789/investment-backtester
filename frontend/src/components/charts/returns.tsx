@@ -51,8 +51,6 @@ interface ReturnChartProps {
 type PeriodKey = "daily" | "weekly" | "monthly" | "quarterly" | "yearly";
 
 export function ReturnBarChart({ chartData }: ReturnChartProps) {
-  const [timeRange, setTimeRange] = React.useState("monthly");
-
   // Dynamically filter the available periods based on backtest length
   const startDate = new Date(chartData["daily"][0]?.period_start);
   const endDate = new Date(
@@ -65,6 +63,15 @@ export function ReturnBarChart({ chartData }: ReturnChartProps) {
   if (daysDiff >= 120) availableOptions.push("monthly");
   if (daysDiff >= 365) availableOptions.push("quarterly");
   if (daysDiff >= 1461) availableOptions.push("yearly");
+
+  // set default to the smallest aggretion possible without exceeding approx 100 datapoints
+  let defaultTimeRange = "daily";
+  if (daysDiff >= 100) defaultTimeRange = "weekly";
+  if (daysDiff >= 700) defaultTimeRange = "monthly";
+  if (daysDiff >= 3000) defaultTimeRange = "quarterly";
+  if (daysDiff >= 9100) defaultTimeRange = "yearly";
+
+  const [timeRange, setTimeRange] = React.useState(defaultTimeRange);
 
   const filteredData = React.useMemo(() => {
     return chartData[timeRange as PeriodKey] ?? [];

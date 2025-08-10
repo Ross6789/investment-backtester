@@ -326,19 +326,17 @@ export function PortfolioBalanceStackedChart({
               }
             />
 
-            {Object.entries(chartConfig)
-              .reverse()
-              .map(([key, config]) => (
-                <Area
-                  key={key}
-                  dataKey={key}
-                  type="natural"
-                  fill={config.color}
-                  fillOpacity={0.3}
-                  stroke={config.color}
-                  stackId="a"
-                />
-              ))}
+            {Object.entries(chartConfig).map(([key, config]) => (
+              <Area
+                key={key}
+                dataKey={key}
+                type="natural"
+                fill={config.color}
+                fillOpacity={0.3}
+                stroke={config.color}
+                stackId="a"
+              />
+            ))}
           </AreaChart>
         </ChartContainer>
       </CardContent>
