@@ -55,19 +55,21 @@ function generateChartConfig(tickers: string[]): ChartConfig {
 type holdingData = {
   ticker: string;
   value: number;
+  units: number;
   weight: number;
 };
 
 // Transform data into a flat format based on the active mode eg {"date": "2020-06-19","AAPL": 6733.19, "GOOG": 6019.44, "MSFT": 0}
 function transformData(
   chartData: PortfolioBalanceChartProps["chartData"],
-  mode: "value" | "weight",
+  mode: "value" | "units" | "weight",
   allTickers: string[]
 ) {
   return chartData.map(({ date, holdings }) => {
     const obj: Record<string, number | string> = { date };
     holdings.forEach((h) => {
-      obj[h.ticker] = mode === "value" ? h.value : h.weight;
+      obj[h.ticker] =
+        mode === "value" ? h.value : mode === "weight" ? h.weight : h.units;
     });
     allTickers.forEach((ticker) => {
       if (!(ticker in obj)) obj[ticker] = 0;
@@ -147,9 +149,9 @@ export function PortfolioBalanceStackedChart({
   }, [chartData, timeRange]);
 
   // Set default view
-  const [activeView, setActiveView] = React.useState<"value" | "weight">(
-    "weight"
-  );
+  const [activeView, setActiveView] = React.useState<
+    "value" | "units" | "weight"
+  >("weight");
 
   // Create set containing all tickers
   const allTickers = Array.from(
@@ -166,7 +168,7 @@ export function PortfolioBalanceStackedChart({
 
   return (
     <Card className="pt-0">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+      <CardHeader className="flex items-center gap-3 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle>Portfolio Balance</CardTitle>
           <CardDescription>
@@ -179,7 +181,8 @@ export function PortfolioBalanceStackedChart({
           type="single"
           value={activeView}
           onValueChange={(val) => {
-            if (val === "value" || val === "weight") setActiveView(val);
+            if (val === "value" || val === "weight" || val == "units")
+              setActiveView(val);
           }}
         >
           <ToggleGroupItem value="weight">
@@ -188,14 +191,17 @@ export function PortfolioBalanceStackedChart({
           <ToggleGroupItem value="value">
             {React.createElement(currencyIcon, { className: "h-4 w-4" })}
           </ToggleGroupItem>
+          <ToggleGroupItem value="units">
+            <Boxes className="h-4 w-4"></Boxes>
+          </ToggleGroupItem>
         </ToggleGroup>
 
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
-            className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
+            className="hidden w-[110px] rounded-lg sm:ml-auto sm:flex"
             aria-label="Select a value"
           >
-            <SelectValue placeholder="Choose period" />
+            <SelectValue placeholder="Period" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
             <SelectItem value="daily" className="rounded-lg">
@@ -232,10 +238,6 @@ export function PortfolioBalanceStackedChart({
           <AreaChart
             accessibilityLayer
             data={transformedData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
             stackOffset="expand"
           >
             <CartesianGrid vertical={false} />
@@ -245,13 +247,41 @@ export function PortfolioBalanceStackedChart({
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
-              tickFormatter={(value) =>
-                new Date(value).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "short",
-                  year: "2-digit",
-                })
-              }
+              tickFormatter={(value) => {
+                const date = new Date(value);
+
+                switch (
+                  timeRange // filter could be "day", "week", "month", "quarter", "year"
+                ) {
+                  case "daily":
+                    return date.toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "2-digit",
+                    }); // e.g. 7 Aug '25
+                  case "weekly":
+                    return date.toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "2-digit",
+                    }); // e.g. 7 Aug '25
+                  case "monthly":
+                    return date.toLocaleDateString("en-GB", {
+                      month: "short",
+                      year: "2-digit",
+                    }); // e.g. Aug '25
+                  case "quarterly":
+                    const quarter = Math.floor(date.getMonth() / 3) + 1;
+                    return `Q${quarter} '${date
+                      .getFullYear()
+                      .toString()
+                      .slice(-2)}`; // e.g. Q3 '25
+                  case "yearly":
+                    return date.getFullYear().toString(); // e.g. 2025
+                  default:
+                    return date.toLocaleDateString("en-GB");
+                }
+              }}
             />
             {/* <ChartTooltip
               cursor={false}
@@ -281,9 +311,13 @@ export function PortfolioBalanceStackedChart({
                           name}
 
                         <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
-                          {activeView === "value"
-                            ? formatCurrency(Number(value), currency_code)
-                            : formatPercentage(Number(value), 1, false, true)}
+                          {activeView === "value" ? (
+                            formatCurrency(Number(value), currency_code)
+                          ) : activeView == "weight" ? (
+                            formatPercentage(Number(value), 1, false, true)
+                          ) : (
+                            <span>{Number(value).toFixed(1)} units</span>
+                          )}
                         </div>
                       </div>
                     );

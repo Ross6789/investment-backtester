@@ -613,7 +613,7 @@ class BaseAnalyser(ABC):
                 pl.struct(
                     [
                         pl.col("ticker"),
-                        # pl.col("units"),
+                        pl.col("units"),
                         pl.col("value"),
                         pl.col("portfolio_weighting")
                     ]
@@ -640,6 +640,7 @@ class BaseAnalyser(ABC):
                 {
                     "ticker": h["ticker"],
                     "value": h["value"],
+                    "units": h["units"],
                     "weight": h["portfolio_weighting"]
                 }
                 for h in row["holdings_struct"]
