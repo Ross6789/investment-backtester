@@ -332,7 +332,7 @@ export function PortfolioBalanceStackedChart({
                 dataKey={key}
                 type="natural"
                 fill={config.color}
-                fillOpacity={0.3}
+                fillOpacity={0.4}
                 stroke={config.color}
                 stackId="a"
               />

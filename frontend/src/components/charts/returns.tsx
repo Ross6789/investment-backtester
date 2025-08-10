@@ -157,7 +157,12 @@ export function ReturnBarChart({ chartData }: ReturnChartProps) {
               {filteredData.map((item) => (
                 <Cell
                   key={item.period}
-                  fill={item.return > 0 ? "var(--chart-1)" : "var(--chart-2)"}
+                  fill={
+                    item.return > 0
+                      ? "var(--color-chart-positive)"
+                      : "var(--color-chart-negative)"
+                  }
+                  fillOpacity={0.88}
                 />
               ))}
             </Bar>
