@@ -8,6 +8,9 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { MetricHoverCard } from "@/components/metric_hovercard";
+import { Calendar, Activity, TrendingDown, Shield } from "lucide-react";
+import { metricHoverTexts } from "@/constants/ui_text";
 
 import {
   StrongText,
@@ -48,6 +51,31 @@ export function ResultsPage() {
   const riskRating = getRiskRating(volatility);
   const drawdownRating = getDrawdownRating(max_drawdown);
   const sharpeRating = getSharpeRating(sharpe);
+
+  // Get hover card text for summary metric cards
+  const {
+    title: growthTitle,
+    description: growthDescription,
+    ratings: growthRatingText,
+  } = metricHoverTexts.cagr;
+
+  const {
+    title: volatilityTitle,
+    description: volatilityDescription,
+    ratings: volatilityRatingText,
+  } = metricHoverTexts.volatility;
+
+  const {
+    title: maxDrawdownTitle,
+    description: maxDrawdownDescription,
+    ratings: maxDrawdownRatingText,
+  } = metricHoverTexts.max_drawdown;
+
+  const {
+    title: sharpeTitle,
+    description: sharpeDescription,
+    ratings: sharpeRatingText,
+  } = metricHoverTexts.sharpe;
 
   // Define types
   type TargetWeights = {
@@ -127,10 +155,21 @@ export function ResultsPage() {
       </div>
 
       <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-        <Card>
+        <Card className="h-full">
           <CardHeader>
-            <CardTitle>Annual Growth</CardTitle>
+            <div className="flex justify-between">
+              <CardTitle>Annual Growth</CardTitle>
+              <MetricHoverCard
+                icon={Calendar}
+                title={growthTitle}
+                description={growthDescription}
+                value={formatPercentage(backtestResult.results.metrics.cagr)}
+                valueRatingClass={growthRating.ratingClass}
+                ratings={growthRatingText}
+              ></MetricHoverCard>
+            </div>
           </CardHeader>
+
           <CardContent>
             <StrongText className={growthRating.ratingClass}>
               {formatPercentage(cagr)}
@@ -141,28 +180,48 @@ export function ResultsPage() {
       </div>
 
       <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-        <Card>
+        <Card className="h-full">
           <CardHeader>
-            <CardTitle>Risk Level</CardTitle>
+            <div className="flex justify-between">
+              <CardTitle>Risk Level</CardTitle>
+              <MetricHoverCard
+                icon={Activity}
+                title={volatilityTitle}
+                description={volatilityDescription}
+                value={formatPercentage(
+                  backtestResult.results.metrics.volatility,
+                  1,
+                  false,
+                  true
+                )}
+                valueRatingClass={riskRating.ratingClass}
+                ratings={volatilityRatingText}
+              ></MetricHoverCard>
+            </div>
           </CardHeader>
           <CardContent>
             <StrongText className={riskRating.ratingClass}>
               {riskRating.label}
             </StrongText>
-            <CardDescription>
-              <div>
-                {formatPercentage(volatility, 1, false, false)} volatility
-              </div>
-              {riskRating.caption}
-            </CardDescription>
+            <CardDescription>{riskRating.caption}</CardDescription>
           </CardContent>
         </Card>
       </div>
 
       <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-        <Card>
+        <Card className="h-full">
           <CardHeader>
-            <CardTitle>Biggest Drop</CardTitle>
+            <div className="flex justify-between">
+              <CardTitle>Biggest Drop</CardTitle>
+              <MetricHoverCard
+                icon={TrendingDown}
+                title={maxDrawdownTitle}
+                description={maxDrawdownDescription}
+                value={`${max_drawdown.toFixed(1)}%`}
+                valueRatingClass={drawdownRating.ratingClass}
+                ratings={maxDrawdownRatingText}
+              ></MetricHoverCard>
+            </div>
           </CardHeader>
           <CardContent>
             <StrongText className={drawdownRating.ratingClass}>
@@ -174,23 +233,25 @@ export function ResultsPage() {
       </div>
 
       <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-        <Card>
+        <Card className="h-full">
           <CardHeader>
-            <CardTitle>Risk-Adjusted Score</CardTitle>
+            <div className="flex justify-between">
+              <CardTitle>Risk-Adjusted Score</CardTitle>
+              <MetricHoverCard
+                icon={Shield}
+                title={sharpeTitle}
+                description={sharpeDescription}
+                value={backtestResult.results.metrics.sharpe.toFixed(2)}
+                valueRatingClass={sharpeRating.ratingClass}
+                ratings={sharpeRatingText}
+              ></MetricHoverCard>
+            </div>
           </CardHeader>
           <CardContent>
             <StrongText className={sharpeRating.ratingClass}>
               {sharpeRating.label}
             </StrongText>
-            {/* <CardDescription>
-              {backtestResult.results.metrics.sharpe.toFixed(2)} Sharpe Ratio
-              {sharpeRating.caption}
-            </CardDescription> */}
-
-            <CardDescription>
-              <div>{sharpe.toFixed(2)} Sharpe Ratio</div>
-              {sharpeRating.caption}
-            </CardDescription>
+            <CardDescription>{sharpeRating.caption}</CardDescription>
           </CardContent>
         </Card>
       </div>
@@ -229,13 +290,6 @@ export function ResultsPage() {
           <TabsContent value="performance" className="grid grid-cols-12 gap-8">
             <div className="col-span-12 lg:col-span-6">
               <Card>
-                {/* <CardHeader>
-                  <CardTitle>Best & Worst Periods</CardTitle>
-                  <CardDescription>
-                    Your highest and lowest performing periods
-                  </CardDescription>
-                </CardHeader> */}
-
                 <CardHeader className="flex items-center gap-2 space-y-0 border-b sm:flex-row">
                   <div className="grid flex-1 gap-1">
                     <CardTitle>Best & Worst Periods</CardTitle>

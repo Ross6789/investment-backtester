@@ -93,25 +93,25 @@ export function getGrowthRating(cagr: number) {
 
 
 export function getRiskRating(volatility: number): MetricRating {
-  if (volatility <= 0.03)
+  if (volatility <= 0.05)
     return { 
       label: "Very Low", 
       ratingClass: "text-rating-5", 
       caption: "Very minor ups and downs over time" 
     };
-  if (volatility <= 0.05) 
+  if (volatility <= 0.1) 
     return { 
       label: "Low", 
       ratingClass: "text-rating-4", 
       caption: "Small changes, generally stable" 
     };
-  if (volatility <= 0.10) 
+  if (volatility <= 0.2) 
     return { 
       label: "Medium", 
       ratingClass: "text-rating-3", 
       caption: "Noticeable swings but still manageable" 
     };
-  if (volatility <= 0.20) 
+  if (volatility <= 0.3) 
     return { 
       label: "High", 
       ratingClass: "text-rating-2", 
@@ -148,7 +148,7 @@ export function getSharpeRating(sharpe: number): MetricRating {
     return { 
       label: "Low", 
       ratingClass: "text-rating-2", 
-      caption: "Returns don’t justify the risk taken" 
+      caption: "Returns don't justify the risk taken" 
     };
   if (sharpe < 1.0) 
     return { 

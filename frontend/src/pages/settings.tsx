@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { AssetClassFilterDropdown } from "@/components/asset_filter_dropdown";
-import { tooltipTexts } from "@/constants/tooltips_text";
+import { tooltipTexts } from "@/constants/ui_text";
 
 import {
   Popover,
