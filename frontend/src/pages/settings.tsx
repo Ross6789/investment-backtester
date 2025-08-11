@@ -327,7 +327,7 @@ export function SettingsPage() {
           {/* LEFT SIDE - add items-star to make box shrink */}
           <div className="flex-1">
             <Card>
-              <CardHeader className="flex items-center justify-between  sm:flex-row">
+              <CardHeader className="flex items-center justify-between sm:flex-row">
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2">
                     <CardTitle>Portfolio Assets</CardTitle>
@@ -495,7 +495,10 @@ export function SettingsPage() {
           <div className="flex flex-col flex-1 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Backtest Mode</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle>Backtest Mode</CardTitle>
+                  <InfoTooltip content={tooltipTexts.mode} />
+                </div>
                 <CardDescription>
                   Choose your simulation complexity level
                 </CardDescription>
@@ -540,7 +543,10 @@ export function SettingsPage() {
                       name="base_currency"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Currency</FormLabel>
+                          <div className="flex items-center gap-2">
+                            <FormLabel>Currency</FormLabel>
+                            <InfoTooltip content={tooltipTexts.currency} />
+                          </div>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
@@ -661,7 +667,12 @@ export function SettingsPage() {
                       name="initial_investment"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Initial Investment Amount</FormLabel>
+                          <div className="flex items-center gap-2">
+                            <FormLabel>Initial Investment Amount</FormLabel>
+                            <InfoTooltip
+                              content={tooltipTexts.initialInvestment}
+                            />
+                          </div>
                           <FormControl>
                             <div className="relative">
                               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
@@ -697,9 +708,14 @@ export function SettingsPage() {
                     name="recurring_investment.amount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
-                          Recurring Contributions (Optional)
-                        </FormLabel>
+                        <div className="flex items-center gap-2">
+                          <FormLabel>
+                            Recurring Contributions (Optional)
+                          </FormLabel>
+                          <InfoTooltip
+                            content={tooltipTexts.recurringInvestment}
+                          />
+                        </div>
                         <FormControl>
                           <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
@@ -775,7 +791,12 @@ export function SettingsPage() {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <FormLabel>Rebalancing Frequency</FormLabel>
+                        <div className="flex items-center gap-2">
+                          <FormLabel>Rebalancing Frequency</FormLabel>
+                          <InfoTooltip
+                            content={tooltipTexts.rebalanceFrequency}
+                          />
+                        </div>
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select rebalancing frequency" />
@@ -800,11 +821,16 @@ export function SettingsPage() {
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg shadow-s">
                       <div className="space-y-0.5">
-                        <FormLabel>Reinvest Dividends</FormLabel>
-                        <FormDescription>
+                        <div className="flex items-center gap-2">
+                          <FormLabel>Reinvest Dividends</FormLabel>
+                          <InfoTooltip
+                            content={tooltipTexts.reinvestDividends}
+                          />
+                        </div>
+                        {/* <FormDescription>
                           Choose whether to use dividends to buy more shares or
                           take as cash.
-                        </FormDescription>
+                        </FormDescription> */}
                       </div>
                       <FormControl>
                         <Switch
@@ -821,11 +847,16 @@ export function SettingsPage() {
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg shadow-s">
                       <div className="space-y-0.5">
-                        <FormLabel>Allow Fractional Shares</FormLabel>
-                        <FormDescription>
+                        <div className="flex items-center gap-2">
+                          <FormLabel>Allow Fractional Shares</FormLabel>
+                          <InfoTooltip
+                            content={tooltipTexts.fractionalShares}
+                          />
+                        </div>
+                        {/* <FormDescription>
                           Whether you can buy partial shares (e.g., 0.5 shares
                           of a stock)
-                        </FormDescription>
+                        </FormDescription> */}
                       </div>
                       <FormControl>
                         <Switch

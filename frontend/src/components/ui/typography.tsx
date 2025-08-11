@@ -53,7 +53,7 @@ export function StrongText({
   children: React.ReactNode;
 }) {
   return (
-    <strong className={cn("text-2xl font-semibold tracking-tight", className)}>
+    <strong className={cn("text-3xl font-semibold tracking-tight", className)}>
       {children}
     </strong>
   );
