@@ -40,12 +40,17 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* custom colours for scalings */
+  /* custom colours for ratings */
+
+  /* More muted options => look good but can cause slight clash with var(destructive) components
+  /* --color-scale-1: oklch(0.48 0.18 27); */
+  /* --color-scale-2: oklch(0.6 0.3 85); */
+
   --color-scale-1: var(--destructive);
-  --color-scale-2: oklch(0.65 0.28 65 / 0.8);
-  --color-scale-3: oklch(0.7 0.25 90 / 0.8);
-  --color-scale-4: oklch(0.7 0.28 135 / 0.8);
-  --color-scale-5: oklch(0.75 0.3 150 / 0.8);
+  --color-scale-2: oklch(0.64 0.247 60);
+  --color-scale-3: oklch(0.7 0.25 90);
+  --color-scale-4: oklch(0.65 0.22 120);
+  --color-scale-5: oklch(0.6 0.18 150);
 
   --color-text-negative: var(--destructive);
   --color-text-positive: var(--color-scale-5);
@@ -90,6 +95,8 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+
+  /* original shad cn colours */
 
   /* --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -154,4 +161,28 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom classes to colorize and style metrics based on their 1-5 rating or postive/negative : Needed to pass into typography components*/
+.text-rating-1 {
+  color: var(--color-scale-1);
+}
+.text-rating-2 {
+  color: var(--color-scale-2);
+}
+.text-rating-3 {
+  color: var(--color-scale-3);
+}
+.text-rating-4 {
+  color: var(--color-scale-4);
+}
+.text-rating-5 {
+  color: var(--color-scale-5);
+}
+
+.text-positive {
+  color: var(--color-text-positive);
+}
+.text-negative {
+  color: var(--color-text-negative);
 }

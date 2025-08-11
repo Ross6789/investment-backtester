@@ -19,7 +19,9 @@ import {
   formatPercentage,
   formatDate,
   capitalizeFirst,
+  getGrowthRating,
   getRiskRating,
+  getDrawdownRating,
   getSharpeRating,
 } from "@/lib/utils";
 
@@ -35,8 +37,17 @@ export function ResultsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const backtestResult = location.state?.backtestResult;
-  const riskRating = getRiskRating(backtestResult.results.metrics.volatility);
-  const sharpeRating = getSharpeRating(backtestResult.results.metrics.sharpe);
+
+  const cagr = backtestResult.results.metrics.cagr;
+  const volatility = backtestResult.results.metrics.volatility;
+  const max_drawdown = backtestResult.results.max_drawdown.max_drawdown;
+  const sharpe = backtestResult.results.metrics.sharpe;
+
+  // get rating objects for each summary metric
+  const growthRating = getGrowthRating(cagr);
+  const riskRating = getRiskRating(volatility);
+  const drawdownRating = getDrawdownRating(max_drawdown);
+  const sharpeRating = getSharpeRating(sharpe);
 
   // Define types
   type TargetWeights = {
@@ -121,10 +132,10 @@ export function ResultsPage() {
             <CardTitle>Annual Growth</CardTitle>
           </CardHeader>
           <CardContent>
-            <StrongText>
-              {formatPercentage(backtestResult.results.metrics.cagr)}
+            <StrongText className={growthRating.ratingClass}>
+              {formatPercentage(cagr)}
             </StrongText>
-            <CardDescription>Average yearly return</CardDescription>
+            <CardDescription>{growthRating.caption}</CardDescription>
           </CardContent>
         </Card>
       </div>
@@ -135,12 +146,14 @@ export function ResultsPage() {
             <CardTitle>Risk Level</CardTitle>
           </CardHeader>
           <CardContent>
-            <StrongText className={riskRating.colorClass}>
+            <StrongText className={riskRating.ratingClass}>
               {riskRating.label}
             </StrongText>
             <CardDescription>
-              {formatPercentage(backtestResult.results.metrics.volatility)}{" "}
-              volatility
+              <div>
+                {formatPercentage(volatility, 1, false, false)} volatility
+              </div>
+              {riskRating.caption}
             </CardDescription>
           </CardContent>
         </Card>
@@ -152,10 +165,10 @@ export function ResultsPage() {
             <CardTitle>Biggest Drop</CardTitle>
           </CardHeader>
           <CardContent>
-            <StrongText>
-              {backtestResult.results.max_drawdown.max_drawdown.toFixed(1)}%
+            <StrongText className={drawdownRating.ratingClass}>
+              {max_drawdown.toFixed(1)}%
             </StrongText>
-            <CardDescription>Maximum decline from peak</CardDescription>
+            <CardDescription>{drawdownRating.caption}</CardDescription>
           </CardContent>
         </Card>
       </div>
@@ -166,10 +179,18 @@ export function ResultsPage() {
             <CardTitle>Risk-Adjusted Score</CardTitle>
           </CardHeader>
           <CardContent>
-            <StrongText className={sharpeRating.colorClass}>
-              {backtestResult.results.metrics.sharpe.toFixed(2)}
+            <StrongText className={sharpeRating.ratingClass}>
+              {sharpeRating.label}
             </StrongText>
-            <CardDescription>{sharpeRating.label}</CardDescription>
+            {/* <CardDescription>
+              {backtestResult.results.metrics.sharpe.toFixed(2)} Sharpe Ratio
+              {sharpeRating.caption}
+            </CardDescription> */}
+
+            <CardDescription>
+              <div>{sharpe.toFixed(2)} Sharpe Ratio</div>
+              {sharpeRating.caption}
+            </CardDescription>
           </CardContent>
         </Card>
       </div>
@@ -227,7 +248,7 @@ export function ResultsPage() {
                 <CardContent>
                   <div className="grid grid-cols-2 gap-12 text-sm">
                     <section className="flex flex-col gap-y-4">
-                      <SecondaryText className=" text-green-600">
+                      <SecondaryText className="text-positive">
                         Best Periods
                       </SecondaryText>
                       {["day", "week", "month", "quarter", "year"].map(
@@ -245,7 +266,7 @@ export function ResultsPage() {
                               </MutedText>
                               <div className="text-right">
                                 <p>{data.period}</p>
-                                <p className=" text-green-600">
+                                <p className="text-positive">
                                   {formatPercentage(data.return, 1)}
                                 </p>
                               </div>
@@ -255,7 +276,7 @@ export function ResultsPage() {
                       )}
                     </section>
                     <section className="flex flex-col gap-y-4">
-                      <SecondaryText className=" text-red-600">
+                      <SecondaryText className=" text-negative">
                         Worst Periods
                       </SecondaryText>
 
@@ -274,7 +295,7 @@ export function ResultsPage() {
                               </MutedText>
                               <div className="text-right">
                                 <p>{data.period}</p>
-                                <p className=" text-red-600">
+                                <p className=" text-negative">
                                   {formatPercentage(data.return, 1)}
                                 </p>
                               </div>
@@ -308,13 +329,13 @@ export function ResultsPage() {
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                     <section className="flex flex-col gap-y-2 ">
-                      <StrongText className="text-green-600">
+                      <StrongText className="text-positive">
                         {backtestResult.results.monthly_win_lose_analysis.win}
                       </StrongText>
                       <MutedText>Winning months</MutedText>
                     </section>
                     <section className="flex flex-col gap-y-2">
-                      <StrongText className="text-red-600">
+                      <StrongText className="text-negative">
                         {backtestResult.results.monthly_win_lose_analysis.loss}
                       </StrongText>
                       <MutedText>Losing months</MutedText>
