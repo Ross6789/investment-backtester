@@ -3,7 +3,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { InfoTooltip } from "@/components/info_tooltip";
 import { format } from "date-fns";
 import { CalendarIcon, Trash2, Check, ChevronDown, Plus } from "lucide-react";
 import { getCurrencySymbol } from "@/lib/utils";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { AssetClassFilterDropdown } from "@/components/asset_filter_dropdown";
+import { tooltipTexts } from "@/constants/tooltips_text";
 
 import {
   Popover,
@@ -326,31 +327,24 @@ export function SettingsPage() {
           {/* LEFT SIDE - add items-star to make box shrink */}
           <div className="flex-1">
             <Card>
-              <CardHeader className="flex items-center gap-2 space-y-0 border-b sm:flex-row">
-                <div className="grid flex-1 gap-1">
-                  <CardTitle>Portfolio Assets</CardTitle>
+              <CardHeader className="flex items-center justify-between  sm:flex-row">
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <CardTitle>Portfolio Assets</CardTitle>
+                    <InfoTooltip content={tooltipTexts.portfolioAssets} />
+                  </div>
+
                   <CardDescription>
                     Select assets and assign weights (must total 100%)
                   </CardDescription>
                 </div>
+
                 <AssetClassFilterDropdown
                   enabledClasses={enabledAssetClasses}
                   onChange={handleAssetClassChange}
                   classLabels={assetClassLabels}
                 />
               </CardHeader>
-
-              {/* <CardHeader>
-                <CardTitle>Portfolio Assets</CardTitle>
-                <CardDescription>
-                  Select assets and assign weights (must total 100%)
-                </CardDescription>
-                <AssetClassFilterDropdown
-                  enabledClasses={enabledAssetClasses}
-                  onChange={handleAssetClassChange}
-                  classLabels={assetClassLabels}
-                />
-              </CardHeader> */}
               <CardContent>
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex items-center gap-4 mb-4">
@@ -373,16 +367,19 @@ export function SettingsPage() {
                                     variant="outline"
                                     role="combobox"
                                     className={cn(
-                                      "w-full justify-between",
+                                      "w-full justify-between truncate",
                                       !field.value && "text-muted-foreground"
                                     )}
                                   >
-                                    {field.value
-                                      ? assetOptions.find(
-                                          (asset) => asset.value === field.value
-                                        )?.label
-                                      : "Select asset"}
-                                    <ChevronDown className="opacity-50" />
+                                    <span className="truncate">
+                                      {field.value
+                                        ? assetOptions.find(
+                                            (asset) =>
+                                              asset.value === field.value
+                                          )?.label
+                                        : "Select asset"}
+                                    </span>
+                                    <ChevronDown className="opacity-50 ml-2 flex-shrink-0" />
                                   </Button>
                                 </FormControl>
                               </PopoverTrigger>
@@ -477,7 +474,7 @@ export function SettingsPage() {
                       size="icon"
                       onClick={() => remove(index)}
                     >
-                      <Trash2 className="h-4 w-4  text-red-500" />
+                      <Trash2 className="text-negative" />
                     </Button>
                   </div>
                 ))}
@@ -487,7 +484,7 @@ export function SettingsPage() {
                   variant="outline"
                   onClick={() => append({ ticker: "", percentage: 0 })}
                 >
-                  <Plus className="h-4 w-4" />
+                  <Plus />
                   Add Asset
                 </Button>
               </CardContent>
