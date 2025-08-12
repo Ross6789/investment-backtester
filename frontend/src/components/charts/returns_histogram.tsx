@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell } from "recharts";
 import {
   Card,
   CardContent,
@@ -14,6 +14,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+
+const histogramColors = [
+  "var(--histogram-level-1)",
+  "var(--histogram-level-2)",
+  "var(--histogram-level-3)",
+  "var(--histogram-level-4)",
+  "var(--histogram-level-5)",
+  "var(--histogram-level-6)",
+];
 
 const chartConfig = {
   bucket: {
@@ -106,7 +115,16 @@ export function ReturnHistogramChart({ chartData }: ReturnHistogramChartProps) {
               }
             />
 
-            <Bar dataKey="count" fill="var(--chart-1)" radius={8} />
+            {/* <Bar dataKey="count" fill="var(--chart-1)" radius={8} /> */}
+            <Bar dataKey="count" radius={8}>
+              {chartData.map((_, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={histogramColors[index % histogramColors.length]}
+                  fillOpacity={0.9}
+                />
+              ))}
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
