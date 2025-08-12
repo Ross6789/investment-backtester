@@ -74,34 +74,99 @@ export function capitalizeFirst(str: string) {
 // Metric rating utility functions
 
 type MetricRating = {
-  label: string;
-  colorClass: string;
-  tooltip?: string;
+  label?: string;
+  ratingClass: string;
+  caption: string;
 };
+
+export function getGrowthRating(cagr: number) {
+  if (cagr < 0) 
+    return { ratingClass: "text-rating-1", caption: "Value is shrinking over time" };
+  if (cagr < 0.03) 
+    return { ratingClass: "text-rating-2", caption: "Small yearly growth" };
+  if (cagr < 0.07) 
+    return { ratingClass: "text-rating-3", caption: "Steady yearly growth" };
+  if (cagr < 0.12) 
+    return { ratingClass: "text-rating-4", caption: "Strong yearly growth" };
+  return { ratingClass: "text-rating-5", caption: "Outstanding yearly growth" };
+}
 
 
 export function getRiskRating(volatility: number): MetricRating {
-  if (volatility <= 0.03)
-    return { label: "Very Low", colorClass: "text-dark-green" };
-  if (volatility <= 0.05) 
-    return { label: "Low", colorClass: "text-green" };
-  if (volatility <= 0.10) 
-    return { label: "Medium", colorClass: "text-yellow-600" };
-  if (volatility <= 0.20) 
-    return { label: "High", colorClass: "text-orange-600" };
-  return { label: "Very High", colorClass: "text-red-700" };
+  if (volatility <= 0.05)
+    return { 
+      label: "Very Low", 
+      ratingClass: "text-rating-5", 
+      caption: "Very minor ups and downs over time" 
+    };
+  if (volatility <= 0.1) 
+    return { 
+      label: "Low", 
+      ratingClass: "text-rating-4", 
+      caption: "Small changes, generally stable" 
+    };
+  if (volatility <= 0.2) 
+    return { 
+      label: "Medium", 
+      ratingClass: "text-rating-3", 
+      caption: "Noticeable swings but still manageable" 
+    };
+  if (volatility <= 0.3) 
+    return { 
+      label: "High", 
+      ratingClass: "text-rating-2", 
+      caption: "Large fluctuations, can rise or fall quickly" 
+    };
+  return { 
+    label: "Very High", 
+    ratingClass: "text-rating-1", 
+    caption: "Extreme ups and downs, highly unpredictable" 
+  };
+}
+
+export function getDrawdownRating(maxDrawdown: number) {
+  if (maxDrawdown >= -5) 
+    return { ratingClass: "text-rating-5", caption: "Hardly any major drops" };
+  if (maxDrawdown >= -10) 
+    return { ratingClass: "text-rating-4", caption: "Small drops during downturns" };
+  if (maxDrawdown >= -20) 
+    return { ratingClass: "text-rating-3", caption: "Noticeable drops but recoverable" };
+  if (maxDrawdown >= -35) 
+    return { ratingClass: "text-rating-2", caption: "Large drops in value" };
+  return { ratingClass: "text-rating-1", caption: "Very large and steep drops in value" };
 }
 
 
 export function getSharpeRating(sharpe: number): MetricRating {
-  if (sharpe > 1.5)
-    return { label: "Excellent risk-adjusted return", colorClass: "text-dark-green", tooltip:"Your investment achieved a high return for the amount of risk taken, meaning it performed very well compared to typical investments." };
-  if (sharpe >= 1.0) 
-    return { label: "Good risk-adjusted return", colorClass: "text-green", tooltip:"Your investment earned a solid return relative to the risk involved, showing a balanced and favorable outcome." };
-  if (sharpe >= 0.50) 
-    return { label: "Average risk-adjusted return", colorClass: "text-yellow-600", tooltip:"Your investment’s return is about what you would expect for the level of risk taken — a typical performance." };
-  if (sharpe >= 0) 
-    return { label: "Below average risk-adjusted return", colorClass: "text-orange-600", tooltip:"Your investment’s returns were somewhat low compared to the risk taken, indicating there may be room for improvement." };
-  return { label: "Poor risk-adjusted return", colorClass: "text-red-700", tooltip: "Your investment took on risk but did not generate sufficient returns, suggesting it underperformed compared to typical investments"
-};
+  if (sharpe < 0)
+    return { 
+      label: "Poor", 
+      ratingClass: "text-rating-1", 
+      caption: "Losing money compared to a safe investment" 
+    };
+  if (sharpe < 0.5) 
+    return { 
+      label: "Low", 
+      ratingClass: "text-rating-2", 
+      caption: "Returns don't justify the risk taken" 
+    };
+  if (sharpe < 1.0) 
+    return { 
+      label: "Fair", 
+      ratingClass: "text-rating-3", 
+      caption: "Moderate reward for the risk" 
+    };
+  if (sharpe < 2.0) 
+    return { 
+      label: "Good", 
+      ratingClass: "text-rating-4", 
+      caption: "Strong reward compared to the risk" 
+    };
+  return { 
+    label: "Excellent", 
+    ratingClass: "text-rating-5", 
+    caption: "Outstanding returns for the amount of risk" 
+  };
 }
+
+

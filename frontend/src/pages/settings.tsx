@@ -3,7 +3,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { InfoTooltip } from "@/components/info_tooltip";
 import { format } from "date-fns";
 import { CalendarIcon, Trash2, Check, ChevronDown, Plus } from "lucide-react";
 import { getCurrencySymbol } from "@/lib/utils";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { AssetClassFilterDropdown } from "@/components/asset_filter_dropdown";
+import { tooltipTexts } from "@/constants/ui_text";
 
 import {
   Popover,
@@ -246,6 +247,17 @@ export function SettingsPage() {
   const selectedCurrency = form.watch("base_currency");
   const symbol = getCurrencySymbol(selectedCurrency) || "";
 
+  // Watch mode to determine state of dividend/fractional share toggles
+  const selectedMode = form.watch("mode");
+
+  // Add live tally to show weighting totals
+  const targetWeights = form.watch("target_weights");
+  const totalPercentage =
+    targetWeights?.reduce((sum, item) => {
+      const value = Number(item?.percentage);
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0) ?? 0;
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Clean recurring investment
@@ -326,31 +338,24 @@ export function SettingsPage() {
           {/* LEFT SIDE - add items-star to make box shrink */}
           <div className="flex-1">
             <Card>
-              <CardHeader className="flex items-center gap-2 space-y-0 border-b sm:flex-row">
-                <div className="grid flex-1 gap-1">
-                  <CardTitle>Portfolio Assets</CardTitle>
+              <CardHeader className="flex items-center justify-between sm:flex-row">
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <CardTitle>Portfolio Assets</CardTitle>
+                    <InfoTooltip content={tooltipTexts.portfolioAssets} />
+                  </div>
+
                   <CardDescription>
                     Select assets and assign weights (must total 100%)
                   </CardDescription>
                 </div>
+
                 <AssetClassFilterDropdown
                   enabledClasses={enabledAssetClasses}
                   onChange={handleAssetClassChange}
                   classLabels={assetClassLabels}
                 />
               </CardHeader>
-
-              {/* <CardHeader>
-                <CardTitle>Portfolio Assets</CardTitle>
-                <CardDescription>
-                  Select assets and assign weights (must total 100%)
-                </CardDescription>
-                <AssetClassFilterDropdown
-                  enabledClasses={enabledAssetClasses}
-                  onChange={handleAssetClassChange}
-                  classLabels={assetClassLabels}
-                />
-              </CardHeader> */}
               <CardContent>
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex items-center gap-4 mb-4">
@@ -373,16 +378,19 @@ export function SettingsPage() {
                                     variant="outline"
                                     role="combobox"
                                     className={cn(
-                                      "w-full justify-between",
+                                      "w-full justify-between truncate",
                                       !field.value && "text-muted-foreground"
                                     )}
                                   >
-                                    {field.value
-                                      ? assetOptions.find(
-                                          (asset) => asset.value === field.value
-                                        )?.label
-                                      : "Select asset"}
-                                    <ChevronDown className="opacity-50" />
+                                    <span className="truncate">
+                                      {field.value
+                                        ? assetOptions.find(
+                                            (asset) =>
+                                              asset.value === field.value
+                                          )?.label
+                                        : "Select asset"}
+                                    </span>
+                                    <ChevronDown className="opacity-50 ml-2 flex-shrink-0" />
                                   </Button>
                                 </FormControl>
                               </PopoverTrigger>
@@ -477,19 +485,40 @@ export function SettingsPage() {
                       size="icon"
                       onClick={() => remove(index)}
                     >
-                      <Trash2 className="h-4 w-4  text-red-500" />
+                      <Trash2 className="text-negative" />
                     </Button>
                   </div>
                 ))}
 
-                <Button
+                <div className="flex justify-between items-center">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => append({ ticker: "", percentage: 0 })}
+                  >
+                    <Plus />
+                    Add Asset
+                  </Button>
+                  <span
+                    className={cn(
+                      "font-medium text-sm",
+                      totalPercentage === 100
+                        ? "text-positive"
+                        : "text-negative"
+                    )}
+                  >
+                    Total: {totalPercentage}%
+                  </span>
+                </div>
+
+                {/* <Button
                   type="button"
                   variant="outline"
                   onClick={() => append({ ticker: "", percentage: 0 })}
                 >
-                  <Plus className="h-4 w-4" />
+                  <Plus />
                   Add Asset
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           </div>
@@ -498,7 +527,10 @@ export function SettingsPage() {
           <div className="flex flex-col flex-1 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Backtest Mode</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle>Backtest Mode</CardTitle>
+                  <InfoTooltip content={tooltipTexts.mode} />
+                </div>
                 <CardDescription>
                   Choose your simulation complexity level
                 </CardDescription>
@@ -543,7 +575,10 @@ export function SettingsPage() {
                       name="base_currency"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Currency</FormLabel>
+                          <div className="flex items-center gap-2">
+                            <FormLabel>Currency</FormLabel>
+                            <InfoTooltip content={tooltipTexts.currency} />
+                          </div>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
@@ -664,7 +699,12 @@ export function SettingsPage() {
                       name="initial_investment"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Initial Investment Amount</FormLabel>
+                          <div className="flex items-center gap-2">
+                            <FormLabel>Initial Investment Amount</FormLabel>
+                            <InfoTooltip
+                              content={tooltipTexts.initialInvestment}
+                            />
+                          </div>
                           <FormControl>
                             <div className="relative">
                               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
@@ -700,9 +740,14 @@ export function SettingsPage() {
                     name="recurring_investment.amount"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
-                          Recurring Contributions (Optional)
-                        </FormLabel>
+                        <div className="flex items-center gap-2">
+                          <FormLabel>
+                            Recurring Contributions (Optional)
+                          </FormLabel>
+                          <InfoTooltip
+                            content={tooltipTexts.recurringInvestment}
+                          />
+                        </div>
                         <FormControl>
                           <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
@@ -778,7 +823,12 @@ export function SettingsPage() {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <FormLabel>Rebalancing Frequency</FormLabel>
+                        <div className="flex items-center gap-2">
+                          <FormLabel>Rebalancing Frequency</FormLabel>
+                          <InfoTooltip
+                            content={tooltipTexts.rebalanceFrequency}
+                          />
+                        </div>
                         <FormControl>
                           <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select rebalancing frequency" />
@@ -803,15 +853,22 @@ export function SettingsPage() {
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg shadow-s">
                       <div className="space-y-0.5">
-                        <FormLabel>Reinvest Dividends</FormLabel>
-                        <FormDescription>
-                          Choose whether to use dividends to buy more shares or
-                          take as cash.
+                        <div className="flex items-center gap-2">
+                          <FormLabel>Reinvest Dividends</FormLabel>
+                          <InfoTooltip
+                            content={tooltipTexts.reinvestDividends}
+                          />
+                        </div>
+                        <FormDescription hidden={selectedMode !== "basic"}>
+                          Dividends are automatically reinvested in basic mode.
                         </FormDescription>
                       </div>
                       <FormControl>
                         <Switch
-                          checked={field.value}
+                          disabled={selectedMode === "basic"}
+                          checked={
+                            selectedMode === "basic" ? true : field.value
+                          }
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
@@ -824,15 +881,23 @@ export function SettingsPage() {
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg shadow-s">
                       <div className="space-y-0.5">
-                        <FormLabel>Allow Fractional Shares</FormLabel>
-                        <FormDescription>
-                          Whether you can buy partial shares (e.g., 0.5 shares
-                          of a stock)
+                        <div className="flex items-center gap-2">
+                          <FormLabel>Allow Fractional Shares</FormLabel>
+                          <InfoTooltip
+                            content={tooltipTexts.fractionalShares}
+                          />
+                        </div>
+                        <FormDescription hidden={selectedMode !== "basic"}>
+                          Fractional shares are automatically allowed in basic
+                          mode.
                         </FormDescription>
                       </div>
                       <FormControl>
                         <Switch
-                          checked={field.value}
+                          disabled={selectedMode === "basic"}
+                          checked={
+                            selectedMode === "basic" ? true : field.value
+                          }
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
@@ -845,7 +910,9 @@ export function SettingsPage() {
         </div>
         {/* Full-width row for submit button */}
         <div className="flex justify-center mb-4">
-          <Button type="submit">Run Backtest</Button>
+          <Button type="submit" disabled={totalPercentage !== 100}>
+            Run Backtest
+          </Button>
         </div>
       </form>
     </Form>
