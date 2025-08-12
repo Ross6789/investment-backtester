@@ -3,12 +3,12 @@ import warnings
 from pathlib import Path
 from backend.utils.saving import save_csv, save_regular_parquet,save_partitioned_parquet
 from backend.utils.timing import timing
-from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeline, FXPipeline
+from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeline, FXPipeline,BenchmarkPipeline
 from backend.data_pipeline.compiler import Compiler
 
 class PipelineRunner:
 
-    def __init__(self, price_pipeline : PricePipeline, action_pipeline : CorporateActionPipeline, benchmark_pipeline: PricePipeline, fx_pipeline : FXPipeline,  base_save_path : Path):
+    def __init__(self, price_pipeline : PricePipeline, action_pipeline : CorporateActionPipeline, benchmark_pipeline: BenchmarkPipeline, fx_pipeline : FXPipeline,  base_save_path : Path):
         self.price_pipeline = price_pipeline
         self.action_pipeline = action_pipeline
         self.benchmark_pipeline = benchmark_pipeline

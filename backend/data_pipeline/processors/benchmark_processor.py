@@ -6,7 +6,7 @@ class BenchmarkProcessor:
     Handles cleaning and transformation of benchmark data for use in backtesting pipelines.
     """
     @staticmethod
-    def convert_prices_to_all_base_currencies(benchmark_prices_df: pl.DataFrame) -> pl.LazyFrame:
+    def convert_prices_to_all_base_currencies(benchmark_prices_df: pl.DataFrame) -> pl.DataFrame:
         """
         Convert the processed benchmark price data into all desired base currencies.
         This should update self.processed_data with the currency-adjusted prices.
@@ -63,4 +63,4 @@ class BenchmarkProcessor:
         # Remove any rows with missing price eg. euro conversion before 1999 inception
         final_lf = final_lf.filter(pl.col('price').is_not_null())
 
-        return final_lf.sort(['ticker', 'date', 'currency'])
+        return final_lf.sort(['ticker', 'date', 'currency']).collect()

@@ -2,7 +2,7 @@ import backend.core.paths as paths
 import backend.utils.asset_metadata as utils
 import warnings
 from datetime import date
-from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeline, FXPipeline
+from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeline, FXPipeline, BenchmarkPipeline
 from backend.data_pipeline.ingestors import YFinanceIngestor, CSVIngestor
 from backend.data_pipeline.runner import PipelineRunner
 
@@ -68,7 +68,7 @@ for relative_source in fx_csv_sources:
 # Instantiate sub pipelines
 price_pipeline = PricePipeline(price_ingestors)
 action_pipeline = CorporateActionPipeline(corporate_action_ingestors)
-benchmark_pipeline = PricePipeline(benchmark_ingestors) # benchmark can utilise same class as prices, but must be sepreate object as different save path
+benchmark_pipeline = BenchmarkPipeline(benchmark_ingestors) # benchmark can utilise same class as prices, but must be sepreate object as different save path
 fx_pipeline = FXPipeline(fx_ingestors)
 
 # Instantiate major pipeline and run

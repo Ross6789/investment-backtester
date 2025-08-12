@@ -134,10 +134,10 @@ def get_benchmark_data(base_currency: BaseCurrency, tickers: list[str], start_da
         .filter(
             (pl.col('date')>= start_date)&
             (pl.col('date')<= end_date)&
+            (pl.col('ticker').is_in(tickers))&
             (pl.col('currency')==(base_currency))
         )
-        .select('date','ticker','adj_close')
-        .rename({'adj_close':'price'})
+        .select('date','ticker','price')
     )
 
     return filtered_benchmark_data 
