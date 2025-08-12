@@ -21,6 +21,22 @@ def get_yfinance_tickers(asset_type: str) -> list[str]:
     return metadata["ticker"].to_list()
 
 
+def get_yfinance_benchmarks() -> list[str]:
+    """
+    Returns a list of yFinance tickers for benchmark values.
+
+    Returns:
+        list[str]: List of matching ticker symbols from yFinance.
+    """
+    benchmarks = (
+        pl.scan_csv(paths.get_benchmark_data_csv_path())
+        .filter((pl.col("source")=="yfinance"))
+        .select("ticker")
+        .collect()
+    )
+    return benchmarks["ticker"].to_list()
+
+
 def get_fx_csv_sources() -> list[Path]:
     """
     Returns a list of all csv source paths for fx data
@@ -29,7 +45,7 @@ def get_fx_csv_sources() -> list[Path]:
         list[Path]: List of all csv sources paths within the fx metadata file.
     """
     sources = (
-        pl.scan_csv(paths.get_fx_data_path())
+        pl.scan_csv(paths.get_fx_data_csv_path())
         .filter(pl.col("source")=="local_csv")
         .select("source_file_path")
         .collect()

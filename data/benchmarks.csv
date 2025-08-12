@@ -1,0 +1,8 @@
+ticker,name,currency,source,source_file_path,active,start_date,end_date,notes
+^FTSE,FTSE 100,GBP,yfinance,-,Y,,,UK index
+^GSPC,S&P 500,USD,yfinance,-,Y,,,US incex
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
