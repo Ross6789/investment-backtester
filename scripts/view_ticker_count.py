@@ -8,8 +8,8 @@ from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeli
 from backend.data_pipeline.compiler import Compiler
 
 # Configuration
-save_path = paths.get_backtest_data_path()
-metadata_path = paths.get_asset_data_csv_path()
+save_path = paths.get_asset_data_path()
+metadata_path = paths.get_asset_metadata_csv_path()
 fx_path = paths.get_fx_data_path()
 
 # Quick test to confirm it works and count number of rows for each ticker ie. how much price data

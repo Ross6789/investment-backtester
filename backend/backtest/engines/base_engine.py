@@ -234,3 +234,4 @@ class BaseEngine(ABC):
             .select(['ticker','base_price'])
         )
         return dict(zip(prices_df['ticker'], prices_df['base_price']))
+    
