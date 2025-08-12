@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { InfoTooltip } from "@/components/info_tooltip";
 import { format } from "date-fns";
 import { CalendarIcon, Trash2, Check, ChevronDown, Plus } from "lucide-react";
@@ -247,16 +247,11 @@ export function SettingsPage() {
   const selectedCurrency = form.watch("base_currency");
   const symbol = getCurrencySymbol(selectedCurrency) || "";
 
+  // Watch mode to determine state of dividend/fractional share toggles
+  const selectedMode = form.watch("mode");
+
   // Add live tally to show weighting totals
   const targetWeights = form.watch("target_weights");
-  // const totalPercentage = useMemo(() => {
-  //   if (!targetWeights) return 0;
-  //   return targetWeights.reduce((sum, item) => {
-  //     const value = Number(item.percentage);
-  //     return sum + (isNaN(value) ? 0 : value);
-  //   }, 0);
-  // }, [targetWeights]);
-
   const totalPercentage =
     targetWeights?.reduce((sum, item) => {
       const value = Number(item?.percentage);
@@ -864,14 +859,16 @@ export function SettingsPage() {
                             content={tooltipTexts.reinvestDividends}
                           />
                         </div>
-                        {/* <FormDescription>
-                          Choose whether to use dividends to buy more shares or
-                          take as cash.
-                        </FormDescription> */}
+                        <FormDescription hidden={selectedMode !== "basic"}>
+                          Dividends are automatically reinvested in basic mode.
+                        </FormDescription>
                       </div>
                       <FormControl>
                         <Switch
-                          checked={field.value}
+                          disabled={selectedMode === "basic"}
+                          checked={
+                            selectedMode === "basic" ? true : field.value
+                          }
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
@@ -890,14 +887,17 @@ export function SettingsPage() {
                             content={tooltipTexts.fractionalShares}
                           />
                         </div>
-                        {/* <FormDescription>
-                          Whether you can buy partial shares (e.g., 0.5 shares
-                          of a stock)
-                        </FormDescription> */}
+                        <FormDescription hidden={selectedMode !== "basic"}>
+                          Fractional shares are automatically allowed in basic
+                          mode.
+                        </FormDescription>
                       </div>
                       <FormControl>
                         <Switch
-                          checked={field.value}
+                          disabled={selectedMode === "basic"}
+                          checked={
+                            selectedMode === "basic" ? true : field.value
+                          }
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
