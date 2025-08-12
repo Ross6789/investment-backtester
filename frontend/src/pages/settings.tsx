@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { InfoTooltip } from "@/components/info_tooltip";
 import { format } from "date-fns";
 import { CalendarIcon, Trash2, Check, ChevronDown, Plus } from "lucide-react";
@@ -247,6 +247,22 @@ export function SettingsPage() {
   const selectedCurrency = form.watch("base_currency");
   const symbol = getCurrencySymbol(selectedCurrency) || "";
 
+  // Add live tally to show weighting totals
+  const targetWeights = form.watch("target_weights");
+  // const totalPercentage = useMemo(() => {
+  //   if (!targetWeights) return 0;
+  //   return targetWeights.reduce((sum, item) => {
+  //     const value = Number(item.percentage);
+  //     return sum + (isNaN(value) ? 0 : value);
+  //   }, 0);
+  // }, [targetWeights]);
+
+  const totalPercentage =
+    targetWeights?.reduce((sum, item) => {
+      const value = Number(item?.percentage);
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0) ?? 0;
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Clean recurring investment
@@ -479,14 +495,35 @@ export function SettingsPage() {
                   </div>
                 ))}
 
-                <Button
+                <div className="flex justify-between items-center">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => append({ ticker: "", percentage: 0 })}
+                  >
+                    <Plus />
+                    Add Asset
+                  </Button>
+                  <span
+                    className={cn(
+                      "font-medium text-sm",
+                      totalPercentage === 100
+                        ? "text-positive"
+                        : "text-negative"
+                    )}
+                  >
+                    Total: {totalPercentage}%
+                  </span>
+                </div>
+
+                {/* <Button
                   type="button"
                   variant="outline"
                   onClick={() => append({ ticker: "", percentage: 0 })}
                 >
                   <Plus />
                   Add Asset
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           </div>
@@ -873,7 +910,9 @@ export function SettingsPage() {
         </div>
         {/* Full-width row for submit button */}
         <div className="flex justify-center mb-4">
-          <Button type="submit">Run Backtest</Button>
+          <Button type="submit" disabled={totalPercentage !== 100}>
+            Run Backtest
+          </Button>
         </div>
       </form>
     </Form>
