@@ -37,7 +37,7 @@ class BenchmarkSimulator:
             pl.LazyFrame: LazyFrame with columns ['date', 'ticker', 'value'] representing simulated benchmark value.
         """
 
-                # --- Generate LazyFrame of all cashflows
+        # --- Generate LazyFrame of all cashflows
 
         # Initial investment
         cashflow_dates_lf = pl.LazyFrame({
@@ -58,11 +58,11 @@ class BenchmarkSimulator:
         cashflow_with_prices_lf = cashflow_dates_lf.join(benchmark_data,on="date",how="left")
         units_lf = cashflow_with_prices_lf.with_columns((pl.col("cashflow")/pl.col("price")).alias("units"))
         
-        # Find cumulative units on every cashflow date
-        cumulative_units_lf = units_lf.with_columns(pl.col("units").cum_sum().alias("cumulative_units"))
+        # Find cumulative units on every cashflow date - group by ticker to ensure counts are restricted to each benchmark ie. benchmarks are only cum_sum their own units and not other benchmarks
+        cumulative_units_lf = units_lf.with_columns(pl.col('units').cum_sum().over('ticker').alias('cumulative_units'))
 
         # join benchmark data (already filtered for date range and forward filled previously) to unit data
-        full_dates_units_lf = benchmark_data.join(cumulative_units_lf, on=["date","ticker"],how="left")
+        full_dates_units_lf = benchmark_data.join(cumulative_units_lf, on=["date","ticker","price"],how="left")
 
         # Forward fill units
         filled_lf = full_dates_units_lf.fill_null(strategy="forward")
@@ -70,6 +70,15 @@ class BenchmarkSimulator:
         # Find total value using price x units
         benchmark_values_lf = filled_lf.with_columns((pl.col("cumulative_units")*pl.col("price")).alias("value"))
         final_benchmark_lf = benchmark_values_lf.select(["date","ticker","value"])
+
+        # Print funtions used to debug error : * Error found : Not grouping ticker when accumulating units: therefore S&P benchmark was counting units from FTSE *
+        # print(cashflow_dates_lf.collect())
+        # print(cashflow_with_prices_lf.collect())
+        # print(cumulative_units_lf.collect())
+        # print(full_dates_units_lf.collect())
+        # print(filled_lf.collect())
+        # print(benchmark_values_lf.collect())
+        # print(final_benchmark_lf.collect())
 
         return final_benchmark_lf.sort(['ticker','date'])
 

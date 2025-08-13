@@ -9,12 +9,12 @@ from backend.core.paths import EXTERNAL_DATA_BASE_PATH
 # User choices
 mode = BacktestMode.BASIC
 base_currency = BaseCurrency.GBP
-start_date = date.fromisoformat("1985-01-02")
-end_date = date.fromisoformat("2025-01-01")
-target_weights = {'AAPL':0.5,'GOOG':0.5}
+start_date = date.fromisoformat("2025-06-01")
+end_date = date.fromisoformat("2025-06-30")
+target_weights = {'VUSA.L':1}
 initial_investment = 10000
-fractional_shares = False
-reinvest_dividends = False
+fractional_shares = True
+reinvest_dividends = True
 rebalance_frequency = RebalanceFrequency.MONTHLY
 recurring_investment_amount = 2500
 recurring_investment_frequency = ReinvestmentFrequency.MONTHLY
@@ -29,7 +29,8 @@ backtest_config = BacktestConfig(start_date,end_date,target_portfolio,mode,base_
 benchmark_tickers = ["^FTSE","^GSPC"]
 benchmark_data = get_benchmark_data(base_currency,benchmark_tickers,start_date,end_date)
 
+
 # Create and run backtest
 results = BenchmarkSimulator.run(backtest_config, benchmark_data, get_benchmark_metadata_csv_path())
-
+print(results)
 

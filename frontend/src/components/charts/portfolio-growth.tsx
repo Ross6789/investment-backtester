@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
+import { InfoTooltip } from "../info_tooltip";
 import { differenceInDays } from "date-fns";
 import {
   Card,
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/chart";
 
 import type { ChartConfig } from "@/components/ui/chart";
+import { tooltipTexts } from "@/constants/ui_text";
 
 import { formatCurrency } from "@/lib/utils";
 
@@ -83,12 +85,10 @@ export function PortfolioGrowthChart({
 
   // Create state variables to manage selected time period and benchmark
   const [timeRange, setTimeRange] = React.useState(defaultTimeRange);
-  const [selectedBenchmark, setSelectedBenchmark] = React.useState("^GSPC");
+  const [selectedBenchmark, setSelectedBenchmark] = React.useState("none"); // default to no benchmark
 
   // Filter portfolio data to selected time period
   const filteredPortfolioData = React.useMemo(() => {
-    if (timeRange === "daily") return portfolioChartData;
-
     const visibleData = [];
 
     for (const item of portfolioChartData) {
@@ -107,7 +107,7 @@ export function PortfolioGrowthChart({
       )
         continue;
 
-      visibleData.push(item);
+      visibleData.push({ date: item.date, portfolio: item.value });
     }
 
     return visibleData;
@@ -148,22 +148,22 @@ export function PortfolioGrowthChart({
 
     return filteredPortfolioData.map((item) => ({
       date: item.date,
-      portfolio: item.value,
-      benchmark: benchmarkMap.get(item.date) ?? null, // null if no matching benchmark
+      portfolio: item.portfolio,
+      benchmark: selectedBenchmark ? benchmarkMap.get(item.date) ?? null : null,
     }));
   }, [filteredPortfolioData, filteredBenchmarkData]);
 
   const maxY = React.useMemo(() => {
     return Math.max(
       ...combinedChartData.map((d) =>
-        Math.max(d.portfolio ?? 0, Number(d.benchmark) ?? 0)
+        Math.max(d.portfolio ?? 0, Number(d.benchmark ?? 0))
       )
     );
   }, [combinedChartData]);
 
   return (
     <Card className="pt-0">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+      <CardHeader className="flex items-center gap-3 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle>Portfolio Value History</CardTitle>
           <CardDescription>
@@ -171,11 +171,13 @@ export function PortfolioGrowthChart({
           </CardDescription>
         </div>
 
+        <InfoTooltip content={tooltipTexts.benchmarks} />
         <Select value={selectedBenchmark} onValueChange={setSelectedBenchmark}>
-          <SelectTrigger className="w-[180px]" aria-label="Select benchmark">
-            <SelectValue placeholder="Choose benchmark" />
+          <SelectTrigger className="w-[170px] " aria-label="Select benchmark">
+            <SelectValue />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
+            <SelectItem value="none">No benchmark</SelectItem>
             {Object.keys(benchmarkLabels).map((ticker) => (
               <SelectItem key={ticker} value={ticker} className="rounded-lg">
                 {benchmarkLabels[ticker]}
@@ -186,7 +188,7 @@ export function PortfolioGrowthChart({
 
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
-            className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
+            className="hidden w-[160px] rounded-lg sm:ml-auto md:flex"
             aria-label="Select a value"
           >
             <SelectValue placeholder="Choose period" />
