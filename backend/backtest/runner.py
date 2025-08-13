@@ -66,12 +66,12 @@ class BacktestRunner:
         benchmark_chart_data = BenchmarkSimulator.run(self.config, self.benchmark_data, self.benchmark_metadata_path)
 
         # Setup exporter for saving results
-        # exporter = Exporter(self.base_save_path, self.timestamp)
+        exporter = Exporter(self.base_save_path, self.timestamp)
 
         # # Get export handler and export all results/reports
-        # result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
-        # result_export_handler.export_all()
-        # print("Export finished!")
+        result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
+        result_export_handler.export_all()
+        print("Export finished!")
 
         #Combine potfolio analysis with benchamark chart data
         combined_results = analysis_results.copy()

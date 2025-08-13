@@ -23,7 +23,7 @@ class BasicPortfolio(BasePortfolio):
             ValueError: If allocated_funds is not positive.
         """
         # Check funds entered is positive amount
-        # validate_positive_amount(allocated_funds,'allocated funds for investing')
+        validate_positive_amount(allocated_funds,'allocated funds for investing')
 
         # Calculate amount of units which could be bought using allocated funds
         units_bought = allocated_funds / price 

@@ -47,7 +47,8 @@ class BasicEngine(BaseEngine):
 
         # Re-buy holdings in target amounts
         for ticker, funds in target_allocations.items():
-            self.portfolio.invest(ticker,funds,prices.get(ticker),True)
+            if funds > 0.01: # Only perform buy if amount is valid ie. not very small floating number
+                self.portfolio.invest(ticker,funds,prices.get(ticker),True) 
 
         # Update portfolio flag
         self.portfolio.did_rebalance = True
@@ -125,8 +126,9 @@ class BasicEngine(BaseEngine):
                     total_amount = self.portfolio.get_available_cash()
                     allocated_targets = self._get_ticker_allocations_by_target(normalized_weights,total_amount)
                     for ticker, amount in allocated_targets.items():
-                        price = daily_prices.get(ticker)
-                        self.portfolio.invest(ticker,amount,price,True)
+                        if amount > 0.01:  # Only perform buy if amount is valid ie. not very small floating number
+                            price = daily_prices.get(ticker)
+                            self.portfolio.invest(ticker,amount,price,True)
                     invested = True
     
             # --- SNAPSHOTS ---
