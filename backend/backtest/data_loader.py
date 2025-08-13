@@ -1,10 +1,10 @@
 import polars as pl
 from typing import List
 from datetime import date
-from backend.core.paths import get_backtest_data_path, get_asset_data_csv_path, get_fx_data_path
+from backend.core.paths import get_asset_data_path, get_asset_metadata_csv_path, get_fx_data_path, get_benchmark_metadata_csv_path, get_benchmark_data_path
 from backend.core.enums import BacktestMode, BaseCurrency
 
-def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency , tickers : List[str], start_date: date, end_date: date) -> pl.DataFrame:
+def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency, tickers : List[str], start_date: date, end_date: date) -> pl.DataFrame:
     """
     Load backtest data for given tickers and date range, with prices converted to a specified base currency.
 
@@ -37,8 +37,8 @@ def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency 
         The function collects the lazy Polars DataFrame to eager mode before returning. 
         For very large datasets, consider modifying to return a LazyFrame for downstream lazy processing.
     """
-    backtest_data_path = get_backtest_data_path()
-    metadata_path = get_asset_data_csv_path()
+    backtest_data_path = get_asset_data_path()
+    metadata_path = get_asset_metadata_csv_path()
     fx_data_path = get_fx_data_path()
 
     # Retrieve columns based on backtest mode
@@ -122,3 +122,22 @@ def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency 
     )
 
     return converted_backtest_data.collect()  # Convert backtest data from lazy to eager (can be reverted back to lazy if memory issues are encountered)
+
+
+def get_benchmark_data(base_currency: BaseCurrency, tickers: list[str], start_date: date, end_date: date) -> pl.LazyFrame:
+
+    benchmark_data_path = get_benchmark_data_path()
+    
+    # Filter backtest data by dates and tickers
+    filtered_benchmark_data = (
+        pl.scan_parquet(benchmark_data_path)
+        .filter(
+            (pl.col('date')>= start_date)&
+            (pl.col('date')<= end_date)&
+            (pl.col('ticker').is_in(tickers))&
+            (pl.col('currency')==(base_currency))
+        )
+        .select('date','ticker','price')
+    )
+
+    return filtered_benchmark_data 

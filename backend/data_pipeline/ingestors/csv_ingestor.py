@@ -2,7 +2,8 @@ import pandas as pd
 from pathlib import Path
 from datetime import date
 from backend.data_pipeline.ingestors import BaseIngestor
-from backend.utils import validate_date_order, parse_date
+from backend.core.validators import validate_date_order
+from backend.core.parsers import parse_date
 
 
 class CSVIngestor(BaseIngestor):

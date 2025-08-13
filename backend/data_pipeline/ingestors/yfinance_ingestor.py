@@ -4,7 +4,7 @@ import warnings
 import pandas as pd
 from datetime import date
 from time import sleep
-from backend.utils import validate_date_order, validate_int, validate_positive_amount
+from backend.core.validators import validate_date_order, validate_int, validate_positive_amount
 from backend.data_pipeline.ingestors import BaseIngestor
 
 class YFinanceIngestor(BaseIngestor):

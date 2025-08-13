@@ -7,6 +7,7 @@ export const tooltipTexts = {
   rebalanceFrequency: "How often to adjust your portfolio back to target weights.",
   reinvestDividends: "Choose whether to use dividends to buy more shares or take as cash.",
   fractionalShares:"Whether you can buy partial shares (e.g., 0.5 shares of a stock).",
+  benchmarks:"A benchmark shows how the general market performed over a period of time."
 };
 
 export const metricHoverTexts = {

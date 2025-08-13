@@ -3,6 +3,7 @@ import polars as pl
 from pathlib import Path
 from backend.utils.saving import generate_timestamp
 from backend.backtest.factory import BacktestFactory
+from backend.backtest.benchmark_simulator import BenchmarkSimulator
 from backend.backtest.exporter import Exporter
 
 class BacktestRunner:
@@ -21,17 +22,21 @@ class BacktestRunner:
         timestamp (str): Timestamp used to create unique output folders per run.
     """
 
-    def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame, base_save_path: Path):
+    def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame, benchmark_data: pl.DataFrame, benchmark_metadata_path: Path, base_save_path: Path):
             """
             Initializes the BacktestRunner with configuration, data, and save path.
 
             Args:
                 config: BacktestConfig object containing strategy and mode.
-                backtest_data: Polars DataFrame with all backtest input data.
+                backtest_data: Polars DataFrame with all backtest price and dividend data.
+                benchmark_data: Polars DataFrame with all benchmark data.
+                benchmark_metadata_path: Path to benchmark metadata
                 base_save_path: Base directory path to save outputs.
             """
             self.config = config
             self.backtest_data = backtest_data
+            self.benchmark_data = benchmark_data
+            self.benchmark_metadata_path = benchmark_metadata_path
             self.base_save_path = base_save_path
             self.timestamp = generate_timestamp()
 
@@ -54,8 +59,11 @@ class BacktestRunner:
 
         # Create analyser based on mode and backtest results
         analyser = BacktestFactory.get_analyser(mode,result)
-        metrics = analyser.calculate_overall_metrics()
+        analysis_results = analyser.run()
         # print(metrics)
+
+        # Perform skeleton benchmark simulations
+        benchmark_chart_data = BenchmarkSimulator.run(self.config, self.benchmark_data, self.benchmark_metadata_path)
 
         # Setup exporter for saving results
         # exporter = Exporter(self.base_save_path, self.timestamp)
@@ -65,7 +73,10 @@ class BacktestRunner:
         # result_export_handler.export_all()
         # print("Export finished!")
 
-        return metrics
+        #Combine potfolio analysis with benchamark chart data
+        combined_results = analysis_results.copy()
+        combined_results["charts"]["benchmark"] = benchmark_chart_data
+        return combined_results
         
 
 

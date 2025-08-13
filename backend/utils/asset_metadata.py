@@ -13,12 +13,28 @@ def get_yfinance_tickers(asset_type: str) -> list[str]:
         list[str]: List of matching ticker symbols from yFinance.
     """
     metadata = (
-        pl.scan_csv(paths.get_asset_data_csv_path())
+        pl.scan_csv(paths.get_asset_metadata_csv_path())
         .filter((pl.col("source")=="yfinance") & (pl.col("asset_type")==asset_type))
         .select("ticker")
         .collect()
     )
     return metadata["ticker"].to_list()
+
+
+def get_yfinance_benchmarks() -> list[str]:
+    """
+    Returns a list of yFinance tickers for benchmark values.
+
+    Returns:
+        list[str]: List of matching ticker symbols from yFinance.
+    """
+    benchmarks = (
+        pl.scan_csv(paths.get_benchmark_metadata_csv_path())
+        .filter((pl.col("source")=="yfinance"))
+        .select("ticker")
+        .collect()
+    )
+    return benchmarks["ticker"].to_list()
 
 
 def get_fx_csv_sources() -> list[Path]:
@@ -29,7 +45,7 @@ def get_fx_csv_sources() -> list[Path]:
         list[Path]: List of all csv sources paths within the fx metadata file.
     """
     sources = (
-        pl.scan_csv(paths.get_fx_data_path())
+        pl.scan_csv(paths.get_fx_metadata_csv_path())
         .filter(pl.col("source")=="local_csv")
         .select("source_file_path")
         .collect()
@@ -47,7 +63,7 @@ def get_asset_csv_sources() -> list[Path]:
         list[Path]: List of all csv sources paths within the metadata file.
     """
     sources = (
-        pl.scan_csv(paths.get_asset_data_csv_path())
+        pl.scan_csv(paths.get_asset_metadata_csv_path())
         .filter(pl.col("source")=="local_csv")
         .select("source_file_path")
         .collect()
@@ -65,7 +81,7 @@ def get_csv_ticker_source_map() -> dict[str, Path]:
         dict[str, Path]: Dictionary where keys are ticker symbols and values are local CSV file paths.
     """
     metadata = (
-        pl.scan_csv(paths.get_asset_data_csv_path())
+        pl.scan_csv(paths.get_asset_metadata_csv_path())
         .filter(pl.col("source")=="local_csv")
         .select("ticker","source_file_path")
         .collect()

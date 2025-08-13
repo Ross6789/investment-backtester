@@ -2,8 +2,8 @@ import backend.core.paths as paths
 import polars as pl
 
 # Configuration
-asset_metadata_path = paths.get_asset_data_csv_path()
-parquet_price_path = paths.get_backtest_data_path()
+asset_metadata_path = paths.get_asset_metadata_csv_path()
+parquet_price_path = paths.get_asset_data_path()
 csv_ticker_date_range_path = '/Volumes/T7/investment_backtester_data/processed/csv/find_ticker_date_range.csv'
 
 # Read parquet actions file

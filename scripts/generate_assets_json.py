@@ -1,8 +1,8 @@
 import csv, json
-from backend.core.paths import get_asset_data_csv_path,get_asset_data_json_path
+from backend.core.paths import get_asset_metadata_csv_path,get_asset_metadata_json_path
 
-asset_csv_path = get_asset_data_csv_path()
-asset_json_path = get_asset_data_json_path()
+asset_csv_path = get_asset_metadata_csv_path()
+asset_json_path = get_asset_metadata_json_path()
 
 active_assets = []
 skipped_assets = 0
@@ -18,8 +18,8 @@ with open(asset_csv_path, newline="", encoding="utf-8-sig") as csvfile:
             "name": row["name"],
             "asset_type": row["asset_type"],
             "currency": row["currency"],
-            "source": row["source"],
-            "source_file_path": row["source_file_path"],
+            # "source": row["source"],
+            # "source_file_path": row["source_file_path"],
             "start_date": row["start_date"],
             "end_date": row["end_date"]
         })
