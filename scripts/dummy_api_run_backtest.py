@@ -21,4 +21,4 @@ input_data = {
   }
 }
 
-run_backtest(input_data)
+result = run_backtest(input_data)

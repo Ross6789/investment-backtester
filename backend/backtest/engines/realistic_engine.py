@@ -90,17 +90,21 @@ class RealisticEngine(BaseEngine):
         """
         orders = []
 
-        for ticker, traget_value in ticker_allocations.items():
-            orders.append({
-                    "ticker": ticker,
-                    "target_value": traget_value,
-                    "date_placed": current_date,
-                    "date_executed": self._next_trading_date(ticker,current_date),
-                    "side": side,
-                    "base_price": None,
-                    "units": None,
-                    'status': "pending"
-                })
+        for ticker, target_value in ticker_allocations.items():
+            if target_value > 0.01: # only queue any orders more than 1 pence ie. guard against very small floating values
+                orders.append({
+                        "ticker": ticker,
+                        "target_value": target_value,
+                        "date_placed": current_date,
+                        "date_executed": self._next_trading_date(ticker,current_date),
+                        "side": side,
+                        "base_price": None,
+                        "units": None,
+                        'status': "pending"
+                    })
+            
+        if not orders:
+            return # Exit method if no valid order to add to queue
             
         new_orders_df = pl.DataFrame(orders)
         
