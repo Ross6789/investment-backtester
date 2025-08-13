@@ -1,6 +1,6 @@
 import backend.core.paths as paths
 from datetime import date
-from backend.backtest.data_loader import get_benchmark_data
+from backend.backtest.data_loader import get_benchmark_data, get_benchmark_metadata_csv_path
 from backend.core.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
 from backend.core.enums import BacktestMode, BaseCurrency, RebalanceFrequency, ReinvestmentFrequency
 from backend.backtest.benchmark_simulator import BenchmarkSimulator
@@ -9,7 +9,7 @@ from backend.core.paths import EXTERNAL_DATA_BASE_PATH
 # User choices
 mode = BacktestMode.BASIC
 base_currency = BaseCurrency.GBP
-start_date = date.fromisoformat("1970-01-02")
+start_date = date.fromisoformat("1985-01-02")
 end_date = date.fromisoformat("2025-01-01")
 target_weights = {'AAPL':0.5,'GOOG':0.5}
 initial_investment = 10000
@@ -30,7 +30,6 @@ benchmark_tickers = ["^FTSE","^GSPC"]
 benchmark_data = get_benchmark_data(base_currency,benchmark_tickers,start_date,end_date)
 
 # Create and run backtest
-results = BenchmarkSimulator.simulate_benchmarks(backtest_config, benchmark_data)
-print(results)
-results.write_csv(EXTERNAL_DATA_BASE_PATH / "benchmarks.csv")
+results = BenchmarkSimulator.run(backtest_config, benchmark_data, get_benchmark_metadata_csv_path())
+
 

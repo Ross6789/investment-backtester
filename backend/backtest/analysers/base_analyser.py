@@ -300,7 +300,7 @@ class BaseAnalyser(ABC):
 
     # --- Calculating overall metrics --- # 
 
-    def calculate_overall_metrics(self) -> dict:
+    def run(self) -> dict:
         
         # Remove non trading days from portfolio valuations - this need 
         trading_days = self.calendar_lf.filter(pl.col('trading_tickers').list.len() >0)
@@ -433,7 +433,7 @@ class BaseAnalyser(ABC):
             for period in periods
         }
 
-        # Compile monhtly return histogram chart data
+        # Compile monthly return histogram chart data
         monthly_return_histogram_chart_data  = self._generate_monthly_return_histogram_data(period_returns_df.get("monthly"))
 
         # Compile portfolio balance chart data
@@ -453,11 +453,13 @@ class BaseAnalyser(ABC):
                 "sharpe": calc_sharpe,
                 "volatility": calc_volatility,
             },
-            "max_drawdown": calc_max_drawdown_dict,
-            "monthly_win_lose_analysis": monthly_win_lose_summary,
-            "best_periods":best_periods,
-            "worst_periods": worst_periods,
-            "chart_data": {
+            "analysis":{
+                "max_drawdown": calc_max_drawdown_dict,
+                "monthly_win_lose_analysis": monthly_win_lose_summary,
+                "best_periods":best_periods,
+                "worst_periods": worst_periods,
+            },
+            "charts": {
                 "portfolio_growth":portfolio_growth_chart_data,
                 "returns":returns_chart_data,
                 "monthly_returns_histogram":monthly_return_histogram_chart_data,

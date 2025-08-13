@@ -4,6 +4,7 @@ from backend.backtest.data_loader import get_backtest_data
 from backend.core.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
 from backend.core.enums import BacktestMode, BaseCurrency, RebalanceFrequency, ReinvestmentFrequency
 from backend.backtest.runner import BacktestRunner
+from backend.api.run_backtest import run_backtest
 
 # User choices
 mode = BacktestMode.BASIC
@@ -30,4 +31,3 @@ backtest_data = get_backtest_data(mode,base_currency,target_portfolio.get_ticker
 # Create and run backtest
 backtest = BacktestRunner(backtest_config, backtest_data,paths.get_backtest_run_base_path())
 backtest.run()
-
