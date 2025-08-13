@@ -178,3 +178,55 @@ class PriceProcessor:
         )
         print('Price data forward filled.')
         return filled_prices 
+
+    @staticmethod
+    def forward_fill(cleaned_prices: pl.DataFrame, add_trading_day: bool = True) -> pl.DataFrame:
+        """
+        Forward-fill missing price data for each ticker over its full date range.
+
+        Creates a complete daily date range per ticker, joins with the input price data,
+        and forward-fills missing 'adj_close' and 'close' prices for non-trading days.
+        Optionally flags whether each row corresponds to a trading day.
+
+        Args:
+            cleaned_prices (pl.DataFrame): Polars DataFrame with columns ['date', 'ticker', 'adj_close', 'close'] containing cleaned trading data.
+            add_trading_day (bool, optional): Whether to add an 'is_trading_day' boolean column. Defaults to True.
+
+        Returns:
+            pl.DataFrame: Polars DataFrame with forward-filled price data.
+                        Includes 'is_trading_day' boolean column if add_trading_day=True.
+        """
+        print('Forward filling price data ...')
+
+        # Find relevant date ranges for each ticker
+        ticker_date_ranges = (
+            cleaned_prices.group_by('ticker').agg([
+                pl.col('date').min().alias('min_date'),
+                pl.col('date').max().alias('max_date')
+            ])
+        )
+
+        # Create dataframe of all dates (including non trading) for each ticker using its daterange
+        date_dfs = []
+        for ticker, min_date, max_date in ticker_date_ranges.iter_rows():
+            date_df = pl.DataFrame({'date': pl.date_range(min_date, max_date, interval='1d', eager=True), 'ticker': ticker})
+            date_dfs.append(date_df)
+        full_date_df = pl.concat(date_dfs)
+
+        if add_trading_day:
+            # Add trading dates column to cleaned prices df (trading day = true, since cleaned data is only present on trading dates)
+            cleaned_prices = cleaned_prices.with_columns(pl.lit(True).alias('is_trading_day'))
+
+        # Join full dates df to prices df and forward fill
+        filled_prices = (
+            full_date_df.join(cleaned_prices, on=['date', 'ticker'], how='left')
+            .sort(['ticker', 'date'])
+            .with_columns([
+                pl.col('adj_close').fill_null(strategy='forward'),
+                pl.col('close').fill_null(strategy='forward'),
+                pl.col('is_trading_day').fill_null(False) if add_trading_day else pl.lit(None).alias('is_trading_day')
+            ])
+        )
+        print('Price data forward filled.')
+        return filled_prices
+
