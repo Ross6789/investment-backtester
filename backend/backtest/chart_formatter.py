@@ -19,9 +19,11 @@ class ChartFormatter:
                 "labels": dict[str, str]   # Ticker to human-readable label mapping
             }
         """
+        # Convert date column to string 
+        benchmark_with_string_dates_lf = benchmark_value_lf.with_columns(pl.col("date").dt.strftime('%Y-%m-%d').alias("date"))
+
         # Pivot LazyFrame into wide format
-        print(benchmark_value_lf.collect())
-        wide_df = benchmark_value_lf.collect().pivot(on="ticker", index="date", values="value")
+        wide_df = benchmark_with_string_dates_lf.collect().pivot(on="ticker", index="date", values="value")
 
         # Rename columns (remove "_price" if added by pivot)
         rename_map = {

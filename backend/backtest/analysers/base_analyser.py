@@ -413,7 +413,8 @@ class BaseAnalyser(ABC):
         monthly_win_lose_summary = self._calculate_monthly_win_rate(period_returns_df.get("monthly"))
 
         # Compile portfolio growth data for charts
-        valuation_df = self.enriched_portfolio_lf.select(['date','cumulative_cashflow','net_cumulative_gain','total_portfolio_value']).collect()
+        portfolio_values_with_string_dates_lf = self.enriched_portfolio_lf.with_columns(pl.col("date").dt.strftime('%Y-%m-%d').alias("date")) # Convert date column to ISO string 
+        valuation_df = portfolio_values_with_string_dates_lf.select(['date','cumulative_cashflow','net_cumulative_gain','total_portfolio_value']).collect()
         valuation_df.columns = ['date','contributions','gain','value']
         portfolio_growth_chart_data = valuation_df.to_dicts()
 

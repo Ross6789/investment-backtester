@@ -28,29 +28,44 @@ import {
 } from "@/components/ui/select";
 
 const chartConfig = {
-  value: {
-    label: "Value",
+  portfolio: {
+    label: "Portfolio",
     color: "var(--chart-1)",
+  },
+  benchmark: {
+    label: "Benchmark",
+    color: "var(--chart-4)",
   },
 } satisfies ChartConfig;
 
+interface BenchmarkDataPoint {
+  date: string;
+  [ticker: string]: number | string;
+}
+
 interface PortfolioGrowthChartProps {
-  chartData: {
+  portfolioChartData: {
     date: string;
     contributions: number;
     gain: number;
     value: number;
   }[];
+  benchmarkChartData: BenchmarkDataPoint[];
+  benchmarkLabels: { [ticker: string]: string };
   currency_code: string;
 }
 
 export function PortfolioGrowthChart({
-  chartData,
+  portfolioChartData,
+  benchmarkChartData,
+  benchmarkLabels,
   currency_code,
 }: PortfolioGrowthChartProps) {
   // Dynamically filter the available periods based on backtest length
-  const startDate = new Date(chartData[0]?.date);
-  const endDate = new Date(chartData[chartData.length - 1]?.date);
+  const startDate = new Date(portfolioChartData[0]?.date);
+  const endDate = new Date(
+    portfolioChartData[portfolioChartData.length - 1]?.date
+  );
   const daysDiff = differenceInDays(endDate, startDate);
 
   const availableOptions = ["daily"];
@@ -66,43 +81,85 @@ export function PortfolioGrowthChart({
   if (daysDiff >= 3000) defaultTimeRange = "quarterly";
   if (daysDiff >= 9100) defaultTimeRange = "yearly";
 
+  // Create state variables to manage selected time period and benchmark
   const [timeRange, setTimeRange] = React.useState(defaultTimeRange);
+  const [selectedBenchmark, setSelectedBenchmark] = React.useState("^GSPC");
 
-  const filteredData = React.useMemo(() => {
-    if (timeRange === "daily") return chartData;
+  // Filter portfolio data to selected time period
+  const filteredPortfolioData = React.useMemo(() => {
+    if (timeRange === "daily") return portfolioChartData;
 
-    const result = [];
-    const seen = new Set();
+    const visibleData = [];
 
-    for (const item of chartData) {
+    for (const item of portfolioChartData) {
       const date = new Date(item.date);
-      let key = "";
 
-      if (timeRange === "weekly") {
-        // Use ISO week number (year + week)
-        const monday = new Date(date);
-        monday.setDate(date.getDate() - date.getDay() + 1); // Monday of the week
-        key = monday.toISOString().split("T")[0];
-      } else if (timeRange === "monthly") {
-        key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-          2,
-          "0"
-        )}`;
-      } else if (timeRange === "quarterly") {
-        const quarter = Math.floor(date.getMonth() / 3) + 1;
-        key = `${date.getFullYear()}-Q${quarter}`;
-      } else if (timeRange === "yearly") {
-        key = `${date.getFullYear()}`;
-      }
+      if (timeRange === "weekly" && date.getDay() !== 1) continue;
+      if (timeRange === "monthly" && date.getDate() !== 1) continue;
+      if (
+        timeRange === "quarterly" &&
+        !(date.getDate() === 1 && [0, 3, 6, 9].includes(date.getMonth()))
+      )
+        continue;
+      if (
+        timeRange === "yearly" &&
+        !(date.getDate() === 1 && date.getMonth() === 0)
+      )
+        continue;
 
-      if (!seen.has(key)) {
-        result.push(item);
-        seen.add(key);
-      }
+      visibleData.push(item);
     }
 
-    return result;
-  }, [chartData, timeRange]);
+    return visibleData;
+  }, [portfolioChartData, timeRange]);
+
+  // Filter benchark data to selected benchmark and selected time period
+  const filteredBenchmarkData = React.useMemo(() => {
+    if (!selectedBenchmark) return [];
+
+    const visibleData = [];
+
+    for (const item of benchmarkChartData) {
+      const date = new Date(item.date);
+
+      if (timeRange === "weekly" && date.getDay() !== 1) continue;
+      if (timeRange === "monthly" && date.getDate() !== 1) continue;
+      if (
+        timeRange === "quarterly" &&
+        !(date.getDate() === 1 && [0, 3, 6, 9].includes(date.getMonth()))
+      )
+        continue;
+      if (
+        timeRange === "yearly" &&
+        !(date.getDate() === 1 && date.getMonth() === 0)
+      )
+        continue;
+
+      visibleData.push({ date: item.date, benchmark: item[selectedBenchmark] });
+    }
+
+    return visibleData;
+  }, [benchmarkChartData, timeRange, selectedBenchmark]);
+
+  const combinedChartData = React.useMemo(() => {
+    const benchmarkMap = new Map(
+      filteredBenchmarkData.map((item) => [item.date, item.benchmark])
+    );
+
+    return filteredPortfolioData.map((item) => ({
+      date: item.date,
+      portfolio: item.value,
+      benchmark: benchmarkMap.get(item.date) ?? null, // null if no matching benchmark
+    }));
+  }, [filteredPortfolioData, filteredBenchmarkData]);
+
+  const maxY = React.useMemo(() => {
+    return Math.max(
+      ...combinedChartData.map((d) =>
+        Math.max(d.portfolio ?? 0, Number(d.benchmark) ?? 0)
+      )
+    );
+  }, [combinedChartData]);
 
   return (
     <Card className="pt-0">
@@ -113,6 +170,20 @@ export function PortfolioGrowthChart({
             Track how the total value of your portfolio changes over time.
           </CardDescription>
         </div>
+
+        <Select value={selectedBenchmark} onValueChange={setSelectedBenchmark}>
+          <SelectTrigger className="w-[180px]" aria-label="Select benchmark">
+            <SelectValue placeholder="Choose benchmark" />
+          </SelectTrigger>
+          <SelectContent className="rounded-xl">
+            {Object.keys(benchmarkLabels).map((ticker) => (
+              <SelectItem key={ticker} value={ticker} className="rounded-lg">
+                {benchmarkLabels[ticker]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
             className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
@@ -152,17 +223,29 @@ export function PortfolioGrowthChart({
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart data={combinedChartData}>
             <defs>
-              <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillPortfolio" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-value)"
+                  stopColor="var(--color-portfolio)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-value)"
+                  stopColor="var(--color-portfolio)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
+              <linearGradient id="fillBenchmark" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-benchmark)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-benchmark)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -211,7 +294,7 @@ export function PortfolioGrowthChart({
               }}
             />
             <YAxis
-              dataKey="value"
+              domain={[0, maxY]}
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -222,51 +305,50 @@ export function PortfolioGrowthChart({
             />
 
             <ChartTooltip
+              cursor={false}
               content={
                 <ChartTooltipContent
-                  // labelFormatter={(value) => {
-                  //   return new Date(value).toLocaleDateString("en-GB", {
-                  //     month: "short",
-                  //     day: "numeric",
-                  //     year: "numeric",
-                  //   });
-                  // }}
-                  // formatter={(value, name) => (
-                  //   <div className="text-muted-foreground flex gap-2 items-center text-xs">
-                  //     {chartConfig[name as keyof typeof chartConfig]?.label ||
-                  //       name}
-                  //     <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
-                  //       {formatCurrency(Number(value), currency_code)}
-                  //     </div>
-                  //   </div>
-                  // )}
-                  labelFormatter={(value) => {
+                  labelFormatter={(value) =>
+                    new Date(value).toLocaleDateString("en-GB", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  }
+                  formatter={(value, name) => {
+                    const config =
+                      chartConfig[name as keyof typeof chartConfig];
+
                     return (
-                      <div className="text-muted-foreground">
-                        {new Date(value).toLocaleDateString("en-GB", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
+                      <div className="text-muted-foreground flex gap-3 items-center text-xs">
+                        <div
+                          className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                          style={{ backgroundColor: config?.color ?? "grey" }}
+                        />
+
+                        {config?.label ?? name}
+
+                        <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                          {formatCurrency(Number(value), currency_code)}
+                        </div>
                       </div>
                     );
                   }}
-                  formatter={(value) => (
-                    <div className="text-foreground font-mono font-medium tabular-nums">
-                      {formatCurrency(Number(value), currency_code)}
-                    </div>
-                  )}
                 />
               }
-              // cursor={false}
             />
 
             <Area
-              dataKey="value"
+              dataKey="portfolio"
               type="natural"
-              fill="url(#fillValue)"
-              stroke="var(--color-value)"
-              stackId="a"
+              fill="url(#fillPortfolio)"
+              stroke="var(--color-Portfolio)"
+            />
+            <Area
+              dataKey="benchmark"
+              type="natural"
+              fill="url(#fillBenchmark)"
+              stroke="var(--color-benchmark)"
             />
           </AreaChart>
         </ChartContainer>

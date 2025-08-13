@@ -269,7 +269,11 @@ export function ResultsPage() {
 
           <TabsContent value="overview">
             <PortfolioGrowthChart
-              chartData={backtestResult.results.charts.portfolio_growth}
+              portfolioChartData={
+                backtestResult.results.charts.portfolio_growth
+              }
+              benchmarkChartData={backtestResult.results.charts.benchmark.data}
+              benchmarkLabels={backtestResult.results.charts.benchmark.labels}
               currency_code={backtestResult.settings.base_currency}
             ></PortfolioGrowthChart>
           </TabsContent>
