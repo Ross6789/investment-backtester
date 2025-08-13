@@ -43,7 +43,8 @@ export function ResultsPage() {
 
   const cagr = backtestResult.results.metrics.cagr;
   const volatility = backtestResult.results.metrics.volatility;
-  const max_drawdown = backtestResult.results.max_drawdown.max_drawdown;
+  const max_drawdown =
+    backtestResult.results.analysis.max_drawdown.max_drawdown;
   const sharpe = backtestResult.results.metrics.sharpe;
 
   // get rating objects for each summary metric
@@ -93,8 +94,10 @@ export function ResultsPage() {
   };
 
   const targetWeights: TargetWeights = backtestResult.settings.target_weights;
-  const bestPeriods: BestOrWorstPeriods = backtestResult.results.best_periods;
-  const worstPeriods: BestOrWorstPeriods = backtestResult.results.worst_periods;
+  const bestPeriods: BestOrWorstPeriods =
+    backtestResult.results.analysis.best_periods;
+  const worstPeriods: BestOrWorstPeriods =
+    backtestResult.results.analysis.worst_periods;
 
   useEffect(() => {
     // If no result data (e.g. direct access to /results), redirect to settings
@@ -266,7 +269,7 @@ export function ResultsPage() {
 
           <TabsContent value="overview">
             <PortfolioGrowthChart
-              chartData={backtestResult.results.chart_data.portfolio_growth}
+              chartData={backtestResult.results.charts.portfolio_growth}
               currency_code={backtestResult.settings.base_currency}
             ></PortfolioGrowthChart>
           </TabsContent>
@@ -274,14 +277,14 @@ export function ResultsPage() {
           <TabsContent value="portfolio" className="grid grid-cols-12 gap-8">
             <div className="col-span-12">
               <PortfolioBreakdownStackedChart
-                chartData={backtestResult.results.chart_data.portfolio_growth}
+                chartData={backtestResult.results.charts.portfolio_growth}
                 currency_code={backtestResult.settings.base_currency}
               ></PortfolioBreakdownStackedChart>
             </div>
 
             <div className="col-span-12">
               <PortfolioBalanceStackedChart
-                chartData={backtestResult.results.chart_data.portfolio_balance}
+                chartData={backtestResult.results.charts.portfolio_balance}
                 currency_code={backtestResult.settings.base_currency}
               ></PortfolioBalanceStackedChart>
             </div>
@@ -366,7 +369,7 @@ export function ResultsPage() {
             <div className="col-span-12 lg:col-span-6">
               <ReturnHistogramChart
                 chartData={
-                  backtestResult.results.chart_data.monthly_returns_histogram
+                  backtestResult.results.charts.monthly_returns_histogram
                 }
               ></ReturnHistogramChart>
             </div>
@@ -384,20 +387,27 @@ export function ResultsPage() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                     <section className="flex flex-col gap-y-2 ">
                       <StrongText className="text-positive">
-                        {backtestResult.results.monthly_win_lose_analysis.win}
+                        {
+                          backtestResult.results.analysis
+                            .monthly_win_lose_analysis.win
+                        }
                       </StrongText>
                       <MutedText>Winning months</MutedText>
                     </section>
                     <section className="flex flex-col gap-y-2">
                       <StrongText className="text-negative">
-                        {backtestResult.results.monthly_win_lose_analysis.loss}
+                        {
+                          backtestResult.results.analysis
+                            .monthly_win_lose_analysis.loss
+                        }
                       </StrongText>
                       <MutedText>Losing months</MutedText>
                     </section>
                     <section className="flex flex-col gap-y-2">
                       <StrongText>
                         {formatPercentage(
-                          backtestResult.results.monthly_win_lose_analysis.rate,
+                          backtestResult.results.analysis
+                            .monthly_win_lose_analysis.rate,
                           0,
                           false
                         )}
@@ -423,7 +433,7 @@ export function ResultsPage() {
 
           <TabsContent value="returns">
             <ReturnBarChart
-              chartData={backtestResult.results.chart_data.returns}
+              chartData={backtestResult.results.charts.returns}
             ></ReturnBarChart>
           </TabsContent>
         </Tabs>
