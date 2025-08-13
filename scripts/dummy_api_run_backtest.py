@@ -1,7 +1,7 @@
 from backend.api.run_backtest import run_backtest
 
 input_data = {
-  "mode": "basic",
+  "mode": "realistic",
   "base_currency": "GBP",
   "start_date": "2020-01-01",
   "end_date": "2025-01-01",
@@ -13,7 +13,7 @@ input_data = {
   "strategy":{
     "fractional_shares":True,
     "reinvest_dividends":True,
-    "rebalance_frequency":"yearly"
+    "rebalance_frequency":"never"
   },
   "recurring_investment":{
     "amount":100,
@@ -21,4 +21,4 @@ input_data = {
   }
 }
 
-run_backtest(input_data)
+result = run_backtest(input_data)
