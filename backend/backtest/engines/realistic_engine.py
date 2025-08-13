@@ -231,6 +231,8 @@ class RealisticEngine(BaseEngine):
         Raises:
             ValueError: If the provided rebalance_frequency is invalid.
         """
+        if rebalance_frequency == RebalanceFrequency.NEVER:
+            return False
         if not self._all_active_tickers_trading(current_date):
             return False
         else:

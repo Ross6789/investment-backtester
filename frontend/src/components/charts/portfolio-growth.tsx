@@ -344,7 +344,7 @@ export function PortfolioGrowthChart({
               dataKey="portfolio"
               type="natural"
               fill="url(#fillPortfolio)"
-              stroke="var(--color-Portfolio)"
+              stroke="var(--color-portfolio)"
             />
             <Area
               dataKey="benchmark"
