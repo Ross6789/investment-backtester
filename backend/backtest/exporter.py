@@ -1,5 +1,7 @@
 import csv
+import os 
 import polars as pl
+import pandas as pd
 from pathlib import Path
 from backend.core.models import CSVReport
 from backend.utils.dataframes import round_dataframe_columns, flatten_dataframe_columns
@@ -111,3 +113,18 @@ class Exporter:
         rounded_df.write_csv(save_path)
         print(f'Exported {file_name} to : {save_path}')
 
+
+    def save_dataframes_to_excel_workbook(self, name_dataframe_mappings : dict[str,pl.DataFrame], file_name: str) -> None:
+
+        # Create save folder
+        output_dir = self.timestamped_folder / 'results' / 'excel'
+        os.makedirs(output_dir, exist_ok=True)  # Creates the directory if it doesn't exist
+
+        # Generate full save path
+        save_path = output_dir / f'{file_name}.xlsx'
+
+        # Open an Excel writer context
+        with pd.ExcelWriter(save_path, engine='xlsxwriter', datetime_format="dd/mm/yyyy") as writer:
+
+            for name, report in name_dataframe_mappings.items():
+                report.to_pandas().to_excel(writer,sheet_name=name, index=False)

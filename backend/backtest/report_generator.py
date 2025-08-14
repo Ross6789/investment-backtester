@@ -36,50 +36,59 @@ class ReportGenerator:
 
 
     @staticmethod
-    def generate_csv(df: pl.DataFrame, metadata: dict[str, str] | None = None, percentify_cols: list[str] | None = None, rounding_config : RoundingConfig | None = None) -> CSVReport:
-        """
-        Generates a structured CSVReport from a Polars DataFrame, optionally
-        including metadata and applying formatting for readability.
+    def generate_formatted_report(df: pl.DataFrame, percentify_cols: list[str] | None = None, rounding_config : RoundingConfig | None = None) -> pl.DataFrame:
 
-        Args:
-            df (pl.DataFrame): The DataFrame to export.
-            metadata (dict[str, str] | None): Optional dictionary to include as comments at the top of the CSV file.
-            percentify_cols (list[str] | None): Optional list of columns to convert to percentages for the report.
-            rounding_config (RoundingConfig | None): Optional rounding precision configuration. If not provided, defaults will be applied.
-
-        Returns:
-            CSVReport: An object containing comment lines, headers, and rows
-            suitable for structured CSV export.
-        """
         validate_flat_dataframe(df)
 
-        comments = ReportGenerator._format_metadata(metadata)
-        df = ReportGenerator._format_for_readability(df,percentify_cols, rounding_config)
+        formatted_df = ReportGenerator._format_for_readability(df,percentify_cols, rounding_config)
 
-        return CSVReport(
-            comments=comments,
-            headers=df.columns,
-            rows=df.rows()
-        )
+        return formatted_df
+
+    # @staticmethod
+    # def generate_csv(df: pl.DataFrame, metadata: dict[str, str] | None = None, percentify_cols: list[str] | None = None, rounding_config : RoundingConfig | None = None) -> CSVReport:
+    #     """
+    #     Generates a structured CSVReport from a Polars DataFrame, optionally
+    #     including metadata and applying formatting for readability.
+
+    #     Args:
+    #         df (pl.DataFrame): The DataFrame to export.
+    #         metadata (dict[str, str] | None): Optional dictionary to include as comments at the top of the CSV file.
+    #         percentify_cols (list[str] | None): Optional list of columns to convert to percentages for the report.
+    #         rounding_config (RoundingConfig | None): Optional rounding precision configuration. If not provided, defaults will be applied.
+
+    #     Returns:
+    #         CSVReport: An object containing comment lines, headers, and rows
+    #         suitable for structured CSV export.
+    #     """
+    #     validate_flat_dataframe(df)
+
+    #     comments = ReportGenerator._format_metadata(metadata)
+    #     df = ReportGenerator._format_for_readability(df,percentify_cols, rounding_config)
+
+    #     return CSVReport(
+    #         comments=comments,
+    #         headers=df.columns,
+    #         rows=df.rows()
+    #     )
     
 
-    @staticmethod
-    def _format_metadata(metadata: dict[str, str] | None) -> list[str]:
-        """
-        Generates a CSVReport object from a Polars DataFrame, with optional metadata.
+    # @staticmethod
+    # def _format_metadata(metadata: dict[str, str] | None) -> list[str]:
+    #     """
+    #     Generates a CSVReport object from a Polars DataFrame, with optional metadata.
 
-        Args:
-            df (pl.DataFrame): The Polars DataFrame to be exported.
-            metadata (dict[str, str] | None): Optional metadata to be included as comments at the top of the report.
+    #     Args:
+    #         df (pl.DataFrame): The Polars DataFrame to be exported.
+    #         metadata (dict[str, str] | None): Optional metadata to be included as comments at the top of the report.
 
-        Returns:
-            CSVReport: An object containing comment lines, headers, and rows for CSV export.
+    #     Returns:
+    #         CSVReport: An object containing comment lines, headers, and rows for CSV export.
 
-        Raises:
-            AssertionError: If the DataFrame does not have a flat (non-nested) structure.
-        """
-        if not metadata:
-            return []
-        return [f"# {key}: {value} \n" for key, value in metadata.items()]
+    #     Raises:
+    #         AssertionError: If the DataFrame does not have a flat (non-nested) structure.
+    #     """
+    #     if not metadata:
+    #         return []
+    #     return [f"# {key}: {value} \n" for key, value in metadata.items()]
     
 

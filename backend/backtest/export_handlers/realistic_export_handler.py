@@ -58,16 +58,16 @@ class RealisticResultExportHandler(BaseResultExportHandler):
         """
         super().export_reports()
 
-        dividend_summary_report = ReportGenerator.generate_csv(self.analyser.generate_dividend_summary(),self.flat_config_dict)
+        dividend_summary_report = ReportGenerator.generate_formatted_report(self.analyser.generate_dividend_summary(),self.flat_config_dict)
         self.exporter.save_report_to_csv(dividend_summary_report, 'dividends_summary')
 
-        dividend_yearly_report = ReportGenerator.generate_csv(self.analyser.generate_pivoted_yearly_dividend_summary(),self.flat_config_dict)
+        dividend_yearly_report = ReportGenerator.generate_formatted_report(self.analyser.generate_pivoted_yearly_dividend_summary(),self.flat_config_dict)
         self.exporter.save_report_to_csv(dividend_yearly_report, 'dividends_yearly')
         
-        order_summary_report = ReportGenerator.generate_csv(self.analyser.generate_order_summary(),self.flat_config_dict)
+        order_summary_report = ReportGenerator.generate_formatted_report(self.analyser.generate_order_summary(),self.flat_config_dict)
         self.exporter.save_report_to_csv(order_summary_report, 'orders_summary')
 
-        order_yearly_report = ReportGenerator.generate_csv(self.analyser.generate_pivoted_yearly_order_summary(),self.flat_config_dict)
+        order_yearly_report = ReportGenerator.generate_formatted_report(self.analyser.generate_pivoted_yearly_order_summary(),self.flat_config_dict)
         self.exporter.save_report_to_csv(order_yearly_report, 'orders_yearly')
     
 

@@ -68,9 +68,10 @@ class BacktestRunner:
         # Setup exporter for saving results
         exporter = Exporter(self.base_save_path, self.timestamp)
 
-        # # Get export handler and export all results/reports
+        # Get export handler and export all results/reports
         result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
-        result_export_handler.export_all()
+        # result_export_handler.export_all() #Exports raw results file as csv ie. master calender, holdings, cashbalance ....
+        result_export_handler.export_reports() 
         print("Export finished!")
 
         #Combine potfolio analysis with benchamark chart data
