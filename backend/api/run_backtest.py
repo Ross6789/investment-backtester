@@ -32,6 +32,7 @@ def run_backtest(input_data: dict) -> dict:
         recurring_investment = RecurringInvestment(recurring_investment_amount,recurring_investment_frequency)
     else:
         recurring_investment = None
+    export_excel = input_data["export_excel"]
         
     # Create config objects
     target_portfolio = TargetPortfolio(target_weights)
@@ -47,13 +48,13 @@ def run_backtest(input_data: dict) -> dict:
     benchmark_data = get_benchmark_data(base_currency,benchmark_tickers,start_date,end_date)
 
     # Create and run backtest
-    backtest = BacktestRunner(backtest_config, backtest_data, benchmark_data, benchmark_metadata_path, paths.get_backtest_run_base_path())
-    results = backtest.run()
+    backtest = BacktestRunner(backtest_config, backtest_data, benchmark_data, benchmark_metadata_path, export_excel, dev_run=True, base_save_path=paths.get_backtest_run_base_path())
+    results, temp_excel_path = backtest.run()
 
     return {
         "settings":input_data,
-        "results":results
-    }
+        "results":results,
+    }, temp_excel_path
 
 # Determine which benchmarks are active for the full backtest period
 def _get_valid_benchmark_tickers(start_date: date, end_date: date, benchmark_metadata_path: Path) -> list[str]:

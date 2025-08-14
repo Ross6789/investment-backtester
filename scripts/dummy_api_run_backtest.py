@@ -18,7 +18,8 @@ input_data = {
   "recurring_investment":{
     "amount":100,
     "frequency":"monthly"
-  }
+  },
+  "export_excel":True
 }
 
 result = run_backtest(input_data)

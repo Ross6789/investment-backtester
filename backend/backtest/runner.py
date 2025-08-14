@@ -5,6 +5,7 @@ from backend.utils.saving import generate_timestamp
 from backend.backtest.factory import BacktestFactory
 from backend.backtest.benchmark_simulator import BenchmarkSimulator
 from backend.backtest.exporter import Exporter
+from backend.utils.saving import save_report_temporarily
 
 class BacktestRunner:
     """
@@ -22,7 +23,7 @@ class BacktestRunner:
         timestamp (str): Timestamp used to create unique output folders per run.
     """
 
-    def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame, benchmark_data: pl.DataFrame, benchmark_metadata_path: Path, base_save_path: Path):
+    def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame, benchmark_data: pl.DataFrame, benchmark_metadata_path: Path, export_excel : bool, dev_run: bool = True,  base_save_path: Path | None = None):
             """
             Initializes the BacktestRunner with configuration, data, and save path.
 
@@ -37,6 +38,8 @@ class BacktestRunner:
             self.backtest_data = backtest_data
             self.benchmark_data = benchmark_data
             self.benchmark_metadata_path = benchmark_metadata_path
+            self.export_excel = export_excel
+            self.dev_run = dev_run
             self.base_save_path = base_save_path
             self.timestamp = generate_timestamp()
 
@@ -47,7 +50,7 @@ class BacktestRunner:
         - Executes the backtest engine.
         - Generates and exports all results and reports.
         """
-
+        temp_excel_path = None
         print("Running backtest...")
         mode = self.config.mode
         
@@ -65,19 +68,26 @@ class BacktestRunner:
         # Perform skeleton benchmark simulations
         benchmark_chart_data = BenchmarkSimulator.run(self.config, self.benchmark_data, self.benchmark_metadata_path)
 
-        # Setup exporter for saving results
-        exporter = Exporter(self.base_save_path, self.timestamp)
+        if self.export_excel or self.dev_run:
+            # Setup exporter and result handler
+            exporter = Exporter(self.base_save_path, self.timestamp)   
+            result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
 
-        # Get export handler and export all results/reports
-        result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
-        # result_export_handler.export_all() #Exports raw results file as csv ie. master calender, holdings, cashbalance ....
-        result_export_handler.export_reports() 
-        print("Export finished!")
+            # If development run : Export ALL run data to specified local path.
+            if self.dev_run:
+                result_export_handler.export_all() #Exports raw results file as csv ie. master calender, holdings, cashbalance, aswell as combined excel report
+                # result_export_handler.export_reports() # Only excel report export
+
+            # If exporting excel : Save the excel file temporarily on server
+            if self.export_excel:
+                report_sheets = result_export_handler._prepare_report_sheets_for_export()
+                temp_excel_path = save_report_temporarily(report_sheets)
+
 
         #Combine potfolio analysis with benchamark chart data
         combined_results = analysis_results.copy()
         combined_results["charts"]["benchmark"] = benchmark_chart_data
-        return combined_results
+        return combined_results, temp_excel_path
         
 
 
