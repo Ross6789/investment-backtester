@@ -3,6 +3,9 @@ from backend.backtest.export_handlers import BaseResultExportHandler
 from backend.backtest.exporter import Exporter
 from backend.backtest.analysers import RealisticAnalyser
 from backend.backtest.report_generator import ReportGenerator
+from backend.core.models import RoundingConfig
+
+import polars as pl
 
 class RealisticResultExportHandler(BaseResultExportHandler):
     """
@@ -46,28 +49,68 @@ class RealisticResultExportHandler(BaseResultExportHandler):
         self.exporter.save_dataframe_to_csv(self.result.orders,'orders')
 
     
-    def export_reports(self) -> None:
-        """
-        Export analytical reports to CSV files.
+    # def export_reports(self) -> None:
+    #     """
+    #     Export analytical reports to CSV files.
 
-        Calls the base report export method to save common summary reports, then
-        generates and saves additional detailed reports including dividend summaries,
-        yearly pivoted dividend summaries, order summaries, and yearly pivoted order summaries.
+    #     Calls the base report export method to save common summary reports, then
+    #     generates and saves additional detailed reports including dividend summaries,
+    #     yearly pivoted dividend summaries, order summaries, and yearly pivoted order summaries.
 
-        Each report includes configuration metadata formatted as CSV comments.
-        """
-        super().export_reports()
+    #     Each report includes configuration metadata formatted as CSV comments.
+    #     """
+    #     super().export_reports()
 
-        dividend_summary_report = ReportGenerator.generate_formatted_report(self.analyser.generate_dividend_summary(),self.flat_config_dict)
-        self.exporter.save_report_to_csv(dividend_summary_report, 'dividends_summary')
+    #     dividend_summary_report = ReportGenerator.generate_formatted_report(self.analyser.generate_dividend_summary(),self.flat_config_dict)
+    #     self.exporter.save_report_to_csv(dividend_summary_report, 'dividends_summary')
 
-        dividend_yearly_report = ReportGenerator.generate_formatted_report(self.analyser.generate_pivoted_yearly_dividend_summary(),self.flat_config_dict)
-        self.exporter.save_report_to_csv(dividend_yearly_report, 'dividends_yearly')
+    #     dividend_yearly_report = ReportGenerator.generate_formatted_report(self.analyser.generate_pivoted_yearly_dividend_summary(),self.flat_config_dict)
+    #     self.exporter.save_report_to_csv(dividend_yearly_report, 'dividends_yearly')
         
-        order_summary_report = ReportGenerator.generate_formatted_report(self.analyser.generate_order_summary(),self.flat_config_dict)
-        self.exporter.save_report_to_csv(order_summary_report, 'orders_summary')
+    #     order_summary_report = ReportGenerator.generate_formatted_report(self.analyser.generate_order_summary(),self.flat_config_dict)
+    #     self.exporter.save_report_to_csv(order_summary_report, 'orders_summary')
 
-        order_yearly_report = ReportGenerator.generate_formatted_report(self.analyser.generate_pivoted_yearly_order_summary(),self.flat_config_dict)
-        self.exporter.save_report_to_csv(order_yearly_report, 'orders_yearly')
+    #     order_yearly_report = ReportGenerator.generate_formatted_report(self.analyser.generate_pivoted_yearly_order_summary(),self.flat_config_dict)
+    #     self.exporter.save_report_to_csv(order_yearly_report, 'orders_yearly')
     
 
+    def _prepare_report_sheets_for_export(self) -> dict[str, pl.DataFrame]:
+        """Prepare extended backtest reports for export, including realistic-mode reports.
+
+        This method extends the base report preparation from the superclass by adding:
+        - Dividend summaries (both regular and yearly pivoted)
+        - Order summaries (both regular and yearly pivoted)
+
+        Rounding configuration will use defaults from the constants file if not specified.
+
+        Returns:
+            dict[str, pl.DataFrame]: Mapping of Excel sheet names to Polars DataFrames.
+        """
+        # Prepare base reports
+        report_sheets = super()._prepare_report_sheets_for_export() 
+
+        # ---- Rounding configuration (will use defaults declared in constant file if no rounding config passed in) ----
+        rounding = RoundingConfig(price_precision=2,currency_precision=2,percentage_precision=1,general_precision=1)
+
+        # ---- Realistic mode reports ----
+        # Dividend summary
+        dividend_summary_pl = self.analyser.generate_dividend_summary()
+        dividend_report= ReportGenerator.generate_formatted_report(df=dividend_summary_pl,rounding_config=rounding)
+        report_sheets["Dividends"] = dividend_report
+
+        # Dividend yearly summary
+        dividend_yearly_summary_pl = self.analyser.generate_pivoted_yearly_dividend_summary()
+        dividend_yearly_report= ReportGenerator.generate_formatted_report(df=dividend_yearly_summary_pl,rounding_config=rounding)
+        report_sheets["Dividends (Yearly)"] = dividend_yearly_report
+
+        # Order summary
+        order_summary_pl = self.analyser.generate_order_summary()
+        order_report= ReportGenerator.generate_formatted_report(df=order_summary_pl,rounding_config=rounding)
+        report_sheets["Orders"] = order_report
+
+        # Order yearly summary
+        order_yearly_summary_pl = self.analyser.generate_pivoted_yearly_order_summary()
+        order_yearly_report= ReportGenerator.generate_formatted_report(df=order_yearly_summary_pl,rounding_config=rounding)
+        report_sheets["Orders (Yearly)"] = order_yearly_report
+
+        return report_sheets

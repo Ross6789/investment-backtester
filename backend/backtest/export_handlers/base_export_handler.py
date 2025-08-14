@@ -73,43 +73,48 @@ class BaseResultExportHandler(ABC):
     #     self.exporter.save_report_to_csv(daily_holdings_report, 'holdings_summary')
     
 
-
-
-
-
     def export_reports(self) -> None:
-        """
-        Export analytical reports to a single multi-sheet Excel workbook.
-        Each report is written to its own sheet. Configuration metadata is
-        included in the first row of each sheet as a comment row.
-        """
-        # Decide the filename adn intialise name : dataframe dict
-        # file_name = f"backtest_report_{self.analyser.run_id}.xlsx"
-        file_name = "backtest_report"
-        name_df_dict = {}
+        """Export all backtest reports to a single multi-sheet Excel workbook.
 
-        # ---- Configure rounding settings (with use defaults declared in constant file if no rounding specifiec) ----
+        Each report is written to its own sheet. The configuration metadata is
+        included in the 'Configuration' sheet.
+        """
+        
+        file_name = "backtest_report"
+        report_sheets = self._prepare_report_sheets_for_export()
+        self.exporter.save_dataframes_to_excel_workbook(report_sheets,file_name)
+
+
+    def _prepare_report_sheets_for_export(self) -> dict[str, pl.DataFrame]:
+        """Prepare all backtest reports as a dictionary of sheet name → DataFrame.
+
+        Returns:
+            dict[str, pl.DataFrame]: Mapping of Excel sheet names to Polars DataFrames.
+        """
+        report_sheets = {}
+
+        # ---- Rounding configuration (will use defaults declared in constant file if no rounding config passed in) ----
         rounding = RoundingConfig(price_precision=2,currency_precision=2,percentage_precision=1,general_precision=1)
 
-        # ---- Backtest configuration settings ----
+        # ---- Configuration settings ----
         # Turn settings dict into vertical dataframe
-        settings_df = pl.DataFrame({
+        config_df = pl.DataFrame({
             "Setting":list(self.flat_config_dict.keys()),
             "Value":list(self.flat_config_dict.values())
         })
-        name_df_dict["Configuration"] = settings_df
+        report_sheets["Configuration"] = config_df
 
         # ---- Base reports ----
         # Daily summary
         daily_summary_pl = self.analyser.generate_daily_summary()
         daily_report= ReportGenerator.generate_formatted_report(df=daily_summary_pl,percentify_cols=['net_daily_return'],rounding_config=rounding)
-        name_df_dict["Daily Summary"] = daily_report
+        report_sheets["Daily Summary"] = daily_report
 
         # Holdings summary
         pivoted_percentage_cols = generate_suffixed_col_names(['portfolio_weighting'], self.analyser.tickers)
         holdings_summary_pl = self.analyser.generate_holdings_summary()
         holding_report= ReportGenerator.generate_formatted_report(df=holdings_summary_pl,percentify_cols=pivoted_percentage_cols,rounding_config=rounding)
-        name_df_dict["Holding Summary"] = holding_report
+        report_sheets["Holdings"] = holding_report
 
-        # Export combined excel file
-        self.exporter.save_dataframes_to_excel_workbook(name_df_dict,file_name)
+        return report_sheets
+
