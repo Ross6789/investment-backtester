@@ -54,6 +54,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LoadingScreen } from "@/components/loading_screen";
 
 const assetClassLabels: Record<string, string> = {
   "us stock": "US Stock",
@@ -185,6 +186,9 @@ type Asset = {
 export function SettingsPage() {
   const navigate = useNavigate();
 
+  // Create state control for monitoring loading
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [allAssets, setAllAssets] = useState<Asset[]>([]);
 
   // Fetch asset data once when page loads
@@ -260,9 +264,80 @@ export function SettingsPage() {
       return sum + (isNaN(value) ? 0 : value);
     }, 0) ?? 0;
 
-  // 2. Define a submit handler.
+  // *--- Original submit button handler - before concurrent jobs
+  // // 2. Define a submit handler.
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   // Clean recurring investment
+  //   const recurringInvestment =
+  //     !values.recurring_investment ||
+  //     values.recurring_investment.frequency === "never" ||
+  //     !values.recurring_investment.amount
+  //       ? null
+  //       : {
+  //           amount: Number(values.recurring_investment.amount),
+  //           frequency: values.recurring_investment.frequency,
+  //         };
+
+  //   // Convert target weights array to object
+  //   const weightsObject = Object.fromEntries(
+  //     values.target_weights
+  //       .filter(
+  //         (item): item is { ticker: string; percentage: number } =>
+  //           item.percentage !== undefined && item.percentage !== 0
+  //       )
+  //       .map(({ ticker, percentage }) => [ticker, percentage / 100])
+  //   );
+
+  //   // Format dates
+  //   const formatDate = (d: Date) =>
+  //     d instanceof Date && !isNaN(d.getTime())
+  //       ? d.toISOString().split("T")[0]
+  //       : null;
+
+  //   // Final cleaned payload
+  //   const payload = {
+  //     mode: values.mode,
+  //     base_currency: values.base_currency,
+  //     start_date: formatDate(values.start_date),
+  //     end_date: formatDate(values.end_date),
+  //     initial_investment: Number(values.initial_investment),
+  //     strategy: {
+  //       fractional_shares: values.strategy.fractional_shares,
+  //       reinvest_dividends: values.strategy.reinvest_dividends,
+  //       rebalance_frequency: values.strategy.rebalance_frequency,
+  //     },
+  //     recurring_investment: recurringInvestment,
+  //     target_weights: weightsObject,
+  //     export_excel: values.export_excel,
+  //   };
+
+  //   console.log("Input settings:", payload);
+
+  //   try {
+  //     const response = await fetch("http://localhost:5002/api/run-backtest", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(payload),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Backtest failed");
+  //     }
+
+  //     const result = await response.json();
+
+  //     // Navigate to results page and pass result data
+  //     navigate("/results", { state: { backtestResult: result } });
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("Failed to run backtest");
+  //   }
+  // }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Clean recurring investment
+    setLoading(true); // Show loading screen
+
+    // 1. Clean recurring investment
     const recurringInvestment =
       !values.recurring_investment ||
       values.recurring_investment.frequency === "never" ||
@@ -273,7 +348,7 @@ export function SettingsPage() {
             frequency: values.recurring_investment.frequency,
           };
 
-    // Convert target weights array to object
+    // 2. Convert target weights array to object
     const weightsObject = Object.fromEntries(
       values.target_weights
         .filter(
@@ -283,13 +358,13 @@ export function SettingsPage() {
         .map(({ ticker, percentage }) => [ticker, percentage / 100])
     );
 
-    // Format dates
+    // 3. Format dates
     const formatDate = (d: Date) =>
       d instanceof Date && !isNaN(d.getTime())
         ? d.toISOString().split("T")[0]
         : null;
 
-    // Final cleaned payload
+    // 4. Final cleaned payload
     const payload = {
       mode: values.mode,
       base_currency: values.base_currency,
@@ -309,23 +384,45 @@ export function SettingsPage() {
     console.log("Input settings:", payload);
 
     try {
+      // 5. Start backtest, get job_id
       const response = await fetch("http://localhost:5002/api/run-backtest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error("Backtest failed");
+      if (!response.ok) throw new Error("Failed to start backtest");
+
+      const data = await response.json();
+      const jobId = data.job_id;
+      if (!jobId) throw new Error("No job ID returned");
+
+      // 6. Poll for status
+      let backtestResult: any = null;
+      while (true) {
+        await new Promise((r) => setTimeout(r, 2000)); // 2 sec delay
+        const statusResp = await fetch(
+          `http://localhost:5002/api/backtest-status/${jobId}`
+        );
+        if (!statusResp.ok) throw new Error("Failed to get job status");
+        const statusData = await statusResp.json();
+
+        if (statusData.status === "done") {
+          backtestResult = statusData.result;
+          break;
+        } else if (statusData.status === "error") {
+          throw new Error(statusData.result?.error || "Backtest error");
+        }
+        // else continue polling
       }
 
-      const result = await response.json();
-
-      // Navigate to results page and pass result data
-      navigate("/results", { state: { backtestResult: result } });
+      // 7. Navigate to results page with result
+      navigate("/results", { state: { backtestResult } });
     } catch (error) {
       console.error(error);
-      alert("Failed to run backtest");
+      alert((error as Error).message || "Failed to run backtest");
+    } finally {
+      setLoading(false); // Hide loading screen
     }
   }
 
@@ -336,7 +433,8 @@ export function SettingsPage() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <LoadingScreen visible={loading} />
         <div className="m-4 p-4 flex lg:flex-row flex-col gap-4">
           {/* LEFT SIDE - add items-star to make box shrink */}
           <div className="flex-1">
