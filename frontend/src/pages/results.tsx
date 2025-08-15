@@ -5,11 +5,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MetricHoverCard } from "@/components/metric_hovercard";
-import { Calendar, Activity, TrendingDown, Shield } from "lucide-react";
+import {
+  MoveLeft,
+  Calendar,
+  Activity,
+  TrendingDown,
+  Shield,
+} from "lucide-react";
 import { metricHoverTexts } from "@/constants/ui_text";
 import { ExcelDownloadButton } from "@/components/export_excel_button";
 import {
@@ -102,28 +108,71 @@ export function ResultsPage() {
   useEffect(() => {
     // If no result data (e.g. direct access to /results), redirect to settings
     if (!backtestResult) {
-      navigate("/settings");
+      navigate("/");
     }
   }, [backtestResult, navigate]);
-
-  if (!backtestResult) return null;
 
   return (
     <div className="grid grid-cols-12 gap-8 p-8">
       <div className="col-span-12">
-        <div className="flex flex-row justify-between items-center">
-          <div className="flex flex-col gap-2">
+        {/* <div className="flex flex-row gap-3 items-center">
+          <Button
+            variant="ghost"
+            onClick={() =>
+              navigate("/settings", {
+                // state: { backtestResult: lastBacktestResult },
+              })
+            }
+          >
+            <MoveLeft></MoveLeft>
+            Back
+          </Button>
+          <div className="flex flex-row justify-between items-center">
+            <div className="flex flex-col gap-2">
+              <StrongText className="text-4xl">
+                Your Investment Results
+              </StrongText>
+              <MutedText className="text-md">
+                {backtestResult.settings.start_date} to{" "}
+                {backtestResult.settings.end_date} •{"  "}
+                {
+                  Object.keys(backtestResult.settings.target_weights).length
+                }{" "}
+                investments{" "}
+              </MutedText>
+            </div>
+            <ExcelDownloadButton
+              excel_download={backtestResult.excel_download}
+            />
+          </div>
+        </div> */}
+
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          {/* Back button - fixed width */}
+          <Button variant="ghost" onClick={() => navigate("/settings")}>
+            <MoveLeft />
+            Back
+          </Button>
+
+          {/* Investment results - grows to fill remaining space */}
+          <div className="flex flex-col gap-1 flex-grow">
             <StrongText className="text-4xl">
               Your Investment Results
             </StrongText>
             <MutedText className="text-md">
               {backtestResult.settings.start_date} to{" "}
-              {backtestResult.settings.end_date} •{"  "}
+              {backtestResult.settings.end_date} •{" "}
               {Object.keys(backtestResult.settings.target_weights).length}{" "}
-              investments{" "}
+              investments
             </MutedText>
           </div>
-          <ExcelDownloadButton excel_download={backtestResult.excel_download} />
+
+          {/* Export button - fixed width, aligned right */}
+          <div>
+            <ExcelDownloadButton
+              excel_download={backtestResult.excel_download}
+            />
+          </div>
         </div>
       </div>
       <div className="col-span-12">

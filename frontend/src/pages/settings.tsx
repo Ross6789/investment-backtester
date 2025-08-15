@@ -187,7 +187,11 @@ type Asset = {
 export function SettingsPage() {
   const navigate = useNavigate();
 
-  // Create state control for monitoring loading state and assets
+  // Set state variables
+  const [lastBacktestResult, setLastBacktestResult] = useState(() => {
+    const stored = sessionStorage.getItem("lastBacktestResult");
+    return stored ? JSON.parse(stored) : null;
+  });
   const [loading, setLoading] = useState<boolean>(false);
   const [allAssets, setAllAssets] = useState<Asset[]>([]);
   const [enabledAssetClasses, setEnabledAssetClasses] = useState<string[]>([
@@ -420,6 +424,12 @@ export function SettingsPage() {
         }
         // else continue polling
       }
+
+      // Update session variable to hold last backtest result
+      sessionStorage.setItem(
+        "lastBacktestResult",
+        JSON.stringify(backtestResult)
+      );
 
       // 7. Navigate to results page with result
       navigate("/results", { state: { backtestResult } });
@@ -1055,11 +1065,25 @@ export function SettingsPage() {
             </Card>
           </div>
         </div>
-        {/* Full-width row for submit button */}
-        <div className="flex justify-center mb-4">
+        {/* Full-width column for buttons */}
+        <div className="flex flex-col items-center mb-4">
           <Button type="submit" disabled={totalPercentage !== 100}>
-            Run Backtest
+            Run New Backtest
           </Button>
+
+          {lastBacktestResult && (
+            <Button
+              className="text-xs text-muted-foreground"
+              variant="link"
+              onClick={() =>
+                navigate("/results", {
+                  state: { backtestResult: lastBacktestResult },
+                })
+              }
+            >
+              Previous results
+            </Button>
+          )}
         </div>
       </form>
     </Form>
