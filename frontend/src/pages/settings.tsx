@@ -249,9 +249,16 @@ export function SettingsPage() {
     name: "target_weights",
   });
 
+  const CURRENCY_START_DATES: Record<string, Date> = {
+    EUR: new Date("1999-01-03"),
+    GBP: new Date("1970-01-01"),
+    USD: new Date("1970-01-01"),
+  };
+
   // Determine which currency symbol matches the selected dropdown
   const selectedCurrency = form.watch("base_currency");
   const symbol = getCurrencySymbol(selectedCurrency) || "";
+  const currencyStart = CURRENCY_START_DATES[selectedCurrency];
 
   // Watch mode to determine state of dividend/fractional share toggles
   const selectedMode = form.watch("mode");
@@ -762,11 +769,11 @@ export function SettingsPage() {
                               onSelect={field.onChange}
                               disabled={(date) =>
                                 date >= new Date("2025-06-01") ||
-                                date <= new Date("1969-12-31")
+                                date <= currencyStart
                               }
                               captionLayout="dropdown"
                               defaultMonth={field.value}
-                              startMonth={new Date("1970-01-01")}
+                              startMonth={currencyStart}
                               endMonth={new Date("2025-05-31")}
                             />
                           </PopoverContent>
@@ -807,11 +814,11 @@ export function SettingsPage() {
                               onSelect={field.onChange}
                               disabled={(date) =>
                                 date >= new Date("2025-06-01") ||
-                                date <= new Date("1969-12-31")
+                                date <= currencyStart
                               }
                               captionLayout="dropdown"
                               defaultMonth={field.value}
-                              startMonth={new Date("1970-01-01")}
+                              startMonth={currencyStart}
                               endMonth={new Date("2025-05-31")}
                             />
                           </PopoverContent>
