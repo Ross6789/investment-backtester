@@ -3,7 +3,7 @@ from datetime import date
 import polars as pl
 
 from .enums import RebalanceFrequency, ReinvestmentFrequency, BacktestMode, BaseCurrency
-from .validators import validate_positive_amount, validate_date_order
+from .validators import validate_positive_amount, validate_date_order, validate_currency_active
 from .parsers import parse_enum
 from . import constants
 
@@ -109,6 +109,7 @@ class BacktestConfig:
         ValueError: If `mode` or `base_currency` values are invalid.
         ValueError: If `start_date` is after `end_date`.
         ValueError: If `initial_investment` is not a positive value.
+        ValueError: If `start_date` is before the currency is active. E.G. EUR chosen before 1999 inception
     """
     start_date : date
     end_date : date
@@ -126,6 +127,7 @@ class BacktestConfig:
             self.base_currency = parse_enum(BaseCurrency,self.base_currency)
         validate_date_order(self.start_date,self.end_date)
         validate_positive_amount(self.initial_investment, 'initial investment')
+        validate_currency_active(self.base_currency,self.start_date)
 
     def to_flat_dict(self) -> dict[str, str]:
         """
