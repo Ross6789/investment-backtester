@@ -187,10 +187,12 @@ type Asset = {
 export function SettingsPage() {
   const navigate = useNavigate();
 
-  // Create state control for monitoring loading
+  // Create state control for monitoring loading state and assets
   const [loading, setLoading] = useState<boolean>(false);
-
   const [allAssets, setAllAssets] = useState<Asset[]>([]);
+  const [enabledAssetClasses, setEnabledAssetClasses] = useState<string[]>([
+    "us stock",
+  ]);
 
   // Fetch asset data once when page loads
   useEffect(() => {
@@ -202,27 +204,16 @@ export function SettingsPage() {
       .catch(console.error);
   }, []);
 
-  // Allow filtering of the assets in combo box - set default to us stock
-  const [enabledAssetClasses, setEnabledAssetClasses] = useState<string[]>([
-    "us stock",
-  ]);
-
-  // Filter assets based on selected asset classes:
-  const filteredAssets = allAssets.filter((a) =>
-    enabledAssetClasses.includes(a.asset_type)
-  );
-
-  // Configure combo box options from filtered asset list
-  const assetOptions = filteredAssets.map((a) => ({
-    label: `${a.ticker} - ${a.name}`,
-    ticker: a.ticker,
-    name: a.name,
-    asset_type: a.asset_type,
-    start_date: a.start_date,
-    end_date: a.end_date,
-    currency: a.currency,
-    dividends: a.dividends,
+  // 1️⃣ Full data set (only need to do this once)
+  const allAssetsData = allAssets.map((a) => ({
+    ...a,
+    label: `${a.ticker} - ${a.name}`, // only used for display
   }));
+
+  // 2️⃣ Filtered options for dropdown
+  const filteredAssetOptions = allAssetsData
+    .filter((a) => enabledAssetClasses.includes(a.asset_type))
+    .map((a) => ({ label: a.label, ticker: a.ticker }));
 
   // 1. Define your form.
   const form = useForm({
@@ -485,7 +476,7 @@ export function SettingsPage() {
                           ?.map((item) => item.ticker);
 
                         // Find the asset info for this specific combobox
-                        const selectedAsset = assetOptions.find(
+                        const selectedAsset = allAssetsData.find(
                           (asset) => asset.ticker === field.value
                         );
 
@@ -515,7 +506,7 @@ export function SettingsPage() {
                                     )}
                                     <span className="flex-1 truncate text-left">
                                       {field.value
-                                        ? assetOptions.find(
+                                        ? filteredAssetOptions.find(
                                             (asset) =>
                                               asset.ticker === field.value
                                           )?.label
@@ -537,28 +528,27 @@ export function SettingsPage() {
                                   <CommandList>
                                     <CommandEmpty>No asset found.</CommandEmpty>
                                     <CommandGroup>
-                                      {assetOptions.map((asset) => {
+                                      {filteredAssetOptions.map((a) => {
                                         const isSelectedInOtherField =
-                                          selectedTickers?.includes(
-                                            asset.ticker
-                                          ) && asset.ticker !== field.value;
+                                          selectedTickers?.includes(a.ticker) &&
+                                          a.ticker !== field.value;
 
                                         return (
                                           <CommandItem
-                                            key={asset.ticker}
-                                            value={asset.ticker}
+                                            key={a.ticker}
+                                            value={a.ticker}
                                             disabled={isSelectedInOtherField}
                                             onSelect={() => {
                                               if (!isSelectedInOtherField) {
-                                                field.onChange(asset.ticker);
+                                                field.onChange(a.ticker);
                                               }
                                             }}
                                           >
-                                            {asset.label}
+                                            {a.label}
                                             <Check
                                               className={cn(
                                                 "ml-auto",
-                                                asset.ticker === field.value
+                                                a.ticker === field.value
                                                   ? "opacity-100"
                                                   : "opacity-0"
                                               )}
