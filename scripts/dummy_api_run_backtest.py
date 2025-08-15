@@ -1,7 +1,7 @@
 from backend.api.run_backtest import run_backtest
 
 input_data = {
-  "mode": "realistic",
+  "mode": "basic",
   "base_currency": "GBP",
   "start_date": "2020-01-01",
   "end_date": "2025-01-01",
@@ -18,7 +18,8 @@ input_data = {
   "recurring_investment":{
     "amount":100,
     "frequency":"monthly"
-  }
+  },
+  "export_excel":True
 }
 
 result = run_backtest(input_data)

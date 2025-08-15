@@ -71,3 +71,39 @@ def save_csv(data : pl.DataFrame, save_path: Path) -> None:
     except Exception as e:
         raise RuntimeError(f"Failed to save CSV to {save_path}: {e}") from e
   
+
+import tempfile
+import threading
+import os
+import pandas as pd
+
+def save_report_temporarily(report_sheets : dict[str, pl.DataFrame], prefix="backtest_report_"):
+    print("running temp export code")
+    # Create a temporary file
+    temp_file = tempfile.NamedTemporaryFile(prefix=prefix, suffix=".xlsx", delete=False)
+    temp_file_path = temp_file.name
+    temp_file.close()  # close so pandas can write
+
+    # Open an Excel writer context - needed to write multi page workbook (to_csv will write all on one page)
+    with pd.ExcelWriter(temp_file_path, engine='xlsxwriter', datetime_format="dd/mm/yyyy") as writer:
+
+        for name, report in report_sheets.items():
+            report.to_pandas().to_excel(writer,sheet_name=name, index=False)
+
+    print(f"saving temp_report a : {temp_file_path}")
+
+    # Schedule deletion in 10 minutes
+    def delete_temp_file(path):
+        try:
+            os.remove(path)
+            print(f"Deleted temporary file: {path}")
+        except FileNotFoundError:
+            pass
+
+    timer = threading.Timer(interval=600, function=delete_temp_file, args=[temp_file_path])
+    timer.start()
+
+    return temp_file_path
+
+
+

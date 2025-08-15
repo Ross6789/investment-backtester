@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { MetricHoverCard } from "@/components/metric_hovercard";
 import { Calendar, Activity, TrendingDown, Shield } from "lucide-react";
 import { metricHoverTexts } from "@/constants/ui_text";
-
+import { ExcelDownloadButton } from "@/components/export_excel_button";
 import {
   StrongText,
   SecondaryText,
@@ -110,6 +110,22 @@ export function ResultsPage() {
 
   return (
     <div className="grid grid-cols-12 gap-8 p-8">
+      <div className="col-span-12">
+        <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-col gap-2">
+            <StrongText className="text-4xl">
+              Your Investment Results
+            </StrongText>
+            <MutedText className="text-md">
+              {backtestResult.settings.start_date} to{" "}
+              {backtestResult.settings.end_date} •{"  "}
+              {Object.keys(backtestResult.settings.target_weights).length}{" "}
+              investments{" "}
+            </MutedText>
+          </div>
+          <ExcelDownloadButton excel_download={backtestResult.excel_download} />
+        </div>
+      </div>
       <div className="col-span-12">
         <Card>
           <CardContent>
