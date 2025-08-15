@@ -9,6 +9,21 @@ from backend.core.parsers import parse_enum, parse_date
 from backend.backtest.runner import BacktestRunner
 from backend.core.paths import get_benchmark_metadata_csv_path
 
+def async_run_backtest (jobs, job_id, input_data):
+    try:
+        # Run your current backtest function
+        backtest_result, temp_excel_path = run_backtest(input_data)
+
+        # Store results in job
+        download_link = f"/api/download-report?file={temp_excel_path}" if temp_excel_path else None
+        jobs[job_id]["status"] = "done"
+        jobs[job_id]["result"] = {"success": True, "excel_download": download_link, **backtest_result}
+
+    except Exception as e:
+        jobs[job_id]["status"] = "error"
+        jobs[job_id]["result"] = {"success": False, "error": str(e)}
+        raise Exception(e)
+    
 
 def run_backtest(input_data: dict) -> dict:
    
@@ -48,7 +63,7 @@ def run_backtest(input_data: dict) -> dict:
     benchmark_data = get_benchmark_data(base_currency,benchmark_tickers,start_date,end_date)
 
     # Create and run backtest
-    backtest = BacktestRunner(backtest_config, backtest_data, benchmark_data, benchmark_metadata_path, export_excel, dev_run=True, base_save_path=paths.get_backtest_run_base_path())
+    backtest = BacktestRunner(backtest_config, backtest_data, benchmark_data, benchmark_metadata_path, export_excel, dev_run=False, base_save_path=paths.get_backtest_run_base_path())
     results, temp_excel_path = backtest.run()
 
     return {
@@ -81,3 +96,4 @@ def _get_valid_benchmark_tickers(start_date: date, end_date: date, benchmark_met
     )
     
     return valid_tickers
+
