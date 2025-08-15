@@ -21,7 +21,8 @@ with open(asset_csv_path, newline="", encoding="utf-8-sig") as csvfile:
             # "source": row["source"],
             # "source_file_path": row["source_file_path"],
             "start_date": row["start_date"],
-            "end_date": row["end_date"]
+            "end_date": row["end_date"],
+            "dividends": row["has_dividends"]
         })
 
 # Create / overwrite JSON file

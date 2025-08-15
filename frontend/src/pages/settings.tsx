@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { AssetClassFilterDropdown } from "@/components/asset_filter_dropdown";
 import { tooltipTexts } from "@/constants/ui_text";
-
+import { AssetHoverCard } from "@/components/asset_hovercard";
 import {
   Popover,
   PopoverContent,
@@ -181,6 +181,7 @@ type Asset = {
   start_date: string;
   end_date: string;
   currency: string;
+  dividends: string;
 };
 
 export function SettingsPage() {
@@ -212,9 +213,15 @@ export function SettingsPage() {
   );
 
   // Configure combo box options from filtered asset list
-  const assetOptions = filteredAssets.map(({ ticker, name }) => ({
-    label: `${ticker} - ${name}`,
-    value: ticker,
+  const assetOptions = filteredAssets.map((a) => ({
+    label: `${a.ticker} - ${a.name}`,
+    ticker: a.ticker,
+    name: a.name,
+    asset_type: a.asset_type,
+    start_date: a.start_date,
+    end_date: a.end_date,
+    currency: a.currency,
+    dividends: a.dividends,
   }));
 
   // 1. Define your form.
@@ -477,6 +484,11 @@ export function SettingsPage() {
                           .watch("target_weights")
                           ?.map((item) => item.ticker);
 
+                        // Find the asset info for this specific combobox
+                        const selectedAsset = assetOptions.find(
+                          (asset) => asset.ticker === field.value
+                        );
+
                         return (
                           <FormItem className="flex-1">
                             <Popover>
@@ -486,19 +498,30 @@ export function SettingsPage() {
                                     variant="outline"
                                     role="combobox"
                                     className={cn(
-                                      "w-full justify-between truncate",
+                                      "flex items-center truncate gap-3",
                                       !field.value && "text-muted-foreground"
                                     )}
                                   >
-                                    <span className="truncate">
+                                    {selectedAsset && (
+                                      <AssetHoverCard
+                                        ticker={selectedAsset.ticker}
+                                        name={selectedAsset.name}
+                                        asset_type={selectedAsset.asset_type}
+                                        currency={selectedAsset.currency}
+                                        start_date={selectedAsset.start_date}
+                                        end_date={selectedAsset.end_date}
+                                        dividends={selectedAsset.dividends}
+                                      />
+                                    )}
+                                    <span className="flex-1 truncate text-left">
                                       {field.value
                                         ? assetOptions.find(
                                             (asset) =>
-                                              asset.value === field.value
+                                              asset.ticker === field.value
                                           )?.label
                                         : "Select asset"}
                                     </span>
-                                    <ChevronDown className="opacity-50 ml-2 flex-shrink-0" />
+                                    <ChevronDown className="opacity-50 flex-shrink-0" />
                                   </Button>
                                 </FormControl>
                               </PopoverTrigger>
@@ -517,17 +540,17 @@ export function SettingsPage() {
                                       {assetOptions.map((asset) => {
                                         const isSelectedInOtherField =
                                           selectedTickers?.includes(
-                                            asset.value
-                                          ) && asset.value !== field.value;
+                                            asset.ticker
+                                          ) && asset.ticker !== field.value;
 
                                         return (
                                           <CommandItem
-                                            key={asset.value}
-                                            value={asset.value}
+                                            key={asset.ticker}
+                                            value={asset.ticker}
                                             disabled={isSelectedInOtherField}
                                             onSelect={() => {
                                               if (!isSelectedInOtherField) {
-                                                field.onChange(asset.value);
+                                                field.onChange(asset.ticker);
                                               }
                                             }}
                                           >
@@ -535,7 +558,7 @@ export function SettingsPage() {
                                             <Check
                                               className={cn(
                                                 "ml-auto",
-                                                asset.value === field.value
+                                                asset.ticker === field.value
                                                   ? "opacity-100"
                                                   : "opacity-0"
                                               )}
