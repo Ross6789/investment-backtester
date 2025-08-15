@@ -8,6 +8,7 @@ quantstats
 ipython
 flask
 flask-cors
+xlsxwriter
 
 #  activating virtual environment => source venv/bin/activate
 

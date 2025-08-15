@@ -148,8 +148,8 @@ const formSchema = z
       .optional()
       .nullable(),
     strategy: z.object({
-      fractional_shares: z.boolean().default(true).optional(),
-      reinvest_dividends: z.boolean().default(true).optional(),
+      fractional_shares: z.boolean().default(true),
+      reinvest_dividends: z.boolean().default(true),
       rebalance_frequency: z.enum([
         "never",
         "daily",
@@ -159,6 +159,7 @@ const formSchema = z
         "yearly",
       ]),
     }),
+    export_excel: z.boolean().default(false),
   })
   .refine((data) => data.start_date < data.end_date, {
     message: "Start date must be before end date",
@@ -235,6 +236,7 @@ export function SettingsPage() {
         reinvest_dividends: true,
         rebalance_frequency: "never",
       },
+      export_excel: false,
     },
   });
 
@@ -301,6 +303,7 @@ export function SettingsPage() {
       },
       recurring_investment: recurringInvestment,
       target_weights: weightsObject,
+      export_excel: values.export_excel,
     };
 
     console.log("Input settings:", payload);
@@ -536,31 +539,57 @@ export function SettingsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <FormField
-                  control={form.control}
-                  name="mode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                <div className="grid grid-cols-1 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="mode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a backtest mode" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="basic">Basic Mode</SelectItem>
+                            <SelectItem value="realistic">
+                              Realistic Mode
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="export_excel"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg shadow-s">
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-2">
+                            <FormLabel>Export to Excel</FormLabel>
+                            <InfoTooltip content={tooltipTexts.exportExcel} />
+                          </div>
+                          <FormDescription>
+                            Must be manually downloaded in results page.
+                          </FormDescription>
+                        </div>
                         <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a backtest mode" />
-                          </SelectTrigger>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="basic">Basic Mode</SelectItem>
-                          <SelectItem value="realistic">
-                            Realistic Mode
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </CardContent>
             </Card>
             <Card>
