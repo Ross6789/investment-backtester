@@ -54,6 +54,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LoadingScreen } from "@/components/loading_screen";
 
 const assetClassLabels: Record<string, string> = {
   "us stock": "US Stock",
@@ -184,6 +185,9 @@ type Asset = {
 
 export function SettingsPage() {
   const navigate = useNavigate();
+
+  // Create state control for monitoring loading
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [allAssets, setAllAssets] = useState<Asset[]>([]);
 
@@ -331,6 +335,8 @@ export function SettingsPage() {
   // }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true); // Show loading screen
+
     // 1. Clean recurring investment
     const recurringInvestment =
       !values.recurring_investment ||
@@ -415,6 +421,8 @@ export function SettingsPage() {
     } catch (error) {
       console.error(error);
       alert((error as Error).message || "Failed to run backtest");
+    } finally {
+      setLoading(false); // Hide loading screen
     }
   }
 
@@ -425,7 +433,8 @@ export function SettingsPage() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <LoadingScreen visible={loading} />
         <div className="m-4 p-4 flex lg:flex-row flex-col gap-4">
           {/* LEFT SIDE - add items-star to make box shrink */}
           <div className="flex-1">
