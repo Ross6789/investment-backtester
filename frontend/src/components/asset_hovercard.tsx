@@ -29,46 +29,26 @@ export function AssetHoverCard({
     <HoverCard>
       <HoverCardTrigger asChild>
         <span className="inline-block text-muted-foreground hover:text-foreground">
-          {/* <Eye size={16} /> */}?
+          ?
         </span>
       </HoverCardTrigger>
       <HoverCardContent className="w-auto" align="start">
         <Table>
           <TableBody>
-            <TableRow>
-              <TableCell>Ticker</TableCell>
-              <TableCell>{ticker}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>{name}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>Type</TableCell>
-              <TableCell>{asset_type}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>Active</TableCell>
-              <TableCell>{start_date}</TableCell>
-            </TableRow>
-
-            {/* <TableRow>
-              <TableCell>End</TableCell>
-              <TableCell>{end_date}</TableCell>
-            </TableRow> */}
-
-            <TableRow>
-              <TableCell>Currency</TableCell>
-              <TableCell>{currency}</TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell>Dividends</TableCell>
-              <TableCell>{dividends}</TableCell>
-            </TableRow>
+            {[
+              { label: "Ticker", value: ticker },
+              { label: "Name", value: name },
+              { label: "Type", value: asset_type },
+              { label: "Start", value: start_date },
+              { label: "End", value: end_date },
+              { label: "Currency", value: currency },
+              { label: "Dividends", value: dividends },
+            ].map((field) => (
+              <TableRow key={field.label}>
+                <TableCell>{field.label}</TableCell>
+                <TableCell>{field.value}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </HoverCardContent>
