@@ -9,16 +9,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MetricHoverCard } from "@/components/metric_hovercard";
-import {
-  Calendar,
-  Activity,
-  TrendingDown,
-  Shield,
-  Download,
-} from "lucide-react";
+import { Calendar, Activity, TrendingDown, Shield } from "lucide-react";
 import { metricHoverTexts } from "@/constants/ui_text";
 import { ExcelDownloadButton } from "@/components/export_excel_button";
-import { Button } from "@/components/ui/button";
 import {
   StrongText,
   SecondaryText,
