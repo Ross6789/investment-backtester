@@ -1,4 +1,0 @@
-from_currency,to_currency,source,source_file_path
-eur,gbp,local_csv,raw/csv/fx/eur-gbp.csv
-eur,usd,local_csv,raw/csv/fx/eur-usd.csv
-gbp,usd,local_csv,raw/csv/fx/gbp-usd.csv
