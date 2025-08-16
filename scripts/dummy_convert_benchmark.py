@@ -1,8 +1,8 @@
 import polars as pl
-from backend.core.paths import get_benchmark_data_path
+from backend.core.paths import get_production_benchmark_data_path
 from backend.data_pipeline.processors import BenchmarkProcessor
 
-benchmarks_path = get_benchmark_data_path()
+benchmarks_path = get_production_benchmark_data_path()
 
 benchmarks = pl.read_parquet(benchmarks_path)
 

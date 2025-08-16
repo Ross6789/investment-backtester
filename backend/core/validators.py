@@ -1,6 +1,5 @@
 import polars as pl
 from datetime import date
-from backend.core.models import BaseCurrency
 from backend.core.constants import CURRENCY_START_DATES
 
 
@@ -64,7 +63,7 @@ def validate_flat_dataframe(df: pl.DataFrame):
             raise ValueError(f"Non-flat column detected: '{col}' has type {dtype}")
         
         
-def validate_currency_active(currency : BaseCurrency, start_date: date):
+def validate_currency_active(currency, start_date: date):
     """
     Validate that the given currency was active on or after its allowed start date.
 

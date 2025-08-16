@@ -4,7 +4,7 @@ from backend.backtest.data_loader import get_benchmark_data, get_benchmark_metad
 from backend.core.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
 from backend.core.enums import BacktestMode, BaseCurrency, RebalanceFrequency, ReinvestmentFrequency
 from backend.backtest.benchmark_simulator import BenchmarkSimulator
-from backend.core.paths import EXTERNAL_DATA_BASE_PATH
+from backend.core.paths import EXTERNAL_DATA_ROOT_PATH
 
 # User choices
 mode = BacktestMode.BASIC

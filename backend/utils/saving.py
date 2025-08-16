@@ -27,6 +27,9 @@ def save_partitioned_parquet(data : pl.DataFrame, directory_save_path: Path) -> 
         RuntimeError: If any error occurs while writing the Parquet files.
     """
     try:
+        # Ensure root directory exists
+        directory_save_path.mkdir(parents=True, exist_ok=True)
+
         for (ticker,) , ticker_df in data.group_by("ticker"):
             folder = directory_save_path / f"ticker={ticker}"
             folder.mkdir(parents=True, exist_ok=True)
@@ -48,15 +51,18 @@ def save_regular_parquet(data : pl.DataFrame, save_path: Path) -> None:
         RuntimeError: If saving fails for any reason.
     """
     try:
+        # Ensure parent directories exist
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+
         data.write_parquet(save_path)
         print(f"Data saved to {save_path}.") 
     except Exception as e:
         raise RuntimeError(f"Failed to save regular parquet to {save_path}: {e}") from e
 
 
-def save_csv(data : pl.DataFrame, save_path: Path) -> None: 
+def save_csv(data: pl.DataFrame, save_path: Path) -> None:
     """
-    Save a Polars DataFrame as a CSV file.
+    Save a Polars DataFrame as a CSV file, creating parent directories if needed.
 
     Args:
         data (pl.DataFrame): The DataFrame to save.
@@ -66,8 +72,11 @@ def save_csv(data : pl.DataFrame, save_path: Path) -> None:
         RuntimeError: If writing the CSV file fails.
     """
     try:
+        # Ensure parent directories exist
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+
         data.write_csv(save_path)
-        print(f"Data saved to {save_path}.") 
+        print(f"Data saved to {save_path}.")
     except Exception as e:
         raise RuntimeError(f"Failed to save CSV to {save_path}: {e}") from e
   

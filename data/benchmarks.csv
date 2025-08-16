@@ -1,3 +1,0 @@
-ticker,name,currency,source,source_file_path,active,start_date,end_date,notes
-^FTSE,FTSE 100,GBP,yfinance,-,Y,03/01/1984,27/06/2025,UK index
-^GSPC,S&P 500,USD,yfinance,-,Y,01/01/1970,27/06/2025,US incex
