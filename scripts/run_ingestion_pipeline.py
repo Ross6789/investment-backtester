@@ -1,5 +1,5 @@
 import backend.core.paths as paths
-import backend.utils.asset_metadata as utils
+import backend.utils.metadata as utils
 import warnings
 from datetime import date
 from backend.data_pipeline.pipelines import PricePipeline, CorporateActionPipeline, FXPipeline, BenchmarkPipeline
@@ -17,29 +17,30 @@ warnings.filterwarnings("ignore", message="unclosed database.*") # suppress warn
 
 # Configuration
 yfinance_batch_size = 100
-start_date = date.fromisoformat("1970-01-01")
-end_date = date.fromisoformat("2025-06-30")
-base_path = paths.EXTERNAL_DATA_BASE_PATH
+start_date = date.fromisoformat("1970-01-01") #Inclusive
+end_date = date.fromisoformat("2025-08-01") #Exclusive
+backend_data_root_path = paths.BACKEND_DATA_ROOT_PATH
 
 # Fetch ticker data
 # yfinance_test_tickers = ['AAPL','GOOG','MSFT']
-yfinance_tickers_ukstock = utils.get_yfinance_tickers("uk stock")
-yfinance_tickers_cryptocurrency = utils.get_yfinance_tickers("cryptocurrency")
-yfinance_tickers_etf = utils.get_yfinance_tickers("etf")
-yfinance_tickers_usstock = utils.get_yfinance_tickers("us stock")
-yfinance_tickers_mutualfund = utils.get_yfinance_tickers("mutual fund")
-yfinance_tickers_benchmarks = utils.get_yfinance_benchmarks()
-asset_csv_sources = utils.get_asset_csv_sources()
-fx_csv_sources = utils.get_fx_csv_sources()
-# csv_ticker_source_map = utils.get_csv_ticker_source_map()
+yfinance_tickers_ukstock = utils.get_active_yfinance_tickers("uk stock")
+yfinance_tickers_cryptocurrency = utils.get_active_yfinance_tickers("cryptocurrency")
+yfinance_tickers_etf = utils.get_active_yfinance_tickers("etf")
+yfinance_tickers_usstock = utils.get_active_yfinance_tickers("us stock")
+yfinance_tickers_mutualfund = utils.get_active_yfinance_tickers("mutual fund")
+asset_csv_sources = utils.get_active_asset_csv_sources()
 
-# Instantiate list of ingestors
+yfinance_tickers_benchmarks = utils.get_active_yfinance_benchmarks()
+
+fx_csv_sources = utils.get_fx_csv_sources()
+
+# --- INSTANTIATE INGESTOR LISTS
 price_ingestors = []
 corporate_action_ingestors = []
 benchmark_ingestors = []
 fx_ingestors = []
 
-# Add price ingestors
+# --- PRICE INGESTORS
 # price_ingestors.append(YFinanceIngestor(yfinance_test_tickers,yfinance_batch_size,start_date,end_date,include_actions= False))
 price_ingestors.append(YFinanceIngestor(yfinance_tickers_ukstock,yfinance_batch_size,start_date,end_date,include_actions= False))
 price_ingestors.append(YFinanceIngestor(yfinance_tickers_cryptocurrency,yfinance_batch_size,start_date,end_date,include_actions= False))
@@ -47,31 +48,31 @@ price_ingestors.append(YFinanceIngestor(yfinance_tickers_etf,yfinance_batch_size
 price_ingestors.append(YFinanceIngestor(yfinance_tickers_usstock,yfinance_batch_size,start_date,end_date,include_actions= False))
 price_ingestors.append(YFinanceIngestor(yfinance_tickers_mutualfund,yfinance_batch_size,start_date,end_date,include_actions= False))
 for relative_source in asset_csv_sources:
-    full_source_path = base_path / relative_source
+    full_source_path = backend_data_root_path / relative_source
     price_ingestors.append(CSVIngestor(full_source_path,start_date,end_date))
 
-# Add action ingestors
+# --- ACTION INGESTORS
 # corporate_action_ingestors.append(YFinanceIngestor(yfinance_test_tickers,yfinance_batch_size,start_date,end_date, include_actions=True))
 corporate_action_ingestors.append(YFinanceIngestor(yfinance_tickers_ukstock,yfinance_batch_size,start_date,end_date, include_actions=True))
 corporate_action_ingestors.append(YFinanceIngestor(yfinance_tickers_etf,yfinance_batch_size,start_date,end_date, include_actions=True))
 corporate_action_ingestors.append(YFinanceIngestor(yfinance_tickers_usstock,yfinance_batch_size,start_date,end_date, include_actions=True))
 corporate_action_ingestors.append(YFinanceIngestor(yfinance_tickers_mutualfund,yfinance_batch_size,start_date,end_date, include_actions=True))
 
-# Add benchmark ingestors
+# --- BENCHMARK INGESTORS
 benchmark_ingestors.append(YFinanceIngestor(yfinance_tickers_benchmarks,yfinance_batch_size,start_date,end_date, include_actions=False))
 
-# Add fx ingestors
+# --- FX INGESTORS
 for relative_source in fx_csv_sources:
-    full_source_path = base_path / relative_source
+    full_source_path = backend_data_root_path / relative_source
     fx_ingestors.append(CSVIngestor(full_source_path,start_date,end_date))
 
-# Instantiate sub pipelines
+# --- INSTANTIATE MINOR PIPELINE
 price_pipeline = PricePipeline(price_ingestors)
 action_pipeline = CorporateActionPipeline(corporate_action_ingestors)
 benchmark_pipeline = BenchmarkPipeline(benchmark_ingestors) # benchmark can utilise same class as prices, but must be sepreate object as different save path
 fx_pipeline = FXPipeline(fx_ingestors)
 
-# Instantiate major pipeline and run
-master_pipeline = PipelineRunner(price_pipeline,action_pipeline,benchmark_pipeline,fx_pipeline,base_path)
-# master_pipeline.run()  # run all pipelines
-master_pipeline.run(pipelines_to_run="benchmark")  # run just benchmark pipeline
+# --- MASTER PIPELINE 
+master_pipeline = PipelineRunner(price_pipeline,action_pipeline,benchmark_pipeline,fx_pipeline, dev_mode=True)
+master_pipeline.run()  # run all pipelines
+# master_pipeline.run(pipelines_to_run="benchmark")  # run just benchmark pipeline

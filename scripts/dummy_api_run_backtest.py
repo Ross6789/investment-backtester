@@ -22,4 +22,4 @@ input_data = {
   "export_excel":True
 }
 
-result = run_backtest(input_data)
+result = run_backtest(input_data, dev_mode=True)

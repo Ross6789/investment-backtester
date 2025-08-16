@@ -1,0 +1,4 @@
+from_currency,to_currency,source,source_file_path
+eur,gbp,local_csv,raw_assets/eur-gbp.csv
+eur,usd,local_csv,raw_assets/eur-usd.csv
+gbp,usd,local_csv,raw_assets/gbp-usd.csv

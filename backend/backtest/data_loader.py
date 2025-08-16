@@ -1,10 +1,10 @@
 import polars as pl
 from typing import List
 from datetime import date
-from backend.core.paths import get_asset_data_path, get_asset_metadata_csv_path, get_fx_data_path, get_benchmark_metadata_csv_path, get_benchmark_data_path
+from backend.core.paths import get_historical_prices_path, get_asset_metadata_csv_path, get_fx_data_path, get_benchmark_data_path
 from backend.core.enums import BacktestMode, BaseCurrency
 
-def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency, tickers : List[str], start_date: date, end_date: date) -> pl.DataFrame:
+def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency, tickers : List[str], start_date: date, end_date: date, dev_mode: bool = False) -> pl.DataFrame:
     """
     Load backtest data for given tickers and date range, with prices converted to a specified base currency.
 
@@ -22,6 +22,7 @@ def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency,
         tickers (List[str]): List of ticker symbols to include.
         start_date (date): Start date for filtering the backtest data.
         end_date (date): End date for filtering the backtest data.
+        dev_mode (bool) : Flag to set development mode (retrieves data from development folder instead of production). Defaults to False
 
     Returns:
         pl.DataFrame: Polars DataFrame containing at least the following columns:
@@ -37,9 +38,10 @@ def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency,
         The function collects the lazy Polars DataFrame to eager mode before returning. 
         For very large datasets, consider modifying to return a LazyFrame for downstream lazy processing.
     """
-    backtest_data_path = get_asset_data_path()
+    backtest_data_path = get_historical_prices_path(dev_mode)
+    fx_data_path = get_fx_data_path(dev_mode)
     metadata_path = get_asset_metadata_csv_path()
-    fx_data_path = get_fx_data_path()
+
 
     # Retrieve columns based on backtest mode
     match backtest_mode:
@@ -124,9 +126,9 @@ def get_backtest_data(backtest_mode : BacktestMode, base_currency: BaseCurrency,
     return converted_backtest_data.collect()  # Convert backtest data from lazy to eager (can be reverted back to lazy if memory issues are encountered)
 
 
-def get_benchmark_data(base_currency: BaseCurrency, tickers: list[str], start_date: date, end_date: date) -> pl.LazyFrame:
+def get_benchmark_data(base_currency: BaseCurrency, tickers: list[str], start_date: date, end_date: date, dev_mode: bool = False) -> pl.LazyFrame:
 
-    benchmark_data_path = get_benchmark_data_path()
+    benchmark_data_path = get_benchmark_data_path(dev_mode)
     
     # Filter backtest data by dates and tickers
     filtered_benchmark_data = (

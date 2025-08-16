@@ -10,6 +10,9 @@ import traceback, os, uuid, traceback
 app = Flask(__name__,static_folder="static")
 CORS(app)
 
+# Set app mode based on environment variable
+dev_mode = os.getenv("DEV_MODE","false").lower() == "true"
+
 ## Before trying excel download
 # @app.route('/api/run-backtest', methods=['POST'])
 # def backtest_api():
@@ -49,7 +52,7 @@ def start_backtest():
     jobs[job_id] = {"status": "running", "result": None}
 
     # Run backtest in a separate thread
-    Thread(target=async_run_backtest, args=(jobs,job_id, payload)).start()
+    Thread(target=async_run_backtest, args=(jobs,job_id, payload, dev_mode)).start()
 
     return jsonify({"job_id": job_id})
 
@@ -65,7 +68,7 @@ def backtest_status(job_id):
     
 @app.route("/api/assets")
 def get_assets():
-    return send_file(get_asset_metadata_json_path(), mimetype='application/json')
+    return send_file(get_asset_metadata_json_path(dev_mode), mimetype='application/json')
 
 
 @app.route("/api/download-report")

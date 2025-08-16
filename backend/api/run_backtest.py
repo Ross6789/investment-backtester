@@ -9,10 +9,11 @@ from backend.core.parsers import parse_enum, parse_date
 from backend.backtest.runner import BacktestRunner
 from backend.core.paths import get_benchmark_metadata_csv_path
 
-def async_run_backtest (jobs, job_id, input_data):
+
+def async_run_backtest (jobs, job_id, input_data, dev_mode: bool = False):
     try:
         # Run your current backtest function
-        backtest_result, temp_excel_path = run_backtest(input_data)
+        backtest_result, temp_excel_path = run_backtest(input_data, dev_mode)
 
         # Store results in job
         download_link = f"/api/download-report?file={temp_excel_path}" if temp_excel_path else None
@@ -25,7 +26,7 @@ def async_run_backtest (jobs, job_id, input_data):
         raise Exception(e)
     
 
-def run_backtest(input_data: dict) -> dict:
+def run_backtest(input_data: dict, dev_mode: bool = False) -> dict:
    
     # Parse input
     mode = parse_enum(BacktestMode, input_data["mode"])
@@ -55,12 +56,12 @@ def run_backtest(input_data: dict) -> dict:
     backtest_config = BacktestConfig(start_date,end_date,target_portfolio,mode,base_currency,strategy,initial_investment,recurring_investment)
 
     # Fetch data for backtest
-    backtest_data = get_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date)
+    backtest_data = get_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date, dev_mode)
 
     # Fetch data for benchmark - only fetching data for benchmarks active across full period
     benchmark_metadata_path = get_benchmark_metadata_csv_path()
     benchmark_tickers = _get_valid_benchmark_tickers(start_date,end_date, benchmark_metadata_path)
-    benchmark_data = get_benchmark_data(base_currency,benchmark_tickers,start_date,end_date)
+    benchmark_data = get_benchmark_data(base_currency,benchmark_tickers,start_date,end_date, dev_mode)
 
     # Create and run backtest
     backtest = BacktestRunner(backtest_config, backtest_data, benchmark_data, benchmark_metadata_path, export_excel, dev_run=False, base_save_path=paths.get_backtest_run_base_path())
@@ -77,11 +78,10 @@ def _get_valid_benchmark_tickers(start_date: date, end_date: date, benchmark_met
     metadata = (
         pl.scan_csv(benchmark_metadata_path)
         .with_columns([
-            pl.col("start_date").str.strptime(pl.Date, "%d/%m/%Y"), # Convert to polars date for later comparison
-            pl.col("end_date").str.strptime(pl.Date, "%d/%m/%Y")
+            pl.col("start_date").str.strptime(pl.Date, "%Y-%m-%d"), # Convert to polars date for later comparison
+            pl.col("end_date").str.strptime(pl.Date, "%Y-%m-%d")
         ])
     )
-
     
     valid_tickers = (
         metadata
