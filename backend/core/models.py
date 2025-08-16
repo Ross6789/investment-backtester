@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from datetime import date
 import polars as pl
+from pathlib import Path
+import os
 
 from .enums import RebalanceFrequency, ReinvestmentFrequency, BacktestMode, BaseCurrency
 from .validators import validate_positive_amount, validate_date_order, validate_currency_active
@@ -88,7 +90,6 @@ class Strategy:
 
 
 #--- Configuration models---#
-
 @dataclass
 class BacktestConfig:
     """
