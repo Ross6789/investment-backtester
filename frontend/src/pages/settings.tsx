@@ -188,15 +188,24 @@ export function SettingsPage() {
   const navigate = useNavigate();
 
   // Set state variables
-  const [lastBacktestResult, setLastBacktestResult] = useState(() => {
-    const stored = sessionStorage.getItem("lastBacktestResult");
-    return stored ? JSON.parse(stored) : null;
-  });
   const [loading, setLoading] = useState<boolean>(false);
   const [allAssets, setAllAssets] = useState<Asset[]>([]);
   const [enabledAssetClasses, setEnabledAssetClasses] = useState<string[]>([
     "us stock",
   ]);
+
+  // helpers for creating last result button
+  const hasLastBacktestResult = Boolean(
+    sessionStorage.getItem("lastBacktestResult")
+  );
+
+  const handleViewPreviousResults = () => {
+    const stored = sessionStorage.getItem("lastBacktestResult");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      navigate("/results", { state: { backtestResult: parsed } });
+    }
+  };
 
   // Fetch asset data once when page loads
   useEffect(() => {
@@ -1071,15 +1080,11 @@ export function SettingsPage() {
             Run New Backtest
           </Button>
 
-          {lastBacktestResult && (
+          {hasLastBacktestResult && (
             <Button
               className="text-xs text-muted-foreground"
               variant="link"
-              onClick={() =>
-                navigate("/results", {
-                  state: { backtestResult: lastBacktestResult },
-                })
-              }
+              onClick={handleViewPreviousResults}
             >
               Previous results
             </Button>
