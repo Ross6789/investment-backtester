@@ -219,7 +219,7 @@ class PipelineRunner:
                     self.compiled_data = Compiler.compile(self.price_pipeline.processed_data, self.action_pipeline.processed_data)
                     if self.dev_mode: 
                         self._save_inspection_data('historical-prices',self.compiled_data,'compiled')
-                        self._save_operational_data('historical-prices',self.compiled_data, partitioned=True) # Dev data gets partitioned as it will be read locally from disk ie. should be partition for lazy operations
+                        self._save_operational_data('historical-prices',self.compiled_data, partitioned=False) # Dev data gets partitioned as it will be read locally from disk ie. should be partition for lazy operations *** NO LONGER TRUE - caching data on server in both dev and prod so can be single parquet file
                     else :
                         self._save_operational_data('historical-prices',self.compiled_data, partitioned=False) # Production data does not get partitioned as it will be stored on cloud and will need to be accessed via api call (partition = throttling)
             except Exception as e:

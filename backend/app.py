@@ -1,26 +1,27 @@
-from flask import Flask, request, jsonify, send_file
-from flask_cors import CORS
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from backend.backtest.data_cache import preload_all_data
 from .run_backtest import async_run_backtest
 from backend.core.paths import get_asset_metadata_json_path
 from threading import Thread
 import traceback, os, uuid, traceback
 from dotenv import load_dotenv
+import pathlib
 
+BASE_DIR = pathlib.Path(__file__).parent.resolve()
+FRONTEND_DIST = BASE_DIR / "frontend_dist"
 
+app = Flask(__name__,static_folder=str(FRONTEND_DIST), static_url_path="")
 
-app = Flask(__name__,static_folder="static")
-CORS(app)
-
-load_dotenv()  # loads environment variables
-
-# Set app mode based on environment variable
+# loads environment variables to find which mdoe to run (devolpment vs production)
+load_dotenv() 
 dev_mode = os.getenv("DEV_MODE","false").lower() == "true"
 
 # Load and cache backtest data on start up
 preload_all_data(dev_mode)    
-
 jobs = {}
+
+
+# --- API ROUTES --- #
 
 @app.route("/api/run-backtest", methods=["POST"])
 def start_backtest():
@@ -62,5 +63,19 @@ def download_report():
     return send_file(file_path, as_attachment=True)
 
 
+# --- REACT ROUTES --- #
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_frontend(path):
+    """Serve React app for any non-API route"""
+    # If the requested file exists in frontend_dist, serve it
+    file_path = FRONTEND_DIST / path
+    if file_path.exists() and file_path.is_file():
+        return send_from_directory(FRONTEND_DIST, path)
+    # Otherwise serve index.html so React handles routing
+    return send_from_directory(FRONTEND_DIST, "index.html")
+
+
 if __name__ == '__main__':
-    app.run(port=5002,debug=True)
+    app.run(port=5001,debug=True, use_reloader = False)

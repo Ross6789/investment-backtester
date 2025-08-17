@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# FOR LOCAL DEVELOPMENT
 # Set the PYTHONPATH to the current directory (project root)
 export PYTHONPATH=$(pwd)
 echo "PYTHONPATH set to: $PYTHONPATH"
@@ -12,11 +12,7 @@ echo "Virtual environment activated"
 echo "Starting backend server..."
 python -m backend.app &
 
-# Start the Vite frontend in the background
-echo "Starting Vite frontend..."
-(cd frontend && npm run dev) &
-
-echo "✅ Both servers are running. Your application is ready to use."
+echo "✅ Server running. Your application is ready to use."
 
 # Wait for background processes to exit
 wait

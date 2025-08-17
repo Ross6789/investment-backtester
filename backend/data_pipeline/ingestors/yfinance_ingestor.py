@@ -63,6 +63,36 @@ class YFinanceIngestor(BaseIngestor):
             yield self.tickers[i:i + self.batch_size]
 
 
+    # def _download_data(self, tickers_batch: list[str]) -> pd.DataFrame:
+    #     """
+    #     Download price and optionally corporate actions data for a batch of tickers.
+
+    #     Uses the yfinance API to download data within the specified date range. 
+    #     If the downloaded data is empty, a warning is issued.
+
+    #     Args:
+    #         tickers_batch (list[str]): A list of ticker symbols to download data for.
+
+    #     Returns:
+    #         pd.DataFrame: The downloaded data as a pandas DataFrame.
+
+    #     Raises:
+    #         RuntimeError: If there is an error during download.
+    #     """
+    #     print(f"Starting download...")
+    #     try:
+    #         raw_data = yf.download(tickers_batch, self.start_date.isoformat(), self.end_date.isoformat(), auto_adjust= False, actions=self.include_actions)
+            
+    #         print('Download complete.')
+
+    #         if raw_data.empty:
+    #             warnings.warn(f"Downloaded data is empty.")
+
+    #         return raw_data
+        
+    #     except Exception as e:
+    #         raise RuntimeError(f"Failed download : {e}")
+
     def _download_data(self, tickers_batch: list[str]) -> pd.DataFrame:
         """
         Download price and optionally corporate actions data for a batch of tickers.
@@ -81,7 +111,7 @@ class YFinanceIngestor(BaseIngestor):
         """
         print(f"Starting download...")
         try:
-            raw_data = yf.download(tickers_batch, self.start_date, self.end_date, auto_adjust= False, actions=self.include_actions)
+            raw_data = yf.download(tickers_batch, period="max", auto_adjust= False, actions=self.include_actions)
             
             print('Download complete.')
 

@@ -219,7 +219,7 @@ def update_asset_metadata_csv(new_asset_data: pl.DataFrame):
         .agg([
             pl.col("date").min().alias("start_date"),
             pl.col("date").max().alias("end_date"),
-            pl.when(pl.col("dividend").is_not_null().count() > 0)
+            pl.when(pl.col("dividend").is_not_null().sum() > 0)
               .then(pl.lit("Y"))
               .otherwise(pl.lit("N"))
               .alias("has_dividends")
