@@ -9,6 +9,7 @@ ipython
 flask
 flask-cors
 xlsxwriter
+dotenv
 
 #  activating virtual environment => source venv/bin/activate
 

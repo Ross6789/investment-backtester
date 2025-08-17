@@ -2,6 +2,7 @@ import polars as pl
 from backend.core import paths
 from pathlib import Path
 import csv, json
+from datetime import date
 
 def get_active_yfinance_tickers(asset_type: str) -> list[str]:
     """
@@ -72,6 +73,42 @@ def get_active_asset_csv_sources() -> list[Path]:
         .to_list()
     )
     return sources
+
+
+def get_valid_benchmark_tickers(start_date: date, end_date: date) -> list[str]:
+    """
+    Return benchmark tickers valid within the given date range.
+
+    A ticker is considered valid if its is active for the entire duration of the date range.
+
+    Args:
+        start_date (date): The earliest date of the desired range.
+        end_date (date): The latest date of the desired range.
+
+    Returns:
+        list[str]: A list of valid benchmark ticker symbols.
+    """
+    metadata = (
+        pl.scan_csv(paths.get_benchmark_metadata_csv_path())
+        .with_columns([
+            pl.col("start_date").str.strptime(pl.Date, "%Y-%m-%d"), # Convert to polars date for later comparison
+            pl.col("end_date").str.strptime(pl.Date, "%Y-%m-%d")
+        ])
+    )
+    
+    valid_tickers = (
+        metadata
+        .filter(
+            (pl.col("start_date") <= pl.lit(start_date)) & # Convert to polars date for comparison (both side must match) - pl.Lit detects it is a date
+            (pl.col("end_date") >= pl.lit(end_date))
+        )
+        .select("ticker")
+        .collect()
+        .to_series()
+        .to_list()
+    )
+    return valid_tickers
+
 
 
 # def get_csv_ticker_source_map() -> dict[str, Path]:

@@ -1,5 +1,5 @@
 import polars as pl
-from backend.core.paths import get_fx_data_path, get_benchmark_metadata_csv_path
+from backend.core.paths import get_fx_data_source, get_benchmark_metadata_csv_path
 
 class BenchmarkProcessor:
     """
@@ -13,7 +13,7 @@ class BenchmarkProcessor:
         """
 
         benchmark_metadata_path = get_benchmark_metadata_csv_path()
-        fx_data_path = get_fx_data_path()
+        fx_data_path = get_fx_data_source()
 
         # Scan benchmark metadata file to find get ticker - currency pairs
         benchmark_currency_lf = pl.scan_csv(benchmark_metadata_path).select(['ticker','currency'])

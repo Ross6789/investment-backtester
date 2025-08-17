@@ -209,7 +209,7 @@ export function SettingsPage() {
 
   // Fetch asset data once when page loads
   useEffect(() => {
-    fetch("http://localhost:5002/api/assets")
+    fetch("/api/assets")
       .then((res) => res.json())
       .then((data: Asset[]) => {
         setAllAssets(data);
@@ -403,7 +403,7 @@ export function SettingsPage() {
 
     try {
       // 5. Start backtest, get job_id
-      const response = await fetch("http://localhost:5002/api/run-backtest", {
+      const response = await fetch("/api/run-backtest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -419,9 +419,7 @@ export function SettingsPage() {
       let backtestResult: any = null;
       while (true) {
         await new Promise((r) => setTimeout(r, 2000)); // 2 sec delay
-        const statusResp = await fetch(
-          `http://localhost:5002/api/backtest-status/${jobId}`
-        );
+        const statusResp = await fetch(`/api/backtest-status/${jobId}`);
         if (!statusResp.ok) throw new Error("Failed to get job status");
         const statusData = await statusResp.json();
 

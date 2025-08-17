@@ -1,5 +1,4 @@
-import csv
-import os 
+import csv, json, os 
 import polars as pl
 import pandas as pd
 from pathlib import Path
@@ -62,7 +61,7 @@ class Exporter:
             - Adds a disclaimer about rounding precision.
         """
         # Generate full save path
-        save_path = self.timestamped_folder / 'reports' / 'csv' / f'{file_name}.csv'
+        save_path = self.timestamped_folder / 'csv' / f'{file_name}.csv'
 
         # Create the directory if it doesn't exist
         save_path.parent.mkdir(parents=True, exist_ok=True)
@@ -98,7 +97,7 @@ class Exporter:
             - Values are rounded for improved readability in the exported CSV.
         """
         # Generate full save path
-        save_path = self.timestamped_folder / 'results' / 'csv' / f'{file_name}.csv'
+        save_path = self.timestamped_folder /  'csv' / f'{file_name}.csv'
 
         # Create the directory if it doesn't exist
         save_path.parent.mkdir(parents=True, exist_ok=True)
@@ -117,7 +116,7 @@ class Exporter:
     def save_dataframes_to_excel_workbook(self, name_dataframe_mappings : dict[str,pl.DataFrame], file_name: str) -> None:
 
         # Create save folder
-        output_dir = self.timestamped_folder / 'results' / 'excel'
+        output_dir = self.timestamped_folder / 'excel'
         os.makedirs(output_dir, exist_ok=True)  # Creates the directory if it doesn't exist
 
         # Generate full save path
@@ -128,3 +127,18 @@ class Exporter:
 
             for name, report in name_dataframe_mappings.items():
                 report.to_pandas().to_excel(writer,sheet_name=name, index=False)
+
+    def save_dashboard_results_to_json(self, dashboard_results: dict, file_name: str) -> None:
+
+        # Create save folder
+        output_dir = self.timestamped_folder / 'json'
+        os.makedirs(output_dir, exist_ok=True)  # Creates the directory if it doesn't exist
+
+        # Generate full save path
+        save_path = output_dir / f'{file_name}.json'
+
+        # Write dictionary to JSON file
+        with open(save_path, 'w', encoding='utf-8') as f:
+            json.dump(dashboard_results, f, ensure_ascii=False, indent=2)
+        
+
