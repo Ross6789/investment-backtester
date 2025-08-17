@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify, send_file, send_from_directory
-from flask_cors import CORS
 from backend.backtest.data_cache import preload_all_data
 from .run_backtest import async_run_backtest
 from backend.core.paths import get_asset_metadata_json_path
@@ -11,9 +10,7 @@ import pathlib
 BASE_DIR = pathlib.Path(__file__).parent.resolve()
 FRONTEND_DIST = BASE_DIR / "frontend_dist"
 
-# app = Flask(__name__,static_folder="static") # app variable before deployment
 app = Flask(__name__,static_folder=str(FRONTEND_DIST), static_url_path="")
-# CORS(app)
 
 # loads environment variables to find which mdoe to run (devolpment vs production)
 load_dotenv() 
@@ -81,4 +78,4 @@ def serve_frontend(path):
 
 
 if __name__ == '__main__':
-    app.run(port=5002,debug=True, use_reloader = False)
+    app.run(port=5001,debug=True, use_reloader = False)

@@ -1,16 +1,9 @@
-#  use python3 -m pip freeze > requirements.txt to get final version once completed
-polars 
-pyarrow
-yfinance
-pytest
-pytest-mock
-quantstats
-ipython
-flask
-flask-cors
-xlsxwriter
-dotenv
-
-#  activating virtual environment => source venv/bin/activate
-
- 
+Flask==3.1.1
+ipython==9.4.0
+pandas==2.3.0
+polars==1.30.0
+python-dotenv==1.1.1
+QuantStats==0.0.64
+xlsxwriter==3.2.5
+yfinance==0.2.65
+pyarrow==20.0.0
