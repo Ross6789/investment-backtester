@@ -58,11 +58,6 @@ def fetch_filtered_backtest_data(backtest_mode : BacktestMode, base_currency: Ba
     fx_lf = cache.get_cached_fx().lazy()
     asset_metadata_lf = cache.get_cached_asset_metadata().lazy()
  
-    print("DEBUGGING PRICE ERROR")
-    print(fx_lf.filter(pl.col('from_currency')=='USD').collect())
-    fx = pl.scan_parquet("/Volumes/T7/investment_backtester_data/inputs/dev/fx-rates.parquet").filter(pl.col('from_currency')=="USD").collect()
-    print(fx)
-
     # --- PRICE DATA ---
 
     # Retrieve columns based on backtest mode
@@ -112,10 +107,6 @@ def fetch_filtered_backtest_data(backtest_mode : BacktestMode, base_currency: Ba
         .join(ticker_currencies, on='ticker',how='left')
         .join(fx_rates, left_on=['date','currency'], right_on=['date','from_currency'], how='left') # from_currency col on right will simply become currency after join
     )
-
-    print(joined_data.filter(pl.col('ticker')=='GOOG').collect())
-    print(base_currency.value)
-
 
     # Static conversions : convert from GBX (pence) to GBP
     if 'GBX' in currencies_used:

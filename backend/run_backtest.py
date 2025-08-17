@@ -55,9 +55,6 @@ def run_backtest(input_data: dict, dev_mode: bool = False) -> dict:
 
     # Fetch and filter backtest data from cache 
     price_data, benchmark_data = fetch_filtered_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date)
-    print(price_data)
-    print(benchmark_data)
-
     # Create and run backtest
     backtest = BacktestRunner(backtest_config, price_data, benchmark_data, export_excel, dev_run=dev_mode, base_save_path=paths.get_backtest_run_base_path())
     results, temp_excel_path = backtest.run()

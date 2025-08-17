@@ -76,5 +76,5 @@ fx_pipeline = FXPipeline(fx_ingestors)
 
 # --- MASTER PIPELINE 
 master_pipeline = PipelineRunner(price_pipeline,action_pipeline,benchmark_pipeline,fx_pipeline, dev_mode=True)
-master_pipeline.run()  # run all pipelines
-# master_pipeline.run(pipelines_to_run="benchmark")  # run just benchmark pipeline
+# master_pipeline.run()  # run all pipelines
+master_pipeline.run(pipelines_to_run="benchmark")  # run just benchmark pipeline

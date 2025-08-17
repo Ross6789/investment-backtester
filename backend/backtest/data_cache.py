@@ -46,7 +46,7 @@ def get_cached_asset_metadata() -> pl.DataFrame:
 @lru_cache(maxsize=1)
 def get_cached_benchmarks_metadata() -> pl.DataFrame:
     path = paths.get_benchmark_metadata_csv_path()
-    print(f"benchmark metadat : {path}")
+    print(f"benchmark metadata : {path}")
     return pl.read_csv(path)
 
 @lru_cache(maxsize=1)

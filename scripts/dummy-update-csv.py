@@ -8,7 +8,7 @@ crypto = compiled_data.filter(pl.col('ticker')=="AAPL").collect()
 print(crypto)
 
 # update_asset_metadata_csv(compiled_data) 
-fx = pl.scan_parquet("/Volumes/T7/investment_backtester_data/inputs/dev/fx-rates.parquet").filter(pl.col('from_currency')=="USD").collect()
+fx = pl.scan_parquet("/Volumes/T7/investment_backtester_data/inputs/dev/benchmarks.parquet").filter((pl.col('ticker')=="^FTSE")&(pl.col('currency')=="USD")).collect()
 print(fx)
 
-update_asset_metadata_csv()
+# update_asset_metadata_csv()

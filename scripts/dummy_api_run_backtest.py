@@ -1,4 +1,4 @@
-from api.run_backtest import run_backtest
+from backend.run_backtest import run_backtest
 
 input_data = {
   "mode": "basic",
