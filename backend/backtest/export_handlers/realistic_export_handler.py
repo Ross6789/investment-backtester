@@ -21,32 +21,34 @@ class RealisticResultExportHandler(BaseResultExportHandler):
         flat_config_dict (dict[str, str]): Flattened configuration dictionary used as metadata in reports.
     """
 
-    def __init__(self, result : RealisticBacktestResult, exporter: Exporter, analyser : RealisticAnalyser, flat_config_dict : dict[str, str]):
+    def __init__(self, raw_result : RealisticBacktestResult, analysed_result : dict,exporter: Exporter, analyser : RealisticAnalyser, flat_config_dict : dict[str, str]):
         """
         Initializes the export handler with results, analyser, exporter, and config metadata.
 
         Args:
-            result: RealisticBacktestResult containing all raw backtest data.
+            raw_result: RealisticBacktestResult containing all raw backtest data.
+            analysed_results: The fully analysed results of teh backtest run
             exporter: Exporter instance to save files.
             analyser: RealisticAnalyser to generate analytical reports.
             flat_config_dict: Dictionary of flattened config parameters for report comments.
         """
-        self.result = result
+        self.raw_result = raw_result
+        self.analysed_result = analysed_result
         self.analyser = analyser
         self.exporter = exporter
         self.flat_config_dict = flat_config_dict
 
 
-    def export_raw(self) -> None:
+    def export_raw_csv(self) -> None:
         """
         Export raw dataframes to CSV files.
 
         Calls the base export method to export common raw data, then exports
         additional realistic-mode-specific dataframes such as dividends and orders.
         """
-        super().export_raw()
-        self.exporter.save_dataframe_to_csv(self.result.dividends,'dividends')
-        self.exporter.save_dataframe_to_csv(self.result.orders,'orders')
+        super().export_raw_csv()
+        self.exporter.save_dataframe_to_csv(self.raw_result.dividends,'dividends')
+        self.exporter.save_dataframe_to_csv(self.raw_result.orders,'orders')
 
     
     # def export_reports(self) -> None:

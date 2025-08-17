@@ -64,13 +64,14 @@ class BacktestFactory:
 
 
     @staticmethod
-    def get_result_export_handler(mode: BacktestMode, result : BacktestResult, exporter: Exporter, analyser : BaseAnalyser, flat_config_dict : dict[str, str]) -> BaseResultExportHandler:
+    def get_result_export_handler(mode: BacktestMode, raw_result : BacktestResult,analysed_result: dict, exporter: Exporter, analyser : BaseAnalyser, flat_config_dict : dict[str, str]) -> BaseResultExportHandler:
         """
         Returns the appropriate result export handler for saving raw results and summaries.
 
         Args:
             mode (BacktestMode): The selected backtest mode.
             result (BacktestResult): The raw result data from the backtest.
+            analysed_result (dict): The analysed results used to populate the dashboard
             exporter (Exporter): The exporter instance used for file saving.
             analyser (BaseAnalyser): The analyser used to generate reports.
             flat_config_dict (dict[str, str]): Flattened configuration dictionary for metadata.
@@ -83,8 +84,8 @@ class BacktestFactory:
         """
         match mode:
             case BacktestMode.BASIC:
-                return BaseResultExportHandler(result,exporter,analyser,flat_config_dict)
+                return BaseResultExportHandler(raw_result,analysed_result,exporter,analyser,flat_config_dict)
             case BacktestMode.REALISTIC:
-                return RealisticResultExportHandler(result,exporter,analyser,flat_config_dict)
+                return RealisticResultExportHandler(raw_result,analysed_result,exporter,analyser,flat_config_dict)
             case _:
                 raise ValueError(f"No backtest result export handler defined for mode: {mode}")

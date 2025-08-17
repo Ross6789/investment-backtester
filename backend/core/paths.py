@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Union
 
 # --- ORIGINAL HELPER METHOD STRUCTURE
 # PROJECT_ROOT_PATH =  Path(__file__).parent.parent.parent
@@ -52,6 +53,16 @@ BACKTEST_PATH = BACKEND_DATA_ROOT_PATH / "backtests"
 DEV_INPUTS = EXTERNAL_DATA_ROOT_PATH / "inputs" / "dev"
 PROD_INPUTS = BACKTEST_PATH / "inputs" / "prod"
 
+# Public URLs for Google Cloud Production Data
+PROD_HISTORICAL_PRICES_URL = "https://storage.googleapis.com/qub-40286439-backtester-data/historical-prices.parquet"
+PROD_BENCHMARKS_URL = "https://storage.googleapis.com/qub-40286439-backtester-data/benchmarks.parquet"
+PROD_FX_URL = "https://storage.googleapis.com/qub-40286439-backtester-data/fx-rates.parquet"
+
+# Paths for local development data (external drive)
+DEV_HISTORICAL_PRICES_PATH = DEV_INPUTS / "historical-prices" # no .parquet extension due to partitioned structure
+DEV_BENCHMARKS_PATH = DEV_INPUTS / "benchmarks.parquet"
+DEV_FX_PATH = DEV_INPUTS / "fx-rates.parquet"
+
 # --- Ingestion helper
 def get_data_ingestion_path(dev_mode: bool = False) -> Path:
     return DEV_INPUTS if dev_mode else PROD_INPUTS
@@ -74,16 +85,15 @@ def get_benchmark_metadata_json_path(dev_mode: bool = False) -> Path:
 def get_fx_metadata_csv_path() -> Path:
     return METADATA_PATH / "csv" / "fx.csv"
 
-# ---- Historical Prices Helpers ----
-# In dev mode - it points towards a partitioned folder, therefore does not have the .parquet extension
-def get_historical_prices_path(dev_mode: bool = False) -> Path:
-    return DEV_INPUTS / "historical-prices" if dev_mode else PROD_INPUTS / "historical-prices.parquet"
+# ---- Data source Helpers ----
+def get_historical_prices_data_source(dev_mode: bool = False) -> Union[Path, str]:
+    return DEV_HISTORICAL_PRICES_PATH if dev_mode else PROD_HISTORICAL_PRICES_URL
 
-def get_benchmark_data_path(dev_mode: bool = False) -> Path:
-    return DEV_INPUTS / "benchmarks.parquet" if dev_mode else PROD_INPUTS / "benchmarks.parquet"
+def get_benchmark_data_source(dev_mode: bool = False) -> Union[Path, str]:
+    return DEV_BENCHMARKS_PATH if dev_mode else PROD_BENCHMARKS_URL
 
-def get_fx_data_path(dev_mode: bool = False) -> Path:
-    return DEV_INPUTS / "fx-rates.parquet" if dev_mode else PROD_INPUTS / "fx-rates.parquet"
+def get_fx_data_source(dev_mode: bool = False) -> Union[Path,str]:
+    return DEV_FX_PATH if dev_mode else PROD_FX_URL
 
 # ---- Backtest Results ----
 def get_backtest_run_base_path() -> Path:
