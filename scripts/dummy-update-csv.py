@@ -10,3 +10,5 @@ print(crypto)
 # update_asset_metadata_csv(compiled_data) 
 fx = pl.scan_parquet("/Volumes/T7/investment_backtester_data/inputs/dev/fx-rates.parquet").filter(pl.col('from_currency')=="USD").collect()
 print(fx)
+
+update_asset_metadata_csv()
