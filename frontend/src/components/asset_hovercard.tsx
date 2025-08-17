@@ -21,7 +21,7 @@ export function AssetHoverCard({
   name,
   asset_type,
   start_date,
-  end_date,
+  // end_date,
   currency,
   dividends,
 }: Props) {
@@ -39,8 +39,8 @@ export function AssetHoverCard({
               { label: "Ticker", value: ticker },
               { label: "Name", value: name },
               { label: "Type", value: asset_type },
-              { label: "Start", value: start_date },
-              { label: "End", value: end_date },
+              { label: "Available", value: start_date },
+              // { label: "End", value: end_date }, // Show end date if desired
               { label: "Currency", value: currency },
               { label: "Dividends", value: dividends },
             ].map((field) => (

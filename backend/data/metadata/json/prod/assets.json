@@ -5,8 +5,8 @@
     "asset_type": "commodity",
     "currency": "USD",
     "start_date": "1970-02-04",
-    "end_date": "2025-06-30",
-    "dividends": "Y"
+    "end_date": "2025-07-31",
+    "dividends": "N"
   },
   {
     "ticker": "XAU",
@@ -14,8 +14,8 @@
     "asset_type": "commodity",
     "currency": "USD",
     "start_date": "1975-01-03",
-    "end_date": "2025-06-30",
-    "dividends": "Y"
+    "end_date": "2025-07-31",
+    "dividends": "N"
   },
   {
     "ticker": "AAVE-GBP",
@@ -24,7 +24,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ADA-GBP",
@@ -33,7 +33,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AVAX-GBP",
@@ -42,7 +42,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BCH-GBP",
@@ -51,7 +51,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BNB-GBP",
@@ -60,7 +60,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BTC-GBP",
@@ -69,7 +69,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CRO-GBP",
@@ -78,7 +78,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DAI-GBP",
@@ -87,7 +87,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DOGE-GBP",
@@ -96,7 +96,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DOT-GBP",
@@ -105,7 +105,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ETC-GBP",
@@ -114,7 +114,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ETH-GBP",
@@ -123,7 +123,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "HBAR-GBP",
@@ -132,7 +132,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ICP-GBP",
@@ -141,7 +141,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LINK-GBP",
@@ -150,7 +150,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LTC-GBP",
@@ -159,7 +159,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SHIB-GBP",
@@ -168,7 +168,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SKY-GBP",
@@ -177,7 +177,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SOL-GBP",
@@ -186,7 +186,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "TRX-GBP",
@@ -195,7 +195,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "USDC-GBP",
@@ -204,7 +204,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "USDT-GBP",
@@ -213,7 +213,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XLM-GBP",
@@ -222,7 +222,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XMR-GBP",
@@ -231,7 +231,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XRP-GBP",
@@ -240,7 +240,7 @@
     "currency": "GBP",
     "start_date": "2025-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AGBP.L",
@@ -258,7 +258,7 @@
     "currency": "USD",
     "start_date": "2016-09-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AGGU.L",
@@ -267,7 +267,7 @@
     "currency": "USD",
     "start_date": "2017-11-21",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AIAG.L",
@@ -276,7 +276,7 @@
     "currency": "GBX",
     "start_date": "2019-06-26",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BCHS.L",
@@ -285,7 +285,7 @@
     "currency": "GBX",
     "start_date": "2019-03-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CBU0.L",
@@ -294,7 +294,7 @@
     "currency": "USD",
     "start_date": "2011-03-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CBU3.L",
@@ -303,7 +303,7 @@
     "currency": "USD",
     "start_date": "2010-10-18",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CBU7.L",
@@ -312,7 +312,7 @@
     "currency": "USD",
     "start_date": "2010-11-05",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CEMA.L",
@@ -321,7 +321,7 @@
     "currency": "USD",
     "start_date": "2010-09-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CG1.L",
@@ -330,7 +330,7 @@
     "currency": "GBX",
     "start_date": "2009-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CIND.L",
@@ -339,7 +339,7 @@
     "currency": "USD",
     "start_date": "2010-09-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CMFP.L",
@@ -348,7 +348,7 @@
     "currency": "GBX",
     "start_date": "2010-03-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CMOD.L",
@@ -357,7 +357,7 @@
     "currency": "USD",
     "start_date": "2017-01-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CNDX.L",
@@ -366,7 +366,7 @@
     "currency": "USD",
     "start_date": "2010-09-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CNYA.L",
@@ -375,7 +375,7 @@
     "currency": "USD",
     "start_date": "2015-04-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "COMF.L",
@@ -384,7 +384,7 @@
     "currency": "USD",
     "start_date": "2010-03-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "COMM.L",
@@ -393,7 +393,7 @@
     "currency": "GBX",
     "start_date": "2017-07-18",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "COPA.L",
@@ -402,7 +402,7 @@
     "currency": "USD",
     "start_date": "2008-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CORP.L",
@@ -420,7 +420,7 @@
     "currency": "USD",
     "start_date": "2010-09-28",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CRHG.L",
@@ -438,7 +438,7 @@
     "currency": "USD",
     "start_date": "2017-08-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CRUD.L",
@@ -447,7 +447,7 @@
     "currency": "USD",
     "start_date": "2008-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CSCA.L",
@@ -456,7 +456,7 @@
     "currency": "GBX",
     "start_date": "2010-01-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CSH2.L",
@@ -465,7 +465,7 @@
     "currency": "GBX",
     "start_date": "2025-03-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CSJP.L",
@@ -474,7 +474,7 @@
     "currency": "GBX",
     "start_date": "2010-01-11",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CSPX.L",
@@ -483,7 +483,7 @@
     "currency": "USD",
     "start_date": "2010-09-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CSUS.L",
@@ -492,7 +492,7 @@
     "currency": "USD",
     "start_date": "2010-09-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CUKX.L",
@@ -501,7 +501,7 @@
     "currency": "GBX",
     "start_date": "2010-09-16",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CUSS.L",
@@ -510,7 +510,7 @@
     "currency": "USD",
     "start_date": "2010-09-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DGTL.L",
@@ -519,7 +519,7 @@
     "currency": "USD",
     "start_date": "2016-09-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DJMC.L",
@@ -582,7 +582,7 @@
     "currency": "GBX",
     "start_date": "2014-06-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "EMSA.L",
@@ -591,7 +591,7 @@
     "currency": "USD",
     "start_date": "2018-09-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "EMUD.L",
@@ -627,7 +627,7 @@
     "currency": "USD",
     "start_date": "2018-06-29",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ERND.L",
@@ -672,7 +672,7 @@
     "currency": "USD",
     "start_date": "2010-08-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "FLOA.L",
@@ -681,7 +681,7 @@
     "currency": "USD",
     "start_date": "2018-03-21",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "FXC.L",
@@ -699,7 +699,7 @@
     "currency": "USD",
     "start_date": "2009-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "GBSP.L",
@@ -708,7 +708,7 @@
     "currency": "GBX",
     "start_date": "2013-03-18",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "GGRA.L",
@@ -717,7 +717,7 @@
     "currency": "USD",
     "start_date": "2016-06-03",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "GIL5.L",
@@ -735,7 +735,7 @@
     "currency": "GBX",
     "start_date": "2019-06-26",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "H50E.L",
@@ -762,7 +762,7 @@
     "currency": "USD",
     "start_date": "2016-09-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "HMCH.L",
@@ -870,7 +870,7 @@
     "currency": "USD",
     "start_date": "2017-11-16",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "HYLD.L",
@@ -897,7 +897,7 @@
     "currency": "USD",
     "start_date": "2011-09-16",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IB01.L",
@@ -906,7 +906,7 @@
     "currency": "USD",
     "start_date": "2019-02-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IBCI.L",
@@ -915,7 +915,7 @@
     "currency": "GBP",
     "start_date": "2008-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IBGE.L",
@@ -969,7 +969,7 @@
     "currency": "USD",
     "start_date": "2017-04-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IBTM.L",
@@ -1086,7 +1086,7 @@
     "currency": "USD",
     "start_date": "2015-09-04",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IGHY.L",
@@ -1113,7 +1113,7 @@
     "currency": "USD",
     "start_date": "2011-04-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IGLO.L",
@@ -1149,7 +1149,7 @@
     "currency": "USD",
     "start_date": "2011-02-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IGTM.L",
@@ -1167,7 +1167,7 @@
     "currency": "GBX",
     "start_date": "2010-09-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IH2O.L",
@@ -1185,7 +1185,7 @@
     "currency": "USD",
     "start_date": "2017-04-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IHYU.L",
@@ -1212,7 +1212,7 @@
     "currency": "USD",
     "start_date": "2017-04-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IMBS.L",
@@ -1239,7 +1239,7 @@
     "currency": "GBX",
     "start_date": "2012-11-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "INAA.L",
@@ -1275,7 +1275,7 @@
     "currency": "GBX",
     "start_date": "2018-11-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "INXG.L",
@@ -1320,7 +1320,7 @@
     "currency": "USD",
     "start_date": "2011-10-21",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ISF.L",
@@ -1338,7 +1338,7 @@
     "currency": "USD",
     "start_date": "2011-04-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ISP6.L",
@@ -1374,7 +1374,7 @@
     "currency": "GBP",
     "start_date": "2008-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUAA.L",
@@ -1383,7 +1383,7 @@
     "currency": "USD",
     "start_date": "2017-04-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUAG.L",
@@ -1401,7 +1401,7 @@
     "currency": "USD",
     "start_date": "2015-11-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUCM.L",
@@ -1410,7 +1410,7 @@
     "currency": "USD",
     "start_date": "2018-09-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUES.L",
@@ -1419,7 +1419,7 @@
     "currency": "USD",
     "start_date": "2015-11-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUFS.L",
@@ -1428,7 +1428,7 @@
     "currency": "USD",
     "start_date": "2015-11-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUHC.L",
@@ -1437,7 +1437,7 @@
     "currency": "USD",
     "start_date": "2015-11-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUIT.L",
@@ -1446,7 +1446,7 @@
     "currency": "USD",
     "start_date": "2015-11-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUKD.L",
@@ -1473,7 +1473,7 @@
     "currency": "GBX",
     "start_date": "2016-10-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUQD.L",
@@ -1491,7 +1491,7 @@
     "currency": "GBX",
     "start_date": "2016-10-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IUSA.L",
@@ -1518,7 +1518,7 @@
     "currency": "GBX",
     "start_date": "2016-10-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IWDG.L",
@@ -1545,7 +1545,7 @@
     "currency": "USD",
     "start_date": "2014-10-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IWQU.L",
@@ -1554,7 +1554,7 @@
     "currency": "USD",
     "start_date": "2014-10-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IWRD.L",
@@ -1572,7 +1572,7 @@
     "currency": "USD",
     "start_date": "2014-10-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LGAG.L",
@@ -1581,7 +1581,7 @@
     "currency": "GBX",
     "start_date": "2018-11-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LGGG.L",
@@ -1590,7 +1590,7 @@
     "currency": "GBX",
     "start_date": "2018-11-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LGJG.L",
@@ -1599,7 +1599,7 @@
     "currency": "GBX",
     "start_date": "2018-11-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LGUG.L",
@@ -1608,7 +1608,7 @@
     "currency": "GBX",
     "start_date": "2018-11-09",
     "end_date": "2025-06-12",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LOCK.L",
@@ -1617,7 +1617,7 @@
     "currency": "USD",
     "start_date": "2018-09-07",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LQDA.L",
@@ -1626,7 +1626,7 @@
     "currency": "USD",
     "start_date": "2017-04-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LQDE.L",
@@ -1689,7 +1689,7 @@
     "currency": "USD",
     "start_date": "2012-11-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "MXUS.L",
@@ -1698,7 +1698,7 @@
     "currency": "USD",
     "start_date": "2009-03-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "MXWO.L",
@@ -1707,7 +1707,7 @@
     "currency": "USD",
     "start_date": "2009-04-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PHAG.L",
@@ -1716,7 +1716,7 @@
     "currency": "USD",
     "start_date": "2008-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PHAU.L",
@@ -1725,7 +1725,7 @@
     "currency": "USD",
     "start_date": "2008-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PHPT.L",
@@ -1734,7 +1734,7 @@
     "currency": "USD",
     "start_date": "2009-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "RBOT.L",
@@ -1743,7 +1743,7 @@
     "currency": "USD",
     "start_date": "2016-09-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "RIEG.L",
@@ -1752,7 +1752,7 @@
     "currency": "GBX",
     "start_date": "2019-08-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ROBO.L",
@@ -1761,7 +1761,7 @@
     "currency": "USD",
     "start_date": "2014-10-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SAEM.L",
@@ -1770,7 +1770,7 @@
     "currency": "USD",
     "start_date": "2018-10-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SAEU.L",
@@ -1779,7 +1779,7 @@
     "currency": "GBP",
     "start_date": "2018-10-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SASU.L",
@@ -1788,7 +1788,7 @@
     "currency": "USD",
     "start_date": "2018-10-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SAUM.L",
@@ -1797,7 +1797,7 @@
     "currency": "GBP",
     "start_date": "2018-10-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SAWD.L",
@@ -1806,7 +1806,7 @@
     "currency": "USD",
     "start_date": "2018-10-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SDHA.L",
@@ -1815,7 +1815,7 @@
     "currency": "USD",
     "start_date": "2018-07-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SDHY.L",
@@ -1833,7 +1833,7 @@
     "currency": "USD",
     "start_date": "2017-04-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SDIG.L",
@@ -1905,7 +1905,7 @@
     "currency": "USD",
     "start_date": "2009-12-16",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SGLO.L",
@@ -1923,7 +1923,7 @@
     "currency": "GBX",
     "start_date": "2009-09-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SLXX.L",
@@ -1941,7 +1941,7 @@
     "currency": "GBX",
     "start_date": "2009-09-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SMTC.L",
@@ -1950,7 +1950,7 @@
     "currency": "USD",
     "start_date": "2025-03-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SMUD.L",
@@ -1977,7 +1977,7 @@
     "currency": "USD",
     "start_date": "2012-11-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SPXS.L",
@@ -1986,7 +1986,7 @@
     "currency": "USD",
     "start_date": "2010-05-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SUAS.L",
@@ -1995,7 +1995,7 @@
     "currency": "USD",
     "start_date": "2016-07-11",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SUES.L",
@@ -2004,7 +2004,7 @@
     "currency": "GBX",
     "start_date": "2016-07-11",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SUSM.L",
@@ -2013,7 +2013,7 @@
     "currency": "USD",
     "start_date": "2016-07-11",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SUWS.L",
@@ -2130,7 +2130,7 @@
     "currency": "USD",
     "start_date": "2015-09-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VAGS.L",
@@ -2148,7 +2148,7 @@
     "currency": "USD",
     "start_date": "2019-06-18",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VDEM.L",
@@ -2229,7 +2229,7 @@
     "currency": "GBP",
     "start_date": "2019-09-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VHVG.L",
@@ -2238,7 +2238,7 @@
     "currency": "GBP",
     "start_date": "2019-09-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VHYD.L",
@@ -2256,7 +2256,7 @@
     "currency": "GBP",
     "start_date": "2019-09-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VJPB.L",
@@ -2265,7 +2265,7 @@
     "currency": "GBP",
     "start_date": "2019-09-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VSCA.L",
@@ -2274,7 +2274,7 @@
     "currency": "GBP",
     "start_date": "2019-02-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VUAG.L",
@@ -2283,7 +2283,7 @@
     "currency": "GBP",
     "start_date": "2019-05-14",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VUCP.L",
@@ -2346,7 +2346,7 @@
     "currency": "USD",
     "start_date": "2018-03-27",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XASX.L",
@@ -2364,7 +2364,7 @@
     "currency": "GBX",
     "start_date": "2010-06-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XCX6.L",
@@ -2373,7 +2373,7 @@
     "currency": "GBX",
     "start_date": "2010-06-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XDER.L",
@@ -2382,7 +2382,7 @@
     "currency": "GBX",
     "start_date": "2010-03-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XESC.L",
@@ -2391,7 +2391,7 @@
     "currency": "GBX",
     "start_date": "2009-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XESX.L",
@@ -2427,7 +2427,7 @@
     "currency": "USD",
     "start_date": "2009-12-16",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XMEM.L",
@@ -2436,7 +2436,7 @@
     "currency": "GBX",
     "start_date": "2008-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XMEU.L",
@@ -2445,7 +2445,7 @@
     "currency": "GBX",
     "start_date": "2009-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XMJP.L",
@@ -2454,7 +2454,7 @@
     "currency": "GBX",
     "start_date": "2009-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XMUS.L",
@@ -2463,7 +2463,7 @@
     "currency": "GBX",
     "start_date": "2009-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XPXJ.L",
@@ -2472,7 +2472,7 @@
     "currency": "GBX",
     "start_date": "2009-01-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XSPX.L",
@@ -2481,7 +2481,7 @@
     "currency": "GBX",
     "start_date": "2010-03-26",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XSX6.L",
@@ -2490,7 +2490,7 @@
     "currency": "GBX",
     "start_date": "2009-01-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "XXSC.L",
@@ -2499,7 +2499,7 @@
     "currency": "GBX",
     "start_date": "2009-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00009WXM.L",
@@ -2517,7 +2517,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KM1W.L",
@@ -2535,7 +2535,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KM1Z.L",
@@ -2553,7 +2553,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KM21.L",
@@ -2571,7 +2571,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KM23.L",
@@ -2589,7 +2589,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KM25.L",
@@ -2607,7 +2607,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KSP4.L",
@@ -2616,7 +2616,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KSP5.L",
@@ -2634,7 +2634,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KSP7.L",
@@ -2652,7 +2652,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KSP9.L",
@@ -2670,7 +2670,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000KSPB.L",
@@ -2688,7 +2688,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000N47P.L",
@@ -2706,7 +2706,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000SHY5.L",
@@ -2715,7 +2715,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000SHY6.L",
@@ -2724,7 +2724,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000SHY7.L",
@@ -2742,7 +2742,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000TKZG.L",
@@ -2751,7 +2751,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000TKZH.L",
@@ -2769,7 +2769,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000TKZJ.L",
@@ -2787,7 +2787,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000TKZL.L",
@@ -2805,7 +2805,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000TKZN.L",
@@ -2823,7 +2823,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000TKZP.L",
@@ -2841,7 +2841,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000UGLF.L",
@@ -2859,7 +2859,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0000UGLH.L",
@@ -2886,7 +2886,7 @@
     "currency": "GBP",
     "start_date": "2014-01-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00011WU9.L",
@@ -2904,7 +2904,7 @@
     "currency": "GBP",
     "start_date": "2014-01-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00011WUC.L",
@@ -2913,7 +2913,7 @@
     "currency": "GBP",
     "start_date": "2014-01-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00011WUD.L",
@@ -2922,7 +2922,7 @@
     "currency": "GBP",
     "start_date": "2014-01-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00011WUE.L",
@@ -2931,7 +2931,7 @@
     "currency": "GBP",
     "start_date": "2014-01-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00011WUF.L",
@@ -2940,7 +2940,7 @@
     "currency": "GBP",
     "start_date": "2014-01-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00011WUG.L",
@@ -2949,7 +2949,7 @@
     "currency": "GBP",
     "start_date": "2014-01-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P000147Q3.L",
@@ -2967,7 +2967,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00017UWO.L",
@@ -2976,7 +2976,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00017UWP.L",
@@ -2985,7 +2985,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00017UWQ.L",
@@ -2994,7 +2994,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00017UWR.L",
@@ -3003,7 +3003,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00017UWS.L",
@@ -3012,7 +3012,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00017UWT.L",
@@ -3021,7 +3021,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00017UWU.L",
@@ -3030,7 +3030,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00017UWV.L",
@@ -3039,7 +3039,7 @@
     "currency": "GBP",
     "start_date": "2015-12-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P000185SZ.L",
@@ -3048,7 +3048,7 @@
     "currency": "GBP",
     "start_date": "2016-05-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P000185T0.L",
@@ -3066,7 +3066,7 @@
     "currency": "GBP",
     "start_date": "2016-05-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P000185T2.L",
@@ -3102,7 +3102,7 @@
     "currency": "GBP",
     "start_date": "2016-05-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P000185T6.L",
@@ -3129,7 +3129,7 @@
     "currency": "GBP",
     "start_date": "2016-11-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P00018XAQ.L",
@@ -3147,7 +3147,7 @@
     "currency": "GBP",
     "start_date": "2016-11-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001BLQI.L",
@@ -3156,7 +3156,7 @@
     "currency": "GBP",
     "start_date": "2017-09-14",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001C5T4.L",
@@ -3165,7 +3165,7 @@
     "currency": "GBP",
     "start_date": "2017-11-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001C5T6.L",
@@ -3174,7 +3174,7 @@
     "currency": "GBP",
     "start_date": "2017-11-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001CE2G.L",
@@ -3183,7 +3183,7 @@
     "currency": "GBP",
     "start_date": "2017-12-05",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001CE2H.L",
@@ -3192,7 +3192,7 @@
     "currency": "GBP",
     "start_date": "2017-12-05",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001CXIX.L",
@@ -3228,7 +3228,7 @@
     "currency": "GBP",
     "start_date": "2019-10-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001IU24.L",
@@ -3237,7 +3237,7 @@
     "currency": "GBP",
     "start_date": "2019-12-03",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001K1DP.L",
@@ -3246,7 +3246,7 @@
     "currency": "GBP",
     "start_date": "2020-06-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001K1DQ.L",
@@ -3264,7 +3264,7 @@
     "currency": "GBP",
     "start_date": "2020-06-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001K1DS.L",
@@ -3291,7 +3291,7 @@
     "currency": "GBP",
     "start_date": "2021-12-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001O2BO.L",
@@ -3309,7 +3309,7 @@
     "currency": "GBP",
     "start_date": "2021-12-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001O2BQ.L",
@@ -3327,7 +3327,7 @@
     "currency": "GBP",
     "start_date": "2021-12-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001O2BS.L",
@@ -3354,7 +3354,7 @@
     "currency": "GBP",
     "start_date": "2022-10-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001SB8P.L",
@@ -3363,7 +3363,7 @@
     "currency": "GBP",
     "start_date": "2024-02-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "0P0001T4ZA.L",
@@ -3534,7 +3534,7 @@
     "currency": "GBX",
     "start_date": "2018-07-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AJB.L",
@@ -3588,7 +3588,7 @@
     "currency": "GBX",
     "start_date": "2018-10-03",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ANII.L",
@@ -3615,7 +3615,7 @@
     "currency": "GBX",
     "start_date": "2014-05-07",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "APAX.L",
@@ -3642,7 +3642,7 @@
     "currency": "GBX",
     "start_date": "2024-10-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "APTD.L",
@@ -3669,7 +3669,7 @@
     "currency": "GBX",
     "start_date": "2001-10-03",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ASHM.L",
@@ -3705,7 +3705,7 @@
     "currency": "GBX",
     "start_date": "2021-02-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ATR.L",
@@ -3723,7 +3723,7 @@
     "currency": "GBX",
     "start_date": "1995-12-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ATYM.L",
@@ -3741,7 +3741,7 @@
     "currency": "GBX",
     "start_date": "2018-03-12",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AUSC.L",
@@ -3966,7 +3966,7 @@
     "currency": "GBX",
     "start_date": "2007-03-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BIOG.L",
@@ -4227,7 +4227,7 @@
     "currency": "GBX",
     "start_date": "2023-07-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CAPD.L",
@@ -4353,7 +4353,7 @@
     "currency": "GBX",
     "start_date": "2018-11-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CKN.L",
@@ -4551,7 +4551,7 @@
     "currency": "GBX",
     "start_date": "2004-11-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CYN.L",
@@ -4911,7 +4911,7 @@
     "currency": "GBX",
     "start_date": "2018-10-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "FCIT.L",
@@ -5253,7 +5253,7 @@
     "currency": "GBX",
     "start_date": "2016-06-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "GSCT.L",
@@ -5505,7 +5505,7 @@
     "currency": "GBX",
     "start_date": "2019-10-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "HVPE.L",
@@ -5514,7 +5514,7 @@
     "currency": "GBX",
     "start_date": "2010-06-29",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "HWDN.L",
@@ -5604,7 +5604,7 @@
     "currency": "GBX",
     "start_date": "2005-12-22",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IGET.L",
@@ -6351,7 +6351,7 @@
     "currency": "GBX",
     "start_date": "2016-03-07",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "MTU.L",
@@ -6504,7 +6504,7 @@
     "currency": "GBX",
     "start_date": "2010-07-21",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "OCN.L",
@@ -6522,7 +6522,7 @@
     "currency": "GBX",
     "start_date": "1995-03-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "OIT.L",
@@ -6531,7 +6531,7 @@
     "currency": "GBX",
     "start_date": "2018-05-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ONT.L",
@@ -6540,7 +6540,7 @@
     "currency": "GBX",
     "start_date": "2021-09-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ORIT.L",
@@ -6567,7 +6567,7 @@
     "currency": "GBX",
     "start_date": "1996-12-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "OXIG.L",
@@ -6621,7 +6621,7 @@
     "currency": "GBX",
     "start_date": "2021-04-21",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PCA.L",
@@ -6657,7 +6657,7 @@
     "currency": "GBX",
     "start_date": "1996-12-16",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PCTN.L",
@@ -6837,7 +6837,7 @@
     "currency": "GBX",
     "start_date": "2015-06-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PRU.L",
@@ -7080,7 +7080,7 @@
     "currency": "GBX",
     "start_date": "2021-03-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ROR.L",
@@ -7098,7 +7098,7 @@
     "currency": "GBX",
     "start_date": "2024-06-11",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "RR.L",
@@ -7125,7 +7125,7 @@
     "currency": "GBX",
     "start_date": "2013-10-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "RSW.L",
@@ -7512,7 +7512,7 @@
     "currency": "GBX",
     "start_date": "2021-07-14",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SSON.L",
@@ -7737,7 +7737,7 @@
     "currency": "GBX",
     "start_date": "2020-09-16",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "THRG.L",
@@ -7827,7 +7827,7 @@
     "currency": "GBX",
     "start_date": "2019-06-21",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "TRST.L",
@@ -7836,7 +7836,7 @@
     "currency": "GBX",
     "start_date": "2021-03-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "TRY.L",
@@ -7917,7 +7917,7 @@
     "currency": "GBX",
     "start_date": "2018-03-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "UTG.L",
@@ -7962,7 +7962,7 @@
     "currency": "GBX",
     "start_date": "2016-07-05",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VID.L",
@@ -7989,7 +7989,7 @@
     "currency": "GBX",
     "start_date": "2006-06-14",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VOD.L",
@@ -8079,7 +8079,7 @@
     "currency": "GBX",
     "start_date": "2015-02-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "WKP.L",
@@ -8106,7 +8106,7 @@
     "currency": "GBX",
     "start_date": "2021-10-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "WTB.L",
@@ -8205,7 +8205,7 @@
     "currency": "USD",
     "start_date": "2020-12-10",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ABT",
@@ -8349,7 +8349,7 @@
     "currency": "USD",
     "start_date": "1999-10-29",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ALB",
@@ -8367,7 +8367,7 @@
     "currency": "USD",
     "start_date": "2001-01-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ALL",
@@ -8412,7 +8412,7 @@
     "currency": "USD",
     "start_date": "1980-03-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AME",
@@ -8457,7 +8457,7 @@
     "currency": "USD",
     "start_date": "1997-05-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ANET",
@@ -8466,7 +8466,7 @@
     "currency": "USD",
     "start_date": "2014-06-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ANSS",
@@ -8475,7 +8475,7 @@
     "currency": "USD",
     "start_date": "1996-06-20",
     "end_date": "2025-07-17",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AON",
@@ -8601,7 +8601,7 @@
     "currency": "USD",
     "start_date": "2001-06-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "AXP",
@@ -8619,7 +8619,7 @@
     "currency": "USD",
     "start_date": "1991-04-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BA",
@@ -8709,7 +8709,7 @@
     "currency": "USD",
     "start_date": "1991-09-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BK",
@@ -8745,7 +8745,7 @@
     "currency": "USD",
     "start_date": "2005-06-28",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BLK",
@@ -8781,7 +8781,7 @@
     "currency": "USD",
     "start_date": "1996-05-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BRO",
@@ -8799,7 +8799,7 @@
     "currency": "USD",
     "start_date": "1992-05-19",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "BX",
@@ -8889,7 +8889,7 @@
     "currency": "USD",
     "start_date": "2004-06-10",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CCI",
@@ -8916,7 +8916,7 @@
     "currency": "USD",
     "start_date": "1987-06-10",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CDW",
@@ -8979,7 +8979,7 @@
     "currency": "USD",
     "start_date": "2010-01-05",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CI",
@@ -9042,7 +9042,7 @@
     "currency": "USD",
     "start_date": "2006-01-26",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CMI",
@@ -9069,7 +9069,7 @@
     "currency": "USD",
     "start_date": "2001-12-13",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CNP",
@@ -9096,7 +9096,7 @@
     "currency": "USD",
     "start_date": "2021-04-14",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "COO",
@@ -9141,7 +9141,7 @@
     "currency": "USD",
     "start_date": "2010-12-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CPB",
@@ -9159,7 +9159,7 @@
     "currency": "USD",
     "start_date": "1994-03-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CPT",
@@ -9177,7 +9177,7 @@
     "currency": "USD",
     "start_date": "2000-06-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CRM",
@@ -9195,7 +9195,7 @@
     "currency": "USD",
     "start_date": "2019-06-12",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CSCO",
@@ -9213,7 +9213,7 @@
     "currency": "USD",
     "start_date": "1998-07-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "CSX",
@@ -9285,7 +9285,7 @@
     "currency": "USD",
     "start_date": "2014-09-22",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "D",
@@ -9312,7 +9312,7 @@
     "currency": "USD",
     "start_date": "2020-12-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DAY",
@@ -9321,7 +9321,7 @@
     "currency": "USD",
     "start_date": "2018-04-26",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DD",
@@ -9348,7 +9348,7 @@
     "currency": "USD",
     "start_date": "1993-10-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DELL",
@@ -9420,7 +9420,7 @@
     "currency": "USD",
     "start_date": "1995-03-07",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DOC",
@@ -9492,7 +9492,7 @@
     "currency": "USD",
     "start_date": "1995-10-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "DVN",
@@ -9510,7 +9510,7 @@
     "currency": "USD",
     "start_date": "2005-04-14",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "EA",
@@ -9618,7 +9618,7 @@
     "currency": "USD",
     "start_date": "2012-03-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "EOG",
@@ -9636,7 +9636,7 @@
     "currency": "USD",
     "start_date": "2012-02-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "EQIX",
@@ -9726,7 +9726,7 @@
     "currency": "USD",
     "start_date": "2000-03-27",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "EXC",
@@ -9843,7 +9843,7 @@
     "currency": "USD",
     "start_date": "1999-06-04",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "FI",
@@ -9852,7 +9852,7 @@
     "currency": "USD",
     "start_date": "1986-09-25",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "FICO",
@@ -9915,7 +9915,7 @@
     "currency": "USD",
     "start_date": "2006-11-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "FTNT",
@@ -9924,7 +9924,7 @@
     "currency": "USD",
     "start_date": "2009-11-18",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "FTV",
@@ -9951,7 +9951,7 @@
     "currency": "USD",
     "start_date": "2015-03-31",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "GE",
@@ -10203,7 +10203,7 @@
     "currency": "USD",
     "start_date": "1990-03-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "HON",
@@ -10248,7 +10248,7 @@
     "currency": "USD",
     "start_date": "1995-11-03",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "HST",
@@ -10320,7 +10320,7 @@
     "currency": "USD",
     "start_date": "1991-06-21",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IEX",
@@ -10347,7 +10347,7 @@
     "currency": "USD",
     "start_date": "1993-11-04",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "INTC",
@@ -10401,7 +10401,7 @@
     "currency": "USD",
     "start_date": "2013-05-09",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IR",
@@ -10428,7 +10428,7 @@
     "currency": "USD",
     "start_date": "2000-06-16",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "IT",
@@ -10563,7 +10563,7 @@
     "currency": "USD",
     "start_date": "2014-10-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "KHC",
@@ -10626,7 +10626,7 @@
     "currency": "USD",
     "start_date": "1997-02-04",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "KO",
@@ -10644,7 +10644,7 @@
     "currency": "USD",
     "start_date": "2013-09-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "KR",
@@ -10788,7 +10788,7 @@
     "currency": "USD",
     "start_date": "2007-07-27",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "LUV",
@@ -10833,7 +10833,7 @@
     "currency": "USD",
     "start_date": "2005-12-21",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "MA",
@@ -10959,7 +10959,7 @@
     "currency": "USD",
     "start_date": "1992-04-01",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "MKC",
@@ -11031,7 +11031,7 @@
     "currency": "USD",
     "start_date": "2003-07-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "MOS",
@@ -11076,7 +11076,7 @@
     "currency": "USD",
     "start_date": "2018-12-07",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "MS",
@@ -11139,7 +11139,7 @@
     "currency": "USD",
     "start_date": "1997-11-14",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "MU",
@@ -11157,7 +11157,7 @@
     "currency": "USD",
     "start_date": "2013-01-18",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "NDAQ",
@@ -11202,7 +11202,7 @@
     "currency": "USD",
     "start_date": "2002-05-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "NI",
@@ -11238,7 +11238,7 @@
     "currency": "USD",
     "start_date": "2012-06-29",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "NRG",
@@ -11373,7 +11373,7 @@
     "currency": "USD",
     "start_date": "2000-05-02",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ORCL",
@@ -11391,7 +11391,7 @@
     "currency": "USD",
     "start_date": "1993-04-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "OTIS",
@@ -11418,7 +11418,7 @@
     "currency": "USD",
     "start_date": "2012-07-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PARA",
@@ -11562,7 +11562,7 @@
     "currency": "USD",
     "start_date": "2020-09-30",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PM",
@@ -11607,7 +11607,7 @@
     "currency": "USD",
     "start_date": "2007-05-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "POOL",
@@ -11670,7 +11670,7 @@
     "currency": "USD",
     "start_date": "1989-12-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "PWR",
@@ -11688,7 +11688,7 @@
     "currency": "USD",
     "start_date": "2015-07-06",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "QCOM",
@@ -11895,7 +11895,7 @@
     "currency": "USD",
     "start_date": "2007-03-29",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SNA",
@@ -11913,7 +11913,7 @@
     "currency": "USD",
     "start_date": "1992-02-26",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SO",
@@ -11931,7 +11931,7 @@
     "currency": "USD",
     "start_date": "2024-03-26",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "SPG",
@@ -12093,7 +12093,7 @@
     "currency": "USD",
     "start_date": "1999-11-23",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "TECH",
@@ -12210,7 +12210,7 @@
     "currency": "USD",
     "start_date": "1990-07-20",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "TROW",
@@ -12246,7 +12246,7 @@
     "currency": "USD",
     "start_date": "2010-06-29",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "TSN",
@@ -12318,7 +12318,7 @@
     "currency": "USD",
     "start_date": "2019-05-10",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "UDR",
@@ -12462,7 +12462,7 @@
     "currency": "USD",
     "start_date": "1991-07-24",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "VST",
@@ -12516,7 +12516,7 @@
     "currency": "USD",
     "start_date": "1995-11-17",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "WBA",
@@ -12534,7 +12534,7 @@
     "currency": "USD",
     "start_date": "2005-07-08",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "WDAY",
@@ -12543,7 +12543,7 @@
     "currency": "USD",
     "start_date": "2012-10-12",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "WDC",
@@ -12732,7 +12732,7 @@
     "currency": "USD",
     "start_date": "1991-08-15",
     "end_date": "2025-07-31",
-    "dividends": "Y"
+    "dividends": "N"
   },
   {
     "ticker": "ZTS",
