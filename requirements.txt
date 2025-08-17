@@ -7,3 +7,4 @@ QuantStats==0.0.64
 xlsxwriter==3.2.5
 yfinance==0.2.65
 pyarrow==20.0.0
+gunicorn
