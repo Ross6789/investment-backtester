@@ -22,17 +22,19 @@ class BaseResultExportHandler(ABC):
         flat_config_dict (dict[str, str]): Flattened configuration dictionary used as metadata in reports.
     """
 
-    def __init__(self, result : BacktestResult, exporter: Exporter, analyser : BaseAnalyser, flat_config_dict : dict[str, str]):
+    def __init__(self, raw_result : BacktestResult, analysed_result : dict, exporter: Exporter, analyser : BaseAnalyser, flat_config_dict : dict[str, str]):
         """
         Initializes the export handler with backtest results, analyser, exporter, and configuration metadata.
 
         Args:
-            result: The BacktestResult object containing raw backtest data.
+            raw_result: The BacktestResult object containing raw backtest data.
+            analysed_results: The fully analysed results of the backtest run
             exporter: An Exporter instance to handle saving files.
             analyser: A BaseAnalyser instance for generating reports.
             flat_config_dict: A dictionary of flattened configuration parameters for report metadata.
         """
-        self.result = result
+        self.raw_result = raw_result
+        self.analysed_result = analysed_result
         self.analyser = analyser
         self.exporter = exporter
         self.flat_config_dict = flat_config_dict
@@ -42,21 +44,23 @@ class BaseResultExportHandler(ABC):
         """
         Export all relevant backtest data and reports.
         """
-        self.export_raw()
-        self.export_reports()
+
+        self.export_raw_csv()
+        self.export_report_excel()
+        self.export_dashboard_json()
 
     
-    def export_raw(self) -> None:
+    def export_raw_csv(self) -> None:
         """
         Export raw dataframes from the backtest result to CSV files.
 
         Exports the core raw dataframes such as the main data, calendar, cash history,
         and holdings history to separate CSV files.
         """
-        self.exporter.save_dataframe_to_csv(self.result.data,'data')
-        self.exporter.save_dataframe_to_csv(self.result.calendar,'calendar')
-        self.exporter.save_dataframe_to_csv(self.result.cash,'cash_history')
-        self.exporter.save_dataframe_to_csv(self.result.holdings,'holdings_history')
+        self.exporter.save_dataframe_to_csv(self.raw_result.data,'data')
+        self.exporter.save_dataframe_to_csv(self.raw_result.calendar,'calendar')
+        self.exporter.save_dataframe_to_csv(self.raw_result.cash,'cash_history')
+        self.exporter.save_dataframe_to_csv(self.raw_result.holdings,'holdings_history')
 
     
     # def export_reports(self) -> None:
@@ -73,7 +77,7 @@ class BaseResultExportHandler(ABC):
     #     self.exporter.save_report_to_csv(daily_holdings_report, 'holdings_summary')
     
 
-    def export_reports(self) -> None:
+    def export_report_excel(self) -> None:
         """Export all backtest reports to a single multi-sheet Excel workbook.
 
         Each report is written to its own sheet. The configuration metadata is
@@ -83,6 +87,7 @@ class BaseResultExportHandler(ABC):
         file_name = "backtest_report"
         report_sheets = self._prepare_report_sheets_for_export()
         self.exporter.save_dataframes_to_excel_workbook(report_sheets,file_name)
+
 
 
     def _prepare_report_sheets_for_export(self) -> dict[str, pl.DataFrame]:
@@ -118,3 +123,8 @@ class BaseResultExportHandler(ABC):
 
         return report_sheets
 
+
+    def export_dashboard_json(self) -> None:
+            
+            file_name = "dashboard_results"
+            self.exporter.save_dashboard_results_to_json(self.analysed_result,file_name)

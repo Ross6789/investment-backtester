@@ -1,17 +1,16 @@
 import polars as pl
-from pathlib import Path
 
 class ChartFormatter:
 
     @staticmethod
-    def format_benchmark_growth(benchmark_value_lf: pl.LazyFrame, benchmark_metadata_path: Path) -> dict:
+    def format_benchmark_growth(benchmark_value_df: pl.DataFrame, benchmark_metadata_df:pl.DataFrame) -> dict:
         """
         Format benchmark growth data for charts in wide format and provide a ticker-label mapping
         only for tickers present in the chart data.
 
         Args:
-            benchmark_value_lf (pl.LazyFrame): LazyFrame containing columns ["date", "ticker", "price"].
-            benchmark_metadata_path (Path): Path to the benchmark metadata CSV file containing at least ["ticker", "name"] columns.
+            benchmark_value_lf (DataFrame): DataFrame containing columns ["date", "ticker", "price"].
+            benchmark_metadata_lf (DataFrame): DataFrame containing benchmark metadata with at least least ["ticker", "name"] columns.
 
         Returns:
             dict: {
@@ -20,10 +19,10 @@ class ChartFormatter:
             }
         """
         # Convert date column to string 
-        benchmark_with_string_dates_lf = benchmark_value_lf.with_columns(pl.col("date").dt.strftime('%Y-%m-%d').alias("date"))
+        benchmark_with_string_dates_df = benchmark_value_df.with_columns(pl.col("date").dt.strftime('%Y-%m-%d').alias("date"))
 
         # Pivot LazyFrame into wide format
-        wide_df = benchmark_with_string_dates_lf.collect().pivot(on="ticker", index="date", values="value")
+        wide_df = benchmark_with_string_dates_df.pivot(on="ticker", index="date", values="value")
 
         # Rename columns (remove "_price" if added by pivot)
         rename_map = {
@@ -36,10 +35,9 @@ class ChartFormatter:
 
         # Load metadata and filter for only tickers present
         metadata_df = (
-            pl.scan_csv(benchmark_metadata_path)
+            benchmark_metadata_df
             .filter(pl.col("ticker").is_in(tickers_in_chart))
             .select(["ticker", "name"])
-            .collect()
         )
 
         # Create ticker -> "ticker - name" mapping

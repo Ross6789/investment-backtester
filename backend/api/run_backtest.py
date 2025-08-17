@@ -2,12 +2,12 @@ import backend.core.paths as paths
 import polars as pl
 from pathlib import Path
 from datetime import date
-from backend.backtest.data_loader import get_backtest_data, get_benchmark_data
+from backend.backtest.data_loader import fetch_filtered_backtest_data
 from backend.core.models import TargetPortfolio, RecurringInvestment, BacktestConfig, Strategy
 from backend.core.enums import BacktestMode, BaseCurrency, RebalanceFrequency, ReinvestmentFrequency
 from backend.core.parsers import parse_enum, parse_date
 from backend.backtest.runner import BacktestRunner
-from backend.core.paths import get_benchmark_metadata_csv_path
+
 
 
 def async_run_backtest (jobs, job_id, input_data, dev_mode: bool = False):
@@ -55,45 +55,16 @@ def run_backtest(input_data: dict, dev_mode: bool = False) -> dict:
     strategy = Strategy(fractional_shares,reinvest_dividends,rebalance_frequency)
     backtest_config = BacktestConfig(start_date,end_date,target_portfolio,mode,base_currency,strategy,initial_investment,recurring_investment)
 
-    # Fetch data for backtest
-    backtest_data = get_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date, dev_mode)
+    # Fetch and filter backtest data from cache 
+    price_data, benchmark_data = fetch_filtered_backtest_data(mode,base_currency,target_portfolio.get_tickers(),start_date,end_date)
 
-    # Fetch data for benchmark - only fetching data for benchmarks active across full period
-    benchmark_metadata_path = get_benchmark_metadata_csv_path()
-    benchmark_tickers = _get_valid_benchmark_tickers(start_date,end_date, benchmark_metadata_path)
-    benchmark_data = get_benchmark_data(base_currency,benchmark_tickers,start_date,end_date, dev_mode)
 
     # Create and run backtest
-    backtest = BacktestRunner(backtest_config, backtest_data, benchmark_data, benchmark_metadata_path, export_excel, dev_run=False, base_save_path=paths.get_backtest_run_base_path())
+    backtest = BacktestRunner(backtest_config, price_data, benchmark_data, export_excel, dev_run=dev_mode, base_save_path=paths.get_backtest_run_base_path())
     results, temp_excel_path = backtest.run()
 
     return {
         "settings":input_data,
         "results":results,
     }, temp_excel_path
-
-# Determine which benchmarks are active for the full backtest period
-def _get_valid_benchmark_tickers(start_date: date, end_date: date, benchmark_metadata_path: Path) -> list[str]:
-    
-    metadata = (
-        pl.scan_csv(benchmark_metadata_path)
-        .with_columns([
-            pl.col("start_date").str.strptime(pl.Date, "%Y-%m-%d"), # Convert to polars date for later comparison
-            pl.col("end_date").str.strptime(pl.Date, "%Y-%m-%d")
-        ])
-    )
-    
-    valid_tickers = (
-        metadata
-        .filter(
-            (pl.col("start_date") <= pl.lit(start_date)) & # Convert to polars date for comparison (both side must match) - pl.Lit detects it is a date
-            (pl.col("end_date") >= pl.lit(end_date))
-        )
-        .select("ticker")
-        .collect()
-        .to_series()
-        .to_list()
-    )
-    
-    return valid_tickers
 

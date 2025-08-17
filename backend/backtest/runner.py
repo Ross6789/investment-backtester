@@ -8,36 +8,23 @@ from backend.backtest.exporter import Exporter
 from backend.utils.saving import save_report_temporarily
 
 class BacktestRunner:
-    """
-    Coordinates the execution of portfolio backtests, analysis, and result exporting.
 
-    This class serves as the main orchestrator for running backtests according to
-    the provided configuration and dataset. It selects and instantiates the appropriate
-    engine, analyser, and export handler based on the backtest mode, executes the backtest,
-    generates analyses, and exports all results and reports to the designated output folder.
 
-    Attributes:
-        config (BacktestConfig): Configuration detailing strategy, mode, and parameters.
-        backtest_data (pl.DataFrame): The dataset containing all relevant financial data.
-        base_save_path (Path): Directory where all backtest outputs will be saved.
-        timestamp (str): Timestamp used to create unique output folders per run.
-    """
-
-    def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame, benchmark_data: pl.DataFrame, benchmark_metadata_path: Path, export_excel : bool, dev_run: bool = True,  base_save_path: Path | None = None):
+    def __init__(self, config: BacktestConfig, filtered_price_data: pl.DataFrame, filtered_benchmark_data: pl.DataFrame, export_excel : bool, dev_run: bool = False,  base_save_path: Path | None = None):
             """
-            Initializes the BacktestRunner with configuration, data, and save path.
+            Initialize a BacktestRunner instance.
 
             Args:
-                config: BacktestConfig object containing strategy and mode.
-                backtest_data: Polars DataFrame with all backtest price and dividend data.
-                benchmark_data: Polars DataFrame with all benchmark data.
-                benchmark_metadata_path: Path to benchmark metadata
-                base_save_path: Base directory path to save outputs.
+                config (BacktestConfig): Backtest configuration, including strategy parameters and run mode.
+                filtered_price_data (pl.DataFrame): Historical price and dividend data, filtered for the selected assets and date range.
+                filtered_benchmark_data (pl.DataFrame): Benchmark price data, filtered for the selected benchmarks and date range.
+                export_excel (bool): Whether to generate an Excel report for the run.
+                dev_run (bool, optional): If True, exports all intermediate backtest data for debugging/development. Defaults to False.
+                base_save_path (Path | None, optional): Base directory path for saving outputs. Defaults to None.
             """
             self.config = config
-            self.backtest_data = backtest_data
-            self.benchmark_data = benchmark_data
-            self.benchmark_metadata_path = benchmark_metadata_path
+            self.backtest_data = filtered_price_data
+            self.benchmark_data = filtered_benchmark_data
             self.export_excel = export_excel
             self.dev_run = dev_run
             self.base_save_path = base_save_path
@@ -45,10 +32,21 @@ class BacktestRunner:
 
     def run(self) -> dict:
         """
-        Runs the backtest process:
-        - Instantiates engine, analyser, exporter, and export handler based on mode.
-        - Executes the backtest engine.
-        - Generates and exports all results and reports.
+        Run the complete backtest process.
+
+        Workflow:
+            1. Instantiate and execute the backtest engine based on the configured mode.
+            2. Analyse the backtest results using the appropriate analyser.
+            3. Run benchmark simulations for comparison.
+            4. Export results:
+                - If `dev_run=True`, export all raw outputs (calendar, holdings, balances, etc.).
+                - If `export_excel=True`, prepare and save an Excel report (temporarily on server).
+            5. Combine portfolio analysis results with benchmark chart data.
+
+        Returns:
+            tuple:
+                dict: Combined backtest analysis results including benchmark chart data.
+                Path | None: Path to the temporary Excel file if `export_excel=True`, otherwise None.
         """
         temp_excel_path = None
         print("Running backtest...")
@@ -66,27 +64,26 @@ class BacktestRunner:
         # print(metrics)
 
         # Perform skeleton benchmark simulations
-        benchmark_chart_data = BenchmarkSimulator.run(self.config, self.benchmark_data, self.benchmark_metadata_path)
+        benchmark_chart_data = BenchmarkSimulator.run(self.config, self.benchmark_data)
+
+        #Combine potfolio analysis with benchamark chart data
+        combined_results = analysis_results.copy()
+        combined_results["charts"]["benchmark"] = benchmark_chart_data
 
         if self.export_excel or self.dev_run:
             # Setup exporter and result handler
             exporter = Exporter(self.base_save_path, self.timestamp)   
-            result_export_handler = BacktestFactory.get_result_export_handler(mode,result,exporter,analyser,self.config.to_flat_dict())
+            result_export_handler = BacktestFactory.get_result_export_handler(mode,result,combined_results,exporter,analyser,self.config.to_flat_dict())
 
             # If development run : Export ALL run data to specified local path.
             if self.dev_run:
                 result_export_handler.export_all() #Exports raw results file as csv ie. master calender, holdings, cashbalance, aswell as combined excel report
-                # result_export_handler.export_reports() # Only excel report export
 
             # If exporting excel : Save the excel file temporarily on server
             if self.export_excel:
                 report_sheets = result_export_handler._prepare_report_sheets_for_export()
                 temp_excel_path = save_report_temporarily(report_sheets)
 
-
-        #Combine potfolio analysis with benchamark chart data
-        combined_results = analysis_results.copy()
-        combined_results["charts"]["benchmark"] = benchmark_chart_data
         return combined_results, temp_excel_path
         
 

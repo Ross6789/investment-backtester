@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
+from backend.backtest.data_cache import preload_all_data
 from .run_backtest import run_backtest, async_run_backtest
 from backend.core.paths import get_asset_metadata_json_path
 from threading import Thread
@@ -12,6 +13,9 @@ CORS(app)
 
 # Set app mode based on environment variable
 dev_mode = os.getenv("DEV_MODE","false").lower() == "true"
+
+# Load and cache backtest data on start up
+preload_all_data(dev_mode)    
 
 ## Before trying excel download
 # @app.route('/api/run-backtest', methods=['POST'])
