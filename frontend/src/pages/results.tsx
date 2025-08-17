@@ -112,6 +112,10 @@ export function ResultsPage() {
     }
   }, [backtestResult, navigate]);
 
+  const investmentCount = Object.keys(
+    backtestResult.settings.target_weights
+  ).length;
+
   return (
     <div className="grid grid-cols-12 gap-8 p-8">
       <div className="col-span-12">
@@ -160,10 +164,11 @@ export function ResultsPage() {
               Your Investment Results
             </StrongText>
             <MutedText className="text-md">
-              {backtestResult.settings.start_date} to{" "}
-              {backtestResult.settings.end_date} •{" "}
-              {Object.keys(backtestResult.settings.target_weights).length}{" "}
-              investments
+              {`${backtestResult.settings.start_date} to ${
+                backtestResult.settings.end_date
+              } • ${investmentCount} investment${
+                investmentCount === 1 ? "" : "s"
+              }`}
             </MutedText>
           </div>
 

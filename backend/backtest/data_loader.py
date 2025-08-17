@@ -57,7 +57,7 @@ def fetch_filtered_backtest_data(backtest_mode : BacktestMode, base_currency: Ba
     benchmark_lf = cache.get_cached_benchmarks().lazy()
     fx_lf = cache.get_cached_fx().lazy()
     asset_metadata_lf = cache.get_cached_asset_metadata().lazy()
-
+ 
     # --- PRICE DATA ---
 
     # Retrieve columns based on backtest mode

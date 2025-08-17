@@ -59,7 +59,7 @@ PROD_BENCHMARKS_URL = "https://storage.googleapis.com/qub-40286439-backtester-da
 PROD_FX_URL = "https://storage.googleapis.com/qub-40286439-backtester-data/fx-rates.parquet"
 
 # Paths for local development data (external drive)
-DEV_HISTORICAL_PRICES_PATH = DEV_INPUTS / "historical-prices" # no .parquet extension due to partitioned structure
+DEV_HISTORICAL_PRICES_PATH = DEV_INPUTS / "historical-prices.parquet"  # Previously had no .parquet extension due to partitioned structure, but small enough to cache on server when starting so no longer need partition
 DEV_BENCHMARKS_PATH = DEV_INPUTS / "benchmarks.parquet"
 DEV_FX_PATH = DEV_INPUTS / "fx-rates.parquet"
 

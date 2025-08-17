@@ -9,11 +9,11 @@ export const ExcelDownloadButton: React.FC<{
   const handleDownload = async () => {
     console.log("download button clicked");
     try {
-      const apiHost = import.meta.env.VITE_API_BASE_URL;
-      const fullUrl = `${apiHost}${excel_download}`;
-      console.log(fullUrl);
+      // const apiHost = import.meta.env.VITE_API_BASE_URL;
+      // const fullUrl = `${apiHost}${excel_download}`;
+      // console.log(fullUrl);
 
-      const response = await fetch(fullUrl);
+      const response = await fetch(excel_download);
       if (!response.ok) throw new Error("File not available");
 
       const blob = await response.blob();

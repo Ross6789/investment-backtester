@@ -1,4 +1,4 @@
 ticker,name,currency,source,source_file_path,active,start_date,end_date,notes
-^FTSE,FTSE 100,GBP,yfinance,-,Y,1984-01-03,2025-07-31,UK index
-^GSPC,S&P 500,USD,yfinance,-,Y,1970-01-02,2025-07-31,US index
-^STOXX50E,EURO 50,EUR,yfinance,-,Y,2007-03-30,2025-07-31,Europe index
+^FTSE,FTSE 100,GBP,yfinance,-,Y,1984-01-03,2025-08-15,UK index
+^GSPC,S&P 500,USD,yfinance,-,Y,1927-12-30,2025-08-15,US index
+^STOXX50E,EURO 50,EUR,yfinance,-,Y,2007-03-30,2025-08-15,Europe index

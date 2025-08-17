@@ -1,10 +1,10 @@
-from backend.api.run_backtest import run_backtest
+from backend.run_backtest import run_backtest
 
 input_data = {
   "mode": "basic",
   "base_currency": "GBP",
   "start_date": "2020-01-01",
-  "end_date": "2025-01-01",
+  "end_date": "2025-07-31",
   "target_weights":{
     "AAPL":0.5,
     "GOOG":0.5
@@ -16,10 +16,10 @@ input_data = {
     "rebalance_frequency":"never"
   },
   "recurring_investment":{
-    "amount":100,
-    "frequency":"monthly"
+    "amount":10,
+    "frequency":"yearly"
   },
-  "export_excel":True
+  "export_excel":False
 }
 
 result = run_backtest(input_data, dev_mode=True)

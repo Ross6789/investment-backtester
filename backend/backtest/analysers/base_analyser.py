@@ -438,7 +438,6 @@ class BaseAnalyser(ABC):
         monthly_return_histogram_chart_data  = self._generate_monthly_return_histogram_data(period_returns_df.get("monthly"))
 
         # Compile portfolio balance chart data
-        print(self.enriched_holdings_lf.collect())
         filtered_holding_df = self.enriched_holdings_lf.select(["date","ticker","units","value","portfolio_weighting"]).collect()
         portfolio_balance_chart_data = self._generate_portfolio_balance_data(filtered_holding_df)
 

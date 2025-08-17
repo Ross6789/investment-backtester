@@ -72,14 +72,14 @@ const formSchema = z
     start_date: z
       .date()
       .min(new Date("1970-01-01"), { message: "Date must be after Jan 1 1970" })
-      .max(new Date("2025-05-31"), {
-        message: "Date must be before June 1 2025",
+      .max(new Date("2025-07-31"), {
+        message: "Date must be before August 1 2025",
       }),
     end_date: z
       .date()
       .min(new Date("1970-01-01"), { message: "Date must be after Jan 1 1970" })
-      .max(new Date("2025-05-31"), {
-        message: "Date must be before June 1 2025",
+      .max(new Date("2025-07-31"), {
+        message: "Date must be before August 1 2025",
       }),
     target_weights: z.array(
       z.object({
@@ -235,7 +235,7 @@ export function SettingsPage() {
       mode: "basic",
       base_currency: "GBP",
       start_date: new Date("2020-01-01"),
-      end_date: new Date("2025-05-31"),
+      end_date: new Date("2025-07-31"),
       target_weights: [
         { ticker: "AAPL", percentage: 50 },
         { ticker: "GOOG", percentage: 30 },
@@ -281,76 +281,6 @@ export function SettingsPage() {
       const value = Number(item?.percentage);
       return sum + (isNaN(value) ? 0 : value);
     }, 0) ?? 0;
-
-  // *--- Original submit button handler - before concurrent jobs
-  // // 2. Define a submit handler.
-  // async function onSubmit(values: z.infer<typeof formSchema>) {
-  //   // Clean recurring investment
-  //   const recurringInvestment =
-  //     !values.recurring_investment ||
-  //     values.recurring_investment.frequency === "never" ||
-  //     !values.recurring_investment.amount
-  //       ? null
-  //       : {
-  //           amount: Number(values.recurring_investment.amount),
-  //           frequency: values.recurring_investment.frequency,
-  //         };
-
-  //   // Convert target weights array to object
-  //   const weightsObject = Object.fromEntries(
-  //     values.target_weights
-  //       .filter(
-  //         (item): item is { ticker: string; percentage: number } =>
-  //           item.percentage !== undefined && item.percentage !== 0
-  //       )
-  //       .map(({ ticker, percentage }) => [ticker, percentage / 100])
-  //   );
-
-  //   // Format dates
-  //   const formatDate = (d: Date) =>
-  //     d instanceof Date && !isNaN(d.getTime())
-  //       ? d.toISOString().split("T")[0]
-  //       : null;
-
-  //   // Final cleaned payload
-  //   const payload = {
-  //     mode: values.mode,
-  //     base_currency: values.base_currency,
-  //     start_date: formatDate(values.start_date),
-  //     end_date: formatDate(values.end_date),
-  //     initial_investment: Number(values.initial_investment),
-  //     strategy: {
-  //       fractional_shares: values.strategy.fractional_shares,
-  //       reinvest_dividends: values.strategy.reinvest_dividends,
-  //       rebalance_frequency: values.strategy.rebalance_frequency,
-  //     },
-  //     recurring_investment: recurringInvestment,
-  //     target_weights: weightsObject,
-  //     export_excel: values.export_excel,
-  //   };
-
-  //   console.log("Input settings:", payload);
-
-  //   try {
-  //     const response = await fetch("http://localhost:5002/api/run-backtest", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(payload),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Backtest failed");
-  //     }
-
-  //     const result = await response.json();
-
-  //     // Navigate to results page and pass result data
-  //     navigate("/results", { state: { backtestResult: result } });
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Failed to run backtest");
-  //   }
-  // }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true); // Show loading screen
@@ -432,11 +362,21 @@ export function SettingsPage() {
         // else continue polling
       }
 
-      // Update session variable to hold last backtest result
-      sessionStorage.setItem(
-        "lastBacktestResult",
-        JSON.stringify(backtestResult)
-      );
+      // Update session variable to hold last backtest result - if result is too lareg it cannot be stored on browser
+      try {
+        sessionStorage.setItem(
+          "lastBacktestResult",
+          JSON.stringify(backtestResult)
+        );
+      } catch (e) {
+        if (e instanceof DOMException && e.name === "QuotaExceededError") {
+          console.warn(
+            "Backtest result too large to store in browser. Won't be able to revisit if leave dashboard"
+          );
+        } else {
+          throw e; // rethrow other errors
+        }
+      }
 
       // 7. Navigate to results page with result
       navigate("/results", { state: { backtestResult } });
@@ -648,15 +588,6 @@ export function SettingsPage() {
                     Total: {totalPercentage}%
                   </span>
                 </div>
-
-                {/* <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => append({ ticker: "", percentage: 0 })}
-                >
-                  <Plus />
-                  Add Asset
-                </Button> */}
               </CardContent>
             </Card>
           </div>
@@ -798,13 +729,13 @@ export function SettingsPage() {
                               selected={field.value}
                               onSelect={field.onChange}
                               disabled={(date) =>
-                                date >= new Date("2025-06-01") ||
+                                date >= new Date("2025-08-01") ||
                                 date <= currencyStart
                               }
                               captionLayout="dropdown"
                               defaultMonth={field.value}
                               startMonth={currencyStart}
-                              endMonth={new Date("2025-05-31")}
+                              endMonth={new Date("2025-07-31")}
                             />
                           </PopoverContent>
                         </Popover>
@@ -843,13 +774,13 @@ export function SettingsPage() {
                               selected={field.value}
                               onSelect={field.onChange}
                               disabled={(date) =>
-                                date >= new Date("2025-06-01") ||
+                                date >= new Date("2025-08-01") ||
                                 date <= currencyStart
                               }
                               captionLayout="dropdown"
                               defaultMonth={field.value}
                               startMonth={currencyStart}
-                              endMonth={new Date("2025-05-31")}
+                              endMonth={new Date("2025-07-31")}
                             />
                           </PopoverContent>
                         </Popover>
