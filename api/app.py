@@ -1,49 +1,24 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from backend.backtest.data_cache import preload_all_data
-from .run_backtest import run_backtest, async_run_backtest
+from .run_backtest import async_run_backtest
 from backend.core.paths import get_asset_metadata_json_path
 from threading import Thread
 import traceback, os, uuid, traceback
+from dotenv import load_dotenv
 
 
 
 app = Flask(__name__,static_folder="static")
 CORS(app)
 
+load_dotenv()  # loads environment variables
+
 # Set app mode based on environment variable
 dev_mode = os.getenv("DEV_MODE","false").lower() == "true"
 
 # Load and cache backtest data on start up
 preload_all_data(dev_mode)    
-
-## Before trying excel download
-# @app.route('/api/run-backtest', methods=['POST'])
-# def backtest_api():
-#     try:
-#         data = request.get_json()
-#         payload = run_backtest(data)
-#         return jsonify({"success": True,**payload})
-#     except Exception as e:
-#         print(traceback.format_exc())  # prints full traceback in terminal
-#         return jsonify({"success": False, "error": str(e)}), 400
-
-
-# @app.route('/api/run-backtest', methods=['POST'])
-# def backtest_api():
-#     try:
-#         payload = request.get_json()
-
-#         # Run backtest with input settings
-#         backtest_result, temp_excel_path = run_backtest(payload)
-
-#         # Create full download link (API call) using excel path
-#         download_link = f"/api/download-report?file={temp_excel_path}" if temp_excel_path else None
-
-#         return jsonify({"success": True,"excel_download": download_link,**backtest_result})
-#     except Exception as e:
-#         print(traceback.format_exc())  # prints full traceback in terminal
-#         return jsonify({"success": False, "error": str(e)}), 400
 
 jobs = {}
 
@@ -69,7 +44,6 @@ def backtest_status(job_id):
     return jsonify(job)
 
 
-    
 @app.route("/api/assets")
 def get_assets():
     return send_file(get_asset_metadata_json_path(dev_mode), mimetype='application/json')

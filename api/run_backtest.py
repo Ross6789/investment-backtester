@@ -8,8 +8,6 @@ from backend.core.enums import BacktestMode, BaseCurrency, RebalanceFrequency, R
 from backend.core.parsers import parse_enum, parse_date
 from backend.backtest.runner import BacktestRunner
 
-
-
 def async_run_backtest (jobs, job_id, input_data, dev_mode: bool = False):
     try:
         # Run your current backtest function
