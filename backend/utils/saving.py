@@ -86,20 +86,61 @@ import threading
 import os
 import pandas as pd
 
-def save_report_temporarily(report_sheets : dict[str, pl.DataFrame], prefix="backtest_report_"):
-    print("running temp export code")
+# def save_report_temporarily(report_sheets : dict[str, pl.DataFrame], prefix="backtest_report_"):
+#     print("Writing temporary excel file")
+#     # Create a temporary file
+#     temp_file = tempfile.NamedTemporaryFile(prefix=prefix, suffix=".xlsx", delete=False)
+#     temp_file_path = temp_file.name
+#     temp_file.close()  # close so pandas can write
+
+#     # Open an Excel writer context - needed to write multi page workbook (to_csv will write all on one page)
+#     with pd.ExcelWriter(temp_file_path, engine='xlsxwriter', datetime_format="dd/mm/yyyy") as writer:
+
+#         for name, report in report_sheets.items():
+#             report.to_pandas().to_excel(writer,sheet_name=name, index=False)
+
+#     print(f"saving temp_report a : {temp_file_path}")
+
+#     # Schedule deletion in 10 minutes
+#     def delete_temp_file(path):
+#         try:
+#             os.remove(path)
+#             print(f"Deleted temporary file: {path}")
+#         except FileNotFoundError:
+#             pass
+
+#     timer = threading.Timer(interval=600, function=delete_temp_file, args=[temp_file_path])
+#     timer.start()
+
+#     return temp_file_path
+
+from openpyxl import Workbook
+
+
+def save_report_temporarily(report_sheets: dict[str, pl.DataFrame], prefix="backtest_report_"):
+    print("Writing temporary Excel report ...")
+
     # Create a temporary file
     temp_file = tempfile.NamedTemporaryFile(prefix=prefix, suffix=".xlsx", delete=False)
     temp_file_path = temp_file.name
-    temp_file.close()  # close so pandas can write
+    temp_file.close()  # close so openpyxl can write
 
-    # Open an Excel writer context - needed to write multi page workbook (to_csv will write all on one page)
-    with pd.ExcelWriter(temp_file_path, engine='xlsxwriter', datetime_format="dd/mm/yyyy") as writer:
+    # Create a write-only workbook
+    wb = Workbook(write_only=True)
 
-        for name, report in report_sheets.items():
-            report.to_pandas().to_excel(writer,sheet_name=name, index=False)
+    for sheet_name, report in report_sheets.items():
+        ws = wb.create_sheet(title=sheet_name)
+        
+        # Write header
+        ws.append(report.columns)
+        
+        # Write rows directly from Polars without converting to Pandas
+        for row in report.iter_rows():  # iter_rows() gives tuples
+            ws.append(row)
 
-    print(f"saving temp_report a : {temp_file_path}")
+    # Save workbook to temporary file
+    wb.save(temp_file_path)
+    print(f"Saved temporary report at: {temp_file_path}")
 
     # Schedule deletion in 10 minutes
     def delete_temp_file(path):
@@ -113,6 +154,3 @@ def save_report_temporarily(report_sheets : dict[str, pl.DataFrame], prefix="bac
     timer.start()
 
     return temp_file_path
-
-
-

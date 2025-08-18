@@ -3,7 +3,7 @@ pandas==2.3.0
 polars==1.30.0
 python-dotenv==1.1.1
 git+https://github.com/Ross6789/quantstats-fork.git@main#egg=quantstats
-xlsxwriter==3.2.5
+openpyxl==3.1.5
 pyarrow==20.0.0
-gunicorn
-requests
+gunicorn==23.0.0
+requests==2.32.4

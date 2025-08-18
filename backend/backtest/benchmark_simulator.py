@@ -20,7 +20,7 @@ class BenchmarkSimulator:
             dict: Formatted benchmark chart data including wide format and label mapping.
         """
         benchmark_results_df = BenchmarkSimulator._simulate_backtest_for_benchmarks(config, benchmark_data)
-        benchmark_chart_data = ChartFormatter.format_benchmark_growth(benchmark_results_df,cache.get_cached_benchmarks_metadata())
+        benchmark_chart_data = ChartFormatter.format_benchmark_growth(benchmark_results_df,cache.get_cached_benchmarks_metadata().collect())
         return benchmark_chart_data
 
 
