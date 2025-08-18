@@ -6,3 +6,4 @@ git+https://github.com/Ross6789/quantstats-fork.git@main#egg=quantstats
 xlsxwriter==3.2.5
 pyarrow==20.0.0
 gunicorn
+requests
