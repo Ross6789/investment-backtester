@@ -6,6 +6,17 @@ from backend.core.enums import OrderSide, RebalanceFrequency
 from backend.backtest.engines import BaseEngine
 from backend.backtest.portfolios import RealisticPortfolio
 
+ORDER_SCHEMA = {
+    "ticker": pl.Utf8,
+    "target_value": pl.Float64,
+    "date_placed": pl.Date,
+    "date_executed": pl.Date,
+    "side": pl.Utf8,
+    "base_price": pl.Float64,
+    "units": pl.Float64,
+    "status": pl.Utf8,
+}
+
 class RealisticEngine(BaseEngine):
 
     def __init__(self, config: BacktestConfig, backtest_data: pl.DataFrame):
@@ -28,8 +39,8 @@ class RealisticEngine(BaseEngine):
 
         # Instantiate previous rebalance day (set as first day a ticker is trading) and order books
         self.previous_rebalance_date = self._get_first_active_date()
-        self.pending_orders = None
-        self.executed_orders = None
+        self.pending_orders = pl.DataFrame({col: pl.Series(dtype=type) for col, type in ORDER_SCHEMA.items()})
+        self.executed_orders = pl.DataFrame({col: pl.Series(dtype=type) for col, type in ORDER_SCHEMA.items()})
 
         # Load dividend dates
         self.dividend_dates = self._load_dividend_dates()
@@ -106,12 +117,8 @@ class RealisticEngine(BaseEngine):
         if not orders:
             return # Exit method if no valid order to add to queue
             
-        new_orders_df = pl.DataFrame(orders)
-        
-        if self.pending_orders is None:
-            self.pending_orders = new_orders_df
-        else:
-            self.pending_orders = pl.concat([self.pending_orders, new_orders_df])
+        new_orders_df = pl.DataFrame(orders, schema=ORDER_SCHEMA)
+        self.pending_orders = pl.concat([self.pending_orders, new_orders_df])
 
     def _execute_orders(self, current_date: date, prices: dict[str, float]):
         """
@@ -157,17 +164,14 @@ class RealisticEngine(BaseEngine):
             row['base_price'] = price
             row['units'] = units_moved
             row['status'] = "fulfilled" if units_moved > 0 else "failed"
-            
+
             updated_orders.append(row)
 
         # Create new dataframe with updated orders
-        orders_executed_today = pl.DataFrame(updated_orders)
+        orders_executed_today = pl.DataFrame(updated_orders, schema=ORDER_SCHEMA)
 
         # Append executed orders to executed_orders DataFrame
-        if self.executed_orders is None:
-            self.executed_orders = orders_executed_today
-        else:
-            self.executed_orders = pl.concat([self.executed_orders, orders_executed_today])
+        self.executed_orders = pl.concat([self.executed_orders, orders_executed_today])
 
         # Remove executed orders from pending_orders
         self.pending_orders = self.pending_orders.filter(pl.col('date_executed') != current_date)
