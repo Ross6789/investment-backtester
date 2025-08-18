@@ -66,6 +66,7 @@ def download_report():
 # --- REACT ROUTES --- #
 
 @app.route("/", defaults={"path": ""})
+
 @app.route("/<path:path>")
 def serve_frontend(path):
     """Serve React app for any non-API route"""
@@ -76,6 +77,10 @@ def serve_frontend(path):
     # Otherwise serve index.html so React handles routing
     return send_from_directory(FRONTEND_DIST, "index.html")
 
+# Fall back to index.html if 404 error : ie. user refreshes page while on settings or results
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
 
 if __name__ == '__main__':
     app.run(port=5001,debug=True, use_reloader = False)
