@@ -53,11 +53,11 @@ def fetch_filtered_backtest_data(backtest_mode : BacktestMode, base_currency: Ba
         - For very large datasets, returning a LazyFrame may improve performance.
         - Only benchmarks active for the entire period are included.
     """
-    historical_prices_lf = cache.get_cached_historical_prices().lazy()
-    benchmark_lf = cache.get_cached_benchmarks().lazy()
-    fx_lf = cache.get_cached_fx().lazy()
-    asset_metadata_lf = cache.get_cached_asset_metadata().lazy()
- 
+    historical_prices_lf = cache.get_cached_historical_prices()
+    benchmark_lf = cache.get_cached_benchmarks()
+    fx_lf = cache.get_cached_fx()
+    asset_metadata_lf = cache.get_cached_asset_metadata()
+    
     # --- PRICE DATA ---
 
     # Retrieve columns based on backtest mode

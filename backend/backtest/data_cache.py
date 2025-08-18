@@ -10,12 +10,12 @@ from typing import Union
 def _fetch_parquet(source: Union[str, Path]) -> pl.DataFrame:
     if isinstance(source, Path):
         # Local file/folder (partitioned)
-        return pl.read_parquet(source)
+        return pl.scan_parquet(source)
     else:
         # URL
         resp = requests.get(source)
         resp.raise_for_status()
-        return pl.read_parquet(io.BytesIO(resp.content))
+        return pl.scan_parquet(io.BytesIO(resp.content))
     
 # ---- LRU cache wrappers ----
 @lru_cache(maxsize=1)
@@ -41,19 +41,19 @@ def get_cached_fx(dev_mode: bool = False) -> pl.DataFrame:
 def get_cached_asset_metadata() -> pl.DataFrame:
     path = paths.get_asset_metadata_csv_path()
     print(f"asset metadata : {path}")
-    return pl.read_csv(path)
+    return pl.scan_csv(path)
 
 @lru_cache(maxsize=1)
 def get_cached_benchmarks_metadata() -> pl.DataFrame:
     path = paths.get_benchmark_metadata_csv_path()
     print(f"benchmark metadata : {path}")
-    return pl.read_csv(path)
+    return pl.scan_csv(path)
 
 @lru_cache(maxsize=1)
 def get_cached_fx_metadata() -> pl.DataFrame:
     path = paths.get_fx_metadata_csv_path()
     print(f"fx metadata : {path}")
-    return pl.read_csv(path)
+    return pl.scan_csv(path)
 
 
 # ---- Preload all caches at server start ----
