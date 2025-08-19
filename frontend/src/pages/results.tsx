@@ -599,7 +599,7 @@ export function ResultsPage() {
                   {
                     label: "Fractional Shares",
                     value: capitalizeFirst(
-                      backtestResult.settings.strategy.allow_fractional_shares
+                      backtestResult.settings.strategy.fractional_shares
                         ? "allowed"
                         : "disallowed"
                     ),
