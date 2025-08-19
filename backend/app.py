@@ -42,6 +42,13 @@ def backtest_status(job_id):
     job = jobs.get(job_id)
     if not job:
         return jsonify({"status": "not_found"}), 404
+    
+    # If the job is done or errored, return the result AND delete it immediately
+    if job["status"] in ("done", "error"):
+        result = job.copy()  # copy result for returning at end
+        del jobs[job_id]     # free memory immediately
+        return jsonify(result)
+    
     return jsonify(job)
 
 
