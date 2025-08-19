@@ -1012,6 +1012,7 @@ export function SettingsPage() {
           {hasLastBacktestResult && (
             <Button
               className="text-xs text-muted-foreground"
+              type="button"
               variant="link"
               onClick={handleViewPreviousResults}
             >
